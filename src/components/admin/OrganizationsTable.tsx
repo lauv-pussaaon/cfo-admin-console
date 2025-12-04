@@ -134,7 +134,7 @@ export default function OrganizationsTable({ onEdit, onDelete, data, loading }: 
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, height: '100%' }}>
           <IconButton
             size="small"
             onClick={() => onEdit(params.row.id)}

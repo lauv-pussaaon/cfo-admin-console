@@ -171,7 +171,7 @@ export default function AdminConsoleOrganizationsPage() {
         </Link>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Typography variant="h4" fontWeight="bold">
-            จัดการองค์กร
+            จัดการลูกค้า
           </Typography>
           <Button
             variant="contained"

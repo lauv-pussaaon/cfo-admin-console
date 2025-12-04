@@ -5,37 +5,21 @@ import { Menu, Box, Typography, MenuItem, ListItemIcon, ListItemText, IconButton
 import { 
   AccountCircle as AccountIcon,
   Logout as LogoutIcon,
-  Dashboard as DashboardIcon,
-  Assessment as CFODashboardIcon,
-  BusinessCenter as OrganizationIcon,
-  Business as BusinessIcon,
-  People as PeopleIcon,
   Edit as PersonEditIcon
 } from '@mui/icons-material'
-import { useRouter } from 'next/navigation'
-import { isDealer } from '@/lib/permissions'
 import { getRoleLabel } from '@/types/roles'
 import type { User } from '@/lib/api/types'
 import EditProfileModal from '@/components/EditProfileModal'
 
 interface UserMenuProps {
   user: User | null
-  currentOrganizationId: string | null
   onLogout: () => void
-  onOrganizationClick: () => void
-  onDashboardClick: () => void
-  onCFODashboardClick?: () => void
 }
 
 export default function UserMenu({
   user,
-  currentOrganizationId,
   onLogout,
-  onOrganizationClick,
-  onDashboardClick,
-  onCFODashboardClick,
 }: UserMenuProps) {
-  const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [editProfileOpen, setEditProfileOpen] = useState(false)
 
@@ -59,17 +43,6 @@ export default function UserMenu({
   const handleEditProfileSuccess = () => {
     // User will be updated via AuthContext
     setEditProfileOpen(false)
-  }
-
-  const handleAdminMenuClick = (path: string) => {
-    if (currentOrganizationId && !path.startsWith('/admin-console') && !path.startsWith('/')) {
-      router.push(`/${currentOrganizationId}${path.startsWith('/') ? path : `/${path}`}`)
-    } else if (currentOrganizationId && path.startsWith('/admin/')) {
-      router.push(`/${currentOrganizationId}${path.replace('/admin', '/admin')}`)
-    } else {
-      router.push(path)
-    }
-    handleMenuClose()
   }
 
   return (
@@ -111,39 +84,6 @@ export default function UserMenu({
         <MenuItem onClick={handleEditProfileClick} sx={{ py: 1.5 }}>
           <ListItemIcon><PersonEditIcon fontSize="small" /></ListItemIcon>
           <ListItemText>Edit Profile</ListItemText>
-        </MenuItem>
-
-        {[
-          <MenuItem key="org" onClick={onOrganizationClick} sx={{ py: 1.5 }}>
-            <ListItemIcon><OrganizationIcon fontSize="small" /></ListItemIcon>
-            <ListItemText>All Reports</ListItemText>
-          </MenuItem>,
-          <MenuItem key="dashboard" onClick={onDashboardClick} sx={{ py: 1.5 }}>
-            <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
-            <ListItemText>BU Dashboard</ListItemText>
-          </MenuItem>,
-          isDealer(user) && currentOrganizationId && onCFODashboardClick && (
-            <MenuItem key="cfo-dashboard" onClick={onCFODashboardClick} sx={{ py: 1.5 }}>
-              <ListItemIcon><CFODashboardIcon fontSize="small" /></ListItemIcon>
-              <ListItemText>Organization Wide Dashboard</ListItemText>
-            </MenuItem>
-          ),        
-          isDealer(user) && currentOrganizationId && [
-            <Box key="divider" sx={{ borderTop: '1px solid', borderColor: 'divider', my: 0.5 }} />,
-            <MenuItem key="bu" onClick={() => handleAdminMenuClick(`/${currentOrganizationId}/admin/business-units`)} sx={{ py: 1.5 }}>
-              <ListItemIcon><BusinessIcon fontSize="small" /></ListItemIcon>
-              <ListItemText>Manage Business Units</ListItemText>
-            </MenuItem>,
-            <MenuItem key="users" onClick={() => handleAdminMenuClick(`/${currentOrganizationId}/admin/users`)} sx={{ py: 1.5 }}>
-              <ListItemIcon><PeopleIcon fontSize="small" /></ListItemIcon>
-              <ListItemText>Manage Users</ListItemText>
-            </MenuItem>,
-          ],
-        ].filter(Boolean).flat()}
-
-        <MenuItem onClick={() => router.push('/admin-console')} sx={{ py: 1.5 }}>
-          <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
-          <ListItemText>Admin Console</ListItemText>
         </MenuItem>
 
         <MenuItem onClick={onLogout} sx={{ py: 1.5 }}>

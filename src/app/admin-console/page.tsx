@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
@@ -9,6 +8,7 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin, isAudit, isDealer } from '@/lib/permissions'
 
 export default function AdminConsolePage() {
   const { user, isLoading } = useAuth()
@@ -32,14 +32,11 @@ export default function AdminConsolePage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Admin Console
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          System-wide administration and management
+          {isAudit(user) ? 'Audit Console' : 'Admin Console'}
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
+          {isAudit(user) && <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 height: '100%',
@@ -55,13 +52,14 @@ export default function AdminConsolePage() {
               <CardContent>
                 <BusinessIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Clients&apos; Organizations
+                  Clients
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
+          }
 
-          <Grid item xs={12} sm={6} md={4}>
+          {isAdmin(user) && <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 height: '100%',
@@ -77,11 +75,11 @@ export default function AdminConsolePage() {
               <CardContent>
                 <PeopleIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Users
+                  Users Management
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid>}
         </Grid>
     </Container>
   )

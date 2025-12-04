@@ -15,14 +15,6 @@ export default function AdminConsoleHeader() {
     router.push('/login')
   }
 
-  const handleOrganizationClick = () => {
-    router.push('/')
-  }
-
-  const handleDashboardClick = () => {
-    router.push('/admin-console')
-  }
-
   return (
     <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', borderBottom: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
       <Toolbar sx={{ py: 2, px: 3, minHeight: 80 }}>
@@ -38,10 +30,7 @@ export default function AdminConsoleHeader() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <UserMenu
             user={user}
-            currentOrganizationId={null}
             onLogout={handleLogout}
-            onOrganizationClick={handleOrganizationClick}
-            onDashboardClick={handleDashboardClick}
           />
         </Box>
       </Toolbar>
