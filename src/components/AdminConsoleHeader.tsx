@@ -30,7 +30,7 @@ export default function AdminConsoleHeader() {
           <CFOLogo size={48} color="#10b981" />
           <Box sx={{ ml: 2 }}>
             <Typography variant="h5" component="div" sx={{ fontWeight: 700, color: 'text.primary', lineHeight: 1.2 }}>
-              IdeaCrab Admin Console
+              IdeaCarb Admin Console
             </Typography>
           </Box>
         </Box>

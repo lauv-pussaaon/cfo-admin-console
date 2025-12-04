@@ -96,7 +96,7 @@ export default function LoginPage() {
       <Container maxWidth="sm">
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
-            🔐 IdeaCrab Admin Console Login
+            🔐 IdeaCarb Admin Console Login
           </Typography>
           <Typography variant="h6" color="text.secondary">
             เข้าสู่ระบบด้วยชื่อผู้ใช้หรืออีเมล
