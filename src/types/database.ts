@@ -72,3 +72,18 @@ export interface AnnualReport {
   updated_at: string | null
 }
 
+// Organization Invitation type
+export interface OrganizationInvitation {
+  id: string
+  organization_id: string
+  email: string
+  token: string
+  status: 'pending' | 'accepted' | 'expired'
+  role: string
+  created_by: string | null
+  created_at: string
+  expires_at: string
+  accepted_at: string | null
+  organization?: Organization
+}
+

@@ -39,13 +39,13 @@ export function isAudit (user: User | null): boolean {
 
 /**
  * Check if user can manage organizations
- * Admin and Dealer can manage organizations
+ * Admin, Dealer, Consult, and Audit can manage organizations
  * @param user - User object or null
  * @returns true if user can manage organizations
  */
 export function canManageOrganizations (user: User | null): boolean {
   if (!user) return false
-  return user.role === 'Admin' || user.role === 'Dealer'
+  return user.role === 'Admin' || user.role === 'Audit' || user.role === 'Consult' || user.role === 'Dealer'
 }
 
 /**
@@ -61,10 +61,10 @@ export async function canManageOrganization (
   organizationId: string
 ): Promise<boolean> {
   if (!user) return false
-  
+
   // Admin can manage all organizations
   if (user.role === 'Admin') return true
-  
+
   // Dealer can only manage assigned organizations
   if (user.role === 'Dealer') {
     try {
@@ -75,7 +75,19 @@ export async function canManageOrganization (
       return false
     }
   }
-  
+
   return false
+}
+
+/**
+ * Check if organizations should be filtered by user assignment
+ * Dealers should only see organizations they're assigned to
+ * Admins see all organizations
+ * @param user - User object or null
+ * @returns true if organizations should be filtered by assignment
+ */
+export function shouldFilterOrganizationsByAssignment (user: User | null): boolean {
+  if (!user) return false
+  return user.role === 'Dealer'
 }
 

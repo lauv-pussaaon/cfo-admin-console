@@ -58,6 +58,68 @@ export const getOrganizationsWithStats = async (): Promise<OrganizationWithStats
   }))
 }
 
+export const getOrganizationsForDealer = async (userId: string): Promise<OrganizationWithStats[]> => {
+  // Get organizations assigned to this dealer through user_organizations
+  const { data: userOrgs, error: userOrgsError } = await supabase
+    .from('user_organizations')
+    .select(`
+      organization_id,
+      organization:organizations(*)
+    `)
+    .eq('user_id', userId)
+    .order('assigned_at', { ascending: false })
+
+  if (userOrgsError) throw userOrgsError
+  if (!userOrgs || userOrgs.length === 0) {
+    return []
+  }
+
+  // Extract organization IDs
+  const organizationIds = userOrgs
+    .map((uo: { organization: Organization | Organization[] | null }) => {
+      if (!uo.organization) return null
+      return Array.isArray(uo.organization) ? uo.organization[0]?.id : uo.organization.id
+    })
+    .filter((id): id is string => id !== null)
+
+  if (organizationIds.length === 0) {
+    return []
+  }
+
+  // Get user count for each organization
+  const { data: allUserOrgs, error: userError } = await supabase
+    .from('user_organizations')
+    .select('organization_id')
+    .in('organization_id', organizationIds)
+
+  if (userError) throw userError
+
+  // Create map for counting
+  const userCountMap = new Map<string, number>()
+
+  // Count users per organization
+  if (allUserOrgs) {
+    allUserOrgs.forEach((uo: { organization_id: string }) => {
+      const count = userCountMap.get(uo.organization_id) || 0
+      userCountMap.set(uo.organization_id, count + 1)
+    })
+  }
+
+  // Extract organizations and add stats
+  const organizations: Organization[] = userOrgs
+    .map((uo: { organization: Organization | Organization[] | null }) => {
+      if (!uo.organization) return null
+      return Array.isArray(uo.organization) ? uo.organization[0] : uo.organization
+    })
+    .filter((org): org is Organization => org !== null)
+
+  // Combine organizations with stats
+  return organizations.map(org => ({
+    ...org,
+    userCount: userCountMap.get(org.id) || 0,
+  }))
+}
+
 export const getOrganizationById = async (id: string): Promise<Organization | null> => {
   const { data, error } = await supabase
     .from('organizations')
@@ -77,6 +139,7 @@ export const createOrganization = async (
     app_url?: string | null
     factory_admin_email?: string | null
     created_by?: string | null
+    assignedUserId?: string | null
   }
 ): Promise<Organization> => {
   const result = await supabase
@@ -93,7 +156,19 @@ export const createOrganization = async (
     .select()
     .single()
 
-  return throwIfError(result)
+  const organization = throwIfError(result)
+
+  // Auto-assign user to organization if assignedUserId is provided
+  if (data.assignedUserId && organization.id) {
+    try {
+      await addUserToOrganization(organization.id, data.assignedUserId, data.created_by || null)
+    } catch (error) {
+      // If assignment fails, log but don't fail the organization creation
+      console.error('Failed to auto-assign user to organization:', error)
+    }
+  }
+
+  return organization
 }
 
 export const updateOrganization = async (

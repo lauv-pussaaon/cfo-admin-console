@@ -50,6 +50,20 @@ CREATE TABLE user_organizations (
   UNIQUE(user_id, organization_id)
 );
 
+-- Organization Invitations (invitations for client admins)
+CREATE TABLE organization_invitations (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  token TEXT UNIQUE NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'expired')),
+  role TEXT NOT NULL DEFAULT 'Factory Admin',
+  created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL,
+  accepted_at TIMESTAMPTZ
+);
+
 -- ===========================================
 -- PART 3: CREATE INDEXES
 -- ===========================================
@@ -66,3 +80,10 @@ CREATE INDEX idx_organizations_created_at ON organizations(created_at);
 -- Users indexes
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_email ON users(email);
+
+-- Organization invitations indexes
+CREATE UNIQUE INDEX idx_organization_invitations_unique_pending ON organization_invitations(organization_id, email) WHERE status = 'pending';
+CREATE INDEX idx_organization_invitations_token ON organization_invitations(token);
+CREATE INDEX idx_organization_invitations_organization ON organization_invitations(organization_id);
+CREATE INDEX idx_organization_invitations_email ON organization_invitations(email);
+CREATE INDEX idx_organization_invitations_status ON organization_invitations(status);

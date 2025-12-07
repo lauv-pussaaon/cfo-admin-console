@@ -4,11 +4,10 @@ import { useRouter } from 'next/navigation'
 import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
   Business as BusinessIcon,
-  People as PeopleIcon,
-  Settings as SettingsIcon,
+  People as PeopleIcon
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
-import { isAdmin, isAudit, isDealer } from '@/lib/permissions'
+import { canManageOrganizations, isAdmin, isAudit } from '@/lib/permissions'
 
 export default function AdminConsolePage() {
   const { user, isLoading } = useAuth()
@@ -31,12 +30,8 @@ export default function AdminConsolePage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
-          {isAudit(user) ? 'Audit Console' : 'Admin Console'}
-        </Typography>
-
         <Grid container spacing={3}>
-          {isAudit(user) && <Grid item xs={12} sm={6} md={4}>
+          {canManageOrganizations(user) && <Grid item xs={12} sm={6} md={4}>
             <Card
               sx={{
                 height: '100%',

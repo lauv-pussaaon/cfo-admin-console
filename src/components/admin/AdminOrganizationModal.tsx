@@ -14,8 +14,13 @@ import {
   Button,
   TextField,
   CircularProgress,
-  Chip,
   Alert,
+  FormControlLabel,
+  Switch,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material'
 import {
   Close as CloseIcon,
@@ -23,10 +28,10 @@ import {
 import { organizationService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Organization } from '@/types/database'
+import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
-import { isDealer } from '@/lib/permissions'
 
-interface OrganizationModalProps {
+interface AdminOrganizationModalProps {
   open: boolean
   onClose: () => void
   onSuccess?: () => void
@@ -34,37 +39,35 @@ interface OrganizationModalProps {
   initialData?: Organization | null
 }
 
-// Create dynamic schema based on user role
-const createOrganizationSchema = (isDealerUser: boolean) => z.object({
+// Zod validation schema for admin
+const adminOrganizationSchema = z.object({
   name: z.string().min(1, 'กรุณากรอกชื่อองค์กร'),
   code: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   app_url: z.string().url('กรุณากรอก URL ที่ถูกต้อง').optional().nullable().or(z.literal('')),
-  factory_admin_email: isDealerUser
-    ? z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').min(1, 'กรุณากรอกอีเมล Factory Admin')
-    : z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').optional().nullable().or(z.literal('')),
+  factory_admin_email: z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').optional().nullable().or(z.literal('')),
+  is_initialized: z.boolean().optional(),
+  dealer_id: z.string().optional().nullable(),
 })
 
-export type OrganizationFormData = z.infer<ReturnType<typeof createOrganizationSchema>>
+export type AdminOrganizationFormData = z.infer<typeof adminOrganizationSchema>
 
-export default function OrganizationModal({
+export default function AdminOrganizationModal({
   open,
   onClose,
   onSuccess,
   mode = 'create',
   initialData = null,
-}: OrganizationModalProps) {
+}: AdminOrganizationModalProps) {
   const { user } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const isDealerUser = isDealer(user)
+  const [dealers, setDealers] = useState<User[]>([])
+  const [loadingDealers, setLoadingDealers] = useState(false)
+  const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
 
-  // Create schema based on user role
-  const organizationSchema = createOrganizationSchema(isDealerUser)
-
-  // Initialize React Hook Form with Zod resolver
-  const methods = useForm<OrganizationFormData>({
-    resolver: zodResolver(organizationSchema),
+  const methods = useForm<AdminOrganizationFormData>({
+    resolver: zodResolver(adminOrganizationSchema),
     mode: 'onChange',
     defaultValues: {
       name: '',
@@ -72,45 +75,84 @@ export default function OrganizationModal({
       description: '',
       app_url: '',
       factory_admin_email: '',
+      is_initialized: false,
+      dealer_id: null,
     }
   })
 
-  const { handleSubmit, reset, formState: { errors } } = methods
+  // Load dealers when modal opens
+  useEffect(() => {
+    if (open) {
+      loadDealers()
+      if (mode === 'edit' && initialData) {
+        loadCurrentDealer(initialData.id)
+      } else {
+        setCurrentDealerId(null)
+      }
+    }
+  }, [open, mode, initialData])
 
-  // Reset form when modal opens/closes or initialData changes
+  const loadDealers = async () => {
+    try {
+      setLoadingDealers(true)
+      const dealerList = await organizationService.getDealers()
+      setDealers(dealerList)
+    } catch (error) {
+      console.error('Error loading dealers:', error)
+    } finally {
+      setLoadingDealers(false)
+    }
+  }
+
+  const loadCurrentDealer = async (organizationId: string) => {
+    try {
+      const dealer = await organizationService.getDealerByOrganization(organizationId)
+      setCurrentDealerId(dealer?.id || null)
+      methods.setValue('dealer_id', dealer?.id || null)
+    } catch (error) {
+      console.error('Error loading current dealer:', error)
+    }
+  }
+
+  const { handleSubmit, reset, formState: { errors }, watch } = methods
+
   useEffect(() => {
     if (open) {
       if (mode === 'edit' && initialData) {
-        // Pre-populate form with existing data
         reset({
           name: initialData.name || '',
           code: initialData.code || '',
           description: initialData.description || '',
           app_url: initialData.app_url || '',
           factory_admin_email: initialData.factory_admin_email || '',
+          is_initialized: initialData.is_initialized || false,
+          dealer_id: currentDealerId,
         })
       } else {
-        // Reset to defaults for create mode
         reset({
           name: '',
           code: '',
           description: '',
           app_url: '',
           factory_admin_email: '',
+          is_initialized: false,
+          dealer_id: null,
         })
       }
       setSubmitError(null)
     }
-  }, [open, reset, mode, initialData])
+  }, [open, reset, mode, initialData, currentDealerId])
 
-  const onFormSubmit = async (data: OrganizationFormData) => {
+  const onFormSubmit = async (data: AdminOrganizationFormData) => {
     setIsSubmitting(true)
     setSubmitError(null)
 
     try {
+      let organizationId: string
+
       if (mode === 'edit' && initialData) {
-        // Update existing organization
-        await organizationService.updateOrganization(
+        // Update organization
+        const updated = await organizationService.updateOrganization(
           initialData.id,
           {
             name: data.name,
@@ -118,24 +160,41 @@ export default function OrganizationModal({
             description: data.description || null,
             app_url: data.app_url || null,
             factory_admin_email: data.factory_admin_email || null,
+            is_initialized: data.is_initialized ?? false,
           }
         )
+        organizationId = updated.id
+
+        // Update dealer assignment if changed
+        if (data.dealer_id !== currentDealerId) {
+          await organizationService.setDealerForOrganization(
+            organizationId,
+            data.dealer_id || null,
+            user?.id || null
+          )
+        }
       } else {
-        // Create new organization
-        await organizationService.createOrganization(
-          {
-            name: data.name,
-            code: data.code || null,
-            description: data.description || null,
-            app_url: data.app_url || null,
-            factory_admin_email: data.factory_admin_email || null,
-            created_by: user?.id || null,
-            assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
-          }
-        )
+        // Create organization
+        const created = await organizationService.createOrganization({
+          name: data.name,
+          code: data.code || null,
+          description: data.description || null,
+          app_url: data.app_url || null,
+          factory_admin_email: data.factory_admin_email || null,
+          created_by: null,
+        })
+        organizationId = created.id
+
+        // Assign dealer if provided
+        if (data.dealer_id) {
+          await organizationService.setDealerForOrganization(
+            organizationId,
+            data.dealer_id,
+            user?.id || null
+          )
+        }
       }
 
-      // Close modal and call success callback
       onClose()
       if (onSuccess) {
         onSuccess()
@@ -151,6 +210,8 @@ export default function OrganizationModal({
       setIsSubmitting(false)
     }
   }
+
+  const isInitialized = watch('is_initialized')
 
   return (
     <Dialog
@@ -168,7 +229,7 @@ export default function OrganizationModal({
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
             <Typography variant="h6" fontWeight="bold">
-              {mode === 'edit' ? 'แก้ไของค์กร' : 'สร้างองค์กรใหม่'}
+              {mode === 'edit' ? 'แก้ไของค์กร (Admin)' : 'สร้างองค์กรใหม่'}
             </Typography>
             <IconButton
               onClick={onClose}
@@ -199,10 +260,10 @@ export default function OrganizationModal({
               </Box>
             )}
 
-            {mode === 'edit' && initialData?.is_initialized && (
-              <Alert severity="info" sx={{ mb: 2 }}>
+            {mode === 'edit' && isInitialized && (
+              <Alert severity="success" sx={{ mb: 2 }}>
                 องค์กรนี้ได้ถูกเริ่มต้นใช้งานแล้ว
-                {initialData.initialized_at && (
+                {initialData?.initialized_at && (
                   <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
                     วันที่เริ่มต้น: {new Date(initialData.initialized_at).toLocaleString('th-TH')}
                   </Typography>
@@ -270,22 +331,62 @@ export default function OrganizationModal({
               <TextField
                 {...methods.register('factory_admin_email')}
                 label="อีเมล Factory Admin"
-                required={isDealerUser}
                 fullWidth
                 type="email"
                 error={!!errors.factory_admin_email}
-                helperText={
-                  errors.factory_admin_email?.message ||
-                  (isDealerUser
-                    ? 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน (จำเป็น)'
-                    : 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน')
-                }
+                helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 1,
                   },
                 }}
               />
+
+              <FormControl fullWidth>
+                <InputLabel>Dealer</InputLabel>
+                <Select
+                  {...methods.register('dealer_id')}
+                  value={methods.watch('dealer_id') || ''}
+                  onChange={(e) => methods.setValue('dealer_id', e.target.value || null)}
+                  label="Dealer"
+                  disabled={isSubmitting || loadingDealers}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>ไม่มี Dealer</em>
+                  </MenuItem>
+                  {dealers.map((dealer) => (
+                    <MenuItem key={dealer.id} value={dealer.id}>
+                      {dealer.name} ({dealer.email})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {mode === 'edit' && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      {...methods.register('is_initialized')}
+                      checked={watch('is_initialized') || false}
+                    />
+                  }
+                  label={
+                    <Box>
+                      <Typography variant="body2" fontWeight={500}>
+                        Mark as Deployed
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        ตั้งค่าองค์กรว่าได้ถูกเริ่มต้นใช้งานแล้ว
+                      </Typography>
+                    </Box>
+                  }
+                />
+              )}
             </Box>
           </DialogContent>
 

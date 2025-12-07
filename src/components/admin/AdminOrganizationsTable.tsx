@@ -1,38 +1,38 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Link, Chip } from '@mui/material'
+import { Box, IconButton, Paper, Link, Chip, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { 
   Edit as EditIcon, 
   Delete as DeleteIcon,
   Launch as LaunchIcon,
-  FileDownload as FileDownloadIcon,
-  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material'
-import type { OrganizationWithStats } from '@/types/database'
+import type { OrganizationWithCreator } from '@/lib/api/organizations'
 
 interface Props {
   onEdit: (id: string) => void
   onDelete: (id: string) => void
-  onExport?: (id: string) => void
-  onInvite?: (id: string) => void
-  data: OrganizationWithStats[]
+  data: OrganizationWithCreator[]
   loading: boolean
 }
 
-export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvite, data, loading }: Props) {
+export default function AdminOrganizationsTable({ onEdit, onDelete, data, loading }: Props) {
   const rows: GridRowsProp = useMemo(() => {
     return data.map((org) => ({
       id: org.id,
       name: org.name,
       code: org.code || '-',
       description: org.description || '-',
-      userCount: org.userCount || 0,
       app_url: org.app_url || null,
       is_initialized: org.is_initialized || false,
       factory_admin_email: org.factory_admin_email || '-',
       created_at: org.created_at,
+      creator_name: org.creator?.name || '-',
+      creator_email: org.creator?.email || '-',
+      creator_role: org.creator?.role || '-',
+      dealer_name: org.dealer?.name || '-',
+      dealer_email: org.dealer?.email || '-',
     }))
   }, [data])
 
@@ -52,26 +52,6 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
       minWidth: 120,
     },
     {
-      field: 'description',
-      headerName: 'คำอธิบาย',
-      width: 250,
-      flex: 1.5,
-      minWidth: 200,
-      renderCell: (params) => (
-        <Box
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            maxWidth: '100%',
-          }}
-          title={params.value}
-        >
-          {params.value}
-        </Box>
-      ),
-    },
-    {
       field: 'status',
       headerName: 'สถานะ',
       width: 150,
@@ -84,9 +64,7 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
             label={isInitialized ? 'Deployed' : 'Pending Deployment'}
             color={isInitialized ? 'success' : 'warning'}
             size="small"
-            sx={{
-              fontWeight: 500,
-            }}
+            sx={{ fontWeight: 500 }}
           />
         )
       },
@@ -135,6 +113,51 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
       },
     },
     {
+      field: 'creator_name',
+      headerName: 'สร้างโดย',
+      width: 180,
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <Box>
+          <Typography variant="body2" fontWeight={500}>
+            {params.row.creator_name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {params.row.creator_email}
+          </Typography>
+          <Typography variant="caption" color="text.secondary" display="block">
+            ({params.row.creator_role})
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: 'dealer_name',
+      headerName: 'Dealer',
+      width: 180,
+      flex: 1,
+      minWidth: 150,
+      renderCell: (params) => (
+        <Box>
+          {params.row.dealer_name !== '-' ? (
+            <>
+              <Typography variant="body2" fontWeight={500}>
+                {params.row.dealer_name}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {params.row.dealer_email}
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="body2" color="text.secondary" fontStyle="italic">
+              ไม่มี Dealer
+            </Typography>
+          )}
+        </Box>
+      ),
+    },
+    {
       field: 'created_at',
       headerName: 'วันที่สร้าง',
       width: 150,
@@ -145,51 +168,21 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
           year: 'numeric',
           month: 'short',
           day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
         })
       },
     },
     {
       field: 'actions',
       headerName: 'การดำเนินการ',
-      width: (onExport ? 50 : 0) + (onInvite ? 50 : 0) + 150,
+      width: 150,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, height: '100%' }}>
-          {onExport && (
-            <IconButton
-              size="small"
-              onClick={() => onExport(params.row.id)}
-              sx={{
-                color: 'info.main',
-                '&:hover': {
-                  backgroundColor: 'info.light',
-                  color: 'info.dark',
-                },
-              }}
-              title="ส่งออกข้อมูล"
-            >
-              <FileDownloadIcon fontSize="small" />
-            </IconButton>
-          )}
-          {onInvite && params.row.is_initialized && (
-            <IconButton
-              size="small"
-              onClick={() => onInvite(params.row.id)}
-              sx={{
-                color: 'success.main',
-                '&:hover': {
-                  backgroundColor: 'success.light',
-                  color: 'success.dark',
-                },
-              }}
-              title="เชิญ Client Admin"
-            >
-              <PersonAddIcon fontSize="small" />
-            </IconButton>
-          )}
           <IconButton
             size="small"
             onClick={() => onEdit(params.row.id)}
@@ -221,7 +214,7 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
         </Box>
       ),
     },
-  ], [onEdit, onDelete, onExport, onInvite])
+  ], [onEdit, onDelete])
 
   return (
     <Paper elevation={0} sx={{ height: 600, width: '100%', backgroundColor: 'transparent' }}>

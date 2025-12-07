@@ -12,6 +12,10 @@ import {
   Alert,
   CircularProgress,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import {
   Add as AddIcon,
@@ -26,6 +30,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useUsersFilter } from '@/hooks/useUsersFilter'
+import { ROLE_OPTIONS } from '@/types/roles'
 
 export default function AdminConsoleUsersPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -36,6 +41,8 @@ export default function AdminConsoleUsersPage() {
   const {
     searchTerm,
     setSearchTerm,
+    selectedRole,
+    setSelectedRole,
     filteredUsers,
   } = useUsersFilter(users)
   const [modalOpen, setModalOpen] = useState(false)
@@ -200,6 +207,23 @@ export default function AdminConsoleUsersPage() {
               startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
             }}
           />
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>กรองตามบทบาท</InputLabel>
+            <Select
+              value={selectedRole}
+              label="กรองตามบทบาท"
+              onChange={(e) => setSelectedRole(e.target.value as '' | typeof ROLE_OPTIONS[number]['value'])}
+            >
+              <MenuItem value="">
+                <em>ทั้งหมด</em>
+              </MenuItem>
+              {ROLE_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
 
         {/* Table */}

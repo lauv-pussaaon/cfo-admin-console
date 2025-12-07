@@ -20,17 +20,23 @@ import {
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
 import OrganizationModal from '@/components/admin/OrganizationModal'
+import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
+import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
+import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { organizationService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
 import type { OrganizationWithStats } from '@/types/database'
+import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
+import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin } from '@/lib/permissions'
+import { exportOrganizationAsCSV } from '@/lib/utils/export'
 
 export default function AdminConsoleOrganizationsPage() {
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
-  const [organizations, setOrganizations] = useState<OrganizationWithStats[]>([])
+  const [organizations, setOrganizations] = useState<(OrganizationWithStats | OrganizationWithCreator)[]>([])
   const [loading, setLoading] = useState(true)
   
   const {
@@ -40,6 +46,8 @@ export default function AdminConsoleOrganizationsPage() {
   } = useOrganizationsFilter(organizations)
   const [modalOpen, setModalOpen] = useState(false)
   const [editingOrganization, setEditingOrganization] = useState<OrganizationWithStats | null>(null)
+  const [inviteModalOpen, setInviteModalOpen] = useState(false)
+  const [invitingOrganization, setInvitingOrganization] = useState<OrganizationWithStats | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [deletingItemName, setDeletingItemName] = useState('')
@@ -63,9 +71,23 @@ export default function AdminConsoleOrganizationsPage() {
   }, [user])
 
   const loadOrganizations = async () => {
+    if (!user) return
+    
     try {
       setLoading(true)
-      const data = await organizationService.getOrganizationsWithStats()
+      let data: (OrganizationWithStats | OrganizationWithCreator)[]
+      
+      if (isAdmin(user)) {
+        // Admin sees all organizations with creator info
+        data = await organizationService.getOrganizationsForAdmin()
+      } else if (shouldFilterOrganizationsByAssignment(user)) {
+        // Dealer sees only assigned organizations
+        data = await organizationService.getOrganizationsForDealer(user.id)
+      } else {
+        // Other roles see all organizations
+        data = await organizationService.getOrganizationsWithStats()
+      }
+      
       setOrganizations(data)
     } catch (error) {
       // Only log unexpected errors
@@ -144,6 +166,39 @@ export default function AdminConsoleOrganizationsPage() {
     setShowSuccessMessage(true)
   }
 
+  const handleExportOrganization = async (organizationId: string) => {
+    try {
+      const org = organizations.find(o => o.id === organizationId)
+      if (!org) {
+        setSuccessMessage('ไม่พบข้อมูลองค์กร')
+        setShowSuccessMessage(true)
+        return
+      }
+      
+      // Export with dealer info if dealer is viewing
+      exportOrganizationAsCSV(org, isDealer(user) && user ? user : undefined)
+      setSuccessMessage('ส่งออกข้อมูลสำเร็จ')
+      setShowSuccessMessage(true)
+    } catch (error) {
+      console.error('Error exporting organization:', error)
+      setSuccessMessage('เกิดข้อผิดพลาดในการส่งออกข้อมูล')
+      setShowSuccessMessage(true)
+    }
+  }
+
+  const handleInvite = (organizationId: string) => {
+    const org = organizations.find(o => o.id === organizationId)
+    if (org) {
+      setInvitingOrganization(org as OrganizationWithStats)
+      setInviteModalOpen(true)
+    }
+  }
+
+  const handleInviteSuccess = () => {
+    setSuccessMessage('สร้างคำเชิญสำเร็จ')
+    setShowSuccessMessage(true)
+  }
+
   if (authLoading) {
     return (
       <Box
@@ -171,7 +226,7 @@ export default function AdminConsoleOrganizationsPage() {
         </Link>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Typography variant="h4" fontWeight="bold">
-            จัดการลูกค้า
+            {isDealer(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
           </Typography>
           <Button
             variant="contained"
@@ -199,23 +254,56 @@ export default function AdminConsoleOrganizationsPage() {
           />
         </Box>
 
-        <OrganizationsTable
-          data={filteredOrganizations}
-          loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-
-        <OrganizationModal
-          open={modalOpen}
-          onClose={() => {
-            setModalOpen(false)
-            setEditingOrganization(null)
-          }}
-          onSuccess={handleModalSuccess}
-          mode={editingOrganization ? 'edit' : 'create'}
-          initialData={editingOrganization}
-        />
+        {isAdmin(user) ? (
+          <>
+            <AdminOrganizationsTable
+              data={filteredOrganizations as OrganizationWithCreator[]}
+              loading={loading}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+            <AdminOrganizationModal
+              open={modalOpen}
+              onClose={() => {
+                setModalOpen(false)
+                setEditingOrganization(null)
+              }}
+              onSuccess={handleModalSuccess}
+              mode={editingOrganization ? 'edit' : 'create'}
+              initialData={editingOrganization}
+            />
+          </>
+        ) : (
+          <>
+            <OrganizationsTable
+              data={filteredOrganizations as OrganizationWithStats[]}
+              loading={loading}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onExport={handleExportOrganization}
+              onInvite={handleInvite}
+            />
+            <OrganizationModal
+              open={modalOpen}
+              onClose={() => {
+                setModalOpen(false)
+                setEditingOrganization(null)
+              }}
+              onSuccess={handleModalSuccess}
+              mode={editingOrganization ? 'edit' : 'create'}
+              initialData={editingOrganization}
+            />
+            <InviteClientAdminModal
+              open={inviteModalOpen}
+              onClose={() => {
+                setInviteModalOpen(false)
+                setInvitingOrganization(null)
+              }}
+              onSuccess={handleInviteSuccess}
+              organization={invitingOrganization}
+            />
+          </>
+        )}
 
         <DeleteConfirmationDialog
           open={deleteDialogOpen}

@@ -16,8 +16,14 @@ import {
   addUserToOrganization as addUserToOrganizationAPI,
   removeUserFromOrganization as removeUserFromOrganizationAPI,
   getOrganizationsWithStats as getOrganizationsWithStatsAPI,
-} from '../api/emissions'
-import { User } from '../api'
+  getOrganizationsForDealer as getOrganizationsForDealerAPI,
+  getOrganizationsForAdmin as getOrganizationsForAdminAPI,
+  getDealers as getDealersAPI,
+  getDealerByOrganization as getDealerByOrganizationAPI,
+  setDealerForOrganization as setDealerForOrganizationAPI,
+  type OrganizationWithCreator,
+} from '../api/organizations'
+import type { User } from '../api'
 
 export class OrganizationService {
   private supabase: SupabaseClient
@@ -50,9 +56,65 @@ export class OrganizationService {
       app_url?: string | null
       factory_admin_email?: string | null
       created_by?: string | null
+      assignedUserId?: string | null
     }
   ): Promise<Organization> {
     return createOrganizationAPI(data)
+  }
+
+  // Get organizations for dealer (filtered by assignment)
+  async getOrganizationsForDealer (userId: string): Promise<OrganizationWithStats[]> {
+    return getOrganizationsForDealerAPI(userId)
+  }
+
+  // Get organizations for admin (with creator info)
+  async getOrganizationsForAdmin (): Promise<OrganizationWithCreator[]> {
+    return getOrganizationsForAdminAPI()
+  }
+
+  // Export organization details for operations team
+  async exportOrganizationDetails (organizationId: string, dealerInfo?: User): Promise<{
+    organization: OrganizationWithStats
+    dealerInfo?: User
+    exportData: {
+      name: string
+      code: string | null
+      factory_admin_email: string | null
+      status: string
+      created_at: string
+      app_url: string | null
+      dealer_name?: string
+      dealer_email?: string
+    }
+  }> {
+    const organization = await this.getOrganizationById(organizationId)
+    if (!organization) {
+      throw new Error('Organization not found')
+    }
+
+    // Get user count for stats
+    const users = await this.getUsersByOrganization(organizationId)
+    const orgWithStats: OrganizationWithStats = {
+      ...organization,
+      userCount: users.length,
+    }
+
+    const status = organization.is_initialized ? 'Deployed' : 'Pending Deployment'
+
+    return {
+      organization: orgWithStats,
+      dealerInfo,
+      exportData: {
+        name: organization.name,
+        code: organization.code,
+        factory_admin_email: organization.factory_admin_email,
+        status,
+        created_at: organization.created_at,
+        app_url: organization.app_url,
+        dealer_name: dealerInfo?.name,
+        dealer_email: dealerInfo?.email,
+      },
+    }
   }
 
   // Update organization
@@ -103,6 +165,25 @@ export class OrganizationService {
   // Remove user from organization
   async removeUserFromOrganization (organizationId: string, userId: string): Promise<void> {
     return removeUserFromOrganizationAPI(organizationId, userId)
+  }
+
+  // Get all dealers
+  async getDealers (): Promise<User[]> {
+    return getDealersAPI()
+  }
+
+  // Get dealer assigned to organization
+  async getDealerByOrganization (organizationId: string): Promise<User | null> {
+    return getDealerByOrganizationAPI(organizationId)
+  }
+
+  // Set dealer for organization
+  async setDealerForOrganization (
+    organizationId: string,
+    dealerId: string | null,
+    assignedBy: string | null
+  ): Promise<void> {
+    return setDealerForOrganizationAPI(organizationId, dealerId, assignedBy)
   }
 }
 

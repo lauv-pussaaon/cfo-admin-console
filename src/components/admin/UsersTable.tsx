@@ -60,8 +60,25 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
       minWidth: 120,
     },
     {
+      field: 'role',
+      headerName: 'บทบาท',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          color={getRoleColor(params.value)}
+          size="small"
+          sx={{
+            fontWeight: 'medium',
+          }}
+        />
+      ),
+    },
+    {
       field: 'email',
-      headerName: 'อีเมล',
+      headerName: 'อีเมล์',
       width: 250,
       flex: 1.5,
       minWidth: 200,
@@ -83,23 +100,6 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
           </Box>
         )
       },
-    },
-    {
-      field: 'role',
-      headerName: 'บทบาท',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={getRoleColor(params.value)}
-          size="small"
-          sx={{
-            fontWeight: 'medium',
-          }}
-        />
-      ),
     },
     {
       field: 'actions',
