@@ -34,7 +34,7 @@ import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
-import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin, isConsult, isAudit } from '@/lib/permissions'
+import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin, isConsult, isAudit, canManageOrganizations } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 
 export default function AdminConsoleOrganizationsPage() {
@@ -272,7 +272,7 @@ export default function AdminConsoleOrganizationsPage() {
                 }}
               />
             )}
-            {isAdmin(user) && (
+            {canManageOrganizations(user) && (
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}

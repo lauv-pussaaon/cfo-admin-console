@@ -84,7 +84,7 @@ export default function AdminOrganizationModal({
   useEffect(() => {
     if (open) {
       loadDealers()
-      if (mode === 'edit' && initialData) {
+      if (mode === 'edit' && initialData?.id) {
         loadCurrentDealer(initialData.id)
       } else {
         setCurrentDealerId(null)
@@ -105,12 +105,26 @@ export default function AdminOrganizationModal({
   }
 
   const loadCurrentDealer = async (organizationId: string) => {
+    if (!organizationId) {
+      setCurrentDealerId(null)
+      methods.setValue('dealer_id', null)
+      return
+    }
+
     try {
       const dealer = await organizationService.getDealerByOrganization(organizationId)
       setCurrentDealerId(dealer?.id || null)
       methods.setValue('dealer_id', dealer?.id || null)
     } catch (error) {
-      console.error('Error loading current dealer:', error)
+      // Log error with better details
+      console.error('Error loading current dealer:', {
+        error,
+        message: error instanceof Error ? error.message : String(error),
+        organizationId,
+      })
+      // Set to null on error - organization might not have a dealer assigned
+      setCurrentDealerId(null)
+      methods.setValue('dealer_id', null)
     }
   }
 
