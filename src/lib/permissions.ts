@@ -51,7 +51,7 @@ export function canManageOrganizations (user: User | null): boolean {
 /**
  * Check if user can manage a specific organization
  * Admin can manage all organizations
- * Dealer can only manage organizations they are assigned to
+ * Dealer, Consult, and Audit can only manage organizations they are assigned to
  * @param user - User object or null
  * @param organizationId - Organization ID to check
  * @returns Promise<boolean> true if user can manage the organization
@@ -65,8 +65,8 @@ export async function canManageOrganization (
   // Admin can manage all organizations
   if (user.role === 'Admin') return true
 
-  // Dealer can only manage assigned organizations
-  if (user.role === 'Dealer') {
+  // Dealer, Consult, and Audit can only manage assigned organizations
+  if (user.role === 'Dealer' || user.role === 'Consult' || user.role === 'Audit') {
     try {
       const userOrgs = await organizationService.getUserOrganizations(user.id)
       return userOrgs.some(uo => uo.organization_id === organizationId)
@@ -81,13 +81,13 @@ export async function canManageOrganization (
 
 /**
  * Check if organizations should be filtered by user assignment
- * Dealers should only see organizations they're assigned to
+ * Dealers, Consult, and Audit should only see organizations they're assigned to
  * Admins see all organizations
  * @param user - User object or null
  * @returns true if organizations should be filtered by assignment
  */
 export function shouldFilterOrganizationsByAssignment (user: User | null): boolean {
   if (!user) return false
-  return user.role === 'Dealer'
+  return user.role === 'Dealer' || user.role === 'Consult' || user.role === 'Audit'
 }
 

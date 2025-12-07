@@ -22,6 +22,7 @@ CREATE TABLE users (
   name TEXT NOT NULL,
   avatar_url TEXT,
   role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit')),
+  invite_hashcode TEXT UNIQUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -80,6 +81,7 @@ CREATE INDEX idx_organizations_created_at ON organizations(created_at);
 -- Users indexes
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_invite_hashcode ON users(invite_hashcode);
 
 -- Organization invitations indexes
 CREATE UNIQUE INDEX idx_organization_invitations_unique_pending ON organization_invitations(organization_id, email) WHERE status = 'pending';

@@ -17,6 +17,7 @@ import {
   removeUserFromOrganization as removeUserFromOrganizationAPI,
   getOrganizationsWithStats as getOrganizationsWithStatsAPI,
   getOrganizationsForDealer as getOrganizationsForDealerAPI,
+  getOrganizationsForConsultAudit as getOrganizationsForConsultAuditAPI,
   getOrganizationsForAdmin as getOrganizationsForAdminAPI,
   getDealers as getDealersAPI,
   getDealerByOrganization as getDealerByOrganizationAPI,
@@ -65,6 +66,11 @@ export class OrganizationService {
   // Get organizations for dealer (filtered by assignment)
   async getOrganizationsForDealer (userId: string): Promise<OrganizationWithStats[]> {
     return getOrganizationsForDealerAPI(userId)
+  }
+
+  // Get organizations for Consult/Audit (filtered by assignment)
+  async getOrganizationsForConsultAudit (userId: string): Promise<OrganizationWithStats[]> {
+    return getOrganizationsForConsultAuditAPI(userId)
   }
 
   // Get organizations for admin (with creator info)

@@ -10,7 +10,7 @@ export const getUsers = async (): Promise<User[]> => {
     // Get all users
     const result = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, created_at')
+      .select('id, username, email, name, avatar_url, role, invite_hashcode, created_at')
       .order('name', { ascending: true })
 
     if (result.error) {
@@ -71,7 +71,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
 
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, email, name, avatar_url, role, created_at')
+    .select('id, username, email, name, avatar_url, role, invite_hashcode, created_at')
     .eq('id', userId)
     .single()
 
@@ -84,7 +84,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
 export const getUserById = async (userId: string): Promise<User | null> => {
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, email, name, avatar_url, role, created_at')
+    .select('id, username, email, name, avatar_url, role, invite_hashcode, created_at')
     .eq('id', userId)
     .single()
 
@@ -136,13 +136,18 @@ export const createUser = async (data: {
   // Validate role - only allow admin console roles
   const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit']
   const role = data.role || 'Consult'
-  
+
   if (!allowedRoles.includes(role)) {
     throw new ValidationError(`Invalid role. Allowed roles: ${allowedRoles.join(', ')}`)
   }
 
   const { hashPassword } = await import('@/lib/utils/password')
   const password_hash = await hashPassword(data.password)
+
+  // Generate invite hashcode for Consult and Audit users
+  const invite_hashcode = (role === 'Consult' || role === 'Audit')
+    ? crypto.randomUUID()
+    : null
 
   const insertData: {
     username: string
@@ -151,6 +156,7 @@ export const createUser = async (data: {
     name: string
     avatar_url: string | null
     role: string
+    invite_hashcode: string | null
   } = {
     username: data.username,
     email: data.email,
@@ -158,12 +164,13 @@ export const createUser = async (data: {
     name: data.name,
     avatar_url: data.avatar_url || null,
     role,
+    invite_hashcode,
   }
 
   const result = await supabase
     .from('users')
     .insert(insertData)
-    .select('id, username, email, name, avatar_url, role, created_at')
+    .select('id, username, email, name, avatar_url, role, invite_hashcode, created_at')
     .single()
 
   return throwIfError(result)

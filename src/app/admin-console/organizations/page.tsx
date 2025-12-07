@@ -12,11 +12,15 @@ import {
   Alert,
   CircularProgress,
   TextField,
+  Chip,
+  IconButton,
+  Tooltip,
 } from '@mui/material'
 import {
   Add as AddIcon,
   ArrowBack,
   Search as SearchIcon,
+  ContentCopy as CopyIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
 import OrganizationModal from '@/components/admin/OrganizationModal'
@@ -30,7 +34,7 @@ import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
-import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin } from '@/lib/permissions'
+import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin, isConsult, isAudit } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 
 export default function AdminConsoleOrganizationsPage() {
@@ -55,6 +59,7 @@ export default function AdminConsoleOrganizationsPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -80,9 +85,12 @@ export default function AdminConsoleOrganizationsPage() {
       if (isAdmin(user)) {
         // Admin sees all organizations with creator info
         data = await organizationService.getOrganizationsForAdmin()
-      } else if (shouldFilterOrganizationsByAssignment(user)) {
+      } else if (isDealer(user)) {
         // Dealer sees only assigned organizations
         data = await organizationService.getOrganizationsForDealer(user.id)
+      } else if (isConsult(user) || isAudit(user)) {
+        // Consult/Audit see only assigned organizations
+        data = await organizationService.getOrganizationsForConsultAudit(user.id)
       } else {
         // Other roles see all organizations
         data = await organizationService.getOrganizationsWithStats()
@@ -199,6 +207,18 @@ export default function AdminConsoleOrganizationsPage() {
     setShowSuccessMessage(true)
   }
 
+  const handleCopyHashcode = async () => {
+    if (user?.invite_hashcode) {
+      try {
+        await navigator.clipboard.writeText(user.invite_hashcode)
+        setCopySuccess(true)
+        setTimeout(() => setCopySuccess(false), 2000)
+      } catch (error) {
+        console.error('Failed to copy hashcode:', error)
+      }
+    }
+  }
+
   if (authLoading) {
     return (
       <Box
@@ -226,19 +246,46 @@ export default function AdminConsoleOrganizationsPage() {
         </Link>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Typography variant="h4" fontWeight="bold">
-            {isDealer(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
+            {isDealer(user) ? 'องค์กรที่ดูแล' : isConsult(user) || isAudit(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreate}
-            sx={{
-              textTransform: 'none',
-              borderRadius: 1,
-            }}
-          >
-            สร้างองค์กรใหม่
-          </Button>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            {/* Display invite hashcode for Consult/Audit */}
+            {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
+              <Chip
+                label={`Invite Code: ${user.invite_hashcode}`}
+                onDelete={handleCopyHashcode}
+                deleteIcon={
+                  <Tooltip title={copySuccess ? 'Copied!' : 'Copy to clipboard'}>
+                    <IconButton size="small" onClick={handleCopyHashcode}>
+                      <CopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                }
+                color={copySuccess ? 'success' : 'primary'}
+                variant="outlined"
+                sx={{
+                  fontWeight: 'medium',
+                  '& .MuiChip-label': {
+                    fontFamily: 'monospace',
+                    fontSize: '0.875rem',
+                  },
+                }}
+              />
+            )}
+            {isAdmin(user) && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleCreate}
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: 1,
+                }}
+              >
+                สร้างองค์กรใหม่
+              </Button>
+            )}
+          </Box>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>

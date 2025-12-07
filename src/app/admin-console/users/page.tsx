@@ -57,6 +57,7 @@ export default function AdminConsoleUsersPage() {
 
   // Load users
   useEffect(() => {
+    console.log('useEffect', user)
     if (user) {
       loadUsers()
     }
@@ -64,8 +65,10 @@ export default function AdminConsoleUsersPage() {
 
   const loadUsers = async () => {
     try {
+      console.log('loadUsers')
       setLoading(true)
       const data = await userService.getUsers()
+      console.log(data)
       // userService.getUsers() already filters to admin console roles
       setUsers(data)
     } catch (error) {

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
@@ -7,11 +8,18 @@ import {
   People as PeopleIcon
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
-import { canManageOrganizations, isAdmin, isAudit } from '@/lib/permissions'
+import { canManageOrganizations, isAdmin, isConsult, isAudit } from '@/lib/permissions'
 
 export default function AdminConsolePage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+
+  // Redirect Consult and Audit users to organizations page (similar to Dealers)
+  useEffect(() => {
+    if (!isLoading && user && (isConsult(user) || isAudit(user))) {
+      router.push('/admin-console/organizations')
+    }
+  }, [user, isLoading, router])
 
   if (isLoading) {
     return (
@@ -26,6 +34,11 @@ export default function AdminConsolePage() {
         <Typography>Loading...</Typography>
       </Box>
     )
+  }
+
+  // Don't render dashboard for Consult/Audit (they're redirected)
+  if (user && (isConsult(user) || isAudit(user))) {
+    return null
   }
 
   return (

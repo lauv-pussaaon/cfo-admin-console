@@ -217,6 +217,68 @@ export const getOrganizationsForDealer = async (userId: string): Promise<Organiz
   }))
 }
 
+export const getOrganizationsForConsultAudit = async (userId: string): Promise<OrganizationWithStats[]> => {
+  // Get organizations assigned to this Consult/Audit through user_organizations
+  const { data: userOrgs, error: userOrgsError } = await supabase
+    .from('user_organizations')
+    .select(`
+      organization_id,
+      organization:organizations(*)
+    `)
+    .eq('user_id', userId)
+    .order('assigned_at', { ascending: false })
+
+  if (userOrgsError) throw userOrgsError
+  if (!userOrgs || userOrgs.length === 0) {
+    return []
+  }
+
+  // Extract organization IDs
+  const organizationIds = userOrgs
+    .map((uo: { organization: Organization | Organization[] | null }) => {
+      if (!uo.organization) return null
+      return Array.isArray(uo.organization) ? uo.organization[0]?.id : uo.organization.id
+    })
+    .filter((id): id is string => id !== null)
+
+  if (organizationIds.length === 0) {
+    return []
+  }
+
+  // Get user count for each organization
+  const { data: allUserOrgs, error: userError } = await supabase
+    .from('user_organizations')
+    .select('organization_id')
+    .in('organization_id', organizationIds)
+
+  if (userError) throw userError
+
+  // Create map for counting
+  const userCountMap = new Map<string, number>()
+
+  // Count users per organization
+  if (allUserOrgs) {
+    allUserOrgs.forEach((uo: { organization_id: string }) => {
+      const count = userCountMap.get(uo.organization_id) || 0
+      userCountMap.set(uo.organization_id, count + 1)
+    })
+  }
+
+  // Extract organizations and add stats
+  const organizations: Organization[] = userOrgs
+    .map((uo: { organization: Organization | Organization[] | null }) => {
+      if (!uo.organization) return null
+      return Array.isArray(uo.organization) ? uo.organization[0] : uo.organization
+    })
+    .filter((org): org is Organization => org !== null)
+
+  // Combine organizations with stats
+  return organizations.map(org => ({
+    ...org,
+    userCount: userCountMap.get(org.id) || 0,
+  }))
+}
+
 export const getOrganizationById = async (id: string): Promise<Organization | null> => {
   const { data, error } = await supabase
     .from('organizations')
