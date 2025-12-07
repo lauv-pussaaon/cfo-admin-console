@@ -56,11 +56,12 @@ export function exportOrganizationToCSV(
   ]
 
   // Escape CSV values (handle commas, quotes, newlines)
-  const escapeCSV = (value: string): string => {
-    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-      return `"${value.replace(/"/g, '""')}"`
+  const escapeCSV = (value: string | null | undefined): string => {
+    const str = value ?? ''
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+      return `"${str.replace(/"/g, '""')}"`
     }
-    return value
+    return str
   }
 
   return [headers.map(escapeCSV).join(','), row.map(escapeCSV).join(',')].join('\n')

@@ -224,8 +224,8 @@ export default function InviteClientAdminModal({
                   <TextField
                     value={invitationLink}
                     fullWidth
-                    readOnly
                     InputProps={{
+                      readOnly: true,
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton
