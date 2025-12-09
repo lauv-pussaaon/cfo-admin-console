@@ -50,6 +50,9 @@ export default function UserModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  // Check if editing the locked admin user
+  const isLockedAdmin = Boolean(mode === 'edit' && initialData && initialData.role === 'Admin' && initialData.username === 'admin')
+
   const defaultRole: UserRole = 'Consult'
 
   // Initialize React Hook Form with Zod resolver
@@ -98,6 +101,12 @@ export default function UserModal({
   }, [open, reset, mode, initialData])
 
   const onFormSubmit = async (data: UserFormData) => {
+    // Prevent editing the locked admin user
+    if (isLockedAdmin) {
+      setSubmitError('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
 
@@ -180,6 +189,14 @@ export default function UserModal({
             </IconButton>
           </Box>
 
+          {isLockedAdmin && (
+            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'warning.light' }}>
+              <Typography color="warning.dark" variant="body2" fontWeight="medium">
+                ไม่สามารถแก้ไขหรือลบผู้ใช้ admin ได้ (บัญชีนี้ถูกล็อคเพื่อความปลอดภัย)
+              </Typography>
+            </Box>
+          )}
+
           {submitError && (
             <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
               <Typography color="error" variant="body2">{submitError}</Typography>
@@ -192,6 +209,7 @@ export default function UserModal({
               mode={mode} 
               isSubmitting={isSubmitting} 
               availableRoles={ROLE_OPTIONS}
+              isLocked={isLockedAdmin}
             />
           </Box>
 
@@ -201,7 +219,7 @@ export default function UserModal({
             </Button>
             <Button
               onClick={handleSubmit(onFormSubmit)}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isLockedAdmin}
               variant="contained"
               color="primary"
               startIcon={isSubmitting ? <CircularProgress size={16} /> : null}

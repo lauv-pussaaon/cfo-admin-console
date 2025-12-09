@@ -23,7 +23,6 @@ import {
   ContentCopy as CopyIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
-import OrganizationModal from '@/components/admin/OrganizationModal'
 import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
 import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
 import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
@@ -302,54 +301,46 @@ export default function AdminConsoleOrganizationsPage() {
         </Box>
 
         {isAdmin(user) ? (
-          <>
-            <AdminOrganizationsTable
-              data={filteredOrganizations as OrganizationWithCreator[]}
-              loading={loading}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-            <AdminOrganizationModal
-              open={modalOpen}
-              onClose={() => {
-                setModalOpen(false)
-                setEditingOrganization(null)
-              }}
-              onSuccess={handleModalSuccess}
-              mode={editingOrganization ? 'edit' : 'create'}
-              initialData={editingOrganization}
-            />
-          </>
+          <AdminOrganizationsTable
+            data={filteredOrganizations as OrganizationWithCreator[]}
+            loading={loading}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         ) : (
-          <>
-            <OrganizationsTable
-              data={filteredOrganizations as OrganizationWithStats[]}
-              loading={loading}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onExport={handleExportOrganization}
-              onInvite={handleInvite}
-            />
-            <OrganizationModal
-              open={modalOpen}
-              onClose={() => {
-                setModalOpen(false)
-                setEditingOrganization(null)
-              }}
-              onSuccess={handleModalSuccess}
-              mode={editingOrganization ? 'edit' : 'create'}
-              initialData={editingOrganization}
-            />
-            <InviteClientAdminModal
-              open={inviteModalOpen}
-              onClose={() => {
-                setInviteModalOpen(false)
-                setInvitingOrganization(null)
-              }}
-              onSuccess={handleInviteSuccess}
-              organization={invitingOrganization}
-            />
-          </>
+          <OrganizationsTable
+            data={filteredOrganizations as OrganizationWithStats[]}
+            loading={loading}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onExport={handleExportOrganization}
+            onInvite={handleInvite}
+          />
+        )}
+
+        {/* Unified modal for all roles */}
+        <AdminOrganizationModal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false)
+            setEditingOrganization(null)
+          }}
+          onSuccess={handleModalSuccess}
+          mode={editingOrganization ? 'edit' : 'create'}
+          initialData={editingOrganization}
+        />
+
+        {/* Invite modal for non-admin users */}
+        {!isAdmin(user) && (
+          <InviteClientAdminModal
+            open={inviteModalOpen}
+            onClose={() => {
+              setInviteModalOpen(false)
+              setInvitingOrganization(null)
+            }}
+            onSuccess={handleInviteSuccess}
+            organization={invitingOrganization}
+          />
         )}
 
         <DeleteConfirmationDialog

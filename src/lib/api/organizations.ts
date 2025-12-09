@@ -416,7 +416,7 @@ export const getUsersByOrganization = async (organizationId: string): Promise<Us
   const { data: userOrgs, error: userOrgsError } = await supabase
     .from('user_organizations')
     .select(`
-      user:users(*)
+      user:users!user_organizations_user_id_fkey(*)
     `)
     .eq('organization_id', organizationId)
 

@@ -30,6 +30,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import type { Organization } from '@/types/database'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
+import { isAdmin, isDealer } from '@/lib/permissions'
 
 interface AdminOrganizationModalProps {
   open: boolean
@@ -39,8 +40,9 @@ interface AdminOrganizationModalProps {
   initialData?: Organization | null
 }
 
-// Zod validation schema for admin
-const adminOrganizationSchema = z.object({
+// Organization schema
+// Note: app_url and factory_admin_email are only shown in edit mode, so they're optional
+const organizationSchema = z.object({
   name: z.string().min(1, 'กรุณากรอกชื่อองค์กร'),
   code: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
@@ -50,7 +52,7 @@ const adminOrganizationSchema = z.object({
   dealer_id: z.string().optional().nullable(),
 })
 
-export type AdminOrganizationFormData = z.infer<typeof adminOrganizationSchema>
+export type AdminOrganizationFormData = z.infer<typeof organizationSchema>
 
 export default function AdminOrganizationModal({
   open,
@@ -65,9 +67,12 @@ export default function AdminOrganizationModal({
   const [dealers, setDealers] = useState<User[]>([])
   const [loadingDealers, setLoadingDealers] = useState(false)
   const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
+  
+  const isAdminUser = isAdmin(user)
+  const isDealerUser = isDealer(user)
 
   const methods = useForm<AdminOrganizationFormData>({
-    resolver: zodResolver(adminOrganizationSchema),
+    resolver: zodResolver(organizationSchema),
     mode: 'onChange',
     defaultValues: {
       name: '',
@@ -80,17 +85,29 @@ export default function AdminOrganizationModal({
     }
   })
 
-  // Load dealers when modal opens
+  const { handleSubmit, reset, formState: { errors }, watch, setValue } = methods
+
+  // Load dealers when modal opens (only for admins)
   useEffect(() => {
     if (open) {
-      loadDealers()
-      if (mode === 'edit' && initialData?.id) {
-        loadCurrentDealer(initialData.id)
+      if (isAdminUser) {
+        loadDealers()
+        if (mode === 'edit' && initialData?.id) {
+          loadCurrentDealer(initialData.id)
+        } else {
+          setCurrentDealerId(null)
+        }
       } else {
-        setCurrentDealerId(null)
+        // For non-admins, set dealer_id to current user if dealer
+        if (isDealerUser && mode === 'create') {
+          setCurrentDealerId(user?.id || null)
+          setValue('dealer_id', user?.id || null)
+        } else {
+          setCurrentDealerId(null)
+        }
       }
     }
-  }, [open, mode, initialData])
+  }, [open, mode, initialData, isAdminUser, isDealerUser, user?.id, setValue])
 
   const loadDealers = async () => {
     try {
@@ -107,14 +124,14 @@ export default function AdminOrganizationModal({
   const loadCurrentDealer = async (organizationId: string) => {
     if (!organizationId) {
       setCurrentDealerId(null)
-      methods.setValue('dealer_id', null)
+      setValue('dealer_id', null)
       return
     }
 
     try {
       const dealer = await organizationService.getDealerByOrganization(organizationId)
       setCurrentDealerId(dealer?.id || null)
-      methods.setValue('dealer_id', dealer?.id || null)
+      setValue('dealer_id', dealer?.id || null)
     } catch (error) {
       // Log error with better details
       console.error('Error loading current dealer:', {
@@ -124,11 +141,9 @@ export default function AdminOrganizationModal({
       })
       // Set to null on error - organization might not have a dealer assigned
       setCurrentDealerId(null)
-      methods.setValue('dealer_id', null)
+      setValue('dealer_id', null)
     }
   }
-
-  const { handleSubmit, reset, formState: { errors }, watch } = methods
 
   useEffect(() => {
     if (open) {
@@ -195,15 +210,17 @@ export default function AdminOrganizationModal({
           description: data.description || null,
           app_url: data.app_url || null,
           factory_admin_email: data.factory_admin_email || null,
-          created_by: null,
+          created_by: user?.id || null,
+          assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
         })
         organizationId = created.id
 
-        // Assign dealer if provided
-        if (data.dealer_id) {
+        // Assign dealer if provided (for admins) or auto-assign for dealers
+        const dealerToAssign = isAdminUser ? data.dealer_id : (isDealerUser ? user?.id || null : null)
+        if (dealerToAssign) {
           await organizationService.setDealerForOrganization(
             organizationId,
-            data.dealer_id,
+            dealerToAssign,
             user?.id || null
           )
         }
@@ -243,7 +260,7 @@ export default function AdminOrganizationModal({
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
             <Typography variant="h6" fontWeight="bold">
-              {mode === 'edit' ? 'แก้ไของค์กร (Admin)' : 'สร้างองค์กรใหม่'}
+              {mode === 'edit' ? 'แก้ไของค์กร' : 'สร้างองค์กรใหม่'}
             </Typography>
             <IconButton
               onClick={onClose}
@@ -274,10 +291,10 @@ export default function AdminOrganizationModal({
               </Box>
             )}
 
-            {mode === 'edit' && isInitialized && (
-              <Alert severity="success" sx={{ mb: 2 }}>
+            {mode === 'edit' && initialData?.is_initialized && (
+              <Alert severity={isAdminUser ? 'success' : 'info'} sx={{ mb: 2 }}>
                 องค์กรนี้ได้ถูกเริ่มต้นใช้งานแล้ว
-                {initialData?.initialized_at && (
+                {initialData.initialized_at && (
                   <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
                     วันที่เริ่มต้น: {new Date(initialData.initialized_at).toLocaleString('th-TH')}
                   </Typography>
@@ -328,60 +345,69 @@ export default function AdminOrganizationModal({
                 }}
               />
 
-              <TextField
-                {...methods.register('app_url')}
-                label="URL ของแอปองค์กร"
-                fullWidth
-                type="url"
-                error={!!errors.app_url}
-                helperText={errors.app_url?.message || 'URL ของแอปพลิเคชันองค์กร (เช่น https://org-name.cfo.com)'}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                  },
-                }}
-              />
-
-              <TextField
-                {...methods.register('factory_admin_email')}
-                label="อีเมล Factory Admin"
-                fullWidth
-                type="email"
-                error={!!errors.factory_admin_email}
-                helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 1,
-                  },
-                }}
-              />
-
-              <FormControl fullWidth>
-                <InputLabel>Dealer</InputLabel>
-                <Select
-                  {...methods.register('dealer_id')}
-                  value={methods.watch('dealer_id') || ''}
-                  onChange={(e) => methods.setValue('dealer_id', e.target.value || null)}
-                  label="Dealer"
-                  disabled={isSubmitting || loadingDealers}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                    },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>ไม่มี Dealer</em>
-                  </MenuItem>
-                  {dealers.map((dealer) => (
-                    <MenuItem key={dealer.id} value={dealer.id}>
-                      {dealer.name} ({dealer.email})
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
+              {/* URL and Admin Email: Only show in edit mode for all roles */}
               {mode === 'edit' && (
+                <>
+                  <TextField
+                    {...methods.register('app_url')}
+                    label="URL ของแอปองค์กร"
+                    fullWidth
+                    type="url"
+                    error={!!errors.app_url}
+                    helperText={errors.app_url?.message || 'URL ของแอปพลิเคชันองค์กร (เช่น https://org-name.cfo.com)'}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 1,
+                      },
+                    }}
+                  />
+
+                  <TextField
+                    {...methods.register('factory_admin_email')}
+                    label="อีเมล Factory Admin"
+                    fullWidth
+                    type="email"
+                    error={!!errors.factory_admin_email}
+                    helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 1,
+                      },
+                    }}
+                  />
+                </>
+              )}
+
+              {/* Dealer Assignment: Only for admins */}
+              {isAdminUser && (
+                <FormControl fullWidth>
+                  <InputLabel>Dealer</InputLabel>
+                  <Select
+                    {...methods.register('dealer_id')}
+                    value={watch('dealer_id') || ''}
+                    onChange={(e) => setValue('dealer_id', e.target.value || null)}
+                    label="Dealer"
+                    disabled={isSubmitting || loadingDealers}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 1,
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>ไม่มี Dealer</em>
+                    </MenuItem>
+                    {dealers.map((dealer) => (
+                      <MenuItem key={dealer.id} value={dealer.id}>
+                        {dealer.name} ({dealer.email})
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+
+              {/* Mark as Deployed: Only for admins in edit mode */}
+              {isAdminUser && mode === 'edit' && (
                 <FormControlLabel
                   control={
                     <Switch

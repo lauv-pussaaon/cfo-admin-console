@@ -88,17 +88,30 @@ export default function AdminConsoleUsersPage() {
   const handleEdit = (id: string) => {
     const user = users.find(u => u.id === id)
     if (user) {
+      // Prevent editing the locked admin user
+      if (user.role === 'Admin' && user.username === 'admin') {
+        setSuccessMessage('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
+        setShowSuccessMessage(true)
+        return
+      }
       setEditingUser(user)
       setModalOpen(true)
     }
   }
 
   const handleDelete = async (id: string) => {
+    // Prevent deleting the locked admin user
+    const user = users.find(u => u.id === id)
+    if (user && user.role === 'Admin' && user.username === 'admin') {
+      setSuccessMessage('ไม่สามารถลบผู้ใช้ admin ได้')
+      setShowSuccessMessage(true)
+      return
+    }
+
     setDeletingId(id)
     setDeleteError(null)
     
     try {
-      const user = users.find(u => u.id === id)
       if (user) {
         setDeletingItemName(`${user.name} (${user.email})`)
       } else {
@@ -114,6 +127,17 @@ export default function AdminConsoleUsersPage() {
 
   const handleDeleteConfirm = async () => {
     if (!deletingId) return
+    
+    // Double-check: Prevent deleting the locked admin user
+    const user = users.find(u => u.id === deletingId)
+    if (user && user.role === 'Admin' && user.username === 'admin') {
+      setDeleteDialogOpen(false)
+      setDeletingId(null)
+      setDeletingItemName('')
+      setSuccessMessage('ไม่สามารถลบผู้ใช้ admin ได้')
+      setShowSuccessMessage(true)
+      return
+    }
     
     setIsDeleting(true)
     setDeleteError(null)

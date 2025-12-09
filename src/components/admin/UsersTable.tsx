@@ -18,6 +18,11 @@ interface Props {
 }
 
 export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
+  // Helper function to check if user is the locked admin
+  const isLockedAdmin = (user: { role: string; username: string }) => {
+    return user.role === 'Admin' && user.username === 'admin'
+  }
+
   const rows: GridRowsProp = useMemo(() => {
     return data.map((user) => ({
       id: user.id,
@@ -109,30 +114,39 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
       headerAlign: 'center',
       sortable: false,
       filterable: false,
-      renderCell: (params) => (
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <IconButton 
-            size="small" 
-            onClick={() => onEdit(params.row.id)}
-            sx={{ 
-              color: 'primary.main',
-              '&:hover': { backgroundColor: 'primary.light', color: 'white' }
-            }}
-          >
-            <EditIcon fontSize="small" />
-          </IconButton>
-          <IconButton 
-            size="small" 
-            onClick={() => onDelete(params.row.id)}
-            sx={{ 
-              color: 'error.main',
-              '&:hover': { backgroundColor: 'error.light', color: 'white' }
-            }}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Box>
-      ),
+      renderCell: (params) => {
+        const isLocked = isLockedAdmin({ role: params.row.role, username: params.row.username })
+        return (
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <IconButton 
+              size="small" 
+              onClick={() => onEdit(params.row.id)}
+              disabled={isLocked}
+              sx={{ 
+                color: 'primary.main',
+                '&:hover': { backgroundColor: 'primary.light', color: 'white' },
+                '&.Mui-disabled': { color: 'text.disabled' }
+              }}
+              title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton 
+              size="small" 
+              onClick={() => onDelete(params.row.id)}
+              disabled={isLocked}
+              sx={{ 
+                color: 'error.main',
+                '&:hover': { backgroundColor: 'error.light', color: 'white' },
+                '&.Mui-disabled': { color: 'text.disabled' }
+              }}
+              title={isLocked ? 'ไม่สามารถลบผู้ใช้ admin ได้' : 'ลบ'}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        )
+      },
     },
   ], [onEdit, onDelete])
 

@@ -10,9 +10,10 @@ interface UserFormProps {
   mode: 'create' | 'edit'
   isSubmitting: boolean
   availableRoles?: RoleOption[] // Optional filtered role options
+  isLocked?: boolean // If true, disable all fields (for locked admin user)
 }
 
-export default function UserForm({ methods, mode, isSubmitting, availableRoles }: UserFormProps) {
+export default function UserForm({ methods, mode, isSubmitting, availableRoles, isLocked = false }: UserFormProps) {
   const { formState: { errors }, watch, setValue } = methods
   const formData = watch()
   
@@ -29,8 +30,8 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles }
         error={!!errors.username}
         helperText={errors.username?.message || 'ชื่อผู้ใช้สำหรับเข้าสู่ระบบ (ตัวอักษร ตัวเลข หรือ _ เท่านั้น)'}
         required
-        disabled={isSubmitting || mode === 'edit'}
-        InputProps={{ readOnly: mode === 'edit' }}
+        disabled={isSubmitting || mode === 'edit' || isLocked}
+        InputProps={{ readOnly: mode === 'edit' || isLocked }}
       />
 
       <TextField
@@ -42,8 +43,8 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles }
         error={!!errors.email}
         helperText={errors.email?.message || 'กรุณากรอกอีเมลที่ถูกต้อง'}
         required
-        disabled={isSubmitting || mode === 'edit'}
-        InputProps={{ readOnly: mode === 'edit' }}
+        disabled={isSubmitting || mode === 'edit' || isLocked}
+        InputProps={{ readOnly: mode === 'edit' || isLocked }}
       />
 
       <TextField
@@ -55,7 +56,7 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles }
         error={!!errors.password}
         helperText={errors.password?.message || (mode === 'edit' ? 'เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน' : 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')}
         required={mode === 'create'}
-        disabled={isSubmitting}
+        disabled={isSubmitting || isLocked}
       />
 
       <TextField
@@ -66,7 +67,7 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles }
         error={!!errors.name}
         helperText={errors.name?.message || 'กรุณากรอกชื่อ-นามสกุล'}
         required
-        disabled={isSubmitting}
+        disabled={isSubmitting || isLocked}
       />
 
       <FormControl fullWidth required error={!!errors.role}>
@@ -77,7 +78,7 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles }
           onChange={(e) => {
             setValue('role', e.target.value as UserRole, { shouldValidate: true })
           }}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLocked}
         >
           {roleOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
