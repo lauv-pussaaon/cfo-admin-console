@@ -101,7 +101,9 @@ export default function InviteClientAdminModal({
 
       // Generate invitation link
       if (organization.app_url) {
-        const link = `${organization.app_url}/invite/${newInvitation.token}`
+        // Normalize URL to prevent double slashes
+        const baseUrl = organization.app_url.replace(/\/+$/, '') // Remove trailing slashes
+        const link = `${baseUrl}/invite/${newInvitation.token}`
         setInvitationLink(link)
       } else {
         setSubmitError('องค์กรยังไม่ได้ตั้งค่า App URL กรุณาตั้งค่า App URL ก่อนสร้างคำเชิญ')
