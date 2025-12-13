@@ -4,6 +4,13 @@ import { config as appConfig, isMaintenanceMode } from './src/lib/config';
 export function middleware (request: NextRequest) {
   // Skip for static files and Next internals
   const { pathname } = request.nextUrl;
+  const method = request.method;
+
+  // Critical: Allow OPTIONS requests (CORS preflight) to pass through immediately
+  // This prevents redirects on preflight requests which cause CORS errors
+  if (method === 'OPTIONS') {
+    return NextResponse.next();
+  }
 
   // Allow health check path regardless
   if (pathname === appConfig.maintenanceBypassPath) {
@@ -24,7 +31,7 @@ export function middleware (request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Allow API routes (they handle their own routing)
+  // Allow API routes (they handle their own routing and CORS)
   if (pathname.startsWith('/api/')) {
     return NextResponse.next();
   }
