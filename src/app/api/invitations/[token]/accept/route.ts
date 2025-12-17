@@ -3,12 +3,17 @@ import { invitationService } from '@/lib/services/invitation.service'
 import { ValidationError } from '@/lib/utils/errors'
 import { createCorsHeaders, handleOptionsRequest } from '@/lib/utils/cors'
 
+// Prevent Next.js from caching or optimizing this route
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 // Handle OPTIONS preflight request
-export async function OPTIONS(request: NextRequest) {
+// Critical: This must return 204 directly without any redirects
+export async function OPTIONS (request: NextRequest) {
   return handleOptionsRequest(request)
 }
 
-export async function POST(
+export async function POST (
   request: NextRequest,
   { params }: { params: Promise<{ token: string }> }
 ) {

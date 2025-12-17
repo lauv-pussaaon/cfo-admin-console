@@ -245,24 +245,7 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
 }
 
 export const deleteUser = async (id: string): Promise<void> => {
-  // Check if user has business unit assignments before deletion
-  // Other references (conversations, messages, tasks, approvals) will be set to NULL automatically
-  const { data: assignments, error: assignmentsError } = await supabase
-    .from('user_business_units')
-    .select('id')
-    .eq('user_id', id)
-    .limit(1)
-
-  if (assignmentsError && assignmentsError.code !== 'PGRST116') {
-    handleSupabaseError(assignmentsError)
-  }
-
-  if (assignments && assignments.length > 0) {
-    throw new ValidationError('ไม่สามารถลบผู้ใช้ได้ เนื่องจากผู้ใช้ยังถูกกำหนดให้กับ Business Unit อยู่ กรุณาลบการกำหนดก่อน')
-  }
-
-  // If no business unit assignments, proceed with deletion
-  // Related records in conversations, messages, tasks, and approvals will have their user references set to NULL
+  // Delete user - related records in conversations, messages, tasks, and approvals will have their user references set to NULL
   const { error } = await supabase
     .from('users')
     .delete()

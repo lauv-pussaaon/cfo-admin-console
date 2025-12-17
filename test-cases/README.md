@@ -9,13 +9,12 @@ This directory contains comprehensive test cases for the CFO Beta application, o
   - **Authentication & Login** sheet - 6 test cases
   - **User Management** sheet - 10 test cases  
   - **Annual Emissions** sheet - 10 test cases
-  - **Dashboard** sheet - 10 test cases
+  - **Dashboard** sheet - 9 test cases
   - **Approval System** sheet - 10 test cases
   - **Chat System** sheet - 10 test cases
-  - **Organization Management** sheet - 8 test cases
-  - **Business Unit Management** sheet - 10 test cases
+  - **Organization Management** sheet - 7 test cases
   - **CFO Dashboard** sheet - 12 test cases
-  - Total: 86 test cases
+  - Total: 74 test cases
 
 Note: Individual module files are also available for reference but the main file is `QA_Test_Cases_All_Modules.xlsx`
 
