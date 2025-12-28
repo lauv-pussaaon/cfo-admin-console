@@ -119,15 +119,12 @@ export default function AdminOrganizationsTable({ onEdit, onDelete, data, loadin
       flex: 1,
       minWidth: 150,
       renderCell: (params) => (
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
           <Typography variant="body2" fontWeight={500}>
             {params.row.creator_name}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {params.row.creator_email}
-          </Typography>
-          <Typography variant="caption" color="text.secondary" display="block">
-            ({params.row.creator_role})
+            {params.row.creator_email} ({params.row.creator_role})
           </Typography>
         </Box>
       ),
@@ -139,7 +136,7 @@ export default function AdminOrganizationsTable({ onEdit, onDelete, data, loadin
       flex: 1,
       minWidth: 150,
       renderCell: (params) => (
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
           {params.row.dealer_name !== '-' ? (
             <>
               <Typography variant="body2" fontWeight={500}>
@@ -217,7 +214,7 @@ export default function AdminOrganizationsTable({ onEdit, onDelete, data, loadin
   ], [onEdit, onDelete])
 
   return (
-    <Paper elevation={0} sx={{ height: 600, width: '100%', backgroundColor: 'transparent' }}>
+    <Paper elevation={0} sx={{ minHeight: 400, width: '100%', backgroundColor: 'transparent', overflowX: 'scroll' }}>
       <DataGrid
         rows={rows}
         columns={columns}

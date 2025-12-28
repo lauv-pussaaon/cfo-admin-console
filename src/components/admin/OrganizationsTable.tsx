@@ -224,7 +224,7 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
   ], [onEdit, onDelete, onExport, onInvite])
 
   return (
-    <Paper elevation={0} sx={{ height: 600, width: '100%', backgroundColor: 'transparent' }}>
+    <Paper elevation={0} sx={{ minHeight: 400, width: '100%', backgroundColor: 'transparent', overflowX: 'scroll' }}>
       <DataGrid
         rows={rows}
         columns={columns}
