@@ -372,18 +372,13 @@ export const updateOrganization = async (
 
 export const deleteOrganization = async (id: string): Promise<void> => {
   // Check if organization has user assignments before deletion
-  const { data: userOrgs, error: userOrgsError } = await supabase
+  const { error: errorDeleteUserOrganizations } = await supabase
     .from('user_organizations')
-    .select('id')
+    .delete()
     .eq('organization_id', id)
-    .limit(1)
 
-  if (userOrgsError && userOrgsError.code !== 'PGRST116') {
-    handleSupabaseError(userOrgsError)
-  }
-
-  if (userOrgs && userOrgs.length > 0) {
-    throw new ValidationError('ไม่สามารถลบองค์กรได้ เนื่องจากองค์กรยังมีผู้ใช้ที่ถูกกำหนดให้อยู่ กรุณาลบการกำหนดผู้ใช้ก่อน')
+  if (errorDeleteUserOrganizations) {
+    handleSupabaseError(errorDeleteUserOrganizations)
   }
 
   // If no user assignments, proceed with deletion

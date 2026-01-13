@@ -318,6 +318,20 @@ export default function AdminOrganizationModal({
               />
 
               <TextField
+                {...methods.register('factory_admin_email')}
+                label="อีเมล Factory Admin"
+                fullWidth
+                type="email"
+                error={!!errors.factory_admin_email}
+                helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
                 {...methods.register('code')}
                 label="รหัสองค์กร"
                 fullWidth
@@ -345,37 +359,21 @@ export default function AdminOrganizationModal({
                 }}
               />
 
-              {/* URL and Admin Email: Only show in edit mode for all roles */}
+              {/* URL: Only show in edit mode for all roles */}
               {mode === 'edit' && (
-                <>
-                  <TextField
-                    {...methods.register('app_url')}
-                    label="URL ของแอปองค์กร"
-                    fullWidth
-                    type="url"
-                    error={!!errors.app_url}
-                    helperText={errors.app_url?.message || 'URL ของแอปพลิเคชันองค์กร (เช่น https://org-name.cfo.com)'}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 1,
-                      },
-                    }}
-                  />
-
-                  <TextField
-                    {...methods.register('factory_admin_email')}
-                    label="อีเมล Factory Admin"
-                    fullWidth
-                    type="email"
-                    error={!!errors.factory_admin_email}
-                    helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 1,
-                      },
-                    }}
-                  />
-                </>
+                <TextField
+                  {...methods.register('app_url')}
+                  label="URL ของแอปองค์กร"
+                  fullWidth
+                  type="url"
+                  error={!!errors.app_url}
+                  helperText={errors.app_url?.message || 'URL ของแอปพลิเคชันองค์กร (เช่น https://org-name.cfo.com)'}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                    },
+                  }}
+                />
               )}
 
               {/* Dealer Assignment: Only for admins */}

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Box,
-  Container,
   Typography,
   Button,
   Snackbar,
@@ -234,140 +233,140 @@ export default function AdminConsoleOrganizationsPage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Link href="/admin-console" style={{ textDecoration: 'none' }}>
-          <Button
-            startIcon={<ArrowBack />}
-            sx={{ mb: 2, textTransform: 'none' }}
-          >
-            กลับ
-          </Button>
-        </Link>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Typography variant="h4" fontWeight="bold">
-            {isDealer(user) ? 'องค์กรที่ดูแล' : isConsult(user) || isAudit(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            {/* Display invite hashcode for Consult/Audit */}
-            {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
-              <Chip
-                label={`Invite Code: ${user.invite_hashcode}`}
-                onDelete={handleCopyHashcode}
-                deleteIcon={
-                  <Tooltip title={copySuccess ? 'Copied!' : 'Copy to clipboard'}>
-                    <IconButton size="small" onClick={handleCopyHashcode}>
-                      <CopyIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                }
-                color={copySuccess ? 'success' : 'primary'}
-                variant="outlined"
-                sx={{
-                  fontWeight: 'medium',
-                  '& .MuiChip-label': {
-                    fontFamily: 'monospace',
-                    fontSize: '0.875rem',
-                  },
-                }}
-              />
-            )}
-            {canManageOrganizations(user) && (
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleCreate}
-                sx={{
-                  textTransform: 'none',
-                  borderRadius: 1,
-                }}
-              >
-                สร้างองค์กรใหม่
-              </Button>
-            )}
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-          <TextField
-            placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            size="small"
-            sx={{ minWidth: 300 }}
-            InputProps={{
-              startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
-            }}
-          />
-        </Box>
-
-        {isAdmin(user) ? (
-          <AdminOrganizationsTable
-            data={filteredOrganizations as OrganizationWithCreator[]}
-            loading={loading}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ) : (
-          <OrganizationsTable
-            data={filteredOrganizations as OrganizationWithStats[]}
-            loading={loading}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onExport={handleExportOrganization}
-            onInvite={handleInvite}
-          />
-        )}
-
-        {/* Unified modal for all roles */}
-        <AdminOrganizationModal
-          open={modalOpen}
-          onClose={() => {
-            setModalOpen(false)
-            setEditingOrganization(null)
-          }}
-          onSuccess={handleModalSuccess}
-          mode={editingOrganization ? 'edit' : 'create'}
-          initialData={editingOrganization}
-        />
-
-        {/* Invite modal for non-admin users */}
-        {!isAdmin(user) && (
-          <InviteClientAdminModal
-            open={inviteModalOpen}
-            onClose={() => {
-              setInviteModalOpen(false)
-              setInvitingOrganization(null)
-            }}
-            onSuccess={handleInviteSuccess}
-            organization={invitingOrganization}
-          />
-        )}
-
-        <DeleteConfirmationDialog
-          open={deleteDialogOpen}
-          onClose={() => {
-            setDeleteDialogOpen(false)
-            setDeletingId(null)
-            setDeletingItemName('')
-            setDeleteError(null)
-          }}
-          onConfirm={confirmDelete}
-          title="ยืนยันการลบองค์กร"
-          description={`คุณแน่ใจหรือไม่ว่าต้องการลบองค์กร "${deletingItemName}"? การดำเนินการนี้ไม่สามารถยกเลิกได้`}
-          error={deleteError}
-          isDeleting={isDeleting}
-        />
-
-        <Snackbar
-          open={showSuccessMessage}
-          autoHideDuration={6000}
-          onClose={() => setShowSuccessMessage(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+    <Box sx={{ py: 2, width: '100%', px: 3 }}>
+      <Link href="/admin-console" style={{ textDecoration: 'none' }}>
+        <Button
+          startIcon={<ArrowBack />}
+          sx={{ mb: 2, textTransform: 'none' }}
         >
-          <Alert onClose={() => setShowSuccessMessage(false)} severity="success" sx={{ width: '100%' }}>
-            {successMessage}
-          </Alert>
-        </Snackbar>
-    </Container>
+          กลับ
+        </Button>
+      </Link>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Typography variant="h4" fontWeight="bold">
+          {isDealer(user) ? 'องค์กรที่ดูแล' : isConsult(user) || isAudit(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          {/* Display invite hashcode for Consult/Audit */}
+          {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
+            <Chip
+              label={`Invite Code: ${user.invite_hashcode}`}
+              onDelete={handleCopyHashcode}
+              deleteIcon={
+                <Tooltip title={copySuccess ? 'Copied!' : 'Copy to clipboard'}>
+                  <IconButton size="small" onClick={handleCopyHashcode}>
+                    <CopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              }
+              color={copySuccess ? 'success' : 'primary'}
+              variant="outlined"
+              sx={{
+                fontWeight: 'medium',
+                '& .MuiChip-label': {
+                  fontFamily: 'monospace',
+                  fontSize: '0.875rem',
+                },
+              }}
+            />
+          )}
+          {canManageOrganizations(user) && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleCreate}
+              sx={{
+                textTransform: 'none',
+                borderRadius: 1,
+              }}
+            >
+              สร้างองค์กรใหม่
+            </Button>
+          )}
+        </Box>
+      </Box>
+
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <TextField
+          placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          size="small"
+          sx={{ minWidth: 300 }}
+          InputProps={{
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+          }}
+        />
+      </Box>
+
+      {isAdmin(user) ? (
+        <AdminOrganizationsTable
+          data={filteredOrganizations as OrganizationWithCreator[]}
+          loading={loading}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      ) : (
+        <OrganizationsTable
+          data={filteredOrganizations as OrganizationWithStats[]}
+          loading={loading}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onExport={handleExportOrganization}
+          onInvite={handleInvite}
+        />
+      )}
+
+      {/* Unified modal for all roles */}
+      <AdminOrganizationModal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false)
+          setEditingOrganization(null)
+        }}
+        onSuccess={handleModalSuccess}
+        mode={editingOrganization ? 'edit' : 'create'}
+        initialData={editingOrganization}
+      />
+
+      {/* Invite modal for non-admin users */}
+      {!isAdmin(user) && (
+        <InviteClientAdminModal
+          open={inviteModalOpen}
+          onClose={() => {
+            setInviteModalOpen(false)
+            setInvitingOrganization(null)
+          }}
+          onSuccess={handleInviteSuccess}
+          organization={invitingOrganization}
+        />
+      )}
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={() => {
+          setDeleteDialogOpen(false)
+          setDeletingId(null)
+          setDeletingItemName('')
+          setDeleteError(null)
+        }}
+        onConfirm={confirmDelete}
+        title="ยืนยันการลบองค์กร"
+        description={`คุณแน่ใจหรือไม่ว่าต้องการลบองค์กร "${deletingItemName}"? การดำเนินการนี้ไม่สามารถยกเลิกได้`}
+        error={deleteError}
+        isDeleting={isDeleting}
+      />
+
+      <Snackbar
+        open={showSuccessMessage}
+        autoHideDuration={6000}
+        onClose={() => setShowSuccessMessage(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setShowSuccessMessage(false)} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
+    </Box>
   )
 }
