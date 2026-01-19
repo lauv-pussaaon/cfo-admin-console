@@ -187,12 +187,6 @@ export default function LoginPage() {
             </FormProvider>
           </CardContent>
         </Card>
-
-        <Box sx={{ mt: 3, textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            หมายเหตุ: สำหรับการทดสอบ ใช้ username: <strong>admin</strong> และ password: <strong>admin123</strong>
-          </Typography>
-        </Box>
       </Container>
     </Box>
   )
