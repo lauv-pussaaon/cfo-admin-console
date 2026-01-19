@@ -57,7 +57,8 @@ export const ROLE_LABELS: Record<AllUserRole, string> = {
  * Get display label for a role
  */
 export function getRoleLabel (role: string, lang: 'th' | 'en'): string {
-  return lang === 'th' ? ROLE_LABELS[role as AllUserRole] || role : role
+  if (lang === 'th') return ROLE_LABELS[role as AllUserRole] || role
+  return role === 'Audit' ? 'Verifier' : role
 }
 
 /**
