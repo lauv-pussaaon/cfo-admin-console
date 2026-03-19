@@ -42,6 +42,9 @@ export interface AnnualReport {
   updated_at: string | null
 }
 
+// Re-export emission resource types for convenience
+export type { ScopeCategory, FuelResource, FuelResourceWithCategory } from './emission-resources'
+
 // Organization Invitation type
 export interface OrganizationInvitation {
   id: string

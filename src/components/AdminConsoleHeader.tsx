@@ -1,39 +1,132 @@
 'use client'
 
-import { Box, Typography, AppBar, Toolbar } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { Box, Typography, AppBar, Toolbar, Breadcrumbs, Link, Container } from '@mui/material'
+import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import CFOLogo from './CFOLogo'
 import UserMenu from './AppHeader/UserMenu'
+import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 
 export default function AdminConsoleHeader() {
   const { user, logout } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleLogout = () => {
     logout()
     router.push('/login')
   }
 
+  // Generate breadcrumbs based on pathname
+  const pathnames = pathname.split('/').filter((x) => x)
+
   return (
-    <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', borderBottom: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
-      <Toolbar sx={{ py: 2, px: 3, minHeight: 80 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <CFOLogo size={48} color="#10b981" />
-          <Box sx={{ ml: 2 }}>
-            <Typography variant="h5" component="div" sx={{ fontWeight: 700, color: 'text.primary', lineHeight: 1.2 }}>
-              {`IdeaCarb - ${user?.role} Console`}
+    <AppBar 
+      position="sticky" 
+      elevation={0} 
+      sx={{ 
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', 
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+        zIndex: 1100,
+        top: 0,
+      }}
+    >
+      <Container maxWidth={false}>
+        <Toolbar sx={{ py: 1.5, px: { xs: 1, sm: 2 }, minHeight: 72, justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Breadcrumbs 
+              separator={<NavigateNextIcon fontSize="small" sx={{ color: 'text.secondary', opacity: 0.6 }} />}
+              aria-label="breadcrumb"
+              sx={{ mb: 0.5 }}
+            >
+              <Link
+                underline="hover"
+                color="inherit"
+                href="/admin-console"
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push('/admin-console')
+                }}
+                sx={{ 
+                  fontSize: '0.75rem', 
+                  fontWeight: 500, 
+                  color: 'text.secondary',
+                  '&:hover': { color: 'primary.main' }
+                }}
+              >
+                ADMIN
+              </Link>
+              {pathnames.slice(1).map((value, index) => {
+                const last = index === pathnames.length - 2
+                const to = `/${pathnames.slice(0, index + 2).join('/')}`
+
+                return last ? (
+                  <Typography 
+                    key={to} 
+                    sx={{ 
+                      fontSize: '0.75rem', 
+                      fontWeight: 600, 
+                      color: 'primary.main',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    {value.replace(/-/g, ' ')}
+                  </Typography>
+                ) : (
+                  <Link
+                    key={to}
+                    underline="hover"
+                    color="inherit"
+                    href={to}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      router.push(to)
+                    }}
+                    sx={{ 
+                      fontSize: '0.75rem', 
+                      fontWeight: 500, 
+                      color: 'text.secondary',
+                      textTransform: 'uppercase',
+                      '&:hover': { color: 'primary.main' }
+                    }}
+                  >
+                    {value.replace(/-/g, ' ')}
+                  </Link>
+                )
+              })}
+            </Breadcrumbs>
+            
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 800, 
+                color: 'text.primary', 
+                lineHeight: 1.2,
+                fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                letterSpacing: '-0.02em'
+              }}
+            >
+              {pathnames[pathnames.length - 1]?.replace(/-/g, ' ') || 'Dashboard'}
             </Typography>
           </Box>
-        </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <UserMenu
-            user={user}
-            onLogout={handleLogout}
-          />
-        </Box>
-      </Toolbar>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ textAlign: 'right', display: { xs: 'none', md: 'block' }, mr: 1 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, lineHeight: 1 }}>
+                {user?.full_name || 'Admin User'}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                {user?.role || 'Administrator'}
+              </Typography>
+            </Box>
+            <UserMenu
+              user={user}
+              onLogout={handleLogout}
+            />
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   )
 }

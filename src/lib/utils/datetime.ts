@@ -37,9 +37,7 @@ export function getDateString(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
-}
-
-/**
+}/**
  * Get date N days ago from today
  * @param days Number of days ago
  * @returns Date object
@@ -48,13 +46,10 @@ export function getDaysAgo(days: number): Date {
   const date = new Date()
   date.setDate(date.getDate() - days)
   return date
-}
-
-/**
+}/**
  * Get today's date
  * @returns Date object for today
  */
 export function getToday(): Date {
   return new Date()
 }
-

@@ -1,0 +1,83 @@
+source_id [PK],activity_group_id [FK],name_th,name_en,default_unit,is_default_checked,sort_order,notes
+  ✦ Industry 2: General Manufacturing — FULL EXAMPLE (33 sources),,,,,,,
+1,1,ก๊าซธรรมชาติ (Natural Gas),Natural Gas,scf,TRUE,10,"หน่วยอื่น: m³, MJ"
+2,1,ก๊าซหุงต้ม (LPG),LPG,liter,TRUE,20,
+3,1,น้ำมันดีเซล,Diesel,liter,TRUE,30,
+4,1,น้ำมันเตา (Fuel Oil),Fuel Oil,liter,FALSE,40,
+5,1,ถ่านหิน Bituminous,Bituminous Coal,kg,FALSE,50,
+6,1,ชีวมวล (Biomass),Biomass,kg,FALSE,60,Biogenic — รายงานแยกไม่รวม Scope
+7,2,น้ำมันดีเซล (ยานพาหนะ),Diesel (vehicles),liter,TRUE,10,"Forklift, รถบรรทุก"
+8,2,น้ำมันเบนซิน,Gasoline / Petrol,liter,TRUE,20,
+9,2,ก๊าซ NGV / CNG,NGV / CNG,kg,FALSE,30,
+10,3,HFC-134a,HFC-134a,kg,TRUE,10,เครื่องปรับอากาศทั่วไป
+11,3,R-22 (HCFC-22),R-22,kg,TRUE,20,ระบบเก่า
+12,3,R-410A,R-410A,kg,FALSE,30,
+13,3,CO₂ (สารทำความเย็น),CO₂ Refrigerant,kg,FALSE,40,ระบบ CO₂ trans-critical
+14,3,สารดับเพลิง FM-200 (HFC-227ea),FM-200 (HFC-227ea),kg,FALSE,50,ระบบดับเพลิง
+15,4,CO₂ จากกระบวนการเคมี,Process CO₂,tonne,TRUE,10,ต้องวัดจากกระบวนการโดยตรง
+16,4,N₂O จากกระบวนการ,Process N₂O,kg,FALSE,20,GWP = 265 (AR5)
+17,5,ไฟฟ้าจาก PEA (ต่างจังหวัด),Electricity – PEA,kWh,TRUE,10,
+18,5,ไฟฟ้าจาก MEA (กทม.),Electricity – MEA,kWh,TRUE,20,
+19,6,ไอน้ำจากภายนอก,Purchased Steam,MJ,FALSE,10,
+20,6,ความร้อนจากภายนอก,Purchased Heat,MJ,FALSE,20,
+21,7,เครื่องบิน (เส้นทางในประเทศ),Domestic Flight,km,TRUE,10,
+22,7,เครื่องบิน (ระหว่างประเทศ),International Flight,km,TRUE,20,
+23,7,รถยนต์ส่วนตัว (เดินทางธุรกิจ),Private Car (business trip),km,TRUE,30,
+24,8,รถยนต์ส่วนตัว (เดินทางไปทำงาน),Private Car (commute),km,TRUE,10,
+25,8,รถสาธารณะ (BTS/MRT/รถเมล์),Public Transit,km,FALSE,20,
+26,8,รถจักรยานยนต์,Motorcycle,km,FALSE,30,
+27,9,ขยะทั่วไป (Landfill),General Waste – Landfill,kg,TRUE,10,
+28,9,ขยะอินทรีย์ (Composting),Organic Waste – Composting,kg,FALSE,20,
+29,9,ขยะ Hazardous (Incineration),Hazardous Waste Incineration,kg,FALSE,30,
+30,10,น้ำประปา (Tap Water),Tap Water,m³,TRUE,10,
+31,11,"วัตถุดิบหลัก (เหล็ก, พลาสติก, ฯลฯ)",Primary Raw Materials,kg,FALSE,10,ต้องระบุ material type
+32,12,รถบรรทุก (Truck Freight),Truck Freight,tonne-km,FALSE,10,
+33,12,เรือขนส่ง (Sea Freight),Sea Freight,tonne-km,FALSE,20,
+  Industry 1: Power Generation — sample,,,,,,,
+34,13,ก๊าซธรรมชาติ,Natural Gas,scf,TRUE,10,
+35,13,ถ่านหิน,Coal,kg,TRUE,20,
+36,15,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,auxiliary load
+  Industry 3: Oil and Gas — sample,,,,,,,
+37,16,ก๊าซธรรมชาติ,Natural Gas,scf,TRUE,10,
+38,17,CH₄ รั่วไหล (Methane Leakage),Methane Leakage,kg,TRUE,10,fugitive
+39,18,ก๊าซที่เผาทิ้ง (Flare Gas),Flare Gas,scf,TRUE,10,
+  Industry 4: Metals Production — sample,,,,,,,
+40,19,ถ่านหินโค้ก (Coke),Metallurgical Coke,kg,TRUE,10,
+41,20,CO₂ จากกระบวนการหลอม,Process CO₂ (Smelting),tonne,TRUE,10,
+42,21,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,EAF
+  Industry 5: Aluminum Production — sample,,,,,,,
+43,22,"PFC (CF₄, C₂F₆)",Perfluorocarbons (PFC),kg,TRUE,10,GWP CF4=7390
+44,23,น้ำมันเตา (Anode baking),Fuel Oil – Anode Baking,liter,TRUE,10,
+45,24,ไฟฟ้า (Smelter),Smelter Electricity,kWh,TRUE,10,
+  Industry 6: Mining & Mineral — sample,,,,,,,
+46,25,น้ำมันดีเซล (เครื่องจักรเหมือง),Diesel – Mining Equipment,liter,TRUE,10,
+47,26,CO₂ จาก Calcination,Process CO₂ – Calcination,tonne,TRUE,10,
+48,27,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,
+"  Industry 7: Pulp, Paper & Print — sample",,,,,,,
+49,28,ชีวมวล (Biomass boiler),Biomass – Boiler,kg,TRUE,10,Biogenic
+50,29,"สารเคมี (NaOH, Na₂S)",Pulping Chemicals,kg,TRUE,10,process
+51,30,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,
+  Industry 8: Chemical Production — sample,,,,,,,
+52,31,N₂O จากกระบวนการ Adipic Acid,Process N₂O – Adipic Acid,kg,TRUE,10,GWP=265
+53,32,ก๊าซธรรมชาติ (Process fuel),Natural Gas – Process,scf,TRUE,10,
+54,33,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,
+  Industry 9: Carbon Capture Storage — sample,,,,,,,
+55,34,CO₂ ที่ดักจับได้ (Negative),Captured CO₂ (negative EF),tonne,TRUE,10,ค่า EF เป็น negative
+56,35,ไฟฟ้า (compressor/pump),CCS Process Electricity,kWh,TRUE,10,
+57,36,น้ำมันดีเซล (ยานพาหนะ),Diesel – Vehicles,liter,TRUE,10,
+  Industry 10: Transport — sample,,,,,,,
+58,37,น้ำมันดีเซล (รถบรรทุก),Diesel – Trucks,liter,TRUE,10,
+59,38,น้ำมัน Jet A-1,Jet Fuel (Jet A-1),liter,TRUE,10,Aviation
+60,39,ไฟฟ้าจาก PEA (สถานี),Station Electricity – PEA,kWh,TRUE,10,
+  Industry 11: Waste Handling — sample,,,,,,,
+61,40,CH₄ จาก Landfill,Landfill CH₄,tonne,TRUE,10,GWP=28
+62,41,N₂O จากบำบัดน้ำเสีย,Wastewater N₂O,kg,TRUE,10,
+63,42,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,
+  Industry 12: AFOLU — sample,,,,,,,
+64,43,Biomass เผาในที่โล่ง,Open Biomass Burning,kg,TRUE,10,Biogenic
+65,44,CH₄ จากการย่อยในกระเพาะ,Enteric CH₄,kg,TRUE,10,GWP=28
+66,45,N₂O จากดิน (Soil emission),Soil N₂O,kg,TRUE,10,GWP=265
+  Industry 13: General Services — sample,,,,,,,
+67,46,ไฟฟ้าจาก PEA,Electricity – PEA,kWh,TRUE,10,
+68,47,รถยนต์ส่วนตัว (Commute),Private Car – Commute,km,TRUE,20,
+69,48,ขยะทั่วไป (Landfill),General Waste – Landfill,kg,TRUE,10,
