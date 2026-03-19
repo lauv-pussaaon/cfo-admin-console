@@ -95,6 +95,16 @@ export async function bulkUpsertScopeCategories(rows: Partial<ScopeCategory>[]) 
 export async function getFuelResources(query: FuelResourcesQuery): Promise<PaginatedResult<FuelResourceWithCategory>> {
   const { scope, category_id, search, page = 1, per_page = 50, include_deleted = false } = query
 
+  // When filtering by scope, resolve scope_category_ids first (fuel_resources has no scope column)
+  let scopeCategoryIds: string[] | undefined
+  if (scope) {
+    const categories = await getScopeCategories(scope, include_deleted)
+    scopeCategoryIds = categories.map((c) => c.id)
+    if (scopeCategoryIds.length === 0) {
+      return { data: [], total: 0, page, per_page }
+    }
+  }
+
   let countQuery = supabase
     .from('fuel_resources')
     .select('id', { count: 'exact', head: true })
@@ -113,9 +123,9 @@ export async function getFuelResources(query: FuelResourcesQuery): Promise<Pagin
     dataQuery = dataQuery.eq('scope_category_id', category_id)
   }
 
-  if (scope) {
-    countQuery = countQuery.eq('scope_categories.scope', scope)
-    dataQuery = dataQuery.eq('scope_categories.scope', scope)
+  if (scopeCategoryIds) {
+    countQuery = countQuery.in('scope_category_id', scopeCategoryIds)
+    dataQuery = dataQuery.in('scope_category_id', scopeCategoryIds)
   }
 
   if (search) {

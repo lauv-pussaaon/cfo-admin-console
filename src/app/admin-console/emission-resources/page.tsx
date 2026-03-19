@@ -39,7 +39,7 @@ const SCOPE_TABS = [
   { value: 1, label: 'Scope 1' },
   { value: 2, label: 'Scope 2' },
   { value: 3, label: 'Scope 3' },
-  { value: 4, label: 'Scope 4' },
+  { value: 4, label: 'แยกรายงาน' },
 ]
 
 const SCOPE_COLORS: Record<number, string> = {

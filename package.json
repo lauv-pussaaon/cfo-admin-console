@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:fuel": "node dataprep/generate_fuel_resources_sql.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

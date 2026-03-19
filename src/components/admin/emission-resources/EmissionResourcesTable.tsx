@@ -59,7 +59,7 @@ export default function EmissionResourcesTable({
     {
       field: 'scope',
       headerName: 'Scope',
-      width: 80,
+      width: 60,
       display: 'flex',
       renderCell: (params) => {
         const scope = params.row.scope_category?.scope
@@ -101,11 +101,13 @@ export default function EmissionResourcesTable({
     {
       field: 'sub_category',
       headerName: 'Sub-category',
-      width: 140,
+      width: 120,
       display: 'flex',
       renderCell: (params) =>
         params.value ? (
-          <Typography variant="body2">{params.value}</Typography>
+          <Tooltip title={params.value} enterDelay={300}>
+            <Typography variant="body2" noWrap>{params.value}</Typography>
+          </Tooltip>
         ) : (
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
@@ -115,12 +117,14 @@ export default function EmissionResourcesTable({
       headerName: 'Resource',
       width: 220,
       flex: 1,
-      minWidth: 160,
+      minWidth: 130,
       display: 'flex',
       renderCell: (params) => (
-        <Typography variant="body2" fontWeight={500}>
-          {params.value}
-        </Typography>
+        <Tooltip title={params.value} enterDelay={300}>
+          <Typography variant="body2" fontWeight={500}>
+            {params.value}
+          </Typography>
+        </Tooltip>
       ),
     },
     {
@@ -151,13 +155,15 @@ export default function EmissionResourcesTable({
         ),
     },
     {
-      field: 'ref_source',
-      headerName: 'Ref Source',
-      width: 130,
+      field: 'ref_info',
+      headerName: 'Ref.',
+      width: 200,
       display: 'flex',
       renderCell: (params) =>
         params.value ? (
-          <Chip label={params.value} size="small" variant="outlined" sx={{ fontSize: '0.65rem', height: 22 }} />
+          <Tooltip title={params.value} enterDelay={300}>
+            <Chip label={params.value} size="small" variant="outlined" sx={{ fontSize: '0.65rem', height: 22 }} />
+          </Tooltip>
         ) : (
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),

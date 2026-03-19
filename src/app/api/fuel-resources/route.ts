@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFuelResources, createFuelResource, hardDeleteAllFuelResources } from '@/lib/api/fuel-resources'
 
-export async function GET(request: NextRequest) {
+export async function GET (request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const scope = searchParams.get('scope')
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE() {
+export async function DELETE () {
   try {
     const { deleted } = await hardDeleteAllFuelResources()
     return NextResponse.json({ success: true, deleted })
