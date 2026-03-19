@@ -23,8 +23,6 @@ export interface TemplateActivityGroup {
   name_th: string
   name_en: string
   scope: 1 | 2 | 3 | 4 | null
-  category_label: string | null
-  subcategory_label: string | null
   scope_category_id: string | null
   scope_sub_category: string | null
   is_common: boolean

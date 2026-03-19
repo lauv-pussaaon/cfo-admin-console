@@ -196,6 +196,19 @@ export async function softDeleteFuelResource(id: string) {
   return data as FuelResource
 }
 
+/** Get distinct sub_category values for a scope_category_id (for activity group mapping). */
+export async function getDistinctSubCategories(scopeCategoryId: string): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('fuel_resources')
+    .select('sub_category')
+    .eq('scope_category_id', scopeCategoryId)
+    .not('sub_category', 'is', null)
+    .is('deleted_at', null)
+  if (error) throw error
+  const values = [...new Set((data ?? []).map((r) => r.sub_category).filter(Boolean) as string[])]
+  return values.sort()
+}
+
 /** Hard delete all fuel resources across all scopes. Permanently removes rows from DB. */
 export async function hardDeleteAllFuelResources(): Promise<{ deleted: number }> {
   const { data, error } = await supabase

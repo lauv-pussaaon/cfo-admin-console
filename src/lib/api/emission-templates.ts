@@ -139,7 +139,7 @@ export async function getTemplateActivityGroups(
   if (template_id) q = q.eq('template_id', template_id)
   if (search) {
     const like = `%${search}%`
-    q = q.or(`name_en.ilike.${like},name_th.ilike.${like},category_label.ilike.${like},subcategory_label.ilike.${like}`)
+    q = q.or(`name_en.ilike.${like},name_th.ilike.${like}`)
   }
 
   const { data, error } = await q

@@ -6,43 +6,19 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Snackbar,
-  Switch,
-  TextField,
   Typography,
 } from '@mui/material'
 import { Add as AddIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useParams, useRouter } from 'next/navigation'
-import { useForm, Controller } from 'react-hook-form'
+import ActivityGroupFormDialog from '@/components/admin/emission-templates/ActivityGroupFormDialog'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import type { ScopeCategory } from '@/types/emission-resources'
 import type {
   EmissionTemplateWithRelations,
   TemplateActivityGroupWithRelations,
 } from '@/types/emission-templates'
-
-interface ActivityGroupFormValues {
-  name_th: string
-  name_en: string
-  scope: number
-  category_label: string
-  subcategory_label: string
-  scope_category_id: string
-  scope_sub_category: string
-  is_common: boolean
-  sort_order: number
-  status: 'active' | 'inactive'
-}
 
 export default function TemplateDetailPage() {
   const params = useParams<{ id: string }>()
@@ -63,21 +39,6 @@ export default function TemplateDetailPage() {
     open: false,
     message: '',
     severity: 'success',
-  })
-
-  const { control, reset, handleSubmit, formState: { isSubmitting, errors } } = useForm<ActivityGroupFormValues>({
-    defaultValues: {
-      name_th: '',
-      name_en: '',
-      scope: 1,
-      category_label: '',
-      subcategory_label: '',
-      scope_category_id: '',
-      scope_sub_category: '',
-      is_common: false,
-      sort_order: 0,
-      status: 'active',
-    },
   })
 
   const showSnackbar = (message: string, severity: 'success' | 'error' = 'success') => {
@@ -117,54 +78,20 @@ export default function TemplateDetailPage() {
     fetchPageData()
   }, [fetchPageData])
 
-  useEffect(() => {
-    if (!dialogOpen) return
-    if (editTarget) {
-      reset({
-        name_th: editTarget.name_th ?? '',
-        name_en: editTarget.name_en ?? '',
-        scope: editTarget.scope ?? 1,
-        category_label: editTarget.category_label ?? '',
-        subcategory_label: editTarget.subcategory_label ?? '',
-        scope_category_id: editTarget.scope_category_id ?? '',
-        scope_sub_category: editTarget.scope_sub_category ?? '',
-        is_common: !!editTarget.is_common,
-        sort_order: editTarget.sort_order ?? 0,
-        status: editTarget.status ?? 'active',
-      })
-    } else {
-      reset({
-        name_th: '',
-        name_en: '',
-        scope: 1,
-        category_label: '',
-        subcategory_label: '',
-        scope_category_id: '',
-        scope_sub_category: '',
-        is_common: false,
-        sort_order: 0,
-        status: 'active',
-      })
-    }
-  }, [dialogOpen, editTarget, reset])
-
-  const onSaveGroup = async (values: ActivityGroupFormValues) => {
+  const onSaveGroup = async (payload: {
+    template_id: string
+    name_th: string
+    name_en: string
+    scope: number
+    scope_category_id: string | null
+    scope_sub_category?: string | null
+    is_common: boolean
+    sort_order: number
+    status: string
+  }) => {
     try {
       const method = editTarget ? 'PUT' : 'POST'
       const url = editTarget ? `/api/template-activity-groups/${editTarget.id}` : '/api/template-activity-groups'
-      const payload = {
-        template_id: templateId,
-        name_th: values.name_th,
-        name_en: values.name_en,
-        scope: values.scope,
-        category_label: values.category_label || null,
-        subcategory_label: values.subcategory_label || null,
-        scope_category_id: values.scope_category_id || null,
-        scope_sub_category: values.scope_sub_category || null,
-        is_common: values.is_common,
-        sort_order: values.sort_order,
-        status: values.status,
-      }
 
       const res = await fetch(url, {
         method,
@@ -202,7 +129,6 @@ export default function TemplateDetailPage() {
 
   const columns = useMemo<GridColDef[]>(
     () => [
-      { field: 'sort_order', headerName: 'Order', width: 80, type: 'number' },
       {
         field: 'name_en',
         headerName: 'Name',
@@ -211,6 +137,16 @@ export default function TemplateDetailPage() {
         renderCell: (params) => (
           <Box>
             <Typography variant="body2" fontWeight={600}>{params.row.name_en}</Typography>
+          </Box>
+        ),
+      },
+      {
+        field: 'name_th',
+        headerName: 'Name (Thai)',
+        minWidth: 220,
+        flex: 1,
+        renderCell: (params) => (
+          <Box>
             <Typography variant="caption" color="text.secondary">{params.row.name_th}</Typography>
           </Box>
         ),
@@ -222,15 +158,8 @@ export default function TemplateDetailPage() {
         renderCell: (params) => (params.value ? <Chip label={`S${params.value}`} size="small" /> : '—'),
       },
       {
-        field: 'category_label',
-        headerName: 'Category',
-        minWidth: 180,
-        flex: 1,
-        renderCell: (params) => params.value || '—',
-      },
-      {
         field: 'scope_category_id',
-        headerName: 'Mapped Scope Category',
+        headerName: 'Scope Category',
         minWidth: 240,
         flex: 1,
         renderCell: (params) => params.row.scope_category?.name_en ?? '—',
@@ -320,6 +249,7 @@ export default function TemplateDetailPage() {
         disableRowSelectionOnClick
         pageSizeOptions={[25, 50, 100]}
         initialState={{ pagination: { paginationModel: { pageSize: 25, page: 0 } } }}
+        rowHeight={80}
         sx={{
           border: '1px solid',
           borderColor: 'divider',
@@ -328,170 +258,23 @@ export default function TemplateDetailPage() {
             backgroundColor: '#f8fafc',
             fontWeight: 600,
           },
+          '& .MuiDataGrid-cell': {
+            display: 'flex',
+            alignItems: 'center',
+            paddingTop: 1,
+            paddingBottom: 1,
+          },
         }}
       />
 
-      <Dialog open={dialogOpen} onClose={!isSubmitting ? () => setDialogOpen(false) : undefined} maxWidth="md" fullWidth>
-        <DialogTitle>{editTarget ? 'Edit Activity Group' : 'Add Activity Group'}</DialogTitle>
-        <DialogContent dividers>
-          <Box component="form" id="activity-group-form" onSubmit={handleSubmit(onSaveGroup)}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="name_en"
-                  control={control}
-                  rules={{ required: 'English name is required' }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Name (English)"
-                      fullWidth
-                      size="small"
-                      error={!!errors.name_en}
-                      helperText={errors.name_en?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="name_th"
-                  control={control}
-                  rules={{ required: 'Thai name is required' }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Name (Thai)"
-                      fullWidth
-                      size="small"
-                      error={!!errors.name_th}
-                      helperText={errors.name_th?.message}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={4}>
-                <Controller
-                  name="scope"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControl fullWidth size="small">
-                      <InputLabel>Scope</InputLabel>
-                      <Select {...field} label="Scope">
-                        {[1, 2, 3, 4].map((s) => (
-                          <MenuItem key={s} value={s}>Scope {s}</MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Controller
-                  name="sort_order"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Sort Order"
-                      type="number"
-                      fullWidth
-                      size="small"
-                      onChange={(e) => field.onChange(parseInt(e.target.value || '0', 10))}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControl fullWidth size="small">
-                      <InputLabel>Status</InputLabel>
-                      <Select {...field} label="Status">
-                        <MenuItem value="active">active</MenuItem>
-                        <MenuItem value="inactive">inactive</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="category_label"
-                  control={control}
-                  render={({ field }) => <TextField {...field} label="Category Label" fullWidth size="small" />}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="subcategory_label"
-                  control={control}
-                  render={({ field }) => <TextField {...field} label="Subcategory Label" fullWidth size="small" />}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="scope_category_id"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControl fullWidth size="small">
-                      <InputLabel>Mapped Scope Category</InputLabel>
-                      <Select {...field} label="Mapped Scope Category">
-                        <MenuItem value="">None</MenuItem>
-                        {categories.map((cat) => (
-                          <MenuItem key={cat.id} value={cat.id}>
-                            S{cat.scope} - {cat.name_en}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="scope_sub_category"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Scope Sub-category (future mapping key)"
-                      fullWidth
-                      size="small"
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Controller
-                  name="is_common"
-                  control={control}
-                  render={({ field }) => (
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="body2">Common Group Across Industries</Typography>
-                      <Switch checked={field.value} onChange={(e) => field.onChange(e.target.checked)} />
-                    </Box>
-                  )}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} variant="outlined" color="inherit" disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <Button type="submit" form="activity-group-form" variant="contained" disabled={isSubmitting}>
-            {editTarget ? 'Update' : 'Add Group'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ActivityGroupFormDialog
+        open={dialogOpen}
+        onClose={() => { setDialogOpen(false); setEditTarget(null) }}
+        onSave={onSaveGroup}
+        editTarget={editTarget}
+        templateId={templateId}
+        categories={categories}
+      />
 
       <DeleteConfirmationDialog
         open={!!deleteTarget}
