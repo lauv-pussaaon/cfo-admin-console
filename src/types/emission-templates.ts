@@ -99,3 +99,43 @@ export type CreateTemplateActivityGroupInput = Omit<
   'id' | 'created_at' | 'updated_at' | 'deleted_at'
 >
 export type UpdateTemplateActivityGroupInput = Partial<CreateTemplateActivityGroupInput>
+
+/** External API: activity group with flattened fuel_resources (from mappings) */
+export interface ExternalTemplateActivityGroup {
+  id: string
+  name_th: string
+  name_en: string
+  scope: number | null
+  scope_category_id: string | null
+  scope_sub_category: string | null
+  scope_category?: ScopeCategoryLite | null
+  is_common: boolean
+  sort_order: number
+  status: string
+  fuel_resources: Array<{
+    id: string
+    resource: string
+    unit: string | null
+    ef_value: number | null
+    ref_info: string | null
+    note: string | null
+  }>
+}
+
+/** External API: template with nested activity groups and fuel resources */
+export interface ExternalTemplateWithHierarchy {
+  id: string
+  industry_code: string
+  name_th: string
+  name_en: string
+  examples: string | null
+  is_active: boolean
+  feature_image_url: string | null
+  display_order: number
+  activity_groups: ExternalTemplateActivityGroup[]
+}
+
+/** External API response shape */
+export interface ExternalTemplateResponse {
+  data: ExternalTemplateWithHierarchy[]
+}

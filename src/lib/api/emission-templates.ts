@@ -11,6 +11,8 @@ import type {
   CreateTemplateActivityGroupInput,
   UpdateTemplateActivityGroupInput,
   TemplateActivityGroupsQuery,
+  ExternalTemplateActivityGroup,
+  ExternalTemplateWithHierarchy,
 } from '@/types/emission-templates'
 
 export async function getEmissionTemplates(
@@ -182,6 +184,67 @@ export async function getTemplateActivityGroups(
         : undefined,
     }))
     return { ...rest, fuel_resource_mappings } as TemplateActivityGroupWithRelations
+  })
+}
+
+export interface GetEmissionTemplatesWithFullHierarchyQuery {
+  industry_code?: string
+  is_active?: boolean
+}
+
+export async function getEmissionTemplatesWithFullHierarchy(
+  query: GetEmissionTemplatesWithFullHierarchyQuery = {}
+): Promise<ExternalTemplateWithHierarchy[]> {
+  const { industry_code, is_active = true } = query
+
+  let q = supabase
+    .from('emission_templates')
+    .select('id, industry_code, name_th, name_en, examples, is_active, feature_image_url, display_order')
+    .is('deleted_at', null)
+
+  if (typeof is_active === 'boolean') {
+    q = q.eq('is_active', is_active)
+  }
+  if (industry_code) {
+    q = q.eq('industry_code', industry_code)
+  }
+
+  const { data: templates, error } = await q
+    .order('display_order', { ascending: true })
+    .order('name_en', { ascending: true })
+
+  if (error) throw error
+  if (!templates || templates.length === 0) return []
+
+  const groupsByTemplate = await Promise.all(
+    templates.map((t) => getTemplateActivityGroups({ template_id: t.id }))
+  )
+
+  return templates.map((t, i) => {
+    const groups = groupsByTemplate[i] ?? []
+    const activity_groups: ExternalTemplateActivityGroup[] = groups.map((g) => ({
+      id: g.id,
+      name_th: g.name_th,
+      name_en: g.name_en,
+      scope: g.scope,
+      scope_category_id: g.scope_category_id,
+      scope_sub_category: g.scope_sub_category,
+      scope_category: g.scope_category ?? undefined,
+      is_common: g.is_common,
+      sort_order: g.sort_order,
+      status: g.status,
+      fuel_resources: (g.fuel_resource_mappings ?? [])
+        .filter((m) => m.fuel_resource)
+        .map((m) => ({
+          id: m.fuel_resource!.id,
+          resource: m.fuel_resource!.resource,
+          unit: m.fuel_resource!.unit,
+          ef_value: m.fuel_resource!.ef_value,
+          ref_info: m.fuel_resource!.ref_info,
+          note: m.note,
+        })),
+    }))
+    return { ...t, activity_groups }
   })
 }
 
