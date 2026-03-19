@@ -24,6 +24,7 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Science as ScienceIcon,
+  ViewModule as ViewModuleIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import CFOLogo from '../CFOLogo'
@@ -43,6 +44,7 @@ const NAV_ITEMS: NavItem[] = [
   { title: 'Users', path: '/admin-console/users', icon: <PeopleIcon /> },
   { title: 'Analytics', path: '/admin-console/analytics', icon: <AnalyticsIcon /> },
   { title: 'Emission Resources', path: '/admin-console/emission-resources', icon: <ScienceIcon /> },
+  { title: 'Emission Templates', path: '/admin-console/emission-templates', icon: <ViewModuleIcon /> },
 ]
 
 export default function Sidebar() {
