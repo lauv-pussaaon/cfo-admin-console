@@ -27,8 +27,7 @@ export default function AdminConsoleLayout({
         <AdminConsoleHeader />
         <Container 
           maxWidth={false} 
-          sx={{ 
-            py: 4, 
+          sx={{  
             px: { xs: 2, sm: 3, md: 4 },
             flexGrow: 1,
             display: 'flex',

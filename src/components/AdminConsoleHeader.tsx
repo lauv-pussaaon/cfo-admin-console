@@ -96,25 +96,12 @@ export default function AdminConsoleHeader() {
                 )
               })}
             </Breadcrumbs>
-            
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                fontWeight: 800, 
-                color: 'text.primary', 
-                lineHeight: 1.2,
-                fontSize: { xs: '1.25rem', sm: '1.5rem' },
-                letterSpacing: '-0.02em'
-              }}
-            >
-              {pathnames[pathnames.length - 1]?.replace(/-/g, ' ') || 'Dashboard'}
-            </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box sx={{ textAlign: 'right', display: { xs: 'none', md: 'block' }, mr: 1 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, lineHeight: 1 }}>
-                {user?.full_name || 'Admin User'}
+                {user?.name || 'Admin User'}
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                 {user?.role || 'Administrator'}
