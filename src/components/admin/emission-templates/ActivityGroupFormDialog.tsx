@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,6 +15,11 @@ import {
   MenuItem,
   Select,
   Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from '@mui/material'
@@ -32,6 +38,11 @@ interface ActivityGroupFormValues {
   status: 'active' | 'inactive'
 }
 
+interface FuelResourceMapping {
+  fuel_resource_id: string
+  note?: string | null
+}
+
 interface SavePayload {
   template_id: string
   name_th: string
@@ -42,6 +53,7 @@ interface SavePayload {
   is_common: boolean
   sort_order: number
   status: string
+  fuel_resource_mappings?: FuelResourceMapping[]
 }
 
 interface Props {
@@ -63,6 +75,9 @@ export default function ActivityGroupFormDialog({
 }: Props) {
   const [subCategories, setSubCategories] = useState<string[]>([])
   const [loadingSubCategories, setLoadingSubCategories] = useState(false)
+  const [fuelResources, setFuelResources] = useState<Array<{ id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null }>>([])
+  const [loadingFuelResources, setLoadingFuelResources] = useState(false)
+  const [selectedMappings, setSelectedMappings] = useState<Record<string, string>>({})
 
   const { control, reset, handleSubmit, watch, setValue, formState: { isSubmitting, errors } } = useForm<ActivityGroupFormValues>({
     defaultValues: {
@@ -79,8 +94,36 @@ export default function ActivityGroupFormDialog({
 
   const scope = watch('scope')
   const scopeCategoryId = watch('scope_category_id')
+  const scopeSubCategory = watch('scope_sub_category')
 
   const filteredCategories = categories.filter((c) => c.scope === scope)
+
+  const fetchFuelResources = useCallback(async (categoryId: string, subCategory?: string) => {
+    if (!categoryId) {
+      setFuelResources([])
+      return
+    }
+    setLoadingFuelResources(true)
+    try {
+      const params = new URLSearchParams({ scope_category_id: categoryId })
+      if (subCategory) params.set('sub_category', subCategory)
+      const res = await fetch(`/api/fuel-resources/by-category?${params}`)
+      if (!res.ok) throw new Error('Failed to fetch fuel resources')
+      const json = await res.json()
+      const list = (json.data ?? []).map((r: { id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null }) => ({
+        id: r.id,
+        resource: r.resource,
+        unit: r.unit,
+        ef_value: r.ef_value,
+        ref_info: r.ref_info,
+      }))
+      setFuelResources(list)
+    } catch {
+      setFuelResources([])
+    } finally {
+      setLoadingFuelResources(false)
+    }
+  }, [])
 
   const fetchSubCategories = useCallback(async (categoryId: string) => {
     if (!categoryId) {
@@ -115,8 +158,16 @@ export default function ActivityGroupFormDialog({
       })
       if (editTarget.scope_category_id) {
         fetchSubCategories(editTarget.scope_category_id)
+        fetchFuelResources(editTarget.scope_category_id, editTarget.scope_sub_category ?? undefined)
+        const map: Record<string, string> = {}
+        for (const m of editTarget.fuel_resource_mappings ?? []) {
+          map[m.fuel_resource_id] = m.note ?? ''
+        }
+        setSelectedMappings(map)
       } else {
         setSubCategories([])
+        setFuelResources([])
+        setSelectedMappings({})
       }
     } else {
       reset({
@@ -130,8 +181,10 @@ export default function ActivityGroupFormDialog({
         status: 'active',
       })
       setSubCategories([])
+      setFuelResources([])
+      setSelectedMappings({})
     }
-  }, [open, editTarget, reset, fetchSubCategories])
+  }, [open, editTarget, reset, fetchSubCategories, fetchFuelResources])
 
   useEffect(() => {
     if (scopeCategoryId) {
@@ -146,29 +199,58 @@ export default function ActivityGroupFormDialog({
   useEffect(() => {
     if (scopeCategoryId) {
       fetchSubCategories(scopeCategoryId)
+      fetchFuelResources(scopeCategoryId, scopeSubCategory || undefined)
     } else {
       setSubCategories([])
+      setFuelResources([])
+      setSelectedMappings({})
     }
-  }, [scopeCategoryId, fetchSubCategories])
+  }, [scopeCategoryId, scopeSubCategory, fetchSubCategories, fetchFuelResources])
+
+  const showSubCategory = subCategories.length > 0
+
+  const toggleMapping = (fuelResourceId: string, checked: boolean) => {
+    setSelectedMappings((prev) => {
+      const next = { ...prev }
+      if (checked) {
+        next[fuelResourceId] = ''
+      } else {
+        delete next[fuelResourceId]
+      }
+      return next
+    })
+  }
+
+  const setMappingNote = (fuelResourceId: string, note: string) => {
+    setSelectedMappings((prev) => ({ ...prev, [fuelResourceId]: note }))
+  }
 
   const onSubmit = async (values: ActivityGroupFormValues) => {
+    const fuel_resource_mappings = Object.entries(selectedMappings).map(([fuel_resource_id, note]) => ({
+      fuel_resource_id,
+      note: note || null,
+    }))
     await onSave({
       template_id: templateId,
       name_th: values.name_th,
       name_en: values.name_en,
       scope: values.scope,
       scope_category_id: values.scope_category_id || null,
-      scope_sub_category: subCategories.length > 0 ? (values.scope_sub_category || null) : null,
+      scope_sub_category: showSubCategory ? (values.scope_sub_category || null) : null,
       is_common: values.is_common,
       sort_order: values.sort_order,
       status: values.status,
+      fuel_resource_mappings,
     })
   }
 
-  const showSubCategory = subCategories.length > 0
-
   return (
-    <Dialog open={open} onClose={!isSubmitting ? onClose : undefined} maxWidth="md" fullWidth>
+    <Dialog
+      open={open}
+      onClose={!isSubmitting ? onClose : undefined}
+      maxWidth={false}
+      PaperProps={{ sx: { width: '80vw', maxWidth: '80vw' } }}
+    >
       <DialogTitle>{editTarget ? 'Edit Activity Group' : 'Add Activity Group'}</DialogTitle>
       <DialogContent dividers>
         <Box component="form" id="activity-group-form" onSubmit={handleSubmit(onSubmit)}>
@@ -277,6 +359,75 @@ export default function ActivityGroupFormDialog({
                 )}
               </Grid>
             </Grid>
+
+            {/* Fuel Resource Mapping */}
+            {scopeCategoryId && (
+              <Grid item xs={12}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                  Fuel Resource Mapping
+                </Typography>
+                <Box sx={{ maxHeight: 280, overflow: 'auto', border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
+                  {loadingFuelResources ? (
+                    <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
+                      Loading fuel resources…
+                    </Typography>
+                  ) : fuelResources.length === 0 ? (
+                    <Typography variant="body2" color="text.secondary" sx={{ p: 2 }}>
+                      No fuel resources in this category. Select a category first.
+                    </Typography>
+                  ) : (
+                    <Table size="small" stickyHeader>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell padding="checkbox" sx={{ width: 48 }} />
+                          <TableCell>Resource</TableCell>
+                          <TableCell>Unit</TableCell>
+                          <TableCell align="right">EF Value</TableCell>
+                          <TableCell>Ref Info</TableCell>
+                          <TableCell sx={{ minWidth: 160 }}>Note</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {fuelResources.map((fr) => (
+                          <TableRow key={fr.id}>
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                checked={fr.id in selectedMappings}
+                                onChange={(e) => toggleMapping(fr.id, e.target.checked)}
+                              />
+                            </TableCell>
+                            <TableCell>{fr.resource}</TableCell>
+                            <TableCell>{fr.unit ?? '—'}</TableCell>
+                            <TableCell align="right">{fr.ef_value != null ? fr.ef_value : '—'}</TableCell>
+                            <TableCell
+                              sx={{
+                                maxWidth: 140,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={fr.ref_info ?? undefined}
+                            >
+                              {fr.ref_info ?? '—'}
+                            </TableCell>
+                            <TableCell>
+                              <TextField
+                                size="small"
+                                fullWidth
+                                placeholder="Note"
+                                value={selectedMappings[fr.id] ?? ''}
+                                onChange={(e) => setMappingNote(fr.id, e.target.value)}
+                                disabled={!(fr.id in selectedMappings)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </Box>
+              </Grid>
+            )}
 
             {/* Metadata */}
             <Grid item xs={12}>

@@ -93,7 +93,7 @@ export async function bulkUpsertScopeCategories(rows: Partial<ScopeCategory>[]) 
 // ─── Fuel Resources ────────────────────────────────────────────────────────────
 
 export async function getFuelResources(query: FuelResourcesQuery): Promise<PaginatedResult<FuelResourceWithCategory>> {
-  const { scope, category_id, search, page = 1, per_page = 50, include_deleted = false } = query
+  const { scope, category_id, sub_category, search, page = 1, per_page = 50, include_deleted = false } = query
 
   // When filtering by scope, resolve scope_category_ids first (fuel_resources has no scope column)
   let scopeCategoryIds: string[] | undefined
@@ -121,6 +121,11 @@ export async function getFuelResources(query: FuelResourcesQuery): Promise<Pagin
   if (category_id) {
     countQuery = countQuery.eq('scope_category_id', category_id)
     dataQuery = dataQuery.eq('scope_category_id', category_id)
+  }
+
+  if (sub_category) {
+    countQuery = countQuery.eq('sub_category', sub_category)
+    dataQuery = dataQuery.eq('sub_category', sub_category)
   }
 
   if (scopeCategoryIds) {
@@ -194,6 +199,25 @@ export async function softDeleteFuelResource(id: string) {
     .single()
   if (error) throw error
   return data as FuelResource
+}
+
+/** Get all fuel resources for a scope category (and optionally sub_category). No pagination. */
+export async function getFuelResourcesByCategory(
+  scopeCategoryId: string,
+  subCategory?: string | null
+): Promise<FuelResourceWithCategory[]> {
+  let query = supabase
+    .from('fuel_resources')
+    .select('*, scope_category:scope_categories(*)')
+    .eq('scope_category_id', scopeCategoryId)
+    .is('deleted_at', null)
+    .order('resource', { ascending: true })
+  if (subCategory) {
+    query = query.eq('sub_category', subCategory)
+  }
+  const { data, error } = await query
+  if (error) throw error
+  return (data ?? []) as FuelResourceWithCategory[]
 }
 
 /** Get distinct sub_category values for a scope_category_id (for activity group mapping). */

@@ -131,7 +131,17 @@ export async function getTemplateActivityGroups(
 
   let q = supabase
     .from('template_activity_groups')
-    .select('*, scope_category:scope_categories(id, scope, name_th, name_en)')
+    .select(`
+      *,
+      scope_category:scope_categories(id, scope, name_th, name_en),
+      template_activity_group_fuel_resources(
+        id,
+        fuel_resource_id,
+        note,
+        sort_order,
+        fuel_resource:fuel_resources(id, resource, unit, ef_value, ref_info)
+      )
+    `)
     .order('sort_order', { ascending: true })
     .order('name_en', { ascending: true })
 
@@ -144,7 +154,35 @@ export async function getTemplateActivityGroups(
 
   const { data, error } = await q
   if (error) throw error
-  return (data ?? []) as TemplateActivityGroupWithRelations[]
+  const rows = (data ?? []) as (Omit<TemplateActivityGroupWithRelations, 'fuel_resource_mappings'> & {
+    template_activity_group_fuel_resources?: Array<{
+      id: string
+      fuel_resource_id: string
+      note: string | null
+      sort_order: number
+      fuel_resource: { id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null } | null
+    }>
+  })[]
+  return rows.map((r) => {
+    const { template_activity_group_fuel_resources, ...rest } = r
+    const fuel_resource_mappings = (template_activity_group_fuel_resources ?? []).map((m) => ({
+      id: m.id,
+      template_activity_group_id: (rest as { id: string }).id,
+      fuel_resource_id: m.fuel_resource_id,
+      note: m.note,
+      sort_order: m.sort_order,
+      fuel_resource: m.fuel_resource
+        ? {
+            id: m.fuel_resource.id,
+            resource: m.fuel_resource.resource,
+            unit: m.fuel_resource.unit,
+            ef_value: m.fuel_resource.ef_value,
+            ref_info: m.fuel_resource.ref_info,
+          }
+        : undefined,
+    }))
+    return { ...rest, fuel_resource_mappings } as TemplateActivityGroupWithRelations
+  })
 }
 
 export async function getTemplateActivityGroup(id: string) {

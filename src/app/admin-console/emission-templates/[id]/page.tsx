@@ -1,16 +1,24 @@
 'use client'
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Alert,
   Box,
   Button,
   Chip,
+  Collapse,
+  IconButton,
+  Paper,
   Snackbar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from '@mui/material'
-import { Add as AddIcon } from '@mui/icons-material'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { Add as AddIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { useParams, useRouter } from 'next/navigation'
 import ActivityGroupFormDialog from '@/components/admin/emission-templates/ActivityGroupFormDialog'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
@@ -40,6 +48,16 @@ export default function TemplateDetailPage() {
     message: '',
     severity: 'success',
   })
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
 
   const showSnackbar = (message: string, severity: 'success' | 'error' = 'success') => {
     setSnackbar({ open: true, message, severity })
@@ -88,6 +106,7 @@ export default function TemplateDetailPage() {
     is_common: boolean
     sort_order: number
     status: string
+    fuel_resource_mappings?: { fuel_resource_id: string; note?: string | null }[]
   }) => {
     try {
       const method = editTarget ? 'PUT' : 'POST'
@@ -127,89 +146,7 @@ export default function TemplateDetailPage() {
     }
   }
 
-  const columns = useMemo<GridColDef[]>(
-    () => [
-      {
-        field: 'name_en',
-        headerName: 'Name',
-        minWidth: 220,
-        flex: 1,
-        renderCell: (params) => (
-          <Box>
-            <Typography variant="body2" fontWeight={600}>{params.row.name_en}</Typography>
-          </Box>
-        ),
-      },
-      {
-        field: 'name_th',
-        headerName: 'Name (Thai)',
-        minWidth: 220,
-        flex: 1,
-        renderCell: (params) => (
-          <Box>
-            <Typography variant="caption" color="text.secondary">{params.row.name_th}</Typography>
-          </Box>
-        ),
-      },
-      {
-        field: 'scope',
-        headerName: 'Scope',
-        width: 90,
-        renderCell: (params) => (params.value ? <Chip label={`S${params.value}`} size="small" /> : '—'),
-      },
-      {
-        field: 'scope_category_id',
-        headerName: 'Scope Category',
-        minWidth: 240,
-        flex: 1,
-        renderCell: (params) => params.row.scope_category?.name_en ?? '—',
-      },
-      {
-        field: 'is_common',
-        headerName: 'Common',
-        width: 100,
-        renderCell: (params) => (
-          <Chip
-            label={params.value ? 'Yes' : 'No'}
-            size="small"
-            color={params.value ? 'success' : 'default'}
-            variant={params.value ? 'filled' : 'outlined'}
-          />
-        ),
-      },
-      {
-        field: 'status',
-        headerName: 'Status',
-        width: 110,
-        renderCell: (params) => (
-          <Chip
-            label={params.value}
-            size="small"
-            color={params.value === 'active' ? 'success' : 'default'}
-            variant={params.value === 'active' ? 'filled' : 'outlined'}
-          />
-        ),
-      },
-      {
-        field: 'actions',
-        headerName: '',
-        width: 180,
-        sortable: false,
-        disableColumnMenu: true,
-        renderCell: (params) => (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button size="small" variant="outlined" onClick={() => { setEditTarget(params.row); setDialogOpen(true) }}>
-              Edit
-            </Button>
-            <Button size="small" color="error" variant="outlined" onClick={() => setDeleteTarget(params.row)}>
-              Delete
-            </Button>
-          </Box>
-        ),
-      },
-    ],
-    []
-  )
+  const sortedGroups = [...groups].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
 
   return (
     <Box sx={{ p: 3 }}>
@@ -241,31 +178,123 @@ export default function TemplateDetailPage() {
         </Button>
       </Box>
 
-      <DataGrid
-        autoHeight
-        rows={groups}
-        columns={columns}
-        loading={loading}
-        disableRowSelectionOnClick
-        pageSizeOptions={[25, 50, 100]}
-        initialState={{ pagination: { paginationModel: { pageSize: 25, page: 0 } } }}
-        rowHeight={80}
-        sx={{
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 2,
-          '& .MuiDataGrid-columnHeader': {
-            backgroundColor: '#f8fafc',
-            fontWeight: 600,
-          },
-          '& .MuiDataGrid-cell': {
-            display: 'flex',
-            alignItems: 'center',
-            paddingTop: 1,
-            paddingBottom: 1,
-          },
-        }}
-      />
+      <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: '#f8fafc' }}>
+              <TableCell sx={{ width: 48 }} />
+              <TableCell sx={{ fontWeight: 600 }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 90 }}>Scope</TableCell>
+              <TableCell sx={{ fontWeight: 600, minWidth: 200 }}>Scope Category</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 90 }}>Common</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 100 }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600, width: 160 }} align="right">
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                  Loading…
+                </TableCell>
+              </TableRow>
+            ) : (
+              sortedGroups.map((group) => (
+                <React.Fragment key={group.id}>
+                  <TableRow hover sx={{ '& > *': { borderBottom: 'unset' } }}>
+                    <TableCell>
+                      <IconButton size="small" onClick={() => toggleExpand(group.id)} aria-label="expand row">
+                        {expandedIds.has(group.id) ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>
+                      <Box>
+                        <Typography variant="body2" fontWeight={600}>
+                          {group.name_en}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {group.name_th}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{group.scope ? <Chip label={`S${group.scope}`} size="small" /> : '—'}</TableCell>
+                    <TableCell>{group.scope_category?.name_en ?? '—'}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={group.is_common ? 'Yes' : 'No'}
+                        size="small"
+                        color={group.is_common ? 'success' : 'default'}
+                        variant={group.is_common ? 'filled' : 'outlined'}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={group.status}
+                        size="small"
+                        color={group.status === 'active' ? 'success' : 'default'}
+                        variant={group.status === 'active' ? 'filled' : 'outlined'}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+                        <Button size="small" variant="outlined" onClick={() => { setEditTarget(group); setDialogOpen(true) }}>
+                          Edit
+                        </Button>
+                        <Button size="small" color="error" variant="outlined" onClick={() => setDeleteTarget(group)}>
+                          Delete
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ py: 0, borderBottom: expandedIds.has(group.id) ? 1 : 0 }}>
+                      <Collapse in={expandedIds.has(group.id)} timeout="auto" unmountOnExit>
+                        <Box sx={{ py: 2, pl: 6 }}>
+                          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                            Mapped Fuel Resources ({(group.fuel_resource_mappings?.length ?? 0)})
+                          </Typography>
+                          {(group.fuel_resource_mappings?.length ?? 0) === 0 ? (
+                            <Typography variant="body2" color="text.secondary">
+                              No fuel resources mapped.
+                            </Typography>
+                          ) : (
+                            <Table size="small" sx={{ maxWidth: 800 }}>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell sx={{ fontWeight: 600 }}>Resource</TableCell>
+                                  <TableCell sx={{ fontWeight: 600 }}>Unit</TableCell>
+                                  <TableCell sx={{ fontWeight: 600 }} align="right">EF Value</TableCell>
+                                  <TableCell sx={{ fontWeight: 600 }}>Ref Info</TableCell>
+                                  <TableCell sx={{ fontWeight: 600 }}>Note</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {group.fuel_resource_mappings?.map((m) => (
+                                  <TableRow key={m.id}>
+                                    <TableCell>{m.fuel_resource?.resource ?? '—'}</TableCell>
+                                    <TableCell>{m.fuel_resource?.unit ?? '—'}</TableCell>
+                                    <TableCell align="right">{m.fuel_resource?.ef_value != null ? m.fuel_resource.ef_value : '—'}</TableCell>
+                                    <TableCell sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                      {m.fuel_resource?.ref_info ?? '—'}
+                                    </TableCell>
+                                    <TableCell>{m.note ?? '—'}</TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          )}
+                        </Box>
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <ActivityGroupFormDialog
         open={dialogOpen}

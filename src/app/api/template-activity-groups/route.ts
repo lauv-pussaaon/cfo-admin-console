@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createTemplateActivityGroup, getTemplateActivityGroups } from '@/lib/api/emission-templates'
+import { setMappings } from '@/lib/api/activity-group-fuel-resources'
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,8 +27,11 @@ export async function POST(request: NextRequest) {
     if (!body.template_id || !body.name_th || !body.name_en) {
       return NextResponse.json({ error: 'template_id, name_th, and name_en are required' }, { status: 400 })
     }
-
-    const record = await createTemplateActivityGroup(body)
+    const { fuel_resource_mappings, ...createBody } = body
+    const record = await createTemplateActivityGroup(createBody)
+    if (Array.isArray(fuel_resource_mappings) && fuel_resource_mappings.length > 0) {
+      await setMappings(record.id, fuel_resource_mappings)
+    }
     return NextResponse.json(record, { status: 201 })
   } catch (error) {
     console.error('POST /api/template-activity-groups error:', error)

@@ -119,6 +119,7 @@ export interface ImportPreviewStats {
 export interface FuelResourcesQuery {
   scope?: number
   category_id?: string
+  sub_category?: string
   search?: string
   page?: number
   per_page?: number

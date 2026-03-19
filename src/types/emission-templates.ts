@@ -40,8 +40,26 @@ export interface ScopeCategoryLite {
   name_en: string
 }
 
+export interface FuelResourceLite {
+  id: string
+  resource: string
+  unit: string | null
+  ef_value: number | null
+  ref_info: string | null
+}
+
+export interface TemplateActivityGroupFuelResourceMapping {
+  id: string
+  template_activity_group_id: string
+  fuel_resource_id: string
+  note: string | null
+  sort_order: number
+  fuel_resource?: FuelResourceLite
+}
+
 export interface TemplateActivityGroupWithRelations extends TemplateActivityGroup {
   scope_category?: ScopeCategoryLite | null
+  fuel_resource_mappings?: TemplateActivityGroupFuelResourceMapping[]
 }
 
 export interface EmissionTemplateWithRelations extends EmissionTemplate {

@@ -6,6 +6,7 @@ export async function GET (request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const scope = searchParams.get('scope')
     const category_id = searchParams.get('category_id') ?? undefined
+    const sub_category = searchParams.get('sub_category') ?? undefined
     const search = searchParams.get('search') ?? undefined
     const page = parseInt(searchParams.get('page') ?? '1', 10)
     const per_page = parseInt(searchParams.get('per_page') ?? '50', 10)
@@ -14,6 +15,7 @@ export async function GET (request: NextRequest) {
     const result = await getFuelResources({
       scope: scope ? parseInt(scope, 10) : undefined,
       category_id,
+      sub_category,
       search,
       page,
       per_page,

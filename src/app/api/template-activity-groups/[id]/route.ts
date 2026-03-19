@@ -4,6 +4,7 @@ import {
   softDeleteTemplateActivityGroup,
   updateTemplateActivityGroup,
 } from '@/lib/api/emission-templates'
+import { setMappings } from '@/lib/api/activity-group-fuel-resources'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -20,7 +21,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { id } = await params
     const body = await request.json()
-    const record = await updateTemplateActivityGroup(id, body)
+    const { fuel_resource_mappings, ...updateBody } = body
+    const record = await updateTemplateActivityGroup(id, updateBody)
+    if (Array.isArray(fuel_resource_mappings)) {
+      await setMappings(id, fuel_resource_mappings)
+    }
     return NextResponse.json(record)
   } catch (error) {
     console.error('PUT /api/template-activity-groups/[id] error:', error)
