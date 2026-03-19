@@ -6,7 +6,6 @@ import {
   Box,
   Typography,
   TextField,
-  CircularProgress,
   Snackbar,
   Alert,
   FormControl,
@@ -16,16 +15,24 @@ import {
 } from '@mui/material'
 import { Search as SearchIcon } from '@mui/icons-material'
 import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
+import SupportStaffChatDrawer from '@/components/admin/SupportStaffChatDrawer'
 import { organizationService } from '@/lib/services'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
+import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin } from '@/lib/permissions'
 
 export default function SupportClientsDashboard () {
   const router = useRouter()
+  const { user } = useAuth()
   const [organizations, setOrganizations] = useState<OrganizationWithCreator[]>([])
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [unreadByOrganization, setUnreadByOrganization] = useState<Record<string, boolean>>({})
+  const [selectedOrganization, setSelectedOrganization] = useState<OrganizationWithCreator | null>(null)
+  const [chatOpen, setChatOpen] = useState(false)
 
   const {
     searchTerm,
@@ -58,14 +65,54 @@ export default function SupportClientsDashboard () {
     loadOrganizations()
   }, [loadOrganizations])
 
+  const loadInbox = useCallback(async () => {
+    try {
+      const response = await authenticatedAdminFetch('/api/support/staff/inbox')
+      if (!response.ok) return
+      const payload = await response.json()
+      const map: Record<string, boolean> = {}
+      for (const row of payload.data ?? []) {
+        map[row.organization_id] = Boolean(row.has_unread_from_client)
+      }
+      setUnreadByOrganization(map)
+    } catch (error) {
+      console.error('Failed to load support inbox:', error)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadInbox()
+    const poller = window.setInterval(() => {
+      loadInbox()
+    }, 15000)
+    return () => {
+      window.clearInterval(poller)
+    }
+  }, [loadInbox])
+
   const handleRowClick = (id: string) => {
     router.push(`/admin-console/organizations/${id}`)
+  }
+
+  const handleChatClick = (id: string) => {
+    const org = organizations.find((item) => item.id === id)
+    if (!org) return
+    setSelectedOrganization(org)
+    setChatOpen(true)
+  }
+
+  const handleChatRead = (organizationId: string) => {
+    setUnreadByOrganization((prev) => ({
+      ...prev,
+      [organizationId]: false,
+    }))
+    loadInbox()
   }
 
   return (
     <Box sx={{ py: 2, width: '100%' }}>
       <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>
-        ลูกค้า (ฝ่ายสนับสนุน)
+        {isAdmin(user) ? 'Support Clients' : 'ลูกค้า (ฝ่ายสนับสนุน)'}
       </Typography>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -117,6 +164,15 @@ export default function SupportClientsDashboard () {
         data={filteredOrganizations as OrganizationWithCreator[]}
         loading={loading}
         onRowClick={handleRowClick}
+        onChatClick={handleChatClick}
+        unreadByOrganization={unreadByOrganization}
+      />
+
+      <SupportStaffChatDrawer
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        organization={selectedOrganization ? { id: selectedOrganization.id, name: selectedOrganization.name } : null}
+        onRead={handleChatRead}
       />
 
       <Snackbar

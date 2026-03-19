@@ -7,6 +7,8 @@
 -- ===========================================
 
 -- Drop tables that depend on other tables first
+DROP TABLE IF EXISTS support_messages CASCADE;
+DROP TABLE IF EXISTS support_conversations CASCADE;
 DROP TABLE IF EXISTS organization_invitations CASCADE;
 DROP TABLE IF EXISTS user_organizations CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;

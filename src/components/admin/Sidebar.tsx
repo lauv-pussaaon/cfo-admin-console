@@ -22,9 +22,9 @@ import {
   People as PeopleIcon,
   Analytics as AnalyticsIcon,
   Settings as SettingsIcon,
-  Logout as LogoutIcon,
   Science as ScienceIcon,
   ViewModule as ViewModuleIcon,
+  SupportAgent as SupportAgentIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -43,6 +43,7 @@ interface NavItem {
 const FULL_NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', path: '/admin-console', icon: <DashboardIcon /> },
   { title: 'Organizations', path: '/admin-console/organizations', icon: <BusinessIcon /> },
+  { title: 'Support Clients', path: '/admin-console/support-clients', icon: <SupportAgentIcon /> },
   { title: 'Users', path: '/admin-console/users', icon: <PeopleIcon /> },
   { title: 'Analytics', path: '/admin-console/analytics', icon: <AnalyticsIcon /> },
   { title: 'Emission Resources', path: '/admin-console/emission-resources', icon: <ScienceIcon /> },

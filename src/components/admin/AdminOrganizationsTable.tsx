@@ -1,12 +1,13 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Link, Chip, Typography } from '@mui/material'
+import { Box, IconButton, Paper, Link, Chip, Typography, Badge } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Launch as LaunchIcon,
+  ChatBubbleOutline as ChatBubbleOutlineIcon,
 } from '@mui/icons-material'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 
@@ -17,12 +18,16 @@ interface Props {
   onEdit?: (id: string) => void
   onDelete?: (id: string) => void
   onRowClick?: (id: string) => void
+  onChatClick?: (id: string) => void
+  unreadByOrganization?: Record<string, boolean>
 }
 
 export default function AdminOrganizationsTable ({
   onEdit,
   onDelete,
   onRowClick,
+  onChatClick,
+  unreadByOrganization = {},
   data,
   loading,
   variant = 'admin',
@@ -184,7 +189,47 @@ export default function AdminOrganizationsTable ({
     ]
 
     if (variant === 'support') {
-      return base
+      return [
+        ...base,
+        {
+          field: 'chat',
+          headerName: 'Chat',
+          width: 90,
+          align: 'center',
+          headerAlign: 'center',
+          sortable: false,
+          filterable: false,
+          renderCell: (params) => {
+            const orgId = params.row.id as string
+            const hasUnread = unreadByOrganization[orgId] ?? false
+            return (
+              <IconButton
+                size="small"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onChatClick?.(orgId)
+                }}
+                sx={{
+                  color: hasUnread ? 'error.main' : 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                  },
+                }}
+                title="Open support chat"
+              >
+                <Badge
+                  color="error"
+                  variant="dot"
+                  overlap="circular"
+                  invisible={!hasUnread}
+                >
+                  <ChatBubbleOutlineIcon fontSize="small" />
+                </Badge>
+              </IconButton>
+            )
+          },
+        },
+      ]
     }
 
     return [
@@ -231,7 +276,7 @@ export default function AdminOrganizationsTable ({
         ),
       },
     ]
-  }, [onEdit, onDelete, variant])
+  }, [onEdit, onDelete, variant, unreadByOrganization, onChatClick])
 
   return (
     <Paper elevation={0} sx={{ minHeight: 400, width: '100%', backgroundColor: 'transparent', overflowX: 'scroll' }}>
