@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Box,
   Typography,
@@ -19,7 +20,10 @@ import {
   Alert,
   Snackbar,
   Chip,
+  CircularProgress,
 } from '@mui/material'
+import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin } from '@/lib/permissions'
 import {
   FileUpload as FileUploadIcon,
   Add as AddIcon,
@@ -50,6 +54,15 @@ const SCOPE_COLORS: Record<number, string> = {
 }
 
 export default function EmissionResourcesPage() {
+  const router = useRouter()
+  const { user, isLoading: authLoading } = useAuth()
+
+  useEffect(() => {
+    if (!authLoading && user && !isAdmin(user)) {
+      router.replace('/admin-console')
+    }
+  }, [user, authLoading, router])
+
   const [scopeTab, setScopeTab] = useState(0)
   const [categoryId, setCategoryId] = useState<string>('')
   const [search, setSearch] = useState('')
@@ -204,6 +217,18 @@ export default function EmissionResourcesPage() {
   const filteredCategories = categories.filter((c) =>
     scopeTab === 0 ? true : c.scope === scopeTab
   )
+
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (user && !isAdmin(user)) {
+    return null
+  }
 
   return (
     <Box sx={{ p: 3, maxWidth: '100%' }}>

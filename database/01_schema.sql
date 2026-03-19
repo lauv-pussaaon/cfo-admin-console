@@ -21,7 +21,7 @@ CREATE TABLE users (
   password_hash TEXT NOT NULL,
   name TEXT NOT NULL,
   avatar_url TEXT,
-  role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit')),
+  role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit', 'Support')),
   invite_hashcode TEXT UNIQUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

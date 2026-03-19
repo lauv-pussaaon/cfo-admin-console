@@ -38,6 +38,13 @@ export function isAudit (user: User | null): boolean {
 }
 
 /**
+ * Support team: read-only client directory, no org/user admin actions
+ */
+export function isSupport (user: User | null): boolean {
+  return user?.role === 'Support'
+}
+
+/**
  * Check if user can manage organizations
  * Admin, Dealer, Consult, and Audit can manage organizations
  * @param user - User object or null
@@ -45,6 +52,7 @@ export function isAudit (user: User | null): boolean {
  */
 export function canManageOrganizations (user: User | null): boolean {
   if (!user) return false
+  if (user.role === 'Support') return false
   return user.role === 'Admin' || user.role === 'Audit' || user.role === 'Consult' || user.role === 'Dealer'
 }
 
@@ -64,6 +72,8 @@ export async function canManageOrganization (
 
   // Admin can manage all organizations
   if (user.role === 'Admin') return true
+
+  if (user.role === 'Support') return false
 
   // Dealer, Consult, and Audit can only manage assigned organizations
   if (user.role === 'Dealer' || user.role === 'Consult' || user.role === 'Audit') {

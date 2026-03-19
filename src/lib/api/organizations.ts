@@ -290,6 +290,65 @@ export const getOrganizationById = async (id: string): Promise<Organization | nu
   return data
 }
 
+/** Single org with same enrichment as getOrganizationsForAdmin (for detail page). */
+export const getOrganizationForAdminById = async (id: string): Promise<OrganizationWithCreator | null> => {
+  const { data: org, error } = await supabase
+    .from('organizations')
+    .select(`
+      *,
+      creator:users!organizations_created_by_fkey(id, name, email, role)
+    `)
+    .eq('id', id)
+    .single()
+
+  if (error && error.code !== 'PGRST116') throw error
+  if (!org) return null
+
+  const { data: userOrgs } = await supabase
+    .from('user_organizations')
+    .select('organization_id')
+    .eq('organization_id', id)
+
+  const userCount = userOrgs?.length ?? 0
+
+  const { data: dealerOrgs, error: dealerError } = await supabase
+    .from('user_organizations')
+    .select(`
+      organization_id,
+      user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, created_at)
+    `)
+    .eq('organization_id', id)
+
+  let dealer: OrganizationWithCreator['dealer'] = null
+  if (!dealerError && dealerOrgs) {
+    for (const row of dealerOrgs) {
+      const u = row.user
+      const user = Array.isArray(u) ? u[0] : u
+      if (user && user.role === 'Dealer') {
+        dealer = { id: user.id, name: user.name, email: user.email }
+        break
+      }
+    }
+  }
+
+  const o = org as Record<string, unknown>
+  const creatorRaw = o.creator as { id: string; name: string; email: string; role: string } | null | undefined
+
+  return {
+    ...(org as Organization),
+    userCount,
+    creator: creatorRaw
+      ? {
+          id: creatorRaw.id,
+          name: creatorRaw.name,
+          email: creatorRaw.email,
+          role: creatorRaw.role,
+        }
+      : null,
+    dealer,
+  }
+}
+
 export const createOrganization = async (
   data: {
     name: string

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   Box,
   Drawer,
@@ -27,6 +27,8 @@ import {
   ViewModule as ViewModuleIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
+import { isSupport } from '@/lib/permissions'
 import CFOLogo from '../CFOLogo'
 
 const DRAWER_WIDTH = 280
@@ -38,7 +40,7 @@ interface NavItem {
   icon: React.ReactNode
 }
 
-const NAV_ITEMS: NavItem[] = [
+const FULL_NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', path: '/admin-console', icon: <DashboardIcon /> },
   { title: 'Organizations', path: '/admin-console/organizations', icon: <BusinessIcon /> },
   { title: 'Users', path: '/admin-console/users', icon: <PeopleIcon /> },
@@ -47,10 +49,20 @@ const NAV_ITEMS: NavItem[] = [
   { title: 'Emission Templates', path: '/admin-console/emission-templates', icon: <ViewModuleIcon /> },
 ]
 
+const SUPPORT_NAV_ITEMS: NavItem[] = [
+  { title: 'Clients', path: '/admin-console', icon: <BusinessIcon /> },
+]
+
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const { user } = useAuth()
+
+  const navItems = useMemo(
+    () => (user && isSupport(user) ? SUPPORT_NAV_ITEMS : FULL_NAV_ITEMS),
+    [user]
+  )
 
   const handleToggle = () => {
     setCollapsed(!collapsed)
@@ -126,10 +138,13 @@ export default function Sidebar() {
       {/* Navigation List */}
       <Box sx={{ flexGrow: 1, py: 2 }}>
         <List sx={{ px: 2, gap: 1, display: 'flex', flexDirection: 'column' }}>
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.path || (item.path !== '/admin-console' && pathname.startsWith(item.path))
+          {navItems.map((item) => {
+            const isActive =
+              user && isSupport(user) && item.path === '/admin-console'
+                ? pathname === '/admin-console' || pathname.startsWith('/admin-console/organizations')
+                : pathname === item.path || (item.path !== '/admin-console' && pathname.startsWith(item.path))
             return (
-              <ListItem key={item.title} disablePadding sx={{ display: 'block' }}>
+              <ListItem key={`${item.title}-${item.path}`} disablePadding sx={{ display: 'block' }}>
                 <Tooltip title={collapsed ? item.title : ''} placement="right">
                   <ListItemButton
                     onClick={() => navigate(item.path)}

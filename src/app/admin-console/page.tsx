@@ -9,7 +9,8 @@ import {
   Analytics as AnalyticsIcon
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
-import { canManageOrganizations, isAdmin, isConsult, isAudit } from '@/lib/permissions'
+import { canManageOrganizations, isAdmin, isConsult, isAudit, isSupport } from '@/lib/permissions'
+import SupportClientsDashboard from '@/components/admin/SupportClientsDashboard'
 
 export default function AdminConsolePage() {
   const { user, isLoading } = useAuth()
@@ -35,6 +36,10 @@ export default function AdminConsolePage() {
         <Typography>Loading...</Typography>
       </Box>
     )
+  }
+
+  if (user && isSupport(user)) {
+    return <SupportClientsDashboard />
   }
 
   // Don't render dashboard for Consult/Audit (they're redirected)

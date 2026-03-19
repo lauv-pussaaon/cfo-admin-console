@@ -27,6 +27,7 @@ import UserModal from '@/components/admin/UserModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { userService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin } from '@/lib/permissions'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useUsersFilter } from '@/hooks/useUsersFilter'
@@ -35,6 +36,12 @@ import { ROLE_OPTIONS } from '@/types/roles'
 export default function AdminConsoleUsersPage() {
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!authLoading && user && !isAdmin(user)) {
+      router.replace('/admin-console')
+    }
+  }, [user, authLoading, router])
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   
@@ -192,6 +199,10 @@ export default function AdminConsoleUsersPage() {
         <CircularProgress />
       </Box>
     )
+  }
+
+  if (user && !isAdmin(user)) {
+    return null
   }
 
   return (

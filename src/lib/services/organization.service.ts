@@ -19,6 +19,7 @@ import {
   getOrganizationsForDealer as getOrganizationsForDealerAPI,
   getOrganizationsForConsultAudit as getOrganizationsForConsultAuditAPI,
   getOrganizationsForAdmin as getOrganizationsForAdminAPI,
+  getOrganizationForAdminById as getOrganizationForAdminByIdAPI,
   getDealers as getDealersAPI,
   getDealerByOrganization as getDealerByOrganizationAPI,
   setDealerForOrganization as setDealerForOrganizationAPI,
@@ -76,6 +77,10 @@ export class OrganizationService {
   // Get organizations for admin (with creator info)
   async getOrganizationsForAdmin (): Promise<OrganizationWithCreator[]> {
     return getOrganizationsForAdminAPI()
+  }
+
+  async getOrganizationForAdminById (id: string): Promise<OrganizationWithCreator | null> {
+    return getOrganizationForAdminByIdAPI(id)
   }
 
   // Export organization details for operations team

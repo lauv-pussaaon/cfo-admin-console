@@ -17,9 +17,12 @@ import {
   TableHead,
   TableRow,
   Typography,
+  CircularProgress,
 } from '@mui/material'
 import { Add as AddIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { useParams, useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin } from '@/lib/permissions'
 import ActivityGroupFormDialog from '@/components/admin/emission-templates/ActivityGroupFormDialog'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import type { ScopeCategory } from '@/types/emission-resources'
@@ -31,7 +34,14 @@ import type {
 export default function TemplateDetailPage() {
   const params = useParams<{ id: string }>()
   const router = useRouter()
+  const { user, isLoading: authLoading } = useAuth()
   const templateId = params.id
+
+  useEffect(() => {
+    if (!authLoading && user && !isAdmin(user)) {
+      router.replace('/admin-console')
+    }
+  }, [user, authLoading, router])
 
   const [template, setTemplate] = useState<EmissionTemplateWithRelations | null>(null)
   const [groups, setGroups] = useState<TemplateActivityGroupWithRelations[]>([])
@@ -147,6 +157,18 @@ export default function TemplateDetailPage() {
   }
 
   const sortedGroups = [...groups].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (user && !isAdmin(user)) {
+    return null
+  }
 
   return (
     <Box sx={{ p: 3 }}>

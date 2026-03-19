@@ -8,6 +8,7 @@ export type UserRole =
   | 'Dealer'
   | 'Consult'
   | 'Audit'
+  | 'Support'
 
 /**
  * Legacy roles (for backward compatibility)
@@ -38,6 +39,7 @@ export const ROLE_OPTIONS: RoleOption[] = [
   { value: 'Dealer', label: 'ตัวแทนจำหน่าย' },
   { value: 'Consult', label: 'ที่ปรึกษา' },
   { value: 'Audit', label: 'ผู้ตรวจสอบ' },
+  { value: 'Support', label: 'ฝ่ายสนับสนุน' },
 ]
 
 /**
@@ -48,6 +50,7 @@ export const ROLE_LABELS: Record<AllUserRole, string> = {
   'Dealer': 'ตัวแทนจำหน่าย',
   'Consult': 'ที่ปรึกษา',
   'Audit': 'ผู้ตรวจสอบ',
+  'Support': 'ฝ่ายสนับสนุน',
   'project_owner': 'เจ้าของโครงการ',
   'consultant': 'ที่ปรึกษา',
   'project_staff': 'เจ้าหน้าที่โครงการ',
@@ -71,6 +74,7 @@ export function getRoleColor (
   if (role === 'Dealer') return 'warning'
   if (role === 'Consult' || role === 'consultant') return 'info'
   if (role === 'Audit' || role === 'Internal Audit') return 'secondary'
+  if (role === 'Support') return 'success'
   return 'default'
 }
 

@@ -33,6 +33,7 @@ export const storageBuckets = {
   reportDocuments: 'cfo-report-documents',
   efCertificates: 'cfo-ef-certificates',
   userAvatars: 'cfo-user-avatar',
+  emissionTemplateImages: 'cfo-emission-template-images',
 } as const
 
 

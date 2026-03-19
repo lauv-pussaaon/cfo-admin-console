@@ -23,11 +23,15 @@ import {
   Switch,
   TextField,
   Typography,
+  CircularProgress,
 } from '@mui/material'
-import { Add as AddIcon, Edit as EditIcon, Search as SearchIcon, MoreVert as MoreVertIcon } from '@mui/icons-material'
+import { Add as AddIcon, Edit as EditIcon, Search as SearchIcon, MoreVert as MoreVertIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
+import { isAdmin } from '@/lib/permissions'
 import { useForm, Controller } from 'react-hook-form'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
+import { templateImageUploadService } from '@/lib/services/template-image-upload.service'
 import type { EmissionTemplateWithRelations } from '@/types/emission-templates'
 
 interface TemplateFormValues {
@@ -43,6 +47,14 @@ const PLACEHOLDER_IMAGE =
 
 export default function EmissionTemplatesPage() {
   const router = useRouter()
+  const { user, isLoading: authLoading } = useAuth()
+
+  useEffect(() => {
+    if (!authLoading && user && !isAdmin(user)) {
+      router.replace('/admin-console')
+    }
+  }, [user, authLoading, router])
+
   const [templates, setTemplates] = useState<EmissionTemplateWithRelations[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,8 +71,10 @@ export default function EmissionTemplatesPage() {
     message: '',
     severity: 'success',
   })
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
 
-  const { control, reset, handleSubmit, formState: { isSubmitting } } = useForm<TemplateFormValues>({
+  const { control, reset, handleSubmit, setValue, watch, formState: { isSubmitting } } = useForm<TemplateFormValues>({
     defaultValues: {
       name_th: '',
       name_en: '',
@@ -72,6 +86,37 @@ export default function EmissionTemplatesPage() {
 
   const showSnackbar = (message: string, severity: 'success' | 'error' = 'success') => {
     setSnackbar({ open: true, message, severity })
+  }
+
+  const featureImageUrl = watch('feature_image_url')
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setUploadingImage(true)
+    try {
+      const result = await templateImageUploadService.uploadImage(file)
+      if (result.success && result.fileUrl) {
+        setValue('feature_image_url', result.fileUrl)
+        showSnackbar('Image uploaded')
+      } else {
+        showSnackbar(result.error ?? 'Upload failed', 'error')
+      }
+    } catch {
+      showSnackbar('Upload failed', 'error')
+    } finally {
+      setUploadingImage(false)
+      event.target.value = ''
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setValue('feature_image_url', '')
   }
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, template: EmissionTemplateWithRelations) => {
@@ -189,6 +234,18 @@ export default function EmissionTemplatesPage() {
     () => [...templates].sort((a, b) => a.display_order - b.display_order),
     [templates]
   )
+
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (user && !isAdmin(user)) {
+    return null
+  }
 
   return (
     <Box sx={{ p: 3 }}>
@@ -331,7 +388,7 @@ export default function EmissionTemplatesPage() {
 
       <Dialog
         open={formOpen}
-        onClose={!isSubmitting ? () => { setFormOpen(false); setEditTarget(null) } : undefined}
+        onClose={!isSubmitting && !uploadingImage ? () => { setFormOpen(false); setEditTarget(null) } : undefined}
         maxWidth="sm"
         fullWidth
       >
@@ -368,23 +425,82 @@ export default function EmissionTemplatesPage() {
                 />
               )}
             />
-            <Controller
-              name="feature_image_url"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Feature Image URL"
-                  fullWidth
-                  size="small"
-                  placeholder="https://images.unsplash.com/photo-..."
-                  helperText="URL mode is active now. File upload is prepared for a later phase."
-                />
-              )}
-            />
-            <Button variant="outlined" disabled>
-              Upload Image (Coming soon)
-            </Button>
+            <Box>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                Feature Image
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <Box
+                  sx={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={featureImageUrl || PLACEHOLDER_IMAGE}
+                    alt="Preview"
+                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE
+                    }}
+                  />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 200 }}>
+                  <Controller
+                    name="feature_image_url"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Image URL"
+                        fullWidth
+                        size="small"
+                        placeholder="https://images.unsplash.com/photo-..."
+                        sx={{ mb: 1 }}
+                      />
+                    )}
+                  />
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={uploadingImage ? null : <PhotoCameraIcon />}
+                      onClick={handleUploadClick}
+                      disabled={isSubmitting || uploadingImage}
+                    >
+                      {uploadingImage ? 'Uploading…' : 'Upload Image'}
+                    </Button>
+                    {featureImageUrl && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        color="error"
+                        onClick={handleRemoveImage}
+                        disabled={isSubmitting || uploadingImage}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Box>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
+                </Box>
+              </Box>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+                Paste a URL or upload an image (JPG, PNG, GIF, WebP, max 2MB)
+              </Typography>
+            </Box>
             <Controller
               name="examples"
               control={control}
@@ -416,11 +532,11 @@ export default function EmissionTemplatesPage() {
             onClick={() => { setFormOpen(false); setEditTarget(null) }}
             color="inherit"
             variant="outlined"
-            disabled={isSubmitting}
+            disabled={isSubmitting || uploadingImage}
           >
             Cancel
           </Button>
-          <Button type="submit" form="template-edit-form" variant="contained" disabled={isSubmitting}>
+          <Button type="submit" form="template-edit-form" variant="contained" disabled={isSubmitting || uploadingImage}>
             {editTarget ? 'Save' : 'Add Template'}
           </Button>
         </DialogActions>

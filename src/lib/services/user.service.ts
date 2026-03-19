@@ -20,7 +20,7 @@ export class UserService {
   async getUsers (): Promise<User[]> {
     const allUsers = await getUsersAPI()
     // Filter to only admin console roles
-    const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit']
+    const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
     return allUsers.filter(user => allowedRoles.includes(user.role))
   }
 
