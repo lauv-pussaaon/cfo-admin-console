@@ -55,7 +55,7 @@ const SUPPORT_NAV_ITEMS: NavItem[] = [
 ]
 
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
   const { user } = useAuth()

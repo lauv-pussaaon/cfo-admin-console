@@ -145,31 +145,31 @@ export default function AdminOrganizationsTable ({
           </Box>
         ),
       },
-      {
-        field: 'dealer_name',
-        headerName: 'Dealer',
-        width: 180,
-        flex: 1,
-        minWidth: 150,
-        renderCell: (params) => (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-            {params.row.dealer_name !== '-' ? (
-              <>
-                <Typography variant="body2" fontWeight={500}>
-                  {params.row.dealer_name}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {params.row.dealer_email}
-                </Typography>
-              </>
-            ) : (
-              <Typography variant="body2" color="text.secondary" fontStyle="italic">
-                ไม่มี Dealer
-              </Typography>
-            )}
-          </Box>
-        ),
-      },
+      // {
+      //   field: 'dealer_name',
+      //   headerName: 'Dealer',
+      //   width: 180,
+      //   flex: 1,
+      //   minWidth: 150,
+      //   renderCell: (params) => (
+      //     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      //       {params.row.dealer_name !== '-' ? (
+      //         <>
+      //           <Typography variant="body2" fontWeight={500}>
+      //             {params.row.dealer_name}
+      //           </Typography>
+      //           <Typography variant="caption" color="text.secondary">
+      //             {params.row.dealer_email}
+      //           </Typography>
+      //         </>
+      //       ) : (
+      //         <Typography variant="body2" color="text.secondary" fontStyle="italic">
+      //           ไม่มี Dealer
+      //         </Typography>
+      //       )}
+      //     </Box>
+      //   ),
+      // },
       {
         field: 'created_at',
         headerName: 'วันที่สร้าง',
