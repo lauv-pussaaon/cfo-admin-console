@@ -151,11 +151,19 @@ export default function CategoryImportModal({ open, onClose, onComplete }: Props
         if (!raw.name_th) errors.push('Missing required field: name_th')
         if (!raw.name_en) errors.push('Missing required field: name_en')
 
+        const data: ScopeCategoryCSVRow = {
+          ...(raw.id ? { id: raw.id } : {}),
+          scope: raw.scope ?? '',
+          name_th: raw.name_th ?? '',
+          name_en: raw.name_en ?? '',
+          ...(raw.display_order ? { display_order: raw.display_order } : {}),
+        }
+
         return {
           rowNum: i + 2,
-          data: raw as ScopeCategoryCSVRow,
+          data,
           errors,
-          willUpdate: !!(raw.id),
+          willUpdate: !!raw.id,
         }
       })
 

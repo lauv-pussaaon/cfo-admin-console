@@ -220,9 +220,9 @@ export default function EmissionResourceImportModal({ open, onClose, onComplete,
 
         return {
           rowNum: i + 2,
-          data: raw as FuelResourceCSVRow,
+          data: raw as unknown as ParsedRow['data'],
           errors,
-          willUpdate: !!(raw.id),
+          willUpdate: !!raw.id,
         }
       })
 

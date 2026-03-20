@@ -57,6 +57,16 @@ interface SupportMessageRowWithStaffUser extends SupportMessageRow {
   staff_user?: SupportUserBrief | null
 }
 
+/** PostgREST may return embedded `users` as object or single-element array */
+function normalizeStaffUserEmbed (raw: unknown): SupportUserBrief | null {
+  if (raw == null) return null
+  if (Array.isArray(raw)) {
+    const first = raw[0] as SupportUserBrief | undefined
+    return first ?? null
+  }
+  return raw as SupportUserBrief
+}
+
 interface CreateClientMessageInput {
   organizationId: string
   body: string
@@ -152,25 +162,28 @@ export async function listMessagesByOrganization (organizationId: string): Promi
 
   if (error) throw error
 
-  const messages = (data ?? []) as SupportMessageRowWithStaffUser[]
+  const messages = (data ?? []) as unknown as SupportMessageRowWithStaffUser[]
   const attachmentsByMessage = await listAttachmentsByMessageIds(messages.map(m => m.id))
 
-  return messages.map((row) => ({
-    id: row.id,
-    conversation_id: row.conversation_id,
-    organization_id: row.organization_id,
-    body: row.body,
-    sender_type: row.sender_type,
-    staff_user_id: row.staff_user_id,
-    client_user_id: row.client_user_id,
-    client_display_name: row.client_display_name,
-    client_avatar_url: row.client_avatar_url,
-    created_at: row.created_at,
-    staff_name: row.staff_user?.name ?? null,
-    staff_avatar_url: row.staff_user?.avatar_url ?? null,
-    staff_email: row.staff_user?.email ?? null,
-    attachments: attachmentsByMessage[row.id] ?? [],
-  }))
+  return messages.map((row) => {
+    const staff = normalizeStaffUserEmbed(row.staff_user)
+    return {
+      id: row.id,
+      conversation_id: row.conversation_id,
+      organization_id: row.organization_id,
+      body: row.body,
+      sender_type: row.sender_type,
+      staff_user_id: row.staff_user_id,
+      client_user_id: row.client_user_id,
+      client_display_name: row.client_display_name,
+      client_avatar_url: row.client_avatar_url,
+      created_at: row.created_at,
+      staff_name: staff?.name ?? null,
+      staff_avatar_url: staff?.avatar_url ?? null,
+      staff_email: staff?.email ?? null,
+      attachments: attachmentsByMessage[row.id] ?? [],
+    }
+  })
 }
 
 export async function createClientMessage (input: CreateClientMessageInput): Promise<SupportMessageWithSender> {
@@ -262,7 +275,8 @@ export async function createStaffMessage (
     .eq('id', conversation.id)
   if (updateError) throw updateError
 
-  const row = data as SupportMessageRowWithStaffUser
+  const row = data as unknown as SupportMessageRowWithStaffUser
+  const staff = normalizeStaffUserEmbed(row.staff_user)
   return {
     id: row.id,
     conversation_id: row.conversation_id,
@@ -274,9 +288,9 @@ export async function createStaffMessage (
     client_display_name: row.client_display_name,
     client_avatar_url: row.client_avatar_url,
     created_at: row.created_at,
-    staff_name: row.staff_user?.name ?? null,
-    staff_avatar_url: row.staff_user?.avatar_url ?? null,
-    staff_email: row.staff_user?.email ?? null,
+    staff_name: staff?.name ?? null,
+    staff_avatar_url: staff?.avatar_url ?? null,
+    staff_email: staff?.email ?? null,
     attachments: [],
   }
 }

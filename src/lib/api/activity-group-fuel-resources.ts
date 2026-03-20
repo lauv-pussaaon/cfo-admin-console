@@ -4,6 +4,10 @@ import type {
   FuelResourceLite,
 } from '@/types/emission-templates'
 
+type MappingRowWithFuel = Omit<TemplateActivityGroupFuelResourceMapping, 'fuel_resource'> & {
+  fuel_resource: { id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null } | null
+}
+
 export async function getMappingsByActivityGroupId(
   activityGroupId: string
 ): Promise<TemplateActivityGroupFuelResourceMapping[]> {
@@ -20,9 +24,7 @@ export async function getMappingsByActivityGroupId(
     .eq('template_activity_group_id', activityGroupId)
     .order('sort_order', { ascending: true })
   if (error) throw error
-  const rows = (data ?? []) as (Omit<TemplateActivityGroupFuelResourceMapping, 'fuel_resource'> & {
-    fuel_resource: { id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null } | null
-  })[]
+  const rows = (data ?? []) as unknown as MappingRowWithFuel[]
   return rows.map((r) => ({
     id: r.id,
     template_activity_group_id: r.template_activity_group_id,
@@ -71,9 +73,7 @@ export async function setMappings(
       fuel_resource:fuel_resources(id, resource, unit, ef_value, ref_info)
     `)
   if (error) throw error
-  const inserted = (data ?? []) as (Omit<TemplateActivityGroupFuelResourceMapping, 'fuel_resource'> & {
-    fuel_resource: { id: string; resource: string; unit: string | null; ef_value: number | null; ref_info: string | null } | null
-  })[]
+  const inserted = (data ?? []) as unknown as MappingRowWithFuel[]
   return inserted.map((r) => ({
     id: r.id,
     template_activity_group_id: r.template_activity_group_id,
