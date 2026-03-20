@@ -89,6 +89,21 @@ CREATE TABLE support_messages (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Support message attachments
+CREATE TABLE support_message_attachments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  message_id UUID NOT NULL REFERENCES support_messages(id) ON DELETE CASCADE,
+  organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  uploaded_by_type TEXT NOT NULL CHECK (uploaded_by_type IN ('client', 'staff')),
+  uploaded_by_user_id TEXT,
+  bucket TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  file_name TEXT NOT NULL,
+  file_size BIGINT NOT NULL,
+  file_type TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ===========================================
 -- PART 3: CREATE INDEXES
 -- ===========================================
@@ -120,3 +135,6 @@ CREATE INDEX idx_support_conversations_updated_at ON support_conversations(updat
 CREATE INDEX idx_support_messages_conversation_created_at ON support_messages(conversation_id, created_at);
 CREATE INDEX idx_support_messages_organization_created_at ON support_messages(organization_id, created_at);
 CREATE INDEX idx_support_messages_sender_type ON support_messages(sender_type);
+CREATE INDEX idx_support_message_attachments_message_id ON support_message_attachments(message_id);
+CREATE INDEX idx_support_message_attachments_organization_created_at ON support_message_attachments(organization_id, created_at);
+CREATE INDEX idx_support_message_attachments_uploader ON support_message_attachments(uploaded_by_type, uploaded_by_user_id);

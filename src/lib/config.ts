@@ -30,6 +30,7 @@ export function isMaintenanceMode (): boolean {
  */
 export const storageBuckets = {
   chatDocuments: 'cfo-report-chat-documents',
+  supportChatAttachments: 'cfo-support-chat-attachments',
   reportDocuments: 'cfo-report-documents',
   efCertificates: 'cfo-ef-certificates',
   userAvatars: 'cfo-user-avatar',

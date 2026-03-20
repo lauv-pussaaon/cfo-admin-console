@@ -29,6 +29,22 @@ export interface SupportMessageWithSender extends SupportMessageRow {
   staff_name: string | null
   staff_avatar_url: string | null
   staff_email: string | null
+  attachments: SupportMessageAttachment[]
+}
+
+export interface SupportMessageAttachment {
+  id: string
+  message_id: string
+  organization_id: string
+  uploaded_by_type: 'client' | 'staff'
+  uploaded_by_user_id: string | null
+  bucket: string
+  file_path: string
+  file_name: string
+  file_size: number
+  file_type: string
+  created_at: string
+  public_url?: string
 }
 
 interface SupportUserBrief {
@@ -47,6 +63,29 @@ interface CreateClientMessageInput {
   clientUserId?: string | null
   clientDisplayName?: string | null
   clientAvatarUrl?: string | null
+}
+
+async function listAttachmentsByMessageIds (messageIds: string[]): Promise<Record<string, SupportMessageAttachment[]>> {
+  if (messageIds.length === 0) return {}
+
+  const { data, error } = await supabase
+    .from('support_message_attachments')
+    .select('*')
+    .in('message_id', messageIds)
+    .order('created_at', { ascending: true })
+
+  if (error) throw error
+
+  const grouped: Record<string, SupportMessageAttachment[]> = {}
+  for (const row of (data ?? []) as SupportMessageAttachment[]) {
+    const { data: urlData } = supabase.storage
+      .from(row.bucket)
+      .getPublicUrl(row.file_path)
+    row.public_url = urlData.publicUrl
+    if (!grouped[row.message_id]) grouped[row.message_id] = []
+    grouped[row.message_id].push(row)
+  }
+  return grouped
 }
 
 function normalizeBody (body: string): string {
@@ -113,7 +152,10 @@ export async function listMessagesByOrganization (organizationId: string): Promi
 
   if (error) throw error
 
-  return ((data ?? []) as SupportMessageRowWithStaffUser[]).map((row) => ({
+  const messages = (data ?? []) as SupportMessageRowWithStaffUser[]
+  const attachmentsByMessage = await listAttachmentsByMessageIds(messages.map(m => m.id))
+
+  return messages.map((row) => ({
     id: row.id,
     conversation_id: row.conversation_id,
     organization_id: row.organization_id,
@@ -127,6 +169,7 @@ export async function listMessagesByOrganization (organizationId: string): Promi
     staff_name: row.staff_user?.name ?? null,
     staff_avatar_url: row.staff_user?.avatar_url ?? null,
     staff_email: row.staff_user?.email ?? null,
+    attachments: attachmentsByMessage[row.id] ?? [],
   }))
 }
 
@@ -168,6 +211,7 @@ export async function createClientMessage (input: CreateClientMessageInput): Pro
     staff_name: null,
     staff_avatar_url: null,
     staff_email: null,
+    attachments: [],
   }
 }
 
@@ -233,7 +277,84 @@ export async function createStaffMessage (
     staff_name: row.staff_user?.name ?? null,
     staff_avatar_url: row.staff_user?.avatar_url ?? null,
     staff_email: row.staff_user?.email ?? null,
+    attachments: [],
   }
+}
+
+export async function getMessageById (messageId: string): Promise<SupportMessageRow | null> {
+  const { data, error } = await supabase
+    .from('support_messages')
+    .select('*')
+    .eq('id', messageId)
+    .maybeSingle()
+
+  if (error) throw error
+  return (data as SupportMessageRow | null) ?? null
+}
+
+export async function createMessageAttachment (input: {
+  messageId: string
+  organizationId: string
+  uploadedByType: 'client' | 'staff'
+  uploadedByUserId?: string | null
+  bucket: string
+  filePath: string
+  fileName: string
+  fileSize: number
+  fileType: string
+}): Promise<SupportMessageAttachment> {
+  const { data, error } = await supabase
+    .from('support_message_attachments')
+    .insert({
+      message_id: input.messageId,
+      organization_id: input.organizationId,
+      uploaded_by_type: input.uploadedByType,
+      uploaded_by_user_id: input.uploadedByUserId ?? null,
+      bucket: input.bucket,
+      file_path: input.filePath,
+      file_name: input.fileName,
+      file_size: input.fileSize,
+      file_type: input.fileType,
+      created_at: new Date().toISOString(),
+    })
+    .select('*')
+    .single()
+
+  if (error) throw error
+  const attachment = data as SupportMessageAttachment
+  const { data: urlData } = supabase.storage
+    .from(attachment.bucket)
+    .getPublicUrl(attachment.file_path)
+  return {
+    ...attachment,
+    public_url: urlData.publicUrl,
+  }
+}
+
+export async function getAttachmentById (attachmentId: string): Promise<SupportMessageAttachment | null> {
+  const { data, error } = await supabase
+    .from('support_message_attachments')
+    .select('*')
+    .eq('id', attachmentId)
+    .maybeSingle()
+  if (error) throw error
+  if (!data) return null
+  const attachment = data as SupportMessageAttachment
+  const { data: urlData } = supabase.storage
+    .from(attachment.bucket)
+    .getPublicUrl(attachment.file_path)
+  return {
+    ...attachment,
+    public_url: urlData.publicUrl,
+  }
+}
+
+export async function deleteAttachmentById (attachmentId: string): Promise<void> {
+  const { error } = await supabase
+    .from('support_message_attachments')
+    .delete()
+    .eq('id', attachmentId)
+  if (error) throw error
 }
 
 export async function markClientRead (organizationId: string): Promise<void> {
