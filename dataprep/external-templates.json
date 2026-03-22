@@ -1,0 +1,1074 @@
+{
+  "data": [
+    {
+      "id": "07748d84-3729-4260-9863-597e57eb73a3",
+      "industry_code": "power-generation",
+      "name_th": "การผลิตพลังงานและการจัดการพลังงานไฟฟ้า",
+      "name_en": "Power Generation",
+      "examples": "• Energy production and conversion of electrical energy\n• Electric power transactions",
+      "is_active": true,
+      "feature_image_url": "https://uwqgzfehcigvexpilmgw.supabase.co/storage/v1/object/public/cfo-emission-template-images/templates/6471f0a3-5120-41ec-a6e2-8f4b0f8d6398_kross-banner.jpg",
+      "display_order": 1,
+      "activity_groups": [
+        {
+          "id": "222f3b4d-d0dd-41ba-9823-190a26ef1d75",
+          "name_th": "การเผาไหม้เชื้อเพลิงเพื่อผลิตไฟฟ้า",
+          "name_en": "Fuel Combustion for Power Generation",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": true,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "03c58d61-3351-45fd-9331-27cf4f6df903",
+              "resource": "Acetelyne: kg",
+              "unit": "kg",
+              "ef_value": 3.384615385,
+              "ref_info": "2C2H2+502 → 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)",
+              "note": "test"
+            },
+            {
+              "id": "10786544-0219-43b5-b6a2-eccee18648fd",
+              "resource": "Antracite: kg",
+              "unit": "kg",
+              "ef_value": 3.1078935,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": "test"
+            }
+          ]
+        },
+        {
+          "id": "ea0edc74-e8e4-4842-a663-8dfed89b4ea5",
+          "name_th": "การปล่อยก๊าซจากกระบวนการผลิตไฟฟ้า",
+          "name_en": "Process Emissions (Power Generation)",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "3130c309-25fa-4561-8cb3-e937c04a40e5",
+          "name_th": "การใช้ไฟฟ้าภายใน (Auxiliary load)",
+          "name_en": "Auxiliary Power Consumption",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "807ce841-eee0-4fcd-9faa-a3ff703af904",
+      "industry_code": "general-manufacturing",
+      "name_th": "อุตสาหกรรมการผลิตทั่วไป",
+      "name_en": "General Manufacturing",
+      "examples": "• Physical or chemical transformation of materials into new products\n• Manufacturing not covered in specific sectors below",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop",
+      "display_order": 2,
+      "activity_groups": [
+        {
+          "id": "248f696f-e48f-4601-8323-4ca9b6f0b59f",
+          "name_th": "การเผาไหม้จากหม้อไอน้ำและเครื่องกำเนิดไฟฟ้า",
+          "name_en": "Boiler & Generator Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "03c58d61-3351-45fd-9331-27cf4f6df903",
+              "resource": "Acetelyne: kg",
+              "unit": "kg",
+              "ef_value": 3.384615385,
+              "ref_info": "2C2H2+502 → 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)",
+              "note": null
+            },
+            {
+              "id": "10786544-0219-43b5-b6a2-eccee18648fd",
+              "resource": "Antracite: kg",
+              "unit": "kg",
+              "ef_value": 3.1078935,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "d4ae3c60-b37f-43e6-9f55-937f52959850",
+              "resource": "Baggasse",
+              "unit": "kg",
+              "ef_value": 0.014307,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "94075cee-576f-4c30-9f60-2da767052fef",
+              "resource": "Biodiesel: L",
+              "unit": "Liter",
+              "ef_value": 1.64961846,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "f791865a-38c4-4667-9001-17a2e7f6ce03",
+          "name_th": "การเผาไหม้จากยานพาหนะขององค์กร",
+          "name_en": "Company Vehicle Combustion",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": true,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "bf26a307-de40-4f4c-9530-32153b900174",
+          "name_th": "การใช้สารทำความเย็น",
+          "name_en": "Refrigerant",
+          "scope": 1,
+          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+            "scope": 1,
+            "name_en": "4) Fugitive emissions",
+            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "2ef4c85d-4fc7-42b3-9425-01bc3ccdaa00",
+          "name_th": "กระบวนการผลิต (Process Emissions)",
+          "name_en": "Industrial Process Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 40,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "953ed36a-a4f0-49c0-af2e-a176633de454",
+          "name_th": "การใช้ไฟฟ้าจากระบบสายส่ง",
+          "name_en": "Purchased Electricity",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": true,
+          "sort_order": 50,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "1bf640e2-c18c-4fe8-99a2-de85ed382ff3",
+          "name_th": "การใช้ไอน้ำ/ความร้อนจากภายนอก",
+          "name_en": "Purchased Steam & Heat",
+          "scope": 2,
+          "scope_category_id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
+            "scope": 3,
+            "name_en": "Category 3 Fuel and energy related activities",
+            "name_th": "Category 3 กิจกรรมที่เกี่ยวข้องกับเชื้อเพลิงและพลังงาน"
+          },
+          "is_common": false,
+          "sort_order": 60,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "1c6b6ae9-472e-4b0f-bd67-1c1170b0c7aa",
+          "name_th": "การเดินทางเพื่อธุรกิจ",
+          "name_en": "Business Travel",
+          "scope": 3,
+          "scope_category_id": "d237af54-4b32-432f-b4d6-fa889c1d5790",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "d237af54-4b32-432f-b4d6-fa889c1d5790",
+            "scope": 3,
+            "name_en": "Category 6 Business travel",
+            "name_th": "Category 6 การเดินทางเพื่อธุรกิจ"
+          },
+          "is_common": true,
+          "sort_order": 70,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "9fa2a8fd-df98-4de9-8725-fa9eb84b70b7",
+          "name_th": "การเดินทางของพนักงาน (Commute)",
+          "name_en": "Employee Commuting",
+          "scope": 3,
+          "scope_category_id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
+            "scope": 3,
+            "name_en": "Category 7 Employee commuting",
+            "name_th": "Category 7 การเดินทางของพนักงาน"
+          },
+          "is_common": true,
+          "sort_order": 80,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "d92529f1-21a2-4e0f-a896-79cd200d438e",
+          "name_th": "การจัดการของเสีย",
+          "name_en": "Waste Generation",
+          "scope": 3,
+          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+            "scope": 3,
+            "name_en": "Category 5 Waste generated in operations",
+            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
+          },
+          "is_common": false,
+          "sort_order": 90,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "ff4bc338-6f09-4883-8c3e-e2a32e95d916",
+          "name_th": "การใช้น้ำประปา/น้ำดิบ",
+          "name_en": "Water Consumption",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": true,
+          "sort_order": 100,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "d7e05225-6a05-4058-be1c-7a3adef92223",
+          "name_th": "การซื้อสินค้าและวัตถุดิบ (upstream)",
+          "name_en": "Purchased Raw Materials & Goods",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": false,
+          "sort_order": 110,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "d21d25dc-1187-4348-97a5-25b86bc9b66e",
+          "name_th": "การขนส่งและกระจายสินค้า (upstream)",
+          "name_en": "Upstream Transport & Distribution",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
+          },
+          "is_common": false,
+          "sort_order": 120,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "8e9c14bf-b695-49a6-a471-676d65a4b647",
+      "industry_code": "oil-and-gas",
+      "name_th": "การสำรวจ การผลิต การกลั่นน้ำมันปิโตรเลียมและก๊าซและการจัดส่งทางท่อ รวมถึงอุตสาหกรรมปิโตรเคมี",
+      "name_en": "Oil and Gas",
+      "examples": "• Exploration, extraction, production, refining and pipeline distribution of oil and gas",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=800&auto=format&fit=crop",
+      "display_order": 3,
+      "activity_groups": [
+        {
+          "id": "a3a29fde-a298-486d-9e31-b42c22a5a12e",
+          "name_th": "การเผาไหม้จากการสำรวจและผลิต",
+          "name_en": "Upstream Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "eda550ad-e706-45ae-8b0d-883840f06eba",
+          "name_th": "การปล่อย Fugitive จากท่อและวาล์ว",
+          "name_en": "Fugitive Emissions – Pipelines",
+          "scope": 1,
+          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+            "scope": 1,
+            "name_en": "4) Fugitive emissions",
+            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "1ae049bc-83ec-4e7b-a2ec-613e61d7528f",
+          "name_th": "การเผาทิ้ง (Flaring)",
+          "name_en": "Flaring",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": "Flaring",
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "4636a6b6-dca8-48bd-b828-27c6e9eb79b4",
+      "industry_code": "metals-production",
+      "name_th": "อุตสาหกรรมการผลิตโลหะ",
+      "name_en": "Metals Production",
+      "examples": "• Processing of non-ferrous metals, including production of alloys\n• Production of coke\n• Metal ore roasting or sintering, including pelletisation\n• Production of pig iron or steel including continuous casting",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1532634993-15f421e42ec0?q=80&w=800&auto=format&fit=crop",
+      "display_order": 4,
+      "activity_groups": [
+        {
+          "id": "90c66acc-2cd1-4bbe-8d27-d5b7804992ae",
+          "name_th": "เตาหลอมโลหะ (Furnace Combustion)",
+          "name_en": "Furnace Combustion",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "330f09c1-eee5-452d-ad06-9c9e3fd51bdc",
+          "name_th": "กระบวนการผลิตโลหะ (Direct Process)",
+          "name_en": "Metal Process Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "a5847085-bb5a-4144-879c-c03b11adf0b9",
+          "name_th": "การใช้ไฟฟ้า (Electric Arc Furnace)",
+          "name_en": "Electric Arc Furnace Power Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "802c2770-ade6-48b7-90d6-4e8597538576",
+      "industry_code": "aluminum-production",
+      "name_th": "อุตสาหกรรมการผลิตอะลูมิเนียม",
+      "name_en": "Aluminum Production",
+      "examples": "• Primary aluminium production",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1565035010268-a3816f98589a?q=80&w=800&auto=format&fit=crop",
+      "display_order": 5,
+      "activity_groups": [
+        {
+          "id": "5d6101c6-6733-49d5-90ce-fa934750ddc1",
+          "name_th": "กระบวนการ Electrolysis",
+          "name_en": "Electrolysis Process Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": "PFC",
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "fcbcca34-d410-465e-9a46-4cff88ca902f",
+          "name_th": "การเผาไหม้สำหรับ Anode baking",
+          "name_en": "Anode Baking Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "d7cf6343-fc7b-4b3c-95df-3b99103258ff",
+          "name_th": "การใช้ไฟฟ้า (Smelting)",
+          "name_en": "Smelting Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "53effe3b-7cda-4376-9e01-b601cd9da0c3",
+      "industry_code": "mining-and-mineral-production",
+      "name_th": "การทำเหมืองและการผลิตแร่",
+      "name_en": "Mining and Mineral Production",
+      "examples": "• Production of cement clinker and production of lime or calcinations of dolomite or magnetite\n• Glass and ceramic, mineral wool",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?q=80&w=800&auto=format&fit=crop",
+      "display_order": 6,
+      "activity_groups": [
+        {
+          "id": "f9753004-e1a8-42f1-80fc-f6424571401e",
+          "name_th": "การเผาไหม้จากเครื่องจักรเหมือง",
+          "name_en": "Mining Equipment Combustion",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "e6b00a13-d4bc-4d20-b5f5-eba696ffa0a8",
+          "name_th": "กระบวนการผลิตซีเมนต์/ปูนขาว",
+          "name_en": "Cement/Lime Process Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "c8cf4245-6f65-423c-8bfb-055fd405e45d",
+          "name_th": "การใช้ไฟฟ้า",
+          "name_en": "Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "7ab13757-f399-4d00-8c5e-cec49892c6f2",
+      "industry_code": "pulp-paper-and-print",
+      "name_th": "อุตสาหกรรมการผลิตเยื่อกระดาษ กระดาษ และการพิมพ์",
+      "name_en": "Pulp, Paper and Print",
+      "examples": "• Production of pulp from timber or other fibrous materials\n• Production of paper and cardboard\n• Printing and publishing",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1453738773917-9c3eff1db985?q=80&w=800&auto=format&fit=crop",
+      "display_order": 7,
+      "activity_groups": [
+        {
+          "id": "a45a14bd-8682-4a20-9353-dfddfaf9a0fd",
+          "name_th": "การเผาไหม้ Biomass",
+          "name_en": "Biomass Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": "Biogenic",
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "955a7e00-5051-4005-9c72-352d0c8c0a1e",
+          "name_th": "กระบวนการ Kraft pulping",
+          "name_en": "Chemical Pulping Process",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "dcdf1475-d0ae-4167-ace3-cca1442a16b4",
+          "name_th": "การใช้ไฟฟ้า",
+          "name_en": "Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "85f1569f-d167-4873-ac37-41d389d875d0",
+      "industry_code": "chemical-production",
+      "name_th": "อุตสาหกรรมการผลิตสารเคมี",
+      "name_en": "Chemical Production",
+      "examples": "• Production of carbon black, ammonia, soda ash, and sodium bicarbonate\n• Production of bulk organic chemicals by cracking, reforming, etc.\n• Production of hydrogen and synthesis gas\n• Production of nitric, adipic, glyoxal and glyoxylic acid",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop",
+      "display_order": 8,
+      "activity_groups": [
+        {
+          "id": "6e191665-0bf2-44de-86b5-46f991171d95",
+          "name_th": "กระบวนการผลิตสารเคมี",
+          "name_en": "Chemical Process Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "a8c13c84-6aa3-4dee-b800-96ecc29d92c9",
+          "name_th": "การเผาไหม้เชื้อเพลิงในโรงงาน",
+          "name_en": "Process Fuel Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "0bd73538-87d5-4766-b7bb-dbd9acdf6f22",
+          "name_th": "การใช้ไฟฟ้า",
+          "name_en": "Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "cf73b137-9a7c-46c7-ae78-b135528ef12d",
+      "industry_code": "carbon-capture-storage",
+      "name_th": "การดักจับและเก็บก๊าซเรือนกระจก",
+      "name_en": "Carbon Capture Storage",
+      "examples": "• Capture and transport of GHG by pipelines for geological storage\n• Geological storage of GHG in a storage site",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop",
+      "display_order": 9,
+      "activity_groups": [
+        {
+          "id": "cfc5b7e4-1b14-4ea7-87bd-038082d1887b",
+          "name_th": "การปล่อยก๊าซจากการดักจับ CO₂",
+          "name_en": "CO₂ Capture & Compression",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "3478132a-59b0-47c3-90b1-fe545b6cbd3f",
+          "name_th": "การใช้ไฟฟ้าในกระบวนการดักจับ",
+          "name_en": "CCS Auxiliary Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "b4af8a4e-c7c7-4a93-a1a0-d3e8cd7fb68e",
+          "name_th": "การเดินทาง / ยานพาหนะ",
+          "name_en": "Company Vehicle Use",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "59f1e3b5-b320-40f0-837c-c4966485a0fc",
+      "industry_code": "transport",
+      "name_th": "การขนส่ง",
+      "name_en": "Transport",
+      "examples": "• Aviation\n• Road transport, rail, and other transportation services",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop",
+      "display_order": 10,
+      "activity_groups": [
+        {
+          "id": "5d60e82b-fc4a-46c3-ac58-e3898a5ba117",
+          "name_th": "การเผาไหม้เชื้อเพลิงในยานพาหนะ",
+          "name_en": "Vehicle Fuel Combustion",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "3114ff32-0557-4a4e-9676-7b080ba73556",
+          "name_th": "การเผาไหม้เชื้อเพลิง Aviation",
+          "name_en": "Aviation Combustion",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": "Aviation",
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "e4e6fcf2-64b0-4b34-9c8b-e3aa43822f37",
+          "name_th": "การใช้ไฟฟ้า (สถานี/อาคาร)",
+          "name_en": "Station & Building Electricity",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "c140f299-6048-40e5-a968-b586c4854ad8",
+      "industry_code": "waste-handling-and-disposal",
+      "name_th": "การจัดการและกำจัดของเสีย",
+      "name_en": "Waste Handling & Disposal",
+      "examples": "• Water and waste water treatment\n• Landfill and Composting Facilities",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop",
+      "display_order": 11,
+      "activity_groups": [
+        {
+          "id": "46c75df8-0b6c-4b6c-a5da-d25b004609f8",
+          "name_th": "การปล่อยก๊าซจาก Landfill",
+          "name_en": "Landfill Gas Emissions",
+          "scope": 1,
+          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+            "scope": 1,
+            "name_en": "4) Fugitive emissions",
+            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "7a075aee-ccbc-43bd-8594-076e3a13d85b",
+          "name_th": "กระบวนการบำบัดน้ำเสีย",
+          "name_en": "Wastewater Treatment Process",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "15a11937-17cc-45da-92c0-14738aaac480",
+          "name_th": "การใช้ไฟฟ้าในกระบวนการ",
+          "name_en": "Process Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "51eec253-5adc-4924-922f-47d80789827f",
+      "industry_code": "agriculture-forestry-and-other-land-use-afolu",
+      "name_th": "การเกษตร ป่าไม้ และการใช้ที่ดิน",
+      "name_en": "Agriculture, Forestry & Other Land Use (AFOLU)",
+      "examples": "• Farming, forestry, and land use activities (emissions from biological processes)",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop",
+      "display_order": 12,
+      "activity_groups": [
+        {
+          "id": "490c6d5e-9a06-42cb-a2cf-b0d3f649f855",
+          "name_th": "การเผาไหม้ในการเกษตร (Field burning)",
+          "name_en": "Agricultural Field Burning",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
+          "scope_sub_category": "Biogenic",
+          "scope_category": {
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "a64181f5-dedc-4dc4-a0f6-123a5b23b308",
+          "name_th": "การหมักย่อย Enteric fermentation",
+          "name_en": "Enteric Fermentation (Livestock)",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": "Biological",
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "87e71778-d245-408d-a0cc-9100de847eb7",
+          "name_th": "การใช้ปุ๋ย / N₂O จากดิน",
+          "name_en": "Soil N₂O Emissions",
+          "scope": 1,
+          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_sub_category": "N2O",
+          "scope_category": {
+            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "scope": 1,
+            "name_en": "3) Process emissions",
+            "name_th": "3) กระบวนการผลิต (Process emissions)"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    },
+    {
+      "id": "c27e9c5e-18a1-424c-b667-f41f36a286df",
+      "industry_code": "general-services",
+      "name_th": "กิจกรรมการบริการทั่วไป",
+      "name_en": "General Services",
+      "examples": "• Building Services / facilities management\n• Education, Hospitals\n• Others (Office-based activities, IT, retail, etc.)",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop",
+      "display_order": 13,
+      "activity_groups": [
+        {
+          "id": "7e460bb7-5d95-4957-9a80-5e21ef8c6ac3",
+          "name_th": "การใช้ไฟฟ้าในอาคาร",
+          "name_en": "Building Electricity Use",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "0363df44-ece0-4ea3-8807-c2b969035bc0",
+          "name_th": "การเดินทางของพนักงาน",
+          "name_en": "Employee Commuting",
+          "scope": 3,
+          "scope_category_id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
+            "scope": 3,
+            "name_en": "Category 7 Employee commuting",
+            "name_th": "Category 7 การเดินทางของพนักงาน"
+          },
+          "is_common": false,
+          "sort_order": 20,
+          "status": "active",
+          "fuel_resources": []
+        },
+        {
+          "id": "bf62fb1a-d603-4913-9718-a4ce8154b2f9",
+          "name_th": "การจัดการของเสีย",
+          "name_en": "Waste Generation",
+          "scope": 3,
+          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+            "scope": 3,
+            "name_en": "Category 5 Waste generated in operations",
+            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
+          },
+          "is_common": false,
+          "sort_order": 30,
+          "status": "active",
+          "fuel_resources": []
+        }
+      ]
+    }
+  ]
+}

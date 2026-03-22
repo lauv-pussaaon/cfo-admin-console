@@ -15,7 +15,7 @@ import type {
   ExternalTemplateWithHierarchy,
 } from '@/types/emission-templates'
 
-export async function getEmissionTemplates(
+export async function getEmissionTemplates (
   query: EmissionTemplatesQuery
 ): Promise<PaginatedResult<EmissionTemplateWithRelations>> {
   const { search, page = 1, per_page = 24, include_deleted = false, is_active } = query
@@ -74,7 +74,7 @@ export async function getEmissionTemplates(
   }
 }
 
-export async function getEmissionTemplate(id: string) {
+export async function getEmissionTemplate (id: string) {
   const { data, error } = await supabase
     .from('emission_templates')
     .select('*, activity_groups:template_activity_groups(*, scope_category:scope_categories(id, scope, name_th, name_en))')
@@ -90,7 +90,7 @@ export async function getEmissionTemplate(id: string) {
   } as EmissionTemplateWithRelations
 }
 
-export async function createEmissionTemplate(input: CreateEmissionTemplateInput) {
+export async function createEmissionTemplate (input: CreateEmissionTemplateInput) {
   const { data, error } = await supabase
     .from('emission_templates')
     .insert({
@@ -104,7 +104,7 @@ export async function createEmissionTemplate(input: CreateEmissionTemplateInput)
   return data as EmissionTemplate
 }
 
-export async function updateEmissionTemplate(id: string, input: UpdateEmissionTemplateInput) {
+export async function updateEmissionTemplate (id: string, input: UpdateEmissionTemplateInput) {
   const { data, error } = await supabase
     .from('emission_templates')
     .update({ ...input, updated_at: new Date().toISOString() })
@@ -115,7 +115,7 @@ export async function updateEmissionTemplate(id: string, input: UpdateEmissionTe
   return data as EmissionTemplate
 }
 
-export async function softDeleteEmissionTemplate(id: string) {
+export async function softDeleteEmissionTemplate (id: string) {
   const { data, error } = await supabase
     .from('emission_templates')
     .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
@@ -126,7 +126,7 @@ export async function softDeleteEmissionTemplate(id: string) {
   return data as EmissionTemplate
 }
 
-export async function getTemplateActivityGroups(
+export async function getTemplateActivityGroups (
   query: TemplateActivityGroupsQuery
 ): Promise<TemplateActivityGroupWithRelations[]> {
   const { template_id, search, include_deleted = false } = query
@@ -175,12 +175,12 @@ export async function getTemplateActivityGroups(
       sort_order: m.sort_order,
       fuel_resource: m.fuel_resource
         ? {
-            id: m.fuel_resource.id,
-            resource: m.fuel_resource.resource,
-            unit: m.fuel_resource.unit,
-            ef_value: m.fuel_resource.ef_value,
-            ref_info: m.fuel_resource.ref_info,
-          }
+          id: m.fuel_resource.id,
+          resource: m.fuel_resource.resource,
+          unit: m.fuel_resource.unit,
+          ef_value: m.fuel_resource.ef_value,
+          ref_info: m.fuel_resource.ref_info,
+        }
         : undefined,
     }))
     return { ...rest, fuel_resource_mappings } as TemplateActivityGroupWithRelations
@@ -192,7 +192,7 @@ export interface GetEmissionTemplatesWithFullHierarchyQuery {
   is_active?: boolean
 }
 
-export async function getEmissionTemplatesWithFullHierarchy(
+export async function getEmissionTemplatesWithFullHierarchy (
   query: GetEmissionTemplatesWithFullHierarchyQuery = {}
 ): Promise<ExternalTemplateWithHierarchy[]> {
   const { industry_code, is_active = true } = query
@@ -248,7 +248,7 @@ export async function getEmissionTemplatesWithFullHierarchy(
   })
 }
 
-export async function getTemplateActivityGroup(id: string) {
+export async function getTemplateActivityGroup (id: string) {
   const { data, error } = await supabase
     .from('template_activity_groups')
     .select('*, scope_category:scope_categories(id, scope, name_th, name_en)')
@@ -258,7 +258,7 @@ export async function getTemplateActivityGroup(id: string) {
   return data as TemplateActivityGroupWithRelations
 }
 
-export async function createTemplateActivityGroup(input: CreateTemplateActivityGroupInput) {
+export async function createTemplateActivityGroup (input: CreateTemplateActivityGroupInput) {
   const { data, error } = await supabase
     .from('template_activity_groups')
     .insert({
@@ -272,7 +272,7 @@ export async function createTemplateActivityGroup(input: CreateTemplateActivityG
   return data as TemplateActivityGroupWithRelations
 }
 
-export async function updateTemplateActivityGroup(id: string, input: UpdateTemplateActivityGroupInput) {
+export async function updateTemplateActivityGroup (id: string, input: UpdateTemplateActivityGroupInput) {
   const { data, error } = await supabase
     .from('template_activity_groups')
     .update({
@@ -286,7 +286,7 @@ export async function updateTemplateActivityGroup(id: string, input: UpdateTempl
   return data as TemplateActivityGroupWithRelations
 }
 
-export async function softDeleteTemplateActivityGroup(id: string) {
+export async function softDeleteTemplateActivityGroup (id: string) {
   const { data, error } = await supabase
     .from('template_activity_groups')
     .update({

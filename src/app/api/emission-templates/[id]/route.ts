@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getEmissionTemplate, softDeleteEmissionTemplate, updateEmissionTemplate } from '@/lib/api/emission-templates'
 
+function isNotFoundError(error: unknown): boolean {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    (error as { code: string }).code === 'PGRST116'
+  )
+}
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
@@ -8,7 +17,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json(record)
   } catch (error) {
     console.error('GET /api/emission-templates/[id] error:', error)
-    return NextResponse.json({ error: 'Emission template not found' }, { status: 404 })
+    if (isNotFoundError(error)) {
+      return NextResponse.json({ error: 'Emission template not found' }, { status: 404 })
+    }
+    return NextResponse.json({ error: 'Failed to fetch emission template' }, { status: 500 })
   }
 }
 

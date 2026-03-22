@@ -3,7 +3,7 @@ import { createCorsHeaders, handleOptionsRequest } from '@/lib/utils/cors'
 import { getEmissionTemplatesWithFullHierarchy } from '@/lib/api/emission-templates'
 
 // Handle OPTIONS preflight request
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS (request: NextRequest) {
   return handleOptionsRequest(request)
 }
 
@@ -12,7 +12,7 @@ export async function OPTIONS(request: NextRequest) {
  * Returns emission templates with full hierarchy: activity groups and mapped fuel resources.
  * Called by client apps (e.g. org-app) to add emission records from templates by industry.
  */
-export async function GET(request: NextRequest) {
+export async function GET (request: NextRequest) {
   try {
     const origin = request.headers.get('origin')
     const { searchParams } = new URL(request.url)

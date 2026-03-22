@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createEmissionTemplate, getEmissionTemplates } from '@/lib/api/emission-templates'
 
-export async function GET(request: NextRequest) {
+export async function GET (request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search') ?? undefined
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function slugify(text: string): string {
+function slugify (text: string): string {
   return text
     .toLowerCase()
     .replace(/&/g, ' and ')
@@ -33,7 +33,7 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-export async function POST(request: NextRequest) {
+export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
     if (!body.name_th || !body.name_en) {

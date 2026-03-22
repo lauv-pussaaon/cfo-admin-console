@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed:fuel": "node dataprep/generate_fuel_resources_sql.js",
-    "seed:templates": "node dataprep/generate_emission_templates_seed.js"
+    "seed:templates": "node dataprep/generate_emission_templates_seed.js",
+    "export:external-templates": "node scripts/export-external-templates.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
