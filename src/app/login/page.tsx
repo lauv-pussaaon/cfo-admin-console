@@ -186,7 +186,7 @@ export default function LoginPage() {
                 </Box>
                 <Box sx={{ mt: 2, textAlign: 'center' }}>
                   <Button component={Link} href="/register" size="small" sx={{ textTransform: 'none' }}>
-                    Register new Consult/Audit account
+                    สมัครบัญชี
                   </Button>
                 </Box>
               </form>

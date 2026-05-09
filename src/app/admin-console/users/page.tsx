@@ -271,8 +271,8 @@ export default function AdminConsoleUsersPage() {
               <MenuItem value="">
                 <em>ทั้งหมด</em>
               </MenuItem>
-              <MenuItem value="approved">Approved</MenuItem>
-              <MenuItem value="unapproved">Unapproved</MenuItem>
+              <MenuItem value="approved">อนุมัติแล้ว</MenuItem>
+              <MenuItem value="unapproved">ยังไม่อนุมัติ</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -97,7 +97,7 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
       headerAlign: 'center',
       renderCell: (params) => (
         <Chip
-          label={params.value ? 'Approved' : 'Unapproved'}
+          label={params.value ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
           color={params.value ? 'success' : 'warning'}
           size="small"
           sx={{ fontWeight: 'medium' }}

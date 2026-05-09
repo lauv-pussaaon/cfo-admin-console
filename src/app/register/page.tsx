@@ -20,7 +20,6 @@ import {
   TextField,
   Typography,
   CircularProgress,
-  Chip,
 } from '@mui/material'
 import {
   CheckCircleOutline as CheckCircleOutlineIcon,
@@ -32,16 +31,16 @@ import {
 } from '@mui/icons-material'
 
 const registerSchema = z.object({
-  name: z.string().min(1, 'Please enter your full name'),
+  name: z.string().min(1, 'กรุณากรอกชื่อ-นามสกุล'),
   username: z
     .string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(50, 'Username must be at most 50 characters')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Use only letters, numbers, and underscore'),
-  email: z.string().email('Please enter a valid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+    .min(3, 'ชื่อผู้ใช้อย่างน้อย 3 ตัวอักษร')
+    .max(50, 'ชื่อผู้ใช้สูงสุด 50 ตัวอักษร')
+    .regex(/^[a-zA-Z0-9_]+$/, 'ใช้ได้เฉพาะ a–z, 0–9 และ _'),
+  email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
+  password: z.string().min(6, 'รหัสผ่านอย่างน้อย 6 ตัว'),
   role: z.enum(['Consult', 'Audit'], {
-    message: 'Please select a role',
+    message: 'กรุณาเลือกบทบาท',
   }),
 })
 
@@ -82,12 +81,12 @@ export default function RegisterPage() {
 
       const result = await response.json()
       if (!response.ok) {
-        throw new Error(result.error || 'Registration failed')
+        throw new Error(result.error || 'ลงทะเบียนไม่สำเร็จ')
       }
 
       setIsSuccess(true)
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Unable to submit registration')
+      setSubmitError(error instanceof Error ? error.message : 'ส่งไม่สำเร็จ')
     }
   }
 
@@ -106,7 +105,7 @@ export default function RegisterPage() {
           startIcon={<ArrowBackIcon />}
           sx={{ mb: 3, textTransform: 'none' }}
         >
-          Back to Login
+          กลับหน้าเข้าสู่ระบบ
         </Button>
 
         <Card sx={{ borderRadius: 3, boxShadow: '0 16px 40px rgba(15, 23, 42, 0.10)' }}>
@@ -114,12 +113,11 @@ export default function RegisterPage() {
             {!isSuccess ? (
               <>
                 <Box sx={{ mb: 3 }}>
-                  <Chip label="Public Registration" color="primary" size="small" sx={{ mb: 2 }} />
                   <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-                    Register your account
+                    เปิดบัญชี
                   </Typography>
                   <Typography color="text.secondary">
-                    Create your access request for the CFO platform. New accounts are reviewed before activation.
+                    ที่ปรึกษาหรือผู้ตรวจสอบ รอผู้ดูแลอนุมัติแล้วค่อยเข้าได้
                   </Typography>
                 </Box>
 
@@ -131,7 +129,7 @@ export default function RegisterPage() {
 
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'grid', gap: 2 }}>
                   <TextField
-                    label="Full Name"
+                    label="ชื่อ-นามสกุล"
                     {...register('name')}
                     error={!!errors.name}
                     helperText={errors.name?.message}
@@ -147,10 +145,10 @@ export default function RegisterPage() {
                   />
 
                   <TextField
-                    label="Username"
+                    label="ชื่อผู้ใช้"
                     {...register('username')}
                     error={!!errors.username}
-                    helperText={errors.username?.message || 'Use letters, numbers, and underscore'}
+                    helperText={errors.username?.message || 'a–z, 0–9, _ เท่านั้น'}
                     disabled={isSubmitting}
                     fullWidth
                     InputProps={{
@@ -163,7 +161,7 @@ export default function RegisterPage() {
                   />
 
                   <TextField
-                    label="Email"
+                    label="อีเมล"
                     type="email"
                     {...register('email')}
                     error={!!errors.email}
@@ -180,7 +178,7 @@ export default function RegisterPage() {
                   />
 
                   <TextField
-                    label="Password"
+                    label="รหัสผ่าน"
                     type="password"
                     {...register('password')}
                     error={!!errors.password}
@@ -197,16 +195,16 @@ export default function RegisterPage() {
                   />
 
                   <FormControl fullWidth error={!!errors.role}>
-                    <InputLabel id="public-register-role-label">Role</InputLabel>
+                    <InputLabel id="public-register-role-label">บทบาท</InputLabel>
                     <Select
                       labelId="public-register-role-label"
-                      label="Role"
+                      label="บทบาท"
                       value={roleValue}
                       onChange={(event) => setValue('role', event.target.value as 'Consult' | 'Audit', { shouldValidate: true })}
                       disabled={isSubmitting}
                     >
-                      <MenuItem value="Consult">Consult</MenuItem>
-                      <MenuItem value="Audit">Audit</MenuItem>
+                      <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
+                      <MenuItem value="Audit">ผู้ตรวจสอบ</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -218,7 +216,7 @@ export default function RegisterPage() {
                     startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
                     sx={{ mt: 1, py: 1.3, fontWeight: 600 }}
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit registration'}
+                    {isSubmitting ? 'กำลังส่ง...' : 'ส่งคำขอ'}
                   </Button>
                 </Box>
               </>
@@ -226,13 +224,13 @@ export default function RegisterPage() {
               <Box sx={{ textAlign: 'center', py: 2 }}>
                 <CheckCircleOutlineIcon color="success" sx={{ fontSize: 80, mb: 2 }} />
                 <Typography variant="h4" fontWeight={700} gutterBottom>
-                  Registration successful
+                  ส่งคำขอแล้ว
                 </Typography>
                 <Typography color="text.secondary" sx={{ maxWidth: 420, mx: 'auto', mb: 3 }}>
-                  Your account request has been submitted and is now waiting for admin approval. We will activate access once review is complete.
+                  รอผู้ดูแลอนุมัติแล้วค่อยเข้าสู่ระบบ
                 </Typography>
                 <Button component={Link} href="/login" variant="outlined" sx={{ textTransform: 'none' }}>
-                  Go to Login
+                  ไปเข้าสู่ระบบ
                 </Button>
               </Box>
             )}

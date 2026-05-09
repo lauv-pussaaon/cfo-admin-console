@@ -115,7 +115,7 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
               disabled={isSubmitting || isLocked}
             />
           }
-          label={formData.is_approved ? 'Approved' : 'Unapproved'}
+          label={formData.is_approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
           sx={{ mr: 0 }}
         />
       </Box>

@@ -27,12 +27,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Registration submitted. Your account is pending approval.',
+      message: 'ส่งคำขอแล้ว รอผู้ดูแลอนุมัติ',
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid registration data. Please check all fields.' },
+        { error: 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง' },
         { status: 400 }
       )
     }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     console.error('Public registration failed:', error)
     return NextResponse.json(
-      { error: 'Unable to submit registration right now. Please try again later.' },
+      { error: 'ส่งไม่สำเร็จ ลองใหม่ภายหลัง' },
       { status: 500 }
     )
   }

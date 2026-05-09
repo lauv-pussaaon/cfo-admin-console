@@ -65,7 +65,7 @@ export async function POST (request: NextRequest) {
     if (!user.is_approved) {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
-        { error: 'Your account is pending approval' },
+        { error: 'บัญชียังไม่ได้รับการอนุมัติ' },
         { status: 403, headers }
       )
     }
