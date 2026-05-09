@@ -5,6 +5,7 @@ import type { UserRole } from '@/types/roles'
 export function useUsersFilter(users: User[]) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRole, setSelectedRole] = useState<UserRole | ''>('')
+  const [selectedApproval, setSelectedApproval] = useState<'approved' | 'unapproved' | ''>('')
 
   const filteredUsers = useMemo(() => {
     let filtered = users
@@ -12,6 +13,12 @@ export function useUsersFilter(users: User[]) {
     // Filter by role
     if (selectedRole) {
       filtered = filtered.filter((user) => user.role === selectedRole)
+    }
+
+    if (selectedApproval) {
+      filtered = filtered.filter((user) => (
+        selectedApproval === 'approved' ? user.is_approved : !user.is_approved
+      ))
     }
 
     // Filter by search term
@@ -24,13 +31,15 @@ export function useUsersFilter(users: User[]) {
     }
 
     return filtered
-  }, [users, searchTerm, selectedRole])
+  }, [users, searchTerm, selectedRole, selectedApproval])
 
   return {
     searchTerm,
     setSearchTerm,
     selectedRole,
     setSelectedRole,
+    selectedApproval,
+    setSelectedApproval,
     filteredUsers,
   }
 }

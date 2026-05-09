@@ -50,6 +50,8 @@ export default function AdminConsoleUsersPage() {
     setSearchTerm,
     selectedRole,
     setSelectedRole,
+    selectedApproval,
+    setSelectedApproval,
     filteredUsers,
   } = useUsersFilter(users)
   const [modalOpen, setModalOpen] = useState(false)
@@ -257,6 +259,20 @@ export default function AdminConsoleUsersPage() {
                   {option.label}
                 </MenuItem>
               ))}
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>กรองตามการอนุมัติ</InputLabel>
+            <Select
+              value={selectedApproval}
+              label="กรองตามการอนุมัติ"
+              onChange={(e) => setSelectedApproval(e.target.value as '' | 'approved' | 'unapproved')}
+            >
+              <MenuItem value="">
+                <em>ทั้งหมด</em>
+              </MenuItem>
+              <MenuItem value="approved">Approved</MenuItem>
+              <MenuItem value="unapproved">Unapproved</MenuItem>
             </Select>
           </FormControl>
         </Box>

@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react'
 import { Box, IconButton, Paper, Chip, Avatar } from '@mui/material'
-import { DataGrid, GridColDef, GridRowsProp, GridRenderCellParams } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { 
   Edit as EditIcon, 
   Delete as DeleteIcon,
 } from '@mui/icons-material'
 import type { User } from '@/lib/api/types'
-import { getRoleLabel, getRoleColor } from '@/types/roles'
+import { getRoleColor } from '@/types/roles'
 
 interface Props {
   onEdit: (id: string) => void
@@ -30,6 +30,7 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
       username: user.username,
       email: user.email,
       role: user.role,
+      is_approved: user.is_approved,
       avatar_url: user.avatar_url,
       organizations: user.organizations || [],
     }))
@@ -87,6 +88,21 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
       width: 250,
       flex: 1.5,
       minWidth: 200,
+    },
+    {
+      field: 'is_approved',
+      headerName: 'การอนุมัติ',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Chip
+          label={params.value ? 'Approved' : 'Unapproved'}
+          color={params.value ? 'success' : 'warning'}
+          size="small"
+          sx={{ fontWeight: 'medium' }}
+        />
+      ),
     },
     {
       field: 'organizations',

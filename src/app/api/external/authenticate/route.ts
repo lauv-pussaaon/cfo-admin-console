@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { ValidationError } from '@/lib/utils/errors'
 import { createCorsHeaders, handleOptionsRequest } from '@/lib/utils/cors'
 import { verifyPassword } from '@/lib/utils/password'
 
@@ -31,7 +30,7 @@ export async function POST (request: NextRequest) {
     // Note: We need to filter by role after finding the user, so we query first then filter
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, invite_hashcode, password_hash')
+      .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, password_hash')
       .or(`username.eq.${usernameOrEmail},email.eq.${usernameOrEmail}`)
       .limit(1)
 
@@ -59,6 +58,14 @@ export async function POST (request: NextRequest) {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
         { error: 'This account is not authorized to access the organization app' },
+        { status: 403, headers }
+      )
+    }
+
+    if (!user.is_approved) {
+      const headers = createCorsHeaders(origin)
+      return NextResponse.json(
+        { error: 'Your account is pending approval' },
         { status: 403, headers }
       )
     }

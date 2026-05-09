@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -181,6 +182,11 @@ export default function LoginPage() {
                     sx={{ minWidth: 120 }}
                   >
                     {isSubmitting ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+                  </Button>
+                </Box>
+                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                  <Button component={Link} href="/register" size="small" sx={{ textTransform: 'none' }}>
+                    Register new Consult/Audit account
                   </Button>
                 </Box>
               </form>

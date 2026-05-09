@@ -36,6 +36,7 @@ const userSchema = z.object({
     (val) => val !== undefined,
     { message: 'กรุณาเลือกบทบาท' }
   ),
+  is_approved: z.boolean(),
 })
 
 export type UserFormData = z.infer<typeof userSchema>
@@ -66,6 +67,7 @@ export default function UserModal({
       name: '',
       avatar_url: '',
       role: defaultRole,
+      is_approved: true,
     }
   })
 
@@ -81,6 +83,7 @@ export default function UserModal({
           name: initialData.name || '',
           avatar_url: initialData.avatar_url || '',
           role: (initialData.role as UserRole) || defaultRole,
+          is_approved: initialData.is_approved,
         }, {
           keepErrors: false,
         })
@@ -92,6 +95,7 @@ export default function UserModal({
           name: '',
           avatar_url: '',
           role: defaultRole,
+          is_approved: true,
         }, {
           keepErrors: false,
         })
@@ -119,6 +123,7 @@ export default function UserModal({
           name: string
           avatar_url: string | null
           role: string
+          is_approved: boolean
           password?: string
         } = {
           username: data.username,
@@ -126,6 +131,7 @@ export default function UserModal({
           name: data.name,
           avatar_url: data.avatar_url || null,
           role: data.role as string,
+          is_approved: data.is_approved,
         }
         
         // Only update password if provided
@@ -149,6 +155,7 @@ export default function UserModal({
           name: data.name,
           avatar_url: data.avatar_url || null,
           role: data.role as string,
+          is_approved: data.is_approved,
         })
       }
       
