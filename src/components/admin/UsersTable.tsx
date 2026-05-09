@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Chip, Avatar } from '@mui/material'
+import { Box, IconButton, Paper, Chip, Avatar, Switch, Tooltip, CircularProgress } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { 
   Edit as EditIcon, 
@@ -13,11 +13,20 @@ import { getRoleColor } from '@/types/roles'
 interface Props {
   onEdit: (id: string) => void
   onDelete: (id: string) => void
+  onApprovalChange?: (id: string, isApproved: boolean) => void | Promise<void>
+  approvalUpdatingId?: string | null
   data: User[]
   loading: boolean
 }
 
-export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
+export default function UsersTable({
+  onEdit,
+  onDelete,
+  onApprovalChange,
+  approvalUpdatingId = null,
+  data,
+  loading,
+}: Props) {
   // Helper function to check if user is the locked admin
   const isLockedAdmin = (user: { role: string; username: string }) => {
     return user.role === 'Admin' && user.username === 'admin'
@@ -92,17 +101,57 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
     {
       field: 'is_approved',
       headerName: 'การอนุมัติ',
-      width: 150,
+      width: 200,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => (
-        <Chip
-          label={params.value ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
-          color={params.value ? 'success' : 'warning'}
-          size="small"
-          sx={{ fontWeight: 'medium' }}
-        />
-      ),
+      sortable: false,
+      renderCell: (params) => {
+        const locked = isLockedAdmin({ role: params.row.role, username: params.row.username })
+        const busy = approvalUpdatingId === params.row.id
+        const approved = Boolean(params.value)
+
+        if (locked) {
+          return (
+            <Chip
+              label={approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
+              color={approved ? 'success' : 'warning'}
+              size="small"
+              sx={{ fontWeight: 'medium' }}
+            />
+          )
+        }
+
+        return (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 1,
+              height: '100%',
+              width: '100%',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Tooltip title={approved ? 'ปิดการอนุมัติ' : 'อนุมัติ'}>
+              <span>
+                <Switch
+                  size="small"
+                  checked={approved}
+                  disabled={busy || !onApprovalChange}
+                  onChange={(_, checked) => {
+                    if (onApprovalChange) {
+                      void onApprovalChange(params.row.id as string, checked)
+                    }
+                  }}
+                  inputProps={{ 'aria-label': approved ? 'ปิดการอนุมัติ' : 'อนุมัติ' }}
+                />
+              </span>
+            </Tooltip>
+            {busy && <CircularProgress size={18} />}
+          </Box>
+        )
+      },
     },
     {
       field: 'organizations',
@@ -164,7 +213,7 @@ export default function UsersTable({ onEdit, onDelete, data, loading }: Props) {
         )
       },
     },
-  ], [onEdit, onDelete])
+  ], [onEdit, onDelete, onApprovalChange, approvalUpdatingId])
 
   return (
     <Paper elevation={0} sx={{ height: 600, width: '100%', backgroundColor: 'transparent' }}>

@@ -4,6 +4,11 @@
 type AppConfig = {
   maintenanceEnabled: boolean;
   maintenanceBypassPath: string; // path that remains accessible even in maintenance
+  /**
+   * Public origin for absolute links (emails, etc.). No trailing slash.
+   * Set `NEXT_PUBLIC_APP_URL` (preferred) or `APP_URL` in `.env`.
+   */
+  publicAppUrl: string;
 };
 
 function readBooleanEnv (variableName: string, defaultValue: boolean): boolean {
@@ -15,9 +20,17 @@ function readBooleanEnv (variableName: string, defaultValue: boolean): boolean {
   return normalized === '1' || normalized === 'true' || normalized === 'yes' || normalized === 'on';
 }
 
+function readPublicAppUrl (): string {
+  const fromPublic = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const fromApp = process.env.APP_URL?.trim();
+  const raw = fromPublic || fromApp || '';
+  return raw.replace(/\/+$/, '');
+}
+
 export const config: AppConfig = {
   maintenanceEnabled: readBooleanEnv('NEXT_PUBLIC_MAINTENANCE_MODE', false),
   maintenanceBypassPath: '/_health',
+  publicAppUrl: readPublicAppUrl(),
 };
 
 export function isMaintenanceMode (): boolean {

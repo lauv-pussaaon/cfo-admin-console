@@ -63,6 +63,14 @@ export default function AdminConsoleUsersPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  const [approvalUpdatingId, setApprovalUpdatingId] = useState<string | null>(null)
+
+  const notify = (message: string, severity: 'success' | 'error' = 'success') => {
+    setSuccessMessage(message)
+    setSnackbarSeverity(severity)
+    setShowSuccessMessage(true)
+  }
 
   // Load users
   useEffect(() => {
@@ -82,8 +90,7 @@ export default function AdminConsoleUsersPage() {
       if (!isExpectedError(error)) {
         console.error('Error loading users:', error)
       }
-      setSuccessMessage('เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้')
-      setShowSuccessMessage(true)
+      notify('เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้', 'error')
     } finally {
       setLoading(false)
     }
@@ -99,8 +106,7 @@ export default function AdminConsoleUsersPage() {
     if (user) {
       // Prevent editing the locked admin user
       if (user.role === 'Admin' && user.username === 'admin') {
-        setSuccessMessage('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
-        setShowSuccessMessage(true)
+        notify('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
         return
       }
       setEditingUser(user)
@@ -112,8 +118,7 @@ export default function AdminConsoleUsersPage() {
     // Prevent deleting the locked admin user
     const user = users.find(u => u.id === id)
     if (user && user.role === 'Admin' && user.username === 'admin') {
-      setSuccessMessage('ไม่สามารถลบผู้ใช้ admin ได้')
-      setShowSuccessMessage(true)
+      notify('ไม่สามารถลบผู้ใช้ admin ได้')
       return
     }
 
@@ -143,8 +148,7 @@ export default function AdminConsoleUsersPage() {
       setDeleteDialogOpen(false)
       setDeletingId(null)
       setDeletingItemName('')
-      setSuccessMessage('ไม่สามารถลบผู้ใช้ admin ได้')
-      setShowSuccessMessage(true)
+      notify('ไม่สามารถลบผู้ใช้ admin ได้')
       return
     }
     
@@ -162,8 +166,7 @@ export default function AdminConsoleUsersPage() {
       // Reload users
       await loadUsers()
       
-      setSuccessMessage('ลบผู้ใช้เรียบร้อยแล้ว')
-      setShowSuccessMessage(true)
+      notify('ลบผู้ใช้เรียบร้อยแล้ว')
       
     } catch (error) {
       // Error message is already user-friendly from ValidationError
@@ -191,8 +194,34 @@ export default function AdminConsoleUsersPage() {
 
   const handleModalSuccess = () => {
     loadUsers()
-    setSuccessMessage(editingUser ? 'แก้ไขผู้ใช้เรียบร้อยแล้ว' : 'สร้างผู้ใช้เรียบร้อยแล้ว')
-    setShowSuccessMessage(true)
+    notify(editingUser ? 'แก้ไขผู้ใช้เรียบร้อยแล้ว' : 'สร้างผู้ใช้เรียบร้อยแล้ว')
+  }
+
+  const handleApprovalChange = async (id: string, nextApproved: boolean) => {
+    const row = users.find((u) => u.id === id)
+    if (!row) return
+    if (row.role === 'Admin' && row.username === 'admin') {
+      notify('ไม่สามารถเปลี่ยนสถานะผู้ใช้ admin ได้')
+      return
+    }
+
+    setApprovalUpdatingId(id)
+    try {
+      await userService.updateUser(id, { is_approved: nextApproved })
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, is_approved: nextApproved } : u))
+      )
+      notify(nextApproved ? 'อนุมัติผู้ใช้แล้ว' : 'ตั้งเป็นยังไม่อนุมัติแล้ว')
+    } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : 'อัปเดตสถานะการอนุมัติไม่สำเร็จ'
+      notify(msg, 'error')
+      if (!isExpectedError(error)) {
+        console.error('Unexpected error updating approval:', error)
+      }
+    } finally {
+      setApprovalUpdatingId(null)
+    }
   }
 
   if (authLoading || loading) {
@@ -283,6 +312,8 @@ export default function AdminConsoleUsersPage() {
           loading={loading}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onApprovalChange={handleApprovalChange}
+          approvalUpdatingId={approvalUpdatingId}
         />
 
         {/* Create/Edit Modal */}
@@ -314,7 +345,7 @@ export default function AdminConsoleUsersPage() {
           onClose={() => setShowSuccessMessage(false)}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         >
-          <Alert onClose={() => setShowSuccessMessage(false)} severity="success" sx={{ width: '100%' }}>
+          <Alert onClose={() => setShowSuccessMessage(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {successMessage}
           </Alert>
         </Snackbar>

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createUser } from '@/lib/api/auth'
 import { AppError } from '@/lib/utils/errors'
+import { sendRegistrationConfirmationEmail } from '@/lib/email/send-registration-confirmation'
+import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-registration-notice'
+import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
+import { getAdminNotificationEmails } from '@/lib/api/users-admin'
 
 const publicRegistrationSchema = z.object({
   username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
@@ -16,14 +20,57 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const payload = publicRegistrationSchema.parse(body)
 
+    const emailNormalized = payload.email.trim().toLowerCase()
+
     await createUser({
       username: payload.username.trim(),
-      email: payload.email.trim().toLowerCase(),
+      email: emailNormalized,
       password: payload.password,
       name: payload.name.trim(),
       role: payload.role,
       is_approved: false,
     })
+
+    const requestOrigin = resolveSiteOriginFromRequest(request)
+
+    try {
+      const emailResult = await sendRegistrationConfirmationEmail({
+        to: emailNormalized,
+        name: payload.name.trim(),
+        username: payload.username.trim(),
+        email: emailNormalized,
+        role: payload.role,
+        requestOrigin,
+      })
+      if (!emailResult.sent) {
+        console.warn(
+          '[email] ไม่ได้ส่งอีเมลยืนยัน:',
+          emailResult.skipReason ?? 'unknown'
+        )
+      }
+    } catch (emailErr) {
+      console.error('[email] ส่งอีเมลยืนยันลงทะเบียนไม่สำเร็จ:', emailErr)
+    }
+
+    try {
+      const adminEmails = await getAdminNotificationEmails()
+      const noticeResult = await sendAdminNewRegistrationNotice({
+        name: payload.name.trim(),
+        username: payload.username.trim(),
+        email: emailNormalized,
+        role: payload.role,
+        requestOrigin,
+        adminEmails,
+      })
+      if (!noticeResult.sent) {
+        console.warn(
+          '[email] ไม่ได้ส่งอีเมลแจ้ง Admin:',
+          noticeResult.skipReason ?? 'unknown'
+        )
+      }
+    } catch (adminEmailErr) {
+      console.error('[email] ส่งอีเมลแจ้ง Admin ไม่สำเร็จ:', adminEmailErr)
+    }
 
     return NextResponse.json({
       success: true,
