@@ -114,10 +114,7 @@ export default function RegisterPage() {
               <>
                 <Box sx={{ mb: 3 }}>
                   <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-                    เปิดบัญชี
-                  </Typography>
-                  <Typography color="text.secondary">
-                    ที่ปรึกษาหรือผู้ตรวจสอบ รอผู้ดูแลอนุมัติแล้วค่อยเข้าได้
+                    ลงทะเบียนที่ปรึกษาหรือผู้ทวนสอบ
                   </Typography>
                 </Box>
 
