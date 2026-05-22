@@ -1,6 +1,6 @@
 'use client'
 
-import { TextField, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box } from '@mui/material'
+import { TextField, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, FormControlLabel, Switch, Typography } from '@mui/material'
 import { UseFormReturn } from 'react-hook-form'
 import { ROLE_OPTIONS, type UserRole, type RoleOption } from '@/types/roles'
 import type { UserFormData } from './UserModal'
@@ -88,6 +88,37 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
         </Select>
         {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
       </FormControl>
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 1,
+          px: 2,
+          py: 1.5,
+        }}
+      >
+        <Box>
+          <Typography variant="subtitle2">สถานะการอนุมัติ</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {formData.is_approved ? 'อนุมัติแล้ว - ผู้ใช้สามารถเข้าสู่ระบบได้' : 'ยังไม่อนุมัติ - ผู้ใช้จะยังไม่สามารถเข้าสู่ระบบได้'}
+          </Typography>
+        </Box>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={Boolean(formData.is_approved)}
+              onChange={(e) => setValue('is_approved', e.target.checked, { shouldValidate: true })}
+              disabled={isSubmitting || isLocked}
+            />
+          }
+          label={formData.is_approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
+          sx={{ mr: 0 }}
+        />
+      </Box>
     </Box>
   )
 }

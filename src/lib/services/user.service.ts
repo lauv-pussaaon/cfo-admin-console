@@ -37,6 +37,7 @@ export class UserService {
     name: string
     avatar_url?: string | null
     role?: string
+    is_approved?: boolean
   }): Promise<User> {
     return createUserAPI(data)
   }
@@ -51,6 +52,7 @@ export class UserService {
       name: string
       avatar_url: string | null
       role: string
+      is_approved: boolean
     }>
   ): Promise<User> {
     return updateUserAPI(id, updates)

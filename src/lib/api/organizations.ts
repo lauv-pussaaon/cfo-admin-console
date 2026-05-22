@@ -123,7 +123,7 @@ export const getOrganizationsForAdmin = async (): Promise<OrganizationWithCreato
       .from('user_organizations')
       .select(`
         organization_id,
-        user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, created_at)
+        user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, is_approved, created_at)
       `)
       .in('organization_id', orgIdsForDealers)
 
@@ -317,7 +317,7 @@ export const getOrganizationForAdminById = async (id: string): Promise<Organizat
     .from('user_organizations')
     .select(`
       organization_id,
-      user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, created_at)
+      user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, is_approved, created_at)
     `)
     .eq('organization_id', id)
 
@@ -546,7 +546,7 @@ export const removeUserFromOrganization = async (
 export const getDealers = async (): Promise<User[]> => {
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, email, name, avatar_url, role, created_at')
+    .select('id, username, email, name, avatar_url, role, is_approved, created_at')
     .eq('role', 'Dealer')
     .order('name', { ascending: true })
 

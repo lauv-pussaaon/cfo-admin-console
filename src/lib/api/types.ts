@@ -9,6 +9,7 @@ export interface User {
   name: string
   avatar_url?: string
   role: UserRole
+  is_approved: boolean
   invite_hashcode?: string
   created_at: string
   organizations?: Organization[]
