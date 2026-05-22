@@ -3,13 +3,600 @@
     {
       "id": "07748d84-3729-4260-9863-597e57eb73a3",
       "industry_code": "power-generation",
-      "name_th": "การผลิตพลังงานและการจัดการพลังงานไฟฟ้า",
-      "name_en": "Power Generation",
-      "examples": "• Energy production and conversion of electrical energy\n• Electric power transactions",
+      "name_th": "กิจกรรมทั่วไป",
+      "name_en": "General Activities",
+      "examples": "- Stationary combustion (fuel use in buildings & equipment)\n- Purchased electricity, heat, and steam\n- Business travel and employee commuting\n- Company vehicles and fleet\n- Waste generation and disposal\n- Purchased goods and services\n- Water consumption",
       "is_active": true,
       "feature_image_url": "https://uwqgzfehcigvexpilmgw.supabase.co/storage/v1/object/public/cfo-emission-template-images/templates/6471f0a3-5120-41ec-a6e2-8f4b0f8d6398_kross-banner.jpg",
       "display_order": 1,
       "activity_groups": [
+        {
+          "id": "4a3f965a-85a6-4e6c-85dc-aa0977042981",
+          "name_th": "ยานพาหนะบนถนนขององค์กร",
+          "name_en": "Company On-road Vehicles",
+          "scope": 1,
+          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "scope": 1,
+            "name_en": "2.2) Mobile combustion (On road)",
+            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "57a974c7-371e-4ad6-be04-d5c7d329caf6",
+              "resource": "Biodiesel: L",
+              "unit": "Liter",
+              "ef_value": 1.670509494,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "a6e5f701-561f-44fe-8b5f-2d002f8589fc",
+              "resource": "Diesel (20)",
+              "unit": "Liter",
+              "ef_value": 2.197578006,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "a85671ec-ded4-465a-aad9-f08d032be2ab",
+              "resource": "Diesel (B7)",
+              "unit": "Liter",
+              "ef_value": 2.550372739,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "bbda3b55-f714-4b12-aa8a-23d55cc4cf43",
+              "resource": "Diesel: L",
+              "unit": "Liter",
+              "ef_value": 2.740339134,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ec85b542-f574-4dbc-9dd4-f191cec85e93",
+              "resource": "Gasohol: E10",
+              "unit": "Liter",
+              "ef_value": 2.010283117,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c77612e7-d520-4592-bf9f-947ca7ae666c",
+              "resource": "Gasohol: E20",
+              "unit": "Liter",
+              "ef_value": 1.788102222,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "a4fcf3c5-9b09-4192-a68a-aa6c5758c54e",
+              "resource": "Gasohol: E85",
+              "unit": "Liter",
+              "ef_value": 0.3439264062,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "1edde553-5788-4215-99f0-a10b8d908522",
+              "resource": "Motor Gasoline - oxydation catalyst: L",
+              "unit": "Liter",
+              "ef_value": 2.2703376,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c8dc951b-e26a-4e21-a1a2-768941dbde03",
+              "resource": "Motor Gasoline - uncontrolled: L",
+              "unit": "Liter",
+              "ef_value": 2.23734656,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ead0d6cf-b5ff-4c9c-9be1-f9ef4815b11c",
+              "resource": "Motor Gasoline - low mileage light duty vihicle vintage 1995 or later: L",
+              "unit": "Liter",
+              "ef_value": 2.232464012,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "54571063-ffe8-44cb-99d1-c06439467d74",
+          "name_th": "กิจกรรมการปล่อบก๊าซเรือนกระจกทางอ้อมจากการเผาไหม้เชื้อเพลิง และการใช้พลังงาน",
+          "name_en": "Fuel & Energy Related Activities",
+          "scope": 3,
+          "scope_category_id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
+            "scope": 3,
+            "name_en": "Category 3 Fuel and energy related activities",
+            "name_th": "Category 3 กิจกรรมที่เกี่ยวข้องกับเชื้อเพลิงและพลังงาน"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "e5c57d3a-07d7-429f-b6ce-8c9618d4579a",
+              "resource": "Electricity, grid mix (ไฟฟ้า)",
+              "unit": "kWh",
+              "ef_value": 0.0812,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0b4b92c5-2348-486f-9865-6121affdb6ca",
+              "resource": "ก๊าซธรรมชาติแบบผสม",
+              "unit": "m3",
+              "ef_value": 0.5767,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "ac3350de-a204-467e-953f-be515ba35b8b",
+              "resource": "ก๊าซธรรมชาติแบบผสม",
+              "unit": "kg",
+              "ef_value": 0.7544,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "2ee64bb7-4273-4fef-a3d6-230bb83cb90f",
+              "resource": "ก๊าซหุงต้มที่ได้จากกระบวนการกลั่นน้ำมันดิบ",
+              "unit": "kg",
+              "ef_value": 0.4267,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "4e38f1bc-f540-4a4f-a4e3-f7b7bda3089b",
+              "resource": "ก๊าซหุงต้มที่ได้จากกระบวนการแยกก๊าซธรรมชาติ",
+              "unit": "kg",
+              "ef_value": 1.1839,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "f6c1687c-ac31-4390-97fe-3edbb94d0a48",
+              "resource": "Gasoline (แก๊สโซลีน)",
+              "unit": "kg",
+              "ef_value": 0.4024,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "4526c480-50dc-4be2-b689-33047013f779",
+              "resource": "Fuel oil (น้ำมันเตา)",
+              "unit": "kg",
+              "ef_value": 0.3743,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "75f9b06f-6b2a-48f1-bef6-31aa2f9de03e",
+              "resource": "Diesel (น้ำมันดีเซล / น้ำมันโซล่าร์)",
+              "unit": "kg",
+              "ef_value": 0.3522,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "29a47360-1481-4b97-8a93-896438573c88",
+          "name_th": "อุปกรณ์สำนักงาน",
+          "name_en": "Office Supplies",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "c5db1ff2-cc46-4f98-a226-e285d0c87d04",
+              "resource": "กระดาษพิมพ์เขียนแบบไม่เคลือบผิว",
+              "unit": "kg",
+              "ef_value": 2.102,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "517bf770-efb1-4c5b-8994-b60c6a459254",
+          "name_th": "ระบบบำบัดน้ำเสียและบ่อเกรอะในองค์กร",
+          "name_en": "On-site Wastewater Treatment & Septic",
+          "scope": 1,
+          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+            "scope": 1,
+            "name_en": "4) Fugitive emissions",
+            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "50ee830b-08d4-482a-97bb-fce66b4c1f25",
+              "resource": "Aerobic treatment plant Not well managed",
+              "unit": "kgCO2",
+              "ef_value": 2.1,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "f7ae10cd-7056-47fd-ac1f-52b3557639b5",
+              "resource": "Aerobic treatment plant well managed",
+              "unit": "kgCO2",
+              "ef_value": 0,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "d8f2c198-3755-45a5-83dc-11661be139c9",
+              "resource": "Anaerobic deep lagoon",
+              "unit": "kgCO2",
+              "ef_value": 5.6,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "9a96a036-2c44-4a9c-9118-defc994f14b3",
+              "resource": "Anaerobic digester for sludge",
+              "unit": "kgCO2",
+              "ef_value": 5.6,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "4135f7d3-5926-43e5-b74e-3a87fbdab79e",
+              "resource": "Anaerobic reactor",
+              "unit": "kgCO2",
+              "ef_value": 5.6,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "a922b044-0a7b-4cc1-ba6b-2c13d9abdacd",
+              "resource": "Anaerobic shallow lagoon",
+              "unit": "kgCO2",
+              "ef_value": 1.4,
+              "ref_info": "IPCC Vol.5 table 6.8",
+              "note": null
+            },
+            {
+              "id": "fa0b82c3-5662-41e4-ab28-758aebec1d7c",
+              "resource": "CH4 Septictank",
+              "unit": "kgCH4",
+              "ef_value": 28,
+              "ref_info": "IPCC, AR5",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "c8fb9302-db1f-4bac-91e5-0c2b67786831",
+          "name_th": "การใช้ไฟฟ้าที่ซื้อจากระบบสายส่ง",
+          "name_en": "Purchased Electricity",
+          "scope": 2,
+          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+            "scope": 2,
+            "name_en": "Purchased Electricity",
+            "name_th": "การใช้พลังงานไฟฟ้า"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "83cad677-e54a-4c40-8d5e-4f7b6e8c34c0",
+              "resource": "ไฟฟ้าแบบ grid mix ปี 2022-2024; LCIA method IPCC 2013 GWP 100a V1.03 (CFO Scope2)",
+              "unit": "kWh",
+              "ef_value": 0.475,
+              "ref_info": "Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "2b286a94-c02c-4c9c-b709-98a6a325690c",
+          "name_th": "สารทำความเย็นในระบบปรับอากาศและห้องเย็น",
+          "name_en": "Refrigerants — AC & Cooling",
+          "scope": 1,
+          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+            "scope": 1,
+            "name_en": "4) Fugitive emissions",
+            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "80c35b00-03b4-4b3d-8848-793d8669f3da",
+              "resource": "HFC-152",
+              "unit": "kg",
+              "ef_value": 16,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "c535d4ab-7833-47bc-a74a-242318b81f05",
+              "resource": "R-125",
+              "unit": "kg",
+              "ef_value": 3170,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "c4ecd7d3-3438-402d-8436-92eb85b99a56",
+              "resource": "R-134",
+              "unit": "kg",
+              "ef_value": 1120,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "e4c55068-1c6f-465f-ac62-82e40cbdeca4",
+              "resource": "R-134a",
+              "unit": "kg",
+              "ef_value": 1300,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "5cec0a11-333c-43da-bf84-cba488d8bb2d",
+              "resource": "R-143",
+              "unit": "kg",
+              "ef_value": 328,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "cd792010-f334-4aee-bcb1-c6bb9a71f49c",
+              "resource": "R-143a",
+              "unit": "kg",
+              "ef_value": 4800,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "7ded1c36-6335-4318-a6f2-0cf11c80d664",
+              "resource": "R-32",
+              "unit": "kg",
+              "ef_value": 677,
+              "ref_info": "IPCC 2013, AR5",
+              "note": null
+            },
+            {
+              "id": "fa54c38e-5480-4503-9d25-5ccfe054bdff",
+              "resource": "R-401A",
+              "unit": "kg",
+              "ef_value": 18,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "715a1b6d-69ac-47e8-97bc-92499af47b00",
+              "resource": "HFC-152a",
+              "unit": "kg",
+              "ef_value": 138,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "e41a0cc4-8910-4bf5-a0f0-9c49d3fde479",
+              "resource": "HFC-161",
+              "unit": "kg",
+              "ef_value": 4,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "ff90a69f-7e87-47dd-9655-157207e152a4",
+          "name_th": "การจัดการของเสีย",
+          "name_en": "Solid Waste Management",
+          "scope": 3,
+          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+            "scope": 3,
+            "name_en": "Category 5 Waste generated in operations",
+            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "2167d9a9-564a-4579-b8df-a4a83686ebfc",
+              "resource": "การกำจัดขยะมูลฝอยชุมชนแบบเทกอง",
+              "unit": "kg",
+              "ef_value": 1.0388,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "115616e3-9cbf-48e5-b372-cf950c92a3c1",
+              "resource": "การคัดแยกขยะมูลฝอยชุมชน",
+              "unit": "kg",
+              "ef_value": 0.0159,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "326437cd-9de0-4506-b293-7382b2272f64",
+              "resource": "การจัดการมูลฝอยสด (การหมักแบบไร้อากาศ)",
+              "unit": "kg",
+              "ef_value": 0.1102,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "170af492-ba02-4287-a6a6-cd5452bf06c8",
+              "resource": "การจัดเก็บรวบรวม และขนถ่ายขยะมูลฝอยชุมชน",
+              "unit": "kg",
+              "ef_value": 0.0143,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b00674e7-8787-4b06-8bdb-d9a4f12caee1",
+              "resource": "การฝังกลบขยะมูลฝอยชุมชนแบบติดตั้งระบบนำก๊าซมีเทนมาใช้ประโยชน์",
+              "unit": "kg",
+              "ef_value": 0.0175,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "33daddbb-3336-4fa3-a866-1225bd47f357",
+              "resource": "การฝังกลบขยะมูลฝอยชุมชนแบบถูกหลักสุขาภิบาล",
+              "unit": "kg",
+              "ef_value": 0.7933,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "be5c4e9a-4e59-42b0-ba57-d7e959e14d1e",
+          "name_th": "การบำบัดน้ำเสีย",
+          "name_en": "Wastewater Treatment",
+          "scope": 3,
+          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+            "scope": 3,
+            "name_en": "Category 5 Waste generated in operations",
+            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "21e89dc2-1114-4a53-b27e-f28ce8ae333f",
+              "resource": "การรวบรวมน้ำเสียชุมชนของประเทศ, ค่าเฉลี่ยประเทศไทย",
+              "unit": "m3",
+              "ef_value": 0.0101,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "8418c8ca-9346-4774-80e9-9df037c6c0be",
+              "resource": "การรวบรวมน้ำเสียชุมชนของเมืองขนาดกลาง",
+              "unit": "m3",
+              "ef_value": 0.0373,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "20b7b4eb-5cf0-4669-9210-1c0103aa8720",
+              "resource": "การรวบรวมน้ำเสียชุมชนของเมืองขนาดใหญ่",
+              "unit": "m3",
+              "ef_value": 0.002,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "112961bb-2451-4196-b023-aafef0396b70",
+              "resource": "การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของประเทศ",
+              "unit": "m3",
+              "ef_value": 0.1302,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "692bb7f6-ebbe-472c-9974-55b889a156f5",
+              "resource": "การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดกลาง",
+              "unit": "m3",
+              "ef_value": 0.1274,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "1d9b0e42-a341-4a82-a800-00aeb6138759",
+              "resource": "การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดใหญ่",
+              "unit": "m3",
+              "ef_value": 0.131,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "81691957-d373-413f-bd2d-404a6275bebc",
+          "name_th": "การใช้น้ำประปาและน้ำดิบ",
+          "name_en": "Water Consumption",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap water)",
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": true,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "18f414bc-7db3-4093-a23c-95f80e9ca374",
+              "resource": "น้ำประปา-การนิคมอุตสาหกรรม",
+              "unit": "m3",
+              "ef_value": 0.2575,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3ccc4605-4b03-4017-a26c-3b30e3e09858",
+              "resource": "น้ำประปา-การประปานครหลวง",
+              "unit": "m3",
+              "ef_value": 0.7948,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "7380dc51-d41b-4621-ba44-7448df7bd207",
+              "resource": "น้ำประปา-การประปาส่วนภูมิภาค",
+              "unit": "m3",
+              "ef_value": 0.541,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
         {
           "id": "222f3b4d-d0dd-41ba-9823-190a26ef1d75",
           "name_th": "การเผาไหม้เชื้อเพลิงเพื่อผลิตไฟฟ้า",
@@ -42,89 +629,6 @@
               "ef_value": 3.1078935,
               "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
               "note": "test"
-            }
-          ]
-        },
-        {
-          "id": "ea0edc74-e8e4-4842-a663-8dfed89b4ea5",
-          "name_th": "การปล่อยก๊าซจากกระบวนการผลิตไฟฟ้า",
-          "name_en": "Process Emissions (Power Generation)",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
-          },
-          "is_common": false,
-          "sort_order": 20,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "3130c309-25fa-4561-8cb3-e937c04a40e5",
-          "name_th": "การใช้ไฟฟ้าภายใน (Auxiliary load)",
-          "name_en": "Auxiliary Power Consumption",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
-        }
-      ]
-    },
-    {
-      "id": "807ce841-eee0-4fcd-9faa-a3ff703af904",
-      "industry_code": "general-manufacturing",
-      "name_th": "อุตสาหกรรมการผลิตทั่วไป",
-      "name_en": "General Manufacturing",
-      "examples": "• Physical or chemical transformation of materials into new products\n• Manufacturing not covered in specific sectors below",
-      "is_active": true,
-      "feature_image_url": "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop",
-      "display_order": 2,
-      "activity_groups": [
-        {
-          "id": "248f696f-e48f-4601-8323-4ca9b6f0b59f",
-          "name_th": "การเผาไหม้จากหม้อไอน้ำและเครื่องกำเนิดไฟฟ้า",
-          "name_en": "Boiler & Generator Combustion",
-          "scope": 1,
-          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
-            "scope": 1,
-            "name_en": "1) Stationary combustion",
-            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
-          },
-          "is_common": false,
-          "sort_order": 10,
-          "status": "active",
-          "fuel_resources": [
-            {
-              "id": "03c58d61-3351-45fd-9331-27cf4f6df903",
-              "resource": "Acetelyne: kg",
-              "unit": "kg",
-              "ef_value": 3.384615385,
-              "ref_info": "2C2H2+502 → 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)",
-              "note": null
-            },
-            {
-              "id": "10786544-0219-43b5-b6a2-eccee18648fd",
-              "resource": "Antracite: kg",
-              "unit": "kg",
-              "ef_value": 3.1078935,
-              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
-              "note": null
             },
             {
               "id": "d4ae3c60-b37f-43e6-9f55-937f52959850",
@@ -141,31 +645,344 @@
               "ef_value": 1.64961846,
               "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
               "note": null
+            },
+            {
+              "id": "65fcd374-0dc2-486f-8933-5c69b7b338aa",
+              "resource": "Biogas",
+              "unit": "m3",
+              "ef_value": 0.001140685,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "f666bf10-ffee-4ec6-958e-fb7aba4008ec",
+              "resource": "Biogasollne (Ethanol)",
+              "unit": "Liter",
+              "ef_value": 1.501920063,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "84a32504-0d59-42cf-9663-844ec2a61cce",
+              "resource": "Bituminous Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.512467675,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "80491d9e-12ec-40cb-8f58-02b3f7eb2766",
+              "resource": "Butane: kg",
+              "unit": "kg",
+              "ef_value": 3.034482759,
+              "ref_info": "2C4H10+ 1302 → 8CO2+10H2O (MWC4H10 =58, MWCO2 =44)",
+              "note": null
+            },
+            {
+              "id": "89a4253f-0350-4592-8efc-f73c34fe0ae6",
+              "resource": "Charcoal",
+              "unit": "kg",
+              "ef_value": 0.054872,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "827d02a2-423a-4081-bdf5-d105b57ba8da",
+              "resource": "Cob",
+              "unit": "kg",
+              "ef_value": 0.031882,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c318c42e-c51e-4b00-a348-589b73490451",
+              "resource": "Coking Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.632517325,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ef3efca1-7aae-4702-b37f-4fce58f37f5d",
+              "resource": "Diesel B20",
+              "unit": "Liter",
+              "ef_value": 2.16718614,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c6784efb-bc3d-40be-84e1-8127b3cab53c",
+              "resource": "Diesel B7",
+              "unit": "Liter",
+              "ef_value": 2.518436988,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "b9e6365c-56c5-43d0-aa7c-46c7b8dd18f9",
+              "resource": "Diesel: L",
+              "unit": "Liter",
+              "ef_value": 2.70757206,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "58f21ac0-acdf-4869-8757-be483bb455ad",
+              "resource": "Ethane: kg",
+              "unit": "kg",
+              "ef_value": 3.142857143,
+              "ref_info": "C2H4 + 3O2 --> 2CO2 + 2H2O (MWC2H4 =28, MWCO2 =44)",
+              "note": null
+            },
+            {
+              "id": "ed366df3-3d67-4c7a-b94e-a6804b7b605e",
+              "resource": "Fuel Oil A: L",
+              "unit": "Liter",
+              "ef_value": 3.219775405,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "0d8a9d54-31bb-40a3-8699-01ee8ebf1940",
+              "resource": "Fuel Oil C: L",
+              "unit": "Liter",
+              "ef_value": 3.245497564,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "76c68488-a8ca-4ead-a4df-bad5d323e0cf",
+              "resource": "Fuel wood",
+              "unit": "kg",
+              "ef_value": 0.030381,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "871d6e2b-f21f-4894-880f-d9f91c4c5625",
+              "resource": "Gasohol: E10",
+              "unit": "Liter",
+              "ef_value": 1.970806002,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "2e5e5210-0f88-40b2-b5a2-4dbaf5694de3",
+              "resource": "Gasohol: E20",
+              "unit": "Liter",
+              "ef_value": 1.752398365,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "67c3ead6-82b6-4a4a-bc45-2e072ac352e7",
+              "resource": "Gasohol: E85",
+              "unit": "Liter",
+              "ef_value": 0.3327487196,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "2c3c2ba0-9525-434e-bee1-bcd500746f89",
+              "resource": "Gasoline: L",
+              "unit": "Liter",
+              "ef_value": 2.18921364,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "34288965-16a3-44f6-940a-16c4cf7980e0",
+              "resource": "Jet Kerosene: L",
+              "unit": "Liter",
+              "ef_value": 2.47728579,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "78bb0c54-b345-4975-a233-2a93e3479f24",
+              "resource": "Lignite: kg",
+              "unit": "kg",
+              "ef_value": 1.20996225,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "07d207e5-b19b-4dc6-af1a-259d935b2909",
+              "resource": "LPG: kg",
+              "unit": "kg",
+              "ef_value": 3.113282944,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ce2831d9-e584-45cb-9410-a73ee6ba5e61",
+              "resource": "LPG: litre",
+              "unit": "Liter",
+              "ef_value": 1.68117279,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "6f6f6af0-bf8f-48cd-bf29-6a8537d8d077",
+              "resource": "Natural Gas (HHV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.050151666,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "7cd7ce83-7edc-4972-9fe2-d2fe2f52f553",
+              "resource": "Natural Gas (HHV): MMBTU",
+              "unit": "MMBTU",
+              "ef_value": 52.9545,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "b988eaa1-7887-4cab-9190-7b56a0fd568d",
+              "resource": "Natural Gas (NCV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.0561545,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "8ce8ae77-5861-428c-8ef0-00ca5ef00019",
+              "resource": "Natural Gas (NCV): SCF",
+              "unit": "SCF",
+              "ef_value": 0.05727759,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "605b4867-502e-4c0f-acb7-47914fb5b425",
+              "resource": "Other Kerosene: L",
+              "unit": "Liter",
+              "ef_value": 2.49109779,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "f7aca410-1a6a-4fec-b20f-3a033a95709d",
+              "resource": "Paddy husk",
+              "unit": "kg",
+              "ef_value": 0.02736,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "e60a07b3-654a-4f11-ae38-191c74974fd4",
+              "resource": "Palm kernel shell",
+              "unit": "kg",
+              "ef_value": 0.035207,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "e94a2160-b622-4200-88d9-6e3a797810ac",
+              "resource": "Propane: kg",
+              "unit": "kg",
+              "ef_value": 3,
+              "ref_info": "C3H8+5O2→3CO2+4H2O (MWC3H8 =44, MWCO2 =44)",
+              "note": null
+            },
+            {
+              "id": "ac8d2dd2-421f-4081-984d-d92c719b2afa",
+              "resource": "Saw dust",
+              "unit": "kg",
+              "ef_value": 0.020672,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
             }
           ]
         },
         {
-          "id": "f791865a-38c4-4667-9001-17a2e7f6ce03",
-          "name_th": "การเผาไหม้จากยานพาหนะขององค์กร",
-          "name_en": "Company Vehicle Combustion",
+          "id": "964cb405-682e-45cc-99b0-9c9bcbd70708",
+          "name_th": "การซ้อมดับเพลิงและกิจกรรมความปลอดภัย",
+          "name_en": "Fire Drill & Safety Training Activities",
           "scope": 1,
-          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
-            "name_en": "2.2) Mobile combustion (On road)",
-            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": true,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "871d6e2b-f21f-4894-880f-d9f91c4c5625",
+              "resource": "Gasohol: E10",
+              "unit": "Liter",
+              "ef_value": 1.970806002,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "67c3ead6-82b6-4a4a-bc45-2e072ac352e7",
+              "resource": "Gasohol: E85",
+              "unit": "Liter",
+              "ef_value": 0.3327487196,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "2c3c2ba0-9525-434e-bee1-bcd500746f89",
+              "resource": "Gasoline: L",
+              "unit": "Liter",
+              "ef_value": 2.18921364,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "07d207e5-b19b-4dc6-af1a-259d935b2909",
+              "resource": "LPG: kg",
+              "unit": "kg",
+              "ef_value": 3.113282944,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ce2831d9-e584-45cb-9410-a73ee6ba5e61",
+              "resource": "LPG: litre",
+              "unit": "Liter",
+              "ef_value": 1.68117279,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "605b4867-502e-4c0f-acb7-47914fb5b425",
+              "resource": "Other Kerosene: L",
+              "unit": "Liter",
+              "ef_value": 2.49109779,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "e60a07b3-654a-4f11-ae38-191c74974fd4",
+              "resource": "Palm kernel shell",
+              "unit": "kg",
+              "ef_value": 0.035207,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "b9e6365c-56c5-43d0-aa7c-46c7b8dd18f9",
+              "resource": "Diesel: L",
+              "unit": "Liter",
+              "ef_value": 2.70757206,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "bf26a307-de40-4f4c-9530-32153b900174",
-          "name_th": "การใช้สารทำความเย็น",
-          "name_en": "Refrigerant",
+          "id": "57f2d88e-0464-4c20-b132-c19e1fde10ad",
+          "name_th": "ระบบดับเพลิงและก๊าซพิเศษ",
+          "name_en": "Fire Suppression Systems & SF6",
           "scope": 1,
           "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
           "scope_sub_category": null,
@@ -175,67 +992,54 @@
             "name_en": "4) Fugitive emissions",
             "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
           },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "2ef4c85d-4fc7-42b3-9425-01bc3ccdaa00",
-          "name_th": "กระบวนการผลิต (Process Emissions)",
-          "name_en": "Industrial Process Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
-          },
-          "is_common": false,
-          "sort_order": 40,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "953ed36a-a4f0-49c0-af2e-a176633de454",
-          "name_th": "การใช้ไฟฟ้าจากระบบสายส่ง",
-          "name_en": "Purchased Electricity",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
           "is_common": true,
-          "sort_order": 50,
+          "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "35942621-7ccb-4172-9b5f-1251a5ac3149",
+              "resource": "SF6",
+              "unit": "kg",
+              "ef_value": 23500,
+              "ref_info": "IPCC, AR5",
+              "note": null
+            },
+            {
+              "id": "31e69a34-f2d9-4241-9964-bf884d73c9c2",
+              "resource": "HFC-227ea",
+              "unit": "kg",
+              "ef_value": 3350,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "bfb4ab09-ad07-4858-b49f-05ea02d0ac2b",
+              "resource": "HFC-236cb",
+              "unit": "kg",
+              "ef_value": 1210,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "75b368c5-8679-4a3f-9c0a-a6f26bcec37d",
+              "resource": "HFC-236ea",
+              "unit": "kg",
+              "ef_value": 1330,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            },
+            {
+              "id": "739617aa-b6b0-4dad-9676-dce2150f42ea",
+              "resource": "HFC-236fa",
+              "unit": "kg",
+              "ef_value": 8060,
+              "ref_info": "IPCC Vol.5 Table 8.A.1,",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "1bf640e2-c18c-4fe8-99a2-de85ed382ff3",
-          "name_th": "การใช้ไอน้ำ/ความร้อนจากภายนอก",
-          "name_en": "Purchased Steam & Heat",
-          "scope": 2,
-          "scope_category_id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "28af9658-f47d-4e53-9ff0-5af39ce7630d",
-            "scope": 3,
-            "name_en": "Category 3 Fuel and energy related activities",
-            "name_th": "Category 3 กิจกรรมที่เกี่ยวข้องกับเชื้อเพลิงและพลังงาน"
-          },
-          "is_common": false,
-          "sort_order": 60,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "1c6b6ae9-472e-4b0f-bd67-1c1170b0c7aa",
+          "id": "c884bded-af3f-45ce-94bb-57a7abf55232",
           "name_th": "การเดินทางเพื่อธุรกิจ",
           "name_en": "Business Travel",
           "scope": 3,
@@ -248,13 +1052,62 @@
             "name_th": "Category 6 การเดินทางเพื่อธุรกิจ"
           },
           "is_common": true,
-          "sort_order": 70,
+          "sort_order": 50,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "7d24e800-6254-48b2-baaf-e276057091e8",
+              "resource": "Domestic",
+              "unit": "passenger.km",
+              "ef_value": 0.22928,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            },
+            {
+              "id": "e713767d-e304-4dd0-a78a-aae14d43c7ac",
+              "resource": "International: Premium economy class",
+              "unit": "passenger.km",
+              "ef_value": 0.17465,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2028",
+              "note": null
+            },
+            {
+              "id": "b074e71f-2aa5-4389-9550-82a52af8182a",
+              "resource": "International: First class",
+              "unit": "passenger.km",
+              "ef_value": 0.43663,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2030",
+              "note": null
+            },
+            {
+              "id": "307e41e3-54d2-4796-bb16-d542bdd96ff2",
+              "resource": "International: Business class",
+              "unit": "passenger.km",
+              "ef_value": 0.31656,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2029",
+              "note": null
+            },
+            {
+              "id": "ee3724aa-4021-4b7d-9216-d7a0600494fa",
+              "resource": "International: Average passenger",
+              "unit": "passenger.km",
+              "ef_value": 0.14253,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2026",
+              "note": null
+            },
+            {
+              "id": "0487cab8-86ff-4cd3-9934-87dbe099fdd2",
+              "resource": "International: Economy class",
+              "unit": "passenger.km",
+              "ef_value": 0.10916,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2027",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "9fa2a8fd-df98-4de9-8725-fa9eb84b70b7",
-          "name_th": "การเดินทางของพนักงาน (Commute)",
+          "id": "4192ca93-234c-4cae-9b3e-f080eb74762d",
+          "name_th": "การเดินทางของพนักงานไปทำงาน",
           "name_en": "Employee Commuting",
           "scope": 3,
           "scope_category_id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
@@ -266,71 +1119,145 @@
             "name_th": "Category 7 การเดินทางของพนักงาน"
           },
           "is_common": true,
-          "sort_order": 80,
+          "sort_order": 60,
           "status": "active",
-          "fuel_resources": []
-        },
+          "fuel_resources": [
+            {
+              "id": "7d7cf2e4-dde0-437b-ac74-156606a18015",
+              "resource": "Compressed Natural Gas",
+              "unit": "kg",
+              "ef_value": 2.2609245,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, PTT",
+              "note": null
+            },
+            {
+              "id": "a71785e9-6827-4bbc-954b-66ead8e5c0e5",
+              "resource": "Gas/ Diesel Oil",
+              "unit": "litre",
+              "ef_value": 2.74062321,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            },
+            {
+              "id": "342395d5-27a8-41db-a035-66c1f004e094",
+              "resource": "LPG",
+              "unit": "litre",
+              "ef_value": 1.73064606,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            },
+            {
+              "id": "4ab89f4b-8f06-4b16-a7f6-8423c4329196",
+              "resource": "Motor Gasoline - low mileage light duty vihicle vintage 1995 or later",
+              "unit": "litre",
+              "ef_value": 2.23270326,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            },
+            {
+              "id": "769a9448-a204-4b22-a6b2-8c8a1239d1d7",
+              "resource": "Motor Gasoline - oxydation catalyst",
+              "unit": "litre",
+              "ef_value": 2.2719116,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            },
+            {
+              "id": "71ec8b22-0317-40ba-92d2-c57a830817b1",
+              "resource": "Motor Gasoline - uncontrolled",
+              "unit": "litre",
+              "ef_value": 2.23942424,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "807ce841-eee0-4fcd-9faa-a3ff703af904",
+      "industry_code": "general-manufacturing",
+      "name_th": "อุตสาหกรรมการผลิตทั่วไป",
+      "name_en": "General Manufacturing",
+      "examples": "• Physical or chemical transformation of materials into new products\n• Manufacturing not covered in specific sectors below",
+      "is_active": true,
+      "feature_image_url": "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop",
+      "display_order": 2,
+      "activity_groups": [
         {
-          "id": "d92529f1-21a2-4e0f-a896-79cd200d438e",
-          "name_th": "การจัดการของเสีย",
-          "name_en": "Waste Generation",
-          "scope": 3,
-          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
-            "scope": 3,
-            "name_en": "Category 5 Waste generated in operations",
-            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
-          },
-          "is_common": false,
-          "sort_order": 90,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "ff4bc338-6f09-4883-8c3e-e2a32e95d916",
-          "name_th": "การใช้น้ำประปา/น้ำดิบ",
-          "name_en": "Water Consumption",
+          "id": "44467fd2-dc8b-434a-9617-9b25022da91b",
+          "name_th": "วัสดุบรรจุภัณฑ์",
+          "name_en": "Packaging Materials",
           "scope": 3,
           "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
-          "scope_sub_category": null,
+          "scope_sub_category": "กลุ่มปิโตรเคมี",
           "scope_category": {
             "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
             "scope": 3,
             "name_en": "Category 1 Purchased goods and services",
             "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
           },
-          "is_common": true,
-          "sort_order": 100,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "d7e05225-6a05-4058-be1c-7a3adef92223",
-          "name_th": "การซื้อสินค้าและวัตถุดิบ (upstream)",
-          "name_en": "Purchased Raw Materials & Goods",
-          "scope": 3,
-          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
-            "scope": 3,
-            "name_en": "Category 1 Purchased goods and services",
-            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
-          },
           "is_common": false,
-          "sort_order": 110,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "7bde3532-9f97-419e-8cb5-72821f7e8b3c",
+              "resource": "กระดาษกล่องขาวเคลือบแป้ง/กระดาษกล่องแป้งหลังเทา",
+              "unit": "kg",
+              "ef_value": 1.8679,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "9550f71d-13ad-40f0-b065-4adc1c808fd3",
+              "resource": "กระดาษคราฟท์ ชนิดทำผิวกล่อง",
+              "unit": "kg",
+              "ef_value": 1.6324,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "e4e190a0-798d-4695-8c2d-4170ae1b5caf",
+              "resource": "ขวดแก้วสีชา",
+              "unit": "kg",
+              "ef_value": 0.8305,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "28ea59a7-b9af-4edc-aada-bf4abfd4c937",
+              "resource": "ขวดแก้วใส",
+              "unit": "kg",
+              "ef_value": 0.8075,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "06349aca-7b1e-4f01-a4ae-08f5e8242cdc",
+              "resource": "Low Density Polyethylene (LDPE)",
+              "unit": "kg",
+              "ef_value": 2.6258,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "d07c1bb6-8279-4543-ae93-070883609186",
+              "resource": "High Density Polyethylene (HDPE)",
+              "unit": "kg",
+              "ef_value": 6.7071,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "d21d25dc-1187-4348-97a5-25b86bc9b66e",
-          "name_th": "การขนส่งและกระจายสินค้า (upstream)",
-          "name_en": "Upstream Transport & Distribution",
+          "id": "7a6dabae-a0cb-4155-a6fb-b239d54da162",
+          "name_th": "การขนส่งสินค้าและวัตถุดิบขาเข้า",
+          "name_en": "Upstream Transport of Raw Materials",
           "scope": 3,
           "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
-          "scope_sub_category": null,
+          "scope_sub_category": "Road transport",
           "scope_category": {
             "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
             "scope": 3,
@@ -338,9 +1265,74 @@
             "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
           },
           "is_common": false,
-          "sort_order": 120,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "3f39626e-c36a-43e7-8e4d-0024b66daf04",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0875,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "9d0b6723-31d9-42b0-a3e4-00662e6e9db6",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0734,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b3e3d8ab-b42c-4dc6-a402-d6d75b2a35bc",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1345,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c6faac3f-e7a1-4214-8aa9-c44934724f3a",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0942,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c512ca74-75c3-45e0-9e33-daabdfcd8ab8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0613,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3adef6b8-c710-4ee2-af89-14a07e450b4e",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.4273,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "686f3166-57a0-44e3-8d8c-14dac6140375",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0677,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0561dde0-2b02-4538-97cc-bd6209561ed3",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1247,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -355,48 +1347,12 @@
       "display_order": 3,
       "activity_groups": [
         {
-          "id": "a3a29fde-a298-486d-9e31-b42c22a5a12e",
-          "name_th": "การเผาไหม้จากการสำรวจและผลิต",
-          "name_en": "Upstream Combustion",
-          "scope": 1,
-          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
-            "scope": 1,
-            "name_en": "1) Stationary combustion",
-            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
-          },
-          "is_common": false,
-          "sort_order": 10,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "eda550ad-e706-45ae-8b0d-883840f06eba",
-          "name_th": "การปล่อย Fugitive จากท่อและวาล์ว",
-          "name_en": "Fugitive Emissions – Pipelines",
-          "scope": 1,
-          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
-            "scope": 1,
-            "name_en": "4) Fugitive emissions",
-            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
-          },
-          "is_common": false,
-          "sort_order": 20,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "1ae049bc-83ec-4e7b-a2ec-613e61d7528f",
-          "name_th": "การเผาทิ้ง (Flaring)",
+          "id": "c3848e7f-e9af-4978-b134-3e3a4cb12bfb",
+          "name_th": "การเผาทิ้ง",
           "name_en": "Flaring",
           "scope": 1,
           "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": "Flaring",
+          "scope_sub_category": null,
           "scope_category": {
             "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
@@ -404,9 +1360,283 @@
             "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 30,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "6f6f6af0-bf8f-48cd-bf29-6a8537d8d077",
+              "resource": "Natural Gas (HHV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.050151666,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "7cd7ce83-7edc-4972-9fe2-d2fe2f52f553",
+              "resource": "Natural Gas (HHV): MMBTU",
+              "unit": "MMBTU",
+              "ef_value": 52.9545,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "b988eaa1-7887-4cab-9190-7b56a0fd568d",
+              "resource": "Natural Gas (NCV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.0561545,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "8ce8ae77-5861-428c-8ef0-00ca5ef00019",
+              "resource": "Natural Gas (NCV): SCF",
+              "unit": "SCF",
+              "ef_value": 0.05727759,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "5c7787d2-75cb-4e27-8d50-9664b18b487b",
+          "name_th": "การจัดซื้อสารเคมี",
+          "name_en": "Purchased Chemicals & Reagents",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มปิโตรเคมี",
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": false,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "33556eca-97db-4ced-b508-9d3145b3327f",
+              "resource": "Acrylonitrile Butadiene Styrene (ABS)",
+              "unit": "kg",
+              "ef_value": 4.1597,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "dcafc0a3-8077-47ae-9d54-793b6c71f71e",
+              "resource": "Benzene",
+              "unit": "kg",
+              "ef_value": 1.3268,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "633414f7-3075-4a1e-ac7d-d546824a2851",
+              "resource": "Caprolactam (CPL)",
+              "unit": "kg",
+              "ef_value": 1.2916,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "52f3fc19-8314-4d3f-bf5f-7eeef04df8ed",
+              "resource": "Cyclohexane (CX)",
+              "unit": "kg",
+              "ef_value": 1.4132,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "200244c7-952e-435a-9282-44cb28dba1a1",
+              "resource": "Ethylene",
+              "unit": "kg",
+              "ef_value": 1.9562,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "f88b196d-49ba-4343-acd0-28297a6e4458",
+              "resource": "General Purposed Polystyrene (GPPS)",
+              "unit": "kg",
+              "ef_value": 3.2281,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "d07c1bb6-8279-4543-ae93-070883609186",
+              "resource": "High Density Polyethylene (HDPE)",
+              "unit": "kg",
+              "ef_value": 6.7071,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "77a3f693-efc2-4913-89c7-91a3637d97b6",
+              "resource": "High Impact Polystyrene (HIPS)",
+              "unit": "kg",
+              "ef_value": 3.6843,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b4033c22-a752-4a53-8ef9-caa691f6fef0",
+              "resource": "Linear Low Density Polyethylene (LLDPE)",
+              "unit": "kg",
+              "ef_value": 2.1356,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "06349aca-7b1e-4f01-a4ae-08f5e8242cdc",
+              "resource": "Low Density Polyethylene (LDPE)",
+              "unit": "kg",
+              "ef_value": 2.6258,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "caae484c-0cb8-4505-9e70-55ade527e729",
+              "resource": "Mixed C4",
+              "unit": "kg",
+              "ef_value": 1.1114,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "9929ba1f-a21c-46e0-a18d-ce6d7a68fa30",
+              "resource": "P-xylene",
+              "unit": "kg",
+              "ef_value": 0.9226,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e522734c-0b37-47b2-8c08-b2650b1a2e47",
+              "resource": "Ployvinyl Chloride (PVC)",
+              "unit": "kg",
+              "ef_value": 2.1331,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "46ffaee6-7f16-494e-b63a-5b117c1436b1",
+              "resource": "Polypropylene (PP)",
+              "unit": "kg",
+              "ef_value": 1.8814,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "919f8e5c-fc4a-402a-b63a-a60f3143445d",
+              "resource": "Propylene",
+              "unit": "kg",
+              "ef_value": 1.4473,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "52ce9e17-ca2b-4dd8-8772-0bbe698b8524",
+              "resource": "Styrene Acrylonitrile (SAN)",
+              "unit": "kg",
+              "ef_value": 3.0008,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "565995d7-831b-4481-b38e-35e3dc7404a1",
+              "resource": "Styrene Monomer (SM)",
+              "unit": "kg",
+              "ef_value": 2.3705,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c59acb34-6b9f-43aa-b35d-74012f3cfe9b",
+              "resource": "Toluene",
+              "unit": "kg",
+              "ef_value": 0.9551,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "8364cf28-84ff-4d69-8a8a-664d573045ae",
+              "resource": "Vinyl Chlodie Monomer (VCM)",
+              "unit": "kg",
+              "ef_value": 2.1793,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "c481f3e0-56c8-4d71-b57c-fb216d618dbf",
+          "name_th": "การขนส่งวัตถุดิบต้นน้ำ (ทางท่อและเรือบรรทุกของเหลว)",
+          "name_en": "Upstream Transportation (Pipeline & Tanker)",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": "Road transport",
+          "scope_category": {
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
+          },
+          "is_common": false,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "f31a8b63-1983-442a-a076-85dc39dd2072",
+              "resource": "LPG Tanker",
+              "unit": "tkm",
+              "ef_value": 0.01037,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            },
+            {
+              "id": "e42a9712-4158-4c37-9dfe-3b0bf3c9fd1f",
+              "resource": "LNG tanker",
+              "unit": "tkm",
+              "ef_value": 0.01153,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            },
+            {
+              "id": "32ba8612-2653-4143-a44a-9e64f9c84c17",
+              "resource": "Crude tanker",
+              "unit": "tkm",
+              "ef_value": 0.00457,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "6584d398-3b51-41a4-aa9b-6c649e279944",
+          "name_th": "การขุดเจาะหลุมและการปฏิบัติการภาคสนาม",
+          "name_en": "Well Drilling & Field Operations",
+          "scope": 1,
+          "scope_category_id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
+            "scope": 1,
+            "name_en": "2.1) Mobile combustion (Off road)",
+            "name_th": "2.1) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (Off road)"
+          },
+          "is_common": false,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "833f0233-f68d-43c5-90b1-921c3e902050",
+              "resource": "Diesel: Industry, L",
+              "unit": "Liter",
+              "ef_value": 2.978981184,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -421,58 +1651,74 @@
       "display_order": 4,
       "activity_groups": [
         {
-          "id": "90c66acc-2cd1-4bbe-8d27-d5b7804992ae",
-          "name_th": "เตาหลอมโลหะ (Furnace Combustion)",
-          "name_en": "Furnace Combustion",
+          "id": "2852a33a-3704-484b-abfb-db254b273850",
+          "name_th": "ถ่านโค้กและถ่านหินสำหรับเชื้อเพลิงในกระบวนการผลิต",
+          "name_en": "Coke & Coal for Process Fuel",
           "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
-          },
-          "is_common": false,
-          "sort_order": 10,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "330f09c1-eee5-452d-ad06-9c9e3fd51bdc",
-          "name_th": "กระบวนการผลิตโลหะ (Direct Process)",
-          "name_en": "Metal Process Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "84a32504-0d59-42cf-9663-844ec2a61cce",
+              "resource": "Bituminous Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.512467675,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "89a4253f-0350-4592-8efc-f73c34fe0ae6",
+              "resource": "Charcoal",
+              "unit": "kg",
+              "ef_value": 0.054872,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c318c42e-c51e-4b00-a348-589b73490451",
+              "resource": "Coking Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.632517325,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "a5847085-bb5a-4144-879c-c03b11adf0b9",
-          "name_th": "การใช้ไฟฟ้า (Electric Arc Furnace)",
-          "name_en": "Electric Arc Furnace Power Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "id": "5315aad6-a449-496c-bf28-c2e0e6470812",
+          "name_th": "กระบวนการถลุงและการทำให้บริสุทธิ์",
+          "name_en": "Smelting & Refining Process Emissions",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 30,
+          "sort_order": 40,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "c318c42e-c51e-4b00-a348-589b73490451",
+              "resource": "Coking Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.632517325,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -487,27 +1733,132 @@
       "display_order": 5,
       "activity_groups": [
         {
-          "id": "5d6101c6-6733-49d5-90ce-fa934750ddc1",
-          "name_th": "กระบวนการ Electrolysis",
-          "name_en": "Electrolysis Process Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": "PFC",
+          "id": "dfefe442-89e0-43e6-9cdb-39f67c92e037",
+          "name_th": "การขนส่งสินค้าและวัตถุดิบขาเข้า",
+          "name_en": "Upstream Transport of Raw Materials",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": "Road transport",
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
           },
           "is_common": false,
-          "sort_order": 10,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "147f3df1-bdda-4471-ab9e-78c3e592f770",
+              "resource": "Products tanker",
+              "unit": "tkm",
+              "ef_value": 0.00902,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            },
+            {
+              "id": "bb75ae1b-a7db-4816-a627-fec1d3aaf1a6",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.5344,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "09364ce4-803a-452e-8d0c-4d3010efd4de",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.59,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "ac70dd26-0042-4593-a7b6-900b9034d918",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0419,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "4cbcbe9e-da81-44a0-b8bd-013b8e828373",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0533,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "db938b72-e360-4158-a483-68fd14038730",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0972,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "414e2235-903d-4294-8693-bdfbeb938f23",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0786,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "58b72962-fae8-4959-9a07-6ada637dbb43",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0543,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0311285e-c6df-4816-83a9-e88bcc9a3094",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0691,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "aaf873ac-7826-473d-a727-75b8167042df",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.4923,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c512ca74-75c3-45e0-9e33-daabdfcd8ab8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0613,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "13b1de38-decd-49fc-9cb2-a450802fafd8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1083,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b6e89aad-a466-4b9c-a6b6-96517e38866b",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0768,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "fcbcca34-d410-465e-9a46-4cff88ca902f",
-          "name_th": "การเผาไหม้สำหรับ Anode baking",
-          "name_en": "Anode Baking Combustion",
+          "id": "c025f8c3-98e3-44f1-9adc-cdd603decf0a",
+          "name_th": "เชื้อเพลิงสำหรับถลุงและความร้อนในกระบวนการผลิต",
+          "name_en": "Smelting Fuel & Process Heat",
           "scope": 1,
           "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
@@ -518,27 +1869,50 @@
             "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 20,
+          "sort_order": 40,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "d7cf6343-fc7b-4b3c-95df-3b99103258ff",
-          "name_th": "การใช้ไฟฟ้า (Smelting)",
-          "name_en": "Smelting Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "0d8a9d54-31bb-40a3-8699-01ee8ebf1940",
+              "resource": "Fuel Oil C: L",
+              "unit": "Liter",
+              "ef_value": 3.245497564,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "6f6f6af0-bf8f-48cd-bf29-6a8537d8d077",
+              "resource": "Natural Gas (HHV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.050151666,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "7cd7ce83-7edc-4972-9fe2-d2fe2f52f553",
+              "resource": "Natural Gas (HHV): MMBTU",
+              "unit": "MMBTU",
+              "ef_value": 52.9545,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "b988eaa1-7887-4cab-9190-7b56a0fd568d",
+              "resource": "Natural Gas (NCV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.0561545,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "8ce8ae77-5861-428c-8ef0-00ca5ef00019",
+              "resource": "Natural Gas (NCV): SCF",
+              "unit": "SCF",
+              "ef_value": 0.05727759,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -553,58 +1927,122 @@
       "display_order": 6,
       "activity_groups": [
         {
-          "id": "f9753004-e1a8-42f1-80fc-f6424571401e",
-          "name_th": "การเผาไหม้จากเครื่องจักรเหมือง",
-          "name_en": "Mining Equipment Combustion",
+          "id": "b74480ce-ba19-4291-8487-fcdb8e22a0f4",
+          "name_th": "เครื่องจักรและอุปกรณ์สำหรับการทำเหมืองแร่",
+          "name_en": "Mining Equipment & Machinery",
           "scope": 1,
-          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_category_id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
             "scope": 1,
-            "name_en": "2.2) Mobile combustion (On road)",
-            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
-          },
-          "is_common": false,
-          "sort_order": 10,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "e6b00a13-d4bc-4d20-b5f5-eba696ffa0a8",
-          "name_th": "กระบวนการผลิตซีเมนต์/ปูนขาว",
-          "name_en": "Cement/Lime Process Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "name_en": "2.1) Mobile combustion (Off road)",
+            "name_th": "2.1) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (Off road)"
           },
           "is_common": false,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "833f0233-f68d-43c5-90b1-921c3e902050",
+              "resource": "Diesel: Industry, L",
+              "unit": "Liter",
+              "ef_value": 2.978981184,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "c8cf4245-6f65-423c-8bfb-055fd405e45d",
-          "name_th": "การใช้ไฟฟ้า",
-          "name_en": "Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
+          "id": "fd634061-cca1-4395-8caf-cb6dca25e77e",
+          "name_th": "การเผาไหม้เชื้อเพลิงในเตาเผา",
+          "name_en": "Kiln Fuel Combustion",
+          "scope": 1,
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
+            "scope": 1,
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 30,
+          "sort_order": 50,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "b9e6365c-56c5-43d0-aa7c-46c7b8dd18f9",
+              "resource": "Diesel: L",
+              "unit": "Liter",
+              "ef_value": 2.70757206,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ed366df3-3d67-4c7a-b94e-a6804b7b605e",
+              "resource": "Fuel Oil A: L",
+              "unit": "Liter",
+              "ef_value": 3.219775405,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "0d8a9d54-31bb-40a3-8699-01ee8ebf1940",
+              "resource": "Fuel Oil C: L",
+              "unit": "Liter",
+              "ef_value": 3.245497564,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "6f6f6af0-bf8f-48cd-bf29-6a8537d8d077",
+              "resource": "Natural Gas (HHV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.050151666,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "7cd7ce83-7edc-4972-9fe2-d2fe2f52f553",
+              "resource": "Natural Gas (HHV): MMBTU",
+              "unit": "MMBTU",
+              "ef_value": 52.9545,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "b988eaa1-7887-4cab-9190-7b56a0fd568d",
+              "resource": "Natural Gas (NCV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.0561545,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "8ce8ae77-5861-428c-8ef0-00ca5ef00019",
+              "resource": "Natural Gas (NCV): SCF",
+              "unit": "SCF",
+              "ef_value": 0.05727759,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "89a4253f-0350-4592-8efc-f73c34fe0ae6",
+              "resource": "Charcoal",
+              "unit": "kg",
+              "ef_value": 0.054872,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "84a32504-0d59-42cf-9663-844ec2a61cce",
+              "resource": "Bituminous Coal: kg",
+              "unit": "kg",
+              "ef_value": 2.512467675,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -619,12 +2057,95 @@
       "display_order": 7,
       "activity_groups": [
         {
-          "id": "a45a14bd-8682-4a20-9353-dfddfaf9a0fd",
-          "name_th": "การเผาไหม้ Biomass",
-          "name_en": "Biomass Combustion",
+          "id": "504a6069-4a87-4b60-b0fc-09ecd54fc8f5",
+          "name_th": "วัตถุดิบเส้นใยไม้และเยื่อกระดาษดิบขาเข้า",
+          "name_en": "Wood Fiber & Raw Pulp Inputs",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มอุตสาหกรรมโรงเลื่อยและโรงอบไม้ยางพารา (Wood Processing : Para-wood)",
+          "scope_category": {
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
+          },
+          "is_common": false,
+          "sort_order": 10,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "7bde3532-9f97-419e-8cb5-72821f7e8b3c",
+              "resource": "กระดาษกล่องขาวเคลือบแป้ง/กระดาษกล่องแป้งหลังเทา",
+              "unit": "kg",
+              "ef_value": 1.8679,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "9550f71d-13ad-40f0-b065-4adc1c808fd3",
+              "resource": "กระดาษคราฟท์ ชนิดทำผิวกล่อง",
+              "unit": "kg",
+              "ef_value": 1.6324,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "06869b63-9d46-4910-953c-a150cd05c10f",
+              "resource": "กระดาษคราฟท์ ชนิดทำลอน",
+              "unit": "kg",
+              "ef_value": 1.6184,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "dbe1368b-2333-4a75-b31f-b3c75bc46f34",
+              "resource": "กระดาษพิมพ์เขียนแบบเคลือบผิว",
+              "unit": "kg",
+              "ef_value": 2.1639,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA",
+              "note": null
+            },
+            {
+              "id": "d18dc9e6-e1f0-4ccb-a1e7-e6a3d5f475ab",
+              "resource": "กิ่งไม้ยางพารา",
+              "unit": "kg",
+              "ef_value": 0.0471,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "2f28a186-c43c-4afd-b71f-9f3faeaba149",
+              "resource": "ไม้ยางพาราท่อนสด",
+              "unit": "kg",
+              "ef_value": 0.0471,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "9783e7e4-0605-44d0-ad95-f3be65e3e823",
+              "resource": "ไม้ยางพาราสด",
+              "unit": "kg",
+              "ef_value": 0.0363,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "6110b435-dfef-4165-89e3-9b36dfb24dfc",
+              "resource": "พาเลทไม้ยางพารา",
+              "unit": "kg",
+              "ef_value": 0.093,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "01eae3af-93d7-4de0-a70e-c0176b10755c",
+          "name_th": "การเผาไหม้ชีวมวล",
+          "name_en": "Biomass Combustion (Recovery Boiler)",
           "scope": 1,
           "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": "Biogenic",
+          "scope_sub_category": null,
           "scope_category": {
             "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
@@ -632,45 +2153,93 @@
             "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 10,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "955a7e00-5051-4005-9c72-352d0c8c0a1e",
-          "name_th": "กระบวนการ Kraft pulping",
-          "name_en": "Chemical Pulping Process",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
-          },
-          "is_common": false,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "d4ae3c60-b37f-43e6-9f55-937f52959850",
+              "resource": "Baggasse",
+              "unit": "kg",
+              "ef_value": 0.014307,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ac8d2dd2-421f-4081-984d-d92c719b2afa",
+              "resource": "Saw dust",
+              "unit": "kg",
+              "ef_value": 0.020672,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "f7aca410-1a6a-4fec-b20f-3a033a95709d",
+              "resource": "Paddy husk",
+              "unit": "kg",
+              "ef_value": 0.02736,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "76c68488-a8ca-4ead-a4df-bad5d323e0cf",
+              "resource": "Fuel wood",
+              "unit": "kg",
+              "ef_value": 0.030381,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "dcdf1475-d0ae-4167-ace3-cca1442a16b4",
-          "name_th": "การใช้ไฟฟ้า",
-          "name_en": "Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
+          "id": "6c08e655-a3b9-45b9-bb77-c38b29803791",
+          "name_th": "การขนส่งสินค้าและวัตถุดิบขาเข้า",
+          "name_en": "Upstream Transport of Raw Materials",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": "Road transport",
           "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
           },
           "is_common": false,
-          "sort_order": 30,
+          "sort_order": 50,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "aaf873ac-7826-473d-a727-75b8167042df",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.4923,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c512ca74-75c3-45e0-9e33-daabdfcd8ab8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0613,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "13b1de38-decd-49fc-9cb2-a450802fafd8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1083,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b6e89aad-a466-4b9c-a6b6-96517e38866b",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0768,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -685,58 +2254,234 @@
       "display_order": 8,
       "activity_groups": [
         {
-          "id": "6e191665-0bf2-44de-86b5-46f991171d95",
-          "name_th": "กระบวนการผลิตสารเคมี",
-          "name_en": "Chemical Process Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
+          "id": "76ca86ae-4ad0-45be-bce8-4a8778d5e601",
+          "name_th": "การซื้อสินค้าวัตถุดิบ ",
+          "name_en": "Chemical Feedstock & Raw Materials",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มเคมีภัณฑ์ (Chemicals)",
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
           },
           "is_common": false,
-          "sort_order": 10,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "33556eca-97db-4ced-b508-9d3145b3327f",
+              "resource": "Acrylonitrile Butadiene Styrene (ABS)",
+              "unit": "kg",
+              "ef_value": 4.1597,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "633414f7-3075-4a1e-ac7d-d546824a2851",
+              "resource": "Caprolactam (CPL)",
+              "unit": "kg",
+              "ef_value": 1.2916,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "dcafc0a3-8077-47ae-9d54-793b6c71f71e",
+              "resource": "Benzene",
+              "unit": "kg",
+              "ef_value": 1.3268,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "52f3fc19-8314-4d3f-bf5f-7eeef04df8ed",
+              "resource": "Cyclohexane (CX)",
+              "unit": "kg",
+              "ef_value": 1.4132,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "200244c7-952e-435a-9282-44cb28dba1a1",
+              "resource": "Ethylene",
+              "unit": "kg",
+              "ef_value": 1.9562,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "f88b196d-49ba-4343-acd0-28297a6e4458",
+              "resource": "General Purposed Polystyrene (GPPS)",
+              "unit": "kg",
+              "ef_value": 3.2281,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "77a3f693-efc2-4913-89c7-91a3637d97b6",
+              "resource": "High Impact Polystyrene (HIPS)",
+              "unit": "kg",
+              "ef_value": 3.6843,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "d07c1bb6-8279-4543-ae93-070883609186",
+              "resource": "High Density Polyethylene (HDPE)",
+              "unit": "kg",
+              "ef_value": 6.7071,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b4033c22-a752-4a53-8ef9-caa691f6fef0",
+              "resource": "Linear Low Density Polyethylene (LLDPE)",
+              "unit": "kg",
+              "ef_value": 2.1356,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "06349aca-7b1e-4f01-a4ae-08f5e8242cdc",
+              "resource": "Low Density Polyethylene (LDPE)",
+              "unit": "kg",
+              "ef_value": 2.6258,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "caae484c-0cb8-4505-9e70-55ade527e729",
+              "resource": "Mixed C4",
+              "unit": "kg",
+              "ef_value": 1.1114,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "9929ba1f-a21c-46e0-a18d-ce6d7a68fa30",
+              "resource": "P-xylene",
+              "unit": "kg",
+              "ef_value": 0.9226,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e522734c-0b37-47b2-8c08-b2650b1a2e47",
+              "resource": "Ployvinyl Chloride (PVC)",
+              "unit": "kg",
+              "ef_value": 2.1331,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "46ffaee6-7f16-494e-b63a-5b117c1436b1",
+              "resource": "Polypropylene (PP)",
+              "unit": "kg",
+              "ef_value": 1.8814,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "52ce9e17-ca2b-4dd8-8772-0bbe698b8524",
+              "resource": "Styrene Acrylonitrile (SAN)",
+              "unit": "kg",
+              "ef_value": 3.0008,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "919f8e5c-fc4a-402a-b63a-a60f3143445d",
+              "resource": "Propylene",
+              "unit": "kg",
+              "ef_value": 1.4473,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "565995d7-831b-4481-b38e-35e3dc7404a1",
+              "resource": "Styrene Monomer (SM)",
+              "unit": "kg",
+              "ef_value": 2.3705,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "c59acb34-6b9f-43aa-b35d-74012f3cfe9b",
+              "resource": "Toluene",
+              "unit": "kg",
+              "ef_value": 0.9551,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "8364cf28-84ff-4d69-8a8a-664d573045ae",
+              "resource": "Vinyl Chlodie Monomer (VCM)",
+              "unit": "kg",
+              "ef_value": 2.1793,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e0870a10-53a3-451e-9e35-c420c8d118c3",
+              "resource": "Sulfur",
+              "unit": "kg",
+              "ef_value": 0.4529,
+              "ref_info": "Thai National LCI Database/MTEC",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "a8c13c84-6aa3-4dee-b800-96ecc29d92c9",
-          "name_th": "การเผาไหม้เชื้อเพลิงในโรงงาน",
-          "name_en": "Process Fuel Combustion",
-          "scope": 1,
-          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": null,
+          "id": "3c359208-ad2e-4668-ab35-cdb54909aba4",
+          "name_th": "การขนส่งสินค้าและวัตถุดิบขาเข้า",
+          "name_en": "Upstream Transport of Raw Materials",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": "Road transport",
           "scope_category": {
-            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
-            "scope": 1,
-            "name_en": "1) Stationary combustion",
-            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
           },
           "is_common": false,
-          "sort_order": 20,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "0bd73538-87d5-4766-b7bb-dbd9acdf6f22",
-          "name_th": "การใช้ไฟฟ้า",
-          "name_en": "Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "c512ca74-75c3-45e0-9e33-daabdfcd8ab8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0613,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "aaf873ac-7826-473d-a727-75b8167042df",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.4923,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "13b1de38-decd-49fc-9cb2-a450802fafd8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1083,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b6e89aad-a466-4b9c-a6b6-96517e38866b",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0768,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -751,58 +2496,63 @@
       "display_order": 9,
       "activity_groups": [
         {
-          "id": "cfc5b7e4-1b14-4ea7-87bd-038082d1887b",
-          "name_th": "การปล่อยก๊าซจากการดักจับ CO₂",
-          "name_en": "CO₂ Capture & Compression",
+          "id": "93d1f59b-c246-40fa-b108-d9960bf3556e",
+          "name_th": "เชื้อเพลิงในระบบอัดและขนส่ง",
+          "name_en": "Compression & Transport Fuel",
           "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
-          "sort_order": 10,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "3478132a-59b0-47c3-90b1-fe545b6cbd3f",
-          "name_th": "การใช้ไฟฟ้าในกระบวนการดักจับ",
-          "name_en": "CCS Auxiliary Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 20,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "b4af8a4e-c7c7-4a93-a1a0-d3e8cd7fb68e",
-          "name_th": "การเดินทาง / ยานพาหนะ",
-          "name_en": "Company Vehicle Use",
-          "scope": 1,
-          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
-            "scope": 1,
-            "name_en": "2.2) Mobile combustion (On road)",
-            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "b9e6365c-56c5-43d0-aa7c-46c7b8dd18f9",
+              "resource": "Diesel: L",
+              "unit": "Liter",
+              "ef_value": 2.70757206,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "8ce8ae77-5861-428c-8ef0-00ca5ef00019",
+              "resource": "Natural Gas (NCV): SCF",
+              "unit": "SCF",
+              "ef_value": 0.05727759,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "b988eaa1-7887-4cab-9190-7b56a0fd568d",
+              "resource": "Natural Gas (NCV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.0561545,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "7cd7ce83-7edc-4972-9fe2-d2fe2f52f553",
+              "resource": "Natural Gas (HHV): MMBTU",
+              "unit": "MMBTU",
+              "ef_value": 52.9545,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            },
+            {
+              "id": "6f6f6af0-bf8f-48cd-bf29-6a8537d8d077",
+              "resource": "Natural Gas (HHV): MJ",
+              "unit": "MJ",
+              "ef_value": 0.050151666,
+              "ref_info": "2021 API Compendium, Table 4.3 & Table 4.6",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -817,30 +2567,39 @@
       "display_order": 10,
       "activity_groups": [
         {
-          "id": "5d60e82b-fc4a-46c3-ac58-e3898a5ba117",
-          "name_th": "การเผาไหม้เชื้อเพลิงในยานพาหนะ",
-          "name_en": "Vehicle Fuel Combustion",
+          "id": "9fa89908-33c5-4e61-a935-6ec28b6b5ff4",
+          "name_th": "การเผาไหม้เชื้อเพลิงอากาศยาน",
+          "name_en": "Aviation Fuel Combustion",
           "scope": 1,
-          "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+          "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
+            "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
-            "name_en": "2.2) Mobile combustion (On road)",
-            "name_th": "2.2) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (On road)"
+            "name_en": "1) Stationary combustion",
+            "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
           "sort_order": 10,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "34288965-16a3-44f6-940a-16c4cf7980e0",
+              "resource": "Jet Kerosene: L",
+              "unit": "Liter",
+              "ef_value": 2.47728579,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "3114ff32-0557-4a4e-9676-7b080ba73556",
-          "name_th": "การเผาไหม้เชื้อเพลิง Aviation",
-          "name_en": "Aviation Combustion",
+          "id": "c0c9c4df-e58e-45c5-bfd4-2f51fbc3f091",
+          "name_th": "การปฏิบัติการกองรถขนส่ง",
+          "name_en": "Road Fleet Operations",
           "scope": 1,
           "scope_category_id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
-          "scope_sub_category": "Aviation",
+          "scope_sub_category": null,
           "scope_category": {
             "id": "106770c3-d1ca-4028-9daf-65eb0e0312aa",
             "scope": 1,
@@ -850,25 +2609,56 @@
           "is_common": false,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "e4e6fcf2-64b0-4b34-9c8b-e3aa43822f37",
-          "name_th": "การใช้ไฟฟ้า (สถานี/อาคาร)",
-          "name_en": "Station & Building Electricity",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "a85671ec-ded4-465a-aad9-f08d032be2ab",
+              "resource": "Diesel (B7)",
+              "unit": "Liter",
+              "ef_value": 2.550372739,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "12abd973-bf38-4cbb-9fa6-5fbf0b51437d",
+              "resource": "CNG: kg",
+              "unit": "kg",
+              "ef_value": 2.2539509,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "2ef7fd7c-abc7-4bba-a822-b90505617fab",
+              "resource": "LPG: litre",
+              "unit": "Liter",
+              "ef_value": 1.72734518,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "ead0d6cf-b5ff-4c9c-9be1-f9ef4815b11c",
+              "resource": "Motor Gasoline - low mileage light duty vihicle vintage 1995 or later: L",
+              "unit": "Liter",
+              "ef_value": 2.232464012,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "1edde553-5788-4215-99f0-a10b8d908522",
+              "resource": "Motor Gasoline - oxydation catalyst: L",
+              "unit": "Liter",
+              "ef_value": 2.2703376,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "c8dc951b-e26a-4e21-a1a2-768941dbde03",
+              "resource": "Motor Gasoline - uncontrolled: L",
+              "unit": "Liter",
+              "ef_value": 2.23734656,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 & 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -883,58 +2673,31 @@
       "display_order": 11,
       "activity_groups": [
         {
-          "id": "46c75df8-0b6c-4b6c-a5da-d25b004609f8",
-          "name_th": "การปล่อยก๊าซจาก Landfill",
-          "name_en": "Landfill Gas Emissions",
-          "scope": 1,
-          "scope_category_id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
+          "id": "5ac80d56-51b0-446b-9462-75a0114cfad9",
+          "name_th": "การเก็บรวบรวมและการขนส่งของเสีย",
+          "name_en": "Waste Collection & Transport",
+          "scope": 3,
+          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
           "scope_sub_category": null,
           "scope_category": {
-            "id": "1f710731-fbc0-4bac-b3a8-9714a1d2c31b",
-            "scope": 1,
-            "name_en": "4) Fugitive emissions",
-            "name_th": "4) การรั่วไหล และอื่น ๆ (Fugitive emissions)"
+            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
+            "scope": 3,
+            "name_en": "Category 5 Waste generated in operations",
+            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
           },
           "is_common": false,
-          "sort_order": 10,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "7a075aee-ccbc-43bd-8594-076e3a13d85b",
-          "name_th": "กระบวนการบำบัดน้ำเสีย",
-          "name_en": "Wastewater Treatment Process",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
-          },
-          "is_common": false,
-          "sort_order": 20,
-          "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "15a11937-17cc-45da-92c0-14738aaac480",
-          "name_th": "การใช้ไฟฟ้าในกระบวนการ",
-          "name_en": "Process Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "170af492-ba02-4287-a6a6-cd5452bf06c8",
+              "resource": "การจัดเก็บรวบรวม และขนถ่ายขยะมูลฝอยชุมชน",
+              "unit": "kg",
+              "ef_value": 0.0143,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -949,12 +2712,12 @@
       "display_order": 12,
       "activity_groups": [
         {
-          "id": "490c6d5e-9a06-42cb-a2cf-b0d3f649f855",
-          "name_th": "การเผาไหม้ในการเกษตร (Field burning)",
-          "name_en": "Agricultural Field Burning",
+          "id": "8e0a37b4-9fda-4e69-a519-4ee5c75f6853",
+          "name_th": "การเผาเศษวัสดุเหลือใช้ทางการเกษตร",
+          "name_en": "Crop Residue Burning",
           "scope": 1,
           "scope_category_id": "258d3478-6e31-442c-8943-138d7b4d150c",
-          "scope_sub_category": "Biogenic",
+          "scope_sub_category": null,
           "scope_category": {
             "id": "258d3478-6e31-442c-8943-138d7b4d150c",
             "scope": 1,
@@ -962,45 +2725,523 @@
             "name_th": "1) การเผาไหม้อยู่กับที่ (Stationary combustion)"
           },
           "is_common": false,
+          "sort_order": 0,
+          "status": "active",
+          "fuel_resources": [
+            {
+              "id": "d4ae3c60-b37f-43e6-9f55-937f52959850",
+              "resource": "Baggasse",
+              "unit": "kg",
+              "ef_value": 0.014307,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "f7aca410-1a6a-4fec-b20f-3a033a95709d",
+              "resource": "Paddy husk",
+              "unit": "kg",
+              "ef_value": 0.02736,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "41992cd2-e912-4ec4-97b3-ed6257529107",
+          "name_th": "เครื่องจักรทางเกษตรและการปฏิบัติงานในพื้นที่เพาะปลูก",
+          "name_en": "Agricultural Machinery & Field Operations",
+          "scope": 1,
+          "scope_category_id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
+          "scope_sub_category": null,
+          "scope_category": {
+            "id": "41a74307-e3a7-468c-b7bd-b12f8a24113a",
+            "scope": 1,
+            "name_en": "2.1) Mobile combustion (Off road)",
+            "name_th": "2.1) การเผาไหม้ที่มีการเคลื่อนที่ (Mobile combustion) (Off road)"
+          },
+          "is_common": false,
           "sort_order": 10,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "66f09ecc-78fb-434a-8f7b-fafa8987d9ba",
+              "resource": "Diesel: Aggriculture, L",
+              "unit": "Liter",
+              "ef_value": 2.978981184,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "5b1b90cb-e05a-4847-9a3d-17c555b14080",
+              "resource": "Diesel: Forestry, L",
+              "unit": "Liter",
+              "ef_value": 2.978981184,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "5ac6996f-c829-4a0f-ad03-3c3e29de7dd4",
+              "resource": "Gasohol E10,  4-stroke: Aggriculture, L",
+              "unit": "Liter",
+              "ef_value": 2.0506072,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "b96906c0-84d6-4e6d-b28e-b6e77d6b3a43",
+              "resource": "Motor Gasoline 4-stroke: Aggriculture, L",
+              "unit": "Liter",
+              "ef_value": 2.2687636,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "46d2e0da-db29-4336-91e2-5ffd7cdb4cf0",
+              "resource": "Gasohol E10,   2-stroke:  Forestry, L",
+              "unit": "Liter",
+              "ef_value": 2.11658928,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            },
+            {
+              "id": "a1c53666-6904-4a0b-b621-db45e7b4d23e",
+              "resource": "Gasohol E10,  4-stroke:  Forestry, L",
+              "unit": "Liter",
+              "ef_value": 1.9634076,
+              "ref_info": "IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "a64181f5-dedc-4dc4-a0f6-123a5b23b308",
-          "name_th": "การหมักย่อย Enteric fermentation",
-          "name_en": "Enteric Fermentation (Livestock)",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": "Biological",
+          "id": "cd21f024-f2bb-4e4f-a069-6c3706dd9a13",
+          "name_th": "ปัจจัยการผลิตทางการเกษตรที่จัดซื้อ",
+          "name_en": "Purchased Agricultural Inputs",
+          "scope": 3,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มอาหารสัตว์",
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+            "scope": 3,
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
           },
           "is_common": false,
-          "sort_order": 20,
+          "sort_order": 70,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "3db36974-904f-49b7-bb62-49b445987a65",
+              "resource": "กระถินสดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0014,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "1b4cb589-195d-4cce-9458-8bf9baaddce2",
+              "resource": "กากถั่วเหลือง",
+              "unit": "kg",
+              "ef_value": 1.024,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "ece020fd-7f40-4fcd-bb24-42bd3454fe8c",
+              "resource": "การปลูกข้าวโพดเลี้ยงสัตว์",
+              "unit": "kg",
+              "ef_value": 0.2441,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "2822daa1-f014-4036-a819-3dc8877ee6f6",
+              "resource": "ถั่วเหลือง",
+              "unit": "kg",
+              "ef_value": 0.728,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "bcebf2e7-3c86-4b66-879f-c5c5cbe8364d",
+              "resource": "ถั่วเหลืองอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0969,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "277bea4a-34d9-4c9a-9ac5-204df100f6ac",
+              "resource": "ถั่วฮามาต้าสดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0043,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b7a0b2bf-d4bf-4efd-b94d-47725980215d",
+              "resource": "อาหารสุกรขุน",
+              "unit": "kg",
+              "ef_value": 0.8659,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3002c243-1d33-413f-9f31-48193d21e0ad",
+              "resource": "อาหารข้นโคนมอินทรีย์ (16-18% โปรตีน) สำหรับการเลี้ยงตลอดวัฎจักรชีวิต (Life cycle)",
+              "unit": "kg",
+              "ef_value": 0.3056,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "aaed39b3-2f49-4d06-9e06-6da92e1fe39f",
+              "resource": "อาหารข้นโคนมอินทรีย์ (16-18% โปรตีน) สำหรับการเลี้ยงเฉพาะช่วงให้น้ำนม (Lactation)",
+              "unit": "kg",
+              "ef_value": 0.4148,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e7acf7d5-1128-4611-9caa-c03bca77a304",
+              "resource": "อาหารข้นโคนมอินทรีย์ (16-18% โปรตีน)",
+              "unit": "kg",
+              "ef_value": 0.6715,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e649d30d-3f70-40b6-85f7-4b54f3cdf917",
+              "resource": "อาหารไก่เนื้อที่มีโปรตีนจากเนื้อสัตว์เป็นองค์ประกอบ",
+              "unit": "kg",
+              "ef_value": 0.8132,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "1f98155c-a401-446f-ba9b-d276ec231bf6",
+              "resource": "อาหารไก่เนื้อที่ไม่มีโปรตีนจากเนื้อสัตว์เป็นองค์ประกอบ",
+              "unit": "kg",
+              "ef_value": 0.9183,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0415c1ef-d61e-405d-b9ce-a5b8025eb52a",
+              "resource": "อาหารไก่ไข่",
+              "unit": "kg",
+              "ef_value": 0.7083,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "a25915d5-9bf8-4fae-aaec-1c520284aa84",
+              "resource": "หญ้ารูซี่สดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0045,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "223eedd7-527f-4dda-823a-f319f61f4859",
+              "resource": "หญ้าแพงโกล่าสดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0034,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "2ad0efc0-4437-41a0-97ea-29f67206fb96",
+              "resource": "หญ้าเนเปียร์อินทรีย์ หมักด้วยถุงพลาสติก",
+              "unit": "kg",
+              "ef_value": 0.004,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "82dbfeb4-13fa-49de-8e1a-536a806349d3",
+              "resource": "หญ้าเนเปียร์สดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0014,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "de93e0d1-5bdf-4b05-b71f-9f6bcedcff58",
+              "resource": "หญ้ากินนีอินทรีย์ หมักด้วยไซโล",
+              "unit": "kg",
+              "ef_value": 0.0031,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "53eea9ac-a25d-4951-ac70-1f11368ae142",
+              "resource": "หญ้ากินนีแห้งอินทรีย์ (ความชื้น 10%)",
+              "unit": "kg",
+              "ef_value": 0.018,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "4845262c-f749-4106-ac87-6cacdc5970a4",
+              "resource": "หญ้ากินนีสดอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0018,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3f48f799-514d-4e84-8ec5-221fb5020d21",
+              "resource": "เศษปลาจากทูน่า",
+              "unit": "kg",
+              "ef_value": 1.2702,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "28c8b9eb-7ed3-48b7-83d8-3f77e43b0296",
+              "resource": "เศษปลาจากซูริมิ",
+              "unit": "kg",
+              "ef_value": 0.2071,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0582876a-43aa-4873-b244-68ff9bfaaa65",
+              "resource": "แร่ธาตุและวิตามินพรีมิกซ์",
+              "unit": "kg",
+              "ef_value": 1.7246,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "be61adf7-b6a7-4f31-83d2-bb7568932136",
+              "resource": "แร่ธาตุพรีมิกซ์",
+              "unit": "kg",
+              "ef_value": 0.1748,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "f9118c06-ea57-450e-855d-9caf11c2a3b3",
+              "resource": "เมล็ดข้าวโพดเลี้ยงสัตว์",
+              "unit": "kg",
+              "ef_value": 0.3235,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "6d688eba-d306-4a88-8c6a-c6d0162c3c28",
+              "resource": "มันสำปะหลังหมักอินทรีย์",
+              "unit": "kg",
+              "ef_value": 0.0833,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3d5f6cee-d6d5-40c4-b849-41e147c46cea",
+              "resource": "เมล็ดข้าวโพดเลี้ยงสัตว์",
+              "unit": "kg",
+              "ef_value": 0.2827,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "636b7f80-ed77-4717-91ce-3022191da5ad",
+              "resource": "มันสำปะหลัง (ปลูกแบบปลอดภัย; อินทรีย์)",
+              "unit": "kg",
+              "ef_value": 0.053,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "961deaff-4f56-4534-b05d-751cd84f8e14",
+              "resource": "มันสำปะหลัง",
+              "unit": "kg",
+              "ef_value": 0.0489,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "90a77127-a3dd-48c8-9e7e-afa80d95a84f",
+              "resource": "ปลาเป็ด",
+              "unit": "kg",
+              "ef_value": 0.2071,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "d206659d-876d-43cc-acf7-66cf75283bd2",
+              "resource": "ปลาป่นที่ผลิตจากเศษปลาทูน่า",
+              "unit": "kg",
+              "ef_value": 3.7187,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e58c81d9-d681-47e6-bb0d-030df5dfb016",
+              "resource": "ปลาป่นที่ผลิตจากเศษปลาซูริมิ",
+              "unit": "kg",
+              "ef_value": 1.7598,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "25817acf-c6bc-4db9-8210-a41304c2f00a",
+              "resource": "ปลาป่นที่ผลิตจากปลาเป็ด",
+              "unit": "kg",
+              "ef_value": 5.1364,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "87e71778-d245-408d-a0cc-9100de847eb7",
-          "name_th": "การใช้ปุ๋ย / N₂O จากดิน",
-          "name_en": "Soil N₂O Emissions",
-          "scope": 1,
-          "scope_category_id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-          "scope_sub_category": "N2O",
+          "id": "2cc683a8-3a85-4952-b30b-f1c165daf696",
+          "name_th": "การขนส่งสินค้าและวัตถุดิบขาเข้า",
+          "name_en": "Upstream Transport of Raw Materials",
+          "scope": 3,
+          "scope_category_id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+          "scope_sub_category": "Road transport",
           "scope_category": {
-            "id": "9ef008d0-887f-4a9c-a20c-3ee013ce00f5",
-            "scope": 1,
-            "name_en": "3) Process emissions",
-            "name_th": "3) กระบวนการผลิต (Process emissions)"
+            "id": "38253b3c-5796-42a4-a502-cacdb7d3009a",
+            "scope": 3,
+            "name_en": "Category 4 Upstream transportation and distribution",
+            "name_th": "Category 4 การขนส่งและกระจายสินค้าต้นน้ำ"
           },
           "is_common": false,
-          "sort_order": 30,
+          "sort_order": 80,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "8e8853d6-dbf4-433f-a4ef-26ef3dc5e7c9",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading",
+              "unit": "km",
+              "ef_value": 0.7513,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "cce68eb0-5cb8-4390-91d9-38ea8fa8997d",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0639,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "92cbaa82-5ada-4b5a-a205-db0dc2bed806",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1201,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "ea9f221d-2f8e-4166-b81c-82b16dd26168",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0684,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "09364ce4-803a-452e-8d0c-4d3010efd4de",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.59,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "4cbcbe9e-da81-44a0-b8bd-013b8e828373",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0533,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "414e2235-903d-4294-8693-bdfbeb938f23",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0786,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0311285e-c6df-4816-83a9-e88bcc9a3094",
+              "resource": "รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0691,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "e7490eaa-5de9-428a-a1e3-0a83b4609224",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0749,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "fe361175-10f7-48e3-822e-1d8ffd06de14",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1443,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "add22b66-978a-40c5-b75f-f5d541267ef8",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 0% Loading",
+              "unit": "km",
+              "ef_value": 0.5133,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "b199ec00-284e-4f70-a6c6-b3fd7c1d659e",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.099,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3adef6b8-c710-4ee2-af89-14a07e450b4e",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 0% Loading",
+              "unit": "km",
+              "ef_value": 0.4273,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "686f3166-57a0-44e3-8d8c-14dac6140375",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 100% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0677,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "0561dde0-2b02-4538-97cc-bd6209561ed3",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 50% Loading",
+              "unit": "tkm",
+              "ef_value": 0.1247,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "3f39626e-c36a-43e7-8e4d-0024b66daf04",
+              "resource": "รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 75% Loading",
+              "unit": "tkm",
+              "ef_value": 0.0875,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     },
@@ -1015,58 +3256,98 @@
       "display_order": 13,
       "activity_groups": [
         {
-          "id": "7e460bb7-5d95-4957-9a80-5e21ef8c6ac3",
-          "name_th": "การใช้ไฟฟ้าในอาคาร",
-          "name_en": "Building Electricity Use",
-          "scope": 2,
-          "scope_category_id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-          "scope_sub_category": null,
+          "id": "4948daf7-8fce-4817-addc-d7555659db3a",
+          "name_th": "การเดินทางของลูกค้า/ผู้ป่วย",
+          "name_en": "Client/Patient Transport",
+          "scope": 3,
+          "scope_category_id": "d237af54-4b32-432f-b4d6-fa889c1d5790",
+          "scope_sub_category": "Road ไม่ทราบปริมาณเชื้อเพลิง",
           "scope_category": {
-            "id": "db105ad6-1ebe-42b0-8e85-ba6058462bba",
-            "scope": 2,
-            "name_en": "Purchased Electricity",
-            "name_th": "การใช้พลังงานไฟฟ้า"
+            "id": "d237af54-4b32-432f-b4d6-fa889c1d5790",
+            "scope": 3,
+            "name_en": "Category 6 Business travel",
+            "name_th": "Category 6 การเดินทางเพื่อธุรกิจ"
           },
           "is_common": false,
-          "sort_order": 10,
+          "sort_order": 0,
           "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "ee3724aa-4021-4b7d-9216-d7a0600494fa",
+              "resource": "International: Average passenger",
+              "unit": "passenger.km",
+              "ef_value": 0.14253,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2026",
+              "note": null
+            },
+            {
+              "id": "7d24e800-6254-48b2-baaf-e276057091e8",
+              "resource": "Domestic",
+              "unit": "passenger.km",
+              "ef_value": 0.22928,
+              "ref_info": "DEFRA: Greenhouse gas reporting: conversion factors 2025",
+              "note": null
+            },
+            {
+              "id": "23df923d-fc4f-4f9a-80b0-4930c59632a3",
+              "resource": "รถ LPG: LPG",
+              "unit": "km",
+              "ef_value": 0.1938230552,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            },
+            {
+              "id": "40376cdd-853f-422b-8a5f-7b7a69cb8a81",
+              "resource": "รถ NGV: CNG",
+              "unit": "km",
+              "ef_value": 0.1899138597,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, PTT",
+              "note": null
+            },
+            {
+              "id": "d3e72a6f-3b71-4d03-9fd2-514a90533002",
+              "resource": "รถยนต์เฉลี่ยทุกขนาด: เบนซิน",
+              "unit": "km",
+              "ef_value": 0.1538922712,
+              "ref_info": "IPCC Vol.2 table 3.2.1, 3.2.2, DEDE",
+              "note": null
+            }
+          ]
         },
         {
-          "id": "0363df44-ece0-4ea3-8807-c2b969035bc0",
-          "name_th": "การเดินทางของพนักงาน",
-          "name_en": "Employee Commuting",
+          "id": "aca4cd61-b007-48ed-872a-cd503432512e",
+          "name_th": "การจัดซื้ออาหารและบริการจัดเลี้ยง",
+          "name_en": "Purchased Food & Catering",
           "scope": 3,
-          "scope_category_id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
-          "scope_sub_category": null,
+          "scope_category_id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
+          "scope_sub_category": "กลุ่มผลิตภัณฑ์ทางการเกษตรและอาหาร",
           "scope_category": {
-            "id": "7b94b964-7557-4653-bb25-c2fd8d9ebeab",
+            "id": "2d66962c-6ef4-4d01-b7f0-4ac2d506127c",
             "scope": 3,
-            "name_en": "Category 7 Employee commuting",
-            "name_th": "Category 7 การเดินทางของพนักงาน"
+            "name_en": "Category 1 Purchased goods and services",
+            "name_th": "Category 1 การซื้อวัตถุดิบ และบริการ"
           },
           "is_common": false,
           "sort_order": 20,
           "status": "active",
-          "fuel_resources": []
-        },
-        {
-          "id": "bf62fb1a-d603-4913-9718-a4ce8154b2f9",
-          "name_th": "การจัดการของเสีย",
-          "name_en": "Waste Generation",
-          "scope": 3,
-          "scope_category_id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
-          "scope_sub_category": null,
-          "scope_category": {
-            "id": "041b4885-2ded-463e-806d-e29d61b6a2cc",
-            "scope": 3,
-            "name_en": "Category 5 Waste generated in operations",
-            "name_th": "Category 5 การจัดการของเสียที่เกิดจากการด าเนินกิจกรรมขององค์กร"
-          },
-          "is_common": false,
-          "sort_order": 30,
-          "status": "active",
-          "fuel_resources": []
+          "fuel_resources": [
+            {
+              "id": "72db359b-879b-4379-ad4b-65c7d86133a6",
+              "resource": "กาแฟสารอราบิก้า (ค่าเฉลี่ย)",
+              "unit": "kg",
+              "ef_value": 7.2511,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            },
+            {
+              "id": "042edf82-8cdf-46d3-885e-ea6076748b3f",
+              "resource": "กาแฟโรบัสตา",
+              "unit": "kg",
+              "ef_value": 8.0986,
+              "ref_info": "Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2016-2018)",
+              "note": null
+            }
+          ]
         }
       ]
     }

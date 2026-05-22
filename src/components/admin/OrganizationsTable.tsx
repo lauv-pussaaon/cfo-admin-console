@@ -1,16 +1,16 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Link, Chip } from '@mui/material'
+import { Box, IconButton, Paper, Chip } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import { 
   Edit as EditIcon, 
   Delete as DeleteIcon,
-  Launch as LaunchIcon,
   FileDownload as FileDownloadIcon,
   PersonAdd as PersonAddIcon,
 } from '@mui/icons-material'
 import type { OrganizationWithStats } from '@/types/database'
+import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 
 interface Props {
   onEdit: (id: string) => void
@@ -29,7 +29,7 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
       code: org.code || '-',
       description: org.description || '-',
       userCount: org.userCount || 0,
-      app_url: org.app_url || null,
+      account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
       is_initialized: org.is_initialized || false,
       factory_admin_email: org.factory_admin_email || '-',
       created_at: org.created_at,
@@ -112,27 +112,19 @@ export default function OrganizationsTable({ onEdit, onDelete, onExport, onInvit
       ),
     },
     {
-      field: 'app_url',
-      headerName: 'App URL',
-      width: 200,
-      flex: 1,
-      minWidth: 150,
-      renderCell: (params) => {
-        if (!params.value) {
-          return <Box sx={{ color: 'text.secondary', fontStyle: 'italic' }}>ยังไม่ได้ตั้งค่า</Box>
-        }
-        return (
-          <Link
-            href={params.value}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-          >
-            <LaunchIcon fontSize="small" />
-            {params.value}
-          </Link>
-        )
-      },
+      field: 'account_type',
+      headerName: 'ประเภทบัญชี',
+      width: 160,
+      flex: 0.8,
+      minWidth: 140,
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          size="small"
+          variant="outlined"
+          sx={{ fontWeight: 500 }}
+        />
+      ),
     },
     {
       field: 'created_at',

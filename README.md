@@ -58,8 +58,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```bash
    # In Supabase SQL Editor, run:
    database/02_seed_master_data.sql
+   database/05_seed_organizations_clients.sql
    ```
    **Note**: Update the password hash in `02_seed_master_data.sql` with your actual default admin password hash.
+
+4. Verify seeded client organizations:
+   ```sql
+   -- Expect 23 rows
+   SELECT COUNT(*) AS org_count
+   FROM organizations
+   WHERE code BETWEEN 'cbis0101' AND 'cbis0123';
+
+   -- Verify mapping
+   SELECT code, name, factory_admin_email
+   FROM organizations
+   WHERE code BETWEEN 'cbis0101' AND 'cbis0123'
+   ORDER BY code;
+   ```
 
 ## User Roles
 

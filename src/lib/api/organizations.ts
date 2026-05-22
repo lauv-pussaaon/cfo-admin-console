@@ -3,6 +3,8 @@ import type {
   Organization,
   UserOrganization,
 } from '@/types/database'
+import type { AccountType } from '@/types/account-types'
+import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 import { handleSupabaseError, ValidationError, throwIfError } from '@/lib/utils/errors'
 import type { User } from './types'
 
@@ -356,6 +358,7 @@ export const createOrganization = async (
     description?: string | null
     app_url?: string | null
     factory_admin_email?: string | null
+    account_type?: AccountType
     created_by?: string | null
     assignedUserId?: string | null
   }
@@ -368,6 +371,7 @@ export const createOrganization = async (
       description: data.description || null,
       app_url: data.app_url || null,
       factory_admin_email: data.factory_admin_email || null,
+      account_type: data.account_type ?? DEFAULT_ACCOUNT_TYPE,
       is_initialized: false,
       created_by: data.created_by || null,
     })
@@ -400,6 +404,7 @@ export const updateOrganization = async (
     is_initialized: boolean
     initialized_at: string | null
     factory_admin_email: string | null
+    account_type: AccountType
   }>
 ): Promise<Organization> => {
   // Get old record before update

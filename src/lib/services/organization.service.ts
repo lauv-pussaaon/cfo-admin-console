@@ -26,6 +26,7 @@ import {
   type OrganizationWithCreator,
 } from '../api/organizations'
 import type { User } from '../api'
+import type { AccountType } from '@/types/account-types'
 
 export class OrganizationService {
   private supabase: SupabaseClient
@@ -57,6 +58,7 @@ export class OrganizationService {
       description?: string | null
       app_url?: string | null
       factory_admin_email?: string | null
+      account_type?: AccountType
       created_by?: string | null
       assignedUserId?: string | null
     }
@@ -139,6 +141,7 @@ export class OrganizationService {
       is_initialized: boolean
       initialized_at: string | null
       factory_admin_email: string | null
+      account_type: AccountType
     }>
   ): Promise<Organization> {
     return updateOrganizationAPI(id, updates)

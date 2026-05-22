@@ -31,6 +31,12 @@ import type { Organization } from '@/types/database'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { isAdmin, isDealer } from '@/lib/permissions'
+import {
+  ACCOUNT_TYPE_OPTIONS,
+  ACCOUNT_TYPE_VALUES,
+  DEFAULT_ACCOUNT_TYPE,
+  type AccountType,
+} from '@/types/account-types'
 
 interface AdminOrganizationModalProps {
   open: boolean
@@ -44,6 +50,7 @@ interface AdminOrganizationModalProps {
 // Note: app_url and factory_admin_email are only shown in edit mode, so they're optional
 const organizationSchema = z.object({
   name: z.string().min(1, 'กรุณากรอกชื่อองค์กร'),
+  account_type: z.enum(ACCOUNT_TYPE_VALUES),
   code: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   app_url: z.string().url('กรุณากรอก URL ที่ถูกต้อง').optional().nullable().or(z.literal('')),
@@ -76,6 +83,7 @@ export default function AdminOrganizationModal({
     mode: 'onChange',
     defaultValues: {
       name: '',
+      account_type: DEFAULT_ACCOUNT_TYPE,
       code: '',
       description: '',
       app_url: '',
@@ -150,6 +158,7 @@ export default function AdminOrganizationModal({
       if (mode === 'edit' && initialData) {
         reset({
           name: initialData.name || '',
+          account_type: initialData.account_type ?? DEFAULT_ACCOUNT_TYPE,
           code: initialData.code || '',
           description: initialData.description || '',
           app_url: initialData.app_url || '',
@@ -160,6 +169,7 @@ export default function AdminOrganizationModal({
       } else {
         reset({
           name: '',
+          account_type: DEFAULT_ACCOUNT_TYPE,
           code: '',
           description: '',
           app_url: '',
@@ -190,6 +200,7 @@ export default function AdminOrganizationModal({
             app_url: data.app_url || null,
             factory_admin_email: data.factory_admin_email || null,
             is_initialized: data.is_initialized ?? false,
+            account_type: data.account_type,
           }
         )
         organizationId = updated.id
@@ -210,6 +221,7 @@ export default function AdminOrganizationModal({
           description: data.description || null,
           app_url: data.app_url || null,
           factory_admin_email: data.factory_admin_email || null,
+          account_type: data.account_type,
           created_by: user?.id || null,
           assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
         })
@@ -316,6 +328,27 @@ export default function AdminOrganizationModal({
                   },
                 }}
               />
+
+              <FormControl fullWidth error={!!errors.account_type}>
+                <InputLabel>ประเภทบัญชี</InputLabel>
+                <Select
+                  value={watch('account_type')}
+                  onChange={(e) => setValue('account_type', e.target.value as AccountType, { shouldValidate: true })}
+                  label="ประเภทบัญชี"
+                  disabled={isSubmitting}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                    },
+                  }}
+                >
+                  {ACCOUNT_TYPE_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
               <TextField
                 {...methods.register('factory_admin_email')}

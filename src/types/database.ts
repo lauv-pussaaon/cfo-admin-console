@@ -1,3 +1,5 @@
+import type { AccountType } from './account-types'
+
 export interface Organization {
   id: string
   name: string
@@ -7,6 +9,7 @@ export interface Organization {
   is_initialized: boolean
   initialized_at: string | null
   factory_admin_email: string | null
+  account_type: AccountType
   created_by: string | null
   created_at: string
   updated_at: string | null

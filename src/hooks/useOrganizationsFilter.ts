@@ -1,14 +1,19 @@
 import { useState, useMemo } from 'react'
 import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
+import type { AccountType } from '@/types/account-types'
+import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 
 export type OrganizationFilterRow = OrganizationWithStats | OrganizationWithCreator
 
 export type DeploymentStatusFilter = 'all' | 'deployed' | 'pending'
 
+export type AccountTypeFilter = 'all' | AccountType
+
 export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<DeploymentStatusFilter>('all')
+  const [accountTypeFilter, setAccountTypeFilter] = useState<AccountTypeFilter>('all')
   const [createdFrom, setCreatedFrom] = useState('')
   const [createdTo, setCreatedTo] = useState('')
 
@@ -19,6 +24,10 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
       list = list.filter((o) => o.is_initialized)
     } else if (statusFilter === 'pending') {
       list = list.filter((o) => !o.is_initialized)
+    }
+
+    if (accountTypeFilter !== 'all') {
+      list = list.filter((o) => (o.account_type || DEFAULT_ACCOUNT_TYPE) === accountTypeFilter)
     }
 
     if (createdFrom) {
@@ -40,6 +49,7 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
       if (org.code?.toLowerCase().includes(query)) return true
       if (org.factory_admin_email?.toLowerCase().includes(query)) return true
       if (org.description?.toLowerCase().includes(query)) return true
+      if ((org.account_type || DEFAULT_ACCOUNT_TYPE).toLowerCase().includes(query)) return true
 
       const enriched = org as OrganizationWithCreator
       if (enriched.creator) {
@@ -52,13 +62,15 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
       }
       return false
     })
-  }, [organizations, searchTerm, statusFilter, createdFrom, createdTo])
+  }, [organizations, searchTerm, statusFilter, accountTypeFilter, createdFrom, createdTo])
 
   return {
     searchTerm,
     setSearchTerm,
     statusFilter,
     setStatusFilter,
+    accountTypeFilter,
+    setAccountTypeFilter,
     createdFrom,
     setCreatedFrom,
     createdTo,

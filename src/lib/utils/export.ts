@@ -1,5 +1,6 @@
 import type { OrganizationWithStats } from '@/types/database'
 import type { User } from '@/lib/api/types'
+import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 
 export interface ExportData {
   name: string
@@ -7,7 +8,7 @@ export interface ExportData {
   factory_admin_email: string | null
   status: string
   created_at: string
-  app_url: string | null
+  account_type: string
   dealer_name?: string
   dealer_email?: string
 }
@@ -26,7 +27,7 @@ export function exportOrganizationToCSV(
     factory_admin_email: org.factory_admin_email || '',
     status,
     created_at: new Date(org.created_at).toLocaleString('th-TH'),
-    app_url: org.app_url || '',
+    account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
     dealer_name: dealerInfo?.name || '',
     dealer_email: dealerInfo?.email || '',
   }
@@ -38,7 +39,7 @@ export function exportOrganizationToCSV(
     'Client Admin Email',
     'Status',
     'Created At',
-    'App URL',
+    'Account Type',
     'Dealer Name',
     'Dealer Email',
   ]
@@ -50,7 +51,7 @@ export function exportOrganizationToCSV(
     exportData.factory_admin_email,
     exportData.status,
     exportData.created_at,
-    exportData.app_url,
+    exportData.account_type,
     exportData.dealer_name,
     exportData.dealer_email,
   ]
@@ -81,7 +82,7 @@ export function exportOrganizationToJSON(
     factory_admin_email: org.factory_admin_email || null,
     status,
     created_at: new Date(org.created_at).toISOString(),
-    app_url: org.app_url || null,
+    account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
     dealer_name: dealerInfo?.name || undefined,
     dealer_email: dealerInfo?.email || undefined,
   }

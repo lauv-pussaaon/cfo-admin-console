@@ -36,9 +36,13 @@ CREATE TABLE organizations (
   is_initialized BOOLEAN DEFAULT FALSE,
   initialized_at TIMESTAMPTZ,
   factory_admin_email TEXT,        -- Email for factory admin
+  account_type TEXT NOT NULL DEFAULT 'general customers',
   created_by UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  CONSTRAINT organizations_account_type_check CHECK (
+    account_type IN ('general customers', 'demo', 'อบต', 'อบถ', 'cbis', 'ideacarb')
+  )
 );
 
 -- User Organizations (links dealers/consult/audit to organizations)

@@ -14,6 +14,10 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import {
   Add as AddIcon,
@@ -34,6 +38,7 @@ import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
 import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
+import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
 
 export default function AdminConsoleOrganizationsPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -44,6 +49,8 @@ export default function AdminConsoleOrganizationsPage() {
   const {
     searchTerm,
     setSearchTerm,
+    accountTypeFilter,
+    setAccountTypeFilter,
     filteredOrganizations,
   } = useOrganizationsFilter(organizations)
   const [modalOpen, setModalOpen] = useState(false)
@@ -296,18 +303,40 @@ export default function AdminConsoleOrganizationsPage() {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={{ minWidth: 300 }}
+          sx={{ minWidth: 300, maxWidth: 350, flex: '1 1 280px' }}
           InputProps={{
             startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
           }}
         />
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel id="org-account-type-filter">ประเภทบัญชี</InputLabel>
+          <Select
+            labelId="org-account-type-filter"
+            label="ประเภทบัญชี"
+            value={accountTypeFilter}
+            onChange={(e) => setAccountTypeFilter(e.target.value as AccountTypeFilter)}
+          >
+            <MenuItem value="all">ทั้งหมด</MenuItem>
+            {ACCOUNT_TYPE_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
+
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+        {filteredOrganizations.length === organizations.length
+          ? `พบ ${organizations.length} รายการ`
+          : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
+      </Typography>
 
       {isAdmin(user) ? (
         <AdminOrganizationsTable

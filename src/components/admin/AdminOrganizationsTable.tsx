@@ -1,15 +1,15 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Link, Chip, Typography, Badge } from '@mui/material'
+import { Box, IconButton, Paper, Chip, Typography, Badge } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Launch as LaunchIcon,
   ChatBubbleOutline as ChatBubbleOutlineIcon,
 } from '@mui/icons-material'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
+import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 
 interface Props {
   data: OrganizationWithCreator[]
@@ -38,7 +38,7 @@ export default function AdminOrganizationsTable ({
       name: org.name,
       code: org.code || '-',
       description: org.description || '-',
-      app_url: org.app_url || null,
+      account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
       is_initialized: org.is_initialized || false,
       factory_admin_email: org.factory_admin_email || '-',
       created_at: org.created_at,
@@ -105,28 +105,19 @@ export default function AdminOrganizationsTable ({
         ),
       },
       {
-        field: 'app_url',
-        headerName: 'App URL',
-        width: 200,
-        flex: 1,
-        minWidth: 150,
-        renderCell: (params) => {
-          if (!params.value) {
-            return <Box sx={{ color: 'text.secondary', fontStyle: 'italic' }}>ยังไม่ได้ตั้งค่า</Box>
-          }
-          return (
-            <Link
-              href={params.value}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-            >
-              <LaunchIcon fontSize="small" />
-              {params.value}
-            </Link>
-          )
-        },
+        field: 'account_type',
+        headerName: 'ประเภทบัญชี',
+        width: 160,
+        flex: 0.8,
+        minWidth: 140,
+        renderCell: (params) => (
+          <Chip
+            label={params.value}
+            size="small"
+            variant="outlined"
+            sx={{ fontWeight: 500 }}
+          />
+        ),
       },
       {
         field: 'creator_name',
