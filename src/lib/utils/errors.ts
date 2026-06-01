@@ -50,43 +50,39 @@ export class ConflictError extends AppError {
 }
 
 /**
- * Converts Supabase errors to AppError
- * Expected errors (validation, not found, etc.) won't log to console
+ * Converts database errors (PostgreSQL / legacy PostgREST codes) to AppError.
+ * Expected errors (validation, not found, etc.) won't log to console.
  */
 export function handleSupabaseError(error: unknown): never {
   if (error instanceof AppError) {
     throw error
   }
 
-  // Handle Supabase PostgrestError
   if (error && typeof error === 'object' && 'code' in error && 'message' in error) {
-    const supabaseError = error as { code: string; message: string; details?: string; hint?: string }
-    
-    // Map common Supabase error codes to our error types
-    switch (supabaseError.code) {
-      case 'PGRST116': // Not found
-        throw new NotFoundError(supabaseError.message)
-      case '23505': // Unique violation
-        throw new ConflictError(supabaseError.message || 'Resource already exists')
-      case '23503': // Foreign key violation
-        throw new ValidationError(supabaseError.message || 'Invalid reference')
-      default:
-        // Check if it's a network/CORS error
-        const isNetworkError = 
-          supabaseError.message?.includes('fetch') ||
-          supabaseError.message?.includes('CORS') ||
-          supabaseError.message?.includes('Failed to fetch') ||
-          supabaseError.code === 'NETWORK_ERROR'
-        
-        // For unexpected errors, create error but don't log here
-        // Components can decide whether to log based on error.isExpected
-        // Network errors are expected (user-facing) - they indicate connection issues
+    const dbError = error as { code: string; message: string; details?: string; hint?: string }
+
+    switch (dbError.code) {
+      case 'PGRST116':
+      case '42P01':
+        throw new NotFoundError(dbError.message)
+      case '23505':
+        throw new ConflictError(dbError.message || 'Resource already exists')
+      case '23503':
+        throw new ValidationError(dbError.message || 'Invalid reference')
+      default: {
+        const isNetworkError =
+          dbError.message?.includes('fetch') ||
+          dbError.message?.includes('CORS') ||
+          dbError.message?.includes('Failed to fetch') ||
+          dbError.code === 'NETWORK_ERROR'
+
         throw new AppError(
-          supabaseError.message || 'An unexpected error occurred',
-          supabaseError.code,
+          dbError.message || 'An unexpected error occurred',
+          dbError.code,
           undefined,
-          isNetworkError // Network errors are expected - user should see them
+          isNetworkError
         )
+      }
     }
   }
 

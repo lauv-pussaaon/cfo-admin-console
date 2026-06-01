@@ -1,5 +1,4 @@
-import { supabase } from '../supabase'
-import { storageBuckets } from '../config'
+import { authenticatedFetch } from '@/lib/api/fetch-client'
 
 export interface TemplateImageUploadResult {
   success: boolean
@@ -14,7 +13,7 @@ export interface TemplateImageValidationResult {
 }
 
 export class TemplateImageUploadService {
-  private readonly MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
+  private readonly MAX_FILE_SIZE = 2 * 1024 * 1024
   private readonly ALLOWED_FILE_TYPES = [
     'image/jpeg',
     'image/jpg',
@@ -25,7 +24,7 @@ export class TemplateImageUploadService {
 
   private readonly ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 
-  validateFile(file: File): TemplateImageValidationResult {
+  validateFile (file: File): TemplateImageValidationResult {
     if (file.size > this.MAX_FILE_SIZE) {
       return {
         isValid: false,
@@ -51,46 +50,30 @@ export class TemplateImageUploadService {
     return { isValid: true }
   }
 
-  private generateFilePath(fileName: string): string {
-    const uuid = crypto.randomUUID()
-    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_')
-    return `templates/${uuid}_${sanitizedFileName}`
-  }
-
-  async uploadImage(file: File): Promise<TemplateImageUploadResult> {
+  async uploadImage (file: File): Promise<TemplateImageUploadResult> {
     try {
       const validation = this.validateFile(file)
       if (!validation.isValid) {
-        return {
-          success: false,
-          error: validation.error,
-        }
+        return { success: false, error: validation.error }
       }
 
-      const filePath = this.generateFilePath(file.name)
+      const formData = new FormData()
+      formData.append('file', file)
 
-      const { error: uploadError } = await supabase.storage
-        .from(storageBuckets.emissionTemplateImages)
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false,
-        })
+      const response = await authenticatedFetch('/api/uploads/template-image', {
+        method: 'POST',
+        body: formData,
+      })
 
-      if (uploadError) {
-        return {
-          success: false,
-          error: `Upload failed: ${uploadError.message}`,
-        }
+      const data = await response.json() as { fileUrl?: string; filePath?: string; error?: string }
+      if (!data.fileUrl || !data.filePath) {
+        return { success: false, error: data.error || 'Upload failed' }
       }
-
-      const { data: urlData } = supabase.storage
-        .from(storageBuckets.emissionTemplateImages)
-        .getPublicUrl(filePath)
 
       return {
         success: true,
-        fileUrl: urlData.publicUrl,
-        filePath,
+        fileUrl: data.fileUrl,
+        filePath: data.filePath,
       }
     } catch (error) {
       return {
@@ -100,32 +83,16 @@ export class TemplateImageUploadService {
     }
   }
 
-  async deleteImage(filePath: string): Promise<{ success: boolean; error?: string }> {
+  extractFilePathFromUrl (url: string): string | null {
     try {
-      const { error } = await supabase.storage
-        .from(storageBuckets.emissionTemplateImages)
-        .remove([filePath])
+      const apiMatch = url.match(/\/api\/files\/template-images\/(.+)$/)
+      if (apiMatch) return apiMatch[1]
 
-      if (error) {
-        return {
-          success: false,
-          error: `Delete failed: ${error.message}`,
-        }
-      }
+      const uploadsMatch = url.match(/\/uploads\/template-images\/(.+)$/)
+      if (uploadsMatch) return `templates/${uploadsMatch[1].replace(/^templates\//, '')}`
 
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error: `Delete error: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      }
-    }
-  }
-
-  extractFilePathFromUrl(url: string): string | null {
-    try {
-      const match = url.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)$/)
-      return match ? match[1] : null
+      const legacyMatch = url.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)$/)
+      return legacyMatch ? legacyMatch[1] : null
     } catch {
       return null
     }

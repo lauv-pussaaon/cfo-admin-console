@@ -9,7 +9,10 @@
     "lint": "eslint",
     "seed:fuel": "node dataprep/generate_fuel_resources_sql.js",
     "seed:templates": "node dataprep/generate_emission_templates_seed.js",
-    "export:external-templates": "node scripts/export-external-templates.mjs"
+    "export:external-templates": "node scripts/export-external-templates.mjs",
+    "db:backup": "bash database/backup-db.sh",
+    "db:restore": "bash database/restore-db.sh",
+    "migrate:files": "node scripts/migrate-supabase-to-filesystem.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -20,6 +23,7 @@
     "@mui/x-data-grid": "^8.20.0",
     "@supabase/supabase-js": "^2.57.4",
     "next": "15.6.0-canary.58",
+    "pg": "^8.21.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.62.0",
@@ -32,6 +36,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/xlsx": "^0.0.36",

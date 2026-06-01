@@ -1,35 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { insertUsageTracking } from '@/lib/server/analytics'
 import { createCorsHeaders, handleOptionsRequest } from '@/lib/utils/cors'
 import type { UsageTrackingPayload } from '@/types/tracking'
 
-// Handle OPTIONS preflight request
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS (request: NextRequest) {
   return handleOptionsRequest(request)
 }
 
-/**
- * POST /api/tracking/usage
- * Accepts usage tracking data from org-app instances
- * Stores tracking data in app_usage_tracking table
- */
-export async function POST(request: NextRequest) {
-  try {
-    const origin = request.headers.get('origin')
-    const headers = createCorsHeaders(origin)
+export async function POST (request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const headers = createCorsHeaders(origin)
 
-    // Parse request body
+  try {
     let body: UsageTrackingPayload
     try {
       body = await request.json()
-    } catch (error) {
-      return NextResponse.json(
-        { error: 'Invalid JSON payload' },
-        { status: 400, headers }
-      )
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON payload' }, { status: 400, headers })
     }
 
-    // Validate required fields
     if (!body.domain || !body.page || !body.user_agent) {
       return NextResponse.json(
         { error: 'Missing required fields: domain, page, and user_agent are required' },
@@ -37,16 +26,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Extract IP address from headers
-    // Check common proxy headers
     const forwardedFor = request.headers.get('x-forwarded-for')
     const realIp = request.headers.get('x-real-ip')
     const ipAddress = forwardedFor
       ? forwardedFor.split(',')[0].trim()
       : realIp || null
 
-    // Prepare data for insertion
-    const trackingData = {
+    await insertUsageTracking({
       domain: body.domain,
       page: body.page,
       user_role: body.user_role || null,
@@ -59,31 +45,11 @@ export async function POST(request: NextRequest) {
       timezone: body.timezone || null,
       ip_address: ipAddress,
       session_id: body.session_id || null,
-    }
+    })
 
-    // Insert into database
-    const { error } = await supabase
-      .from('app_usage_tracking')
-      .insert(trackingData)
-
-    if (error) {
-      console.error('Error inserting tracking data:', error)
-      // Return 200 to prevent client retries, but log the error
-      return NextResponse.json(
-        { success: false, error: 'Failed to store tracking data' },
-        { status: 200, headers }
-      )
-    }
-
-    return NextResponse.json(
-      { success: true },
-      { status: 200, headers }
-    )
+    return NextResponse.json({ success: true }, { status: 200, headers })
   } catch (error) {
     console.error('Error in usage tracking endpoint:', error)
-    const origin = request.headers.get('origin')
-    const headers = createCorsHeaders(origin)
-    // Return 200 to prevent client retries
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 200, headers }

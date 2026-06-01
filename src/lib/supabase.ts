@@ -1,6 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+/**
+ * @deprecated Supabase client removed on migration branch. Use @/lib/db and @/lib/server/* instead.
+ * Kept only to avoid accidental imports; throws if accessed.
+ */
+export const supabase = new Proxy({} as Record<string, never>, {
+  get () {
+    throw new Error(
+      'Supabase client is disabled on migration branch. Use DATABASE_URL with @/lib/server/* modules.'
+    )
+  },
+})

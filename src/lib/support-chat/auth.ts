@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { getUserByIdServer } from '@/lib/api/auth-helper'
 import type { User } from '@/lib/api/types'
 
 function getBearerToken (request: NextRequest): string | null {
@@ -23,15 +23,9 @@ export async function getStaffUserFromRequest (request: NextRequest): Promise<Us
   const userId = request.headers.get('x-admin-user-id')?.trim()
   if (!userId) return null
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, username, email, name, avatar_url, role, invite_hashcode, created_at')
-    .eq('id', userId)
-    .single()
-
-  if (error || !data) return null
-  if (data.role !== 'Admin' && data.role !== 'Support') return null
-
-  return data as User
+  const user = await getUserByIdServer(userId)
+  if (!user) return null
+  if (user.role !== 'Admin' && user.role !== 'Support') return null
+  return user
 }
 

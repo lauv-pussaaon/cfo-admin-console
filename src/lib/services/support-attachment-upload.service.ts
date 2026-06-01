@@ -1,5 +1,9 @@
-import { supabase } from '@/lib/supabase'
-import { storageBuckets } from '@/lib/config'
+import {
+  storageBuckets,
+  uploadFile,
+  removeFile,
+  getPublicUrl as resolveStoragePublicUrl,
+} from '@/lib/storage-server'
 
 export interface SupportAttachmentUploadResult {
   success: boolean
@@ -17,7 +21,7 @@ export interface SupportAttachmentValidationResult {
 }
 
 export class SupportAttachmentUploadService {
-  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024
   private readonly ALLOWED_FILE_TYPES = [
     'image/jpeg',
     'image/jpg',
@@ -85,14 +89,8 @@ export class SupportAttachmentUploadService {
     try {
       const bucket = storageBuckets.supportChatAttachments
       const filePath = this.generateFilePath(file.name, organizationId, messageId)
-
-      const { error } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file, { cacheControl: '3600', upsert: false })
-
-      if (error) {
-        return { success: false, error: `Upload failed: ${error.message}` }
-      }
+      const buffer = Buffer.from(await file.arrayBuffer())
+      await uploadFile(bucket, filePath, buffer)
 
       return {
         success: true,
@@ -112,13 +110,7 @@ export class SupportAttachmentUploadService {
 
   async deleteAttachment (filePath: string): Promise<{ success: boolean; error?: string }> {
     try {
-      const { error } = await supabase.storage
-        .from(storageBuckets.supportChatAttachments)
-        .remove([filePath])
-
-      if (error) {
-        return { success: false, error: `Delete failed: ${error.message}` }
-      }
+      await removeFile(storageBuckets.supportChatAttachments, filePath)
       return { success: true }
     } catch (error) {
       return {
@@ -129,12 +121,8 @@ export class SupportAttachmentUploadService {
   }
 
   getPublicUrl (filePath: string): string {
-    const { data } = supabase.storage
-      .from(storageBuckets.supportChatAttachments)
-      .getPublicUrl(filePath)
-    return data.publicUrl
+    return resolveStoragePublicUrl(storageBuckets.supportChatAttachments, filePath)
   }
 }
 
 export const supportAttachmentUploadService = new SupportAttachmentUploadService()
-

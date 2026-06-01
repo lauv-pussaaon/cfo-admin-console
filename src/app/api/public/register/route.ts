@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createUser } from '@/lib/api/auth'
+import { createUser } from '@/lib/server/users'
 import { AppError } from '@/lib/utils/errors'
 import { sendRegistrationConfirmationEmail } from '@/lib/email/send-registration-confirmation'
 import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-registration-notice'
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
-import { getAdminNotificationEmails } from '@/lib/api/users-admin'
+import { getAdminNotificationEmails } from '@/lib/server/users-admin'
 
 const publicRegistrationSchema = z.object({
   username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
@@ -15,7 +15,7 @@ const publicRegistrationSchema = z.object({
   role: z.enum(['Consult', 'Audit']),
 })
 
-export async function POST(request: NextRequest) {
+export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
     const payload = publicRegistrationSchema.parse(body)
@@ -43,10 +43,7 @@ export async function POST(request: NextRequest) {
         requestOrigin,
       })
       if (!emailResult.sent) {
-        console.warn(
-          '[email] ไม่ได้ส่งอีเมลยืนยัน:',
-          emailResult.skipReason ?? 'unknown'
-        )
+        console.warn('[email] ไม่ได้ส่งอีเมลยืนยัน:', emailResult.skipReason ?? 'unknown')
       }
     } catch (emailErr) {
       console.error('[email] ส่งอีเมลยืนยันลงทะเบียนไม่สำเร็จ:', emailErr)
@@ -63,10 +60,7 @@ export async function POST(request: NextRequest) {
         adminEmails,
       })
       if (!noticeResult.sent) {
-        console.warn(
-          '[email] ไม่ได้ส่งอีเมลแจ้ง Admin:',
-          noticeResult.skipReason ?? 'unknown'
-        )
+        console.warn('[email] ไม่ได้ส่งอีเมลแจ้ง Admin:', noticeResult.skipReason ?? 'unknown')
       }
     } catch (adminEmailErr) {
       console.error('[email] ส่งอีเมลแจ้ง Admin ไม่สำเร็จ:', adminEmailErr)

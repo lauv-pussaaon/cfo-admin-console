@@ -1,5 +1,3 @@
-import { supabase } from '../supabase'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   Organization,
   OrganizationWithStats,
@@ -29,28 +27,18 @@ import type { User } from '../api'
 import type { AccountType } from '@/types/account-types'
 
 export class OrganizationService {
-  private supabase: SupabaseClient
-
-  constructor(supabaseClient?: SupabaseClient) {
-    this.supabase = supabaseClient || supabase
-  }
-
-  // Get all organizations
   async getOrganizations (): Promise<Organization[]> {
     return getOrganizationsAPI()
   }
 
-  // Get all organizations with statistics
   async getOrganizationsWithStats (): Promise<OrganizationWithStats[]> {
     return getOrganizationsWithStatsAPI()
   }
 
-  // Get organization by ID
   async getOrganizationById (id: string): Promise<Organization | null> {
     return getOrganizationByIdAPI(id)
   }
 
-  // Create organization
   async createOrganization (
     data: {
       name: string
@@ -66,17 +54,14 @@ export class OrganizationService {
     return createOrganizationAPI(data)
   }
 
-  // Get organizations for dealer (filtered by assignment)
   async getOrganizationsForDealer (userId: string): Promise<OrganizationWithStats[]> {
     return getOrganizationsForDealerAPI(userId)
   }
 
-  // Get organizations for Consult/Audit (filtered by assignment)
   async getOrganizationsForConsultAudit (userId: string): Promise<OrganizationWithStats[]> {
     return getOrganizationsForConsultAuditAPI(userId)
   }
 
-  // Get organizations for admin (with creator info)
   async getOrganizationsForAdmin (): Promise<OrganizationWithCreator[]> {
     return getOrganizationsForAdminAPI()
   }
@@ -85,7 +70,6 @@ export class OrganizationService {
     return getOrganizationForAdminByIdAPI(id)
   }
 
-  // Export organization details for operations team
   async exportOrganizationDetails (organizationId: string, dealerInfo?: User): Promise<{
     organization: OrganizationWithStats
     dealerInfo?: User
@@ -105,7 +89,6 @@ export class OrganizationService {
       throw new Error('Organization not found')
     }
 
-    // Get user count for stats
     const users = await this.getUsersByOrganization(organizationId)
     const orgWithStats: OrganizationWithStats = {
       ...organization,
@@ -130,7 +113,6 @@ export class OrganizationService {
     }
   }
 
-  // Update organization
   async updateOrganization (
     id: string,
     updates: Partial<{
@@ -147,7 +129,6 @@ export class OrganizationService {
     return updateOrganizationAPI(id, updates)
   }
 
-  // Get organization app URL
   async getOrganizationAppUrl (organizationId: string): Promise<string> {
     const org = await this.getOrganizationById(organizationId)
     if (!org || !org.app_url) {
@@ -156,42 +137,34 @@ export class OrganizationService {
     return org.app_url
   }
 
-  // Delete organization
   async deleteOrganization (id: string): Promise<void> {
     return deleteOrganizationAPI(id)
   }
 
-  // Get user's organizations
   async getUserOrganizations (userId: string): Promise<UserOrganization[]> {
     return getUserOrganizationsAPI(userId)
   }
 
-  // Get users by organization
   async getUsersByOrganization (organizationId: string): Promise<User[]> {
     return getUsersByOrganizationAPI(organizationId)
   }
 
-  // Add user to organization
   async addUserToOrganization (organizationId: string, userId: string): Promise<UserOrganization> {
     return addUserToOrganizationAPI(organizationId, userId)
   }
 
-  // Remove user from organization
   async removeUserFromOrganization (organizationId: string, userId: string): Promise<void> {
     return removeUserFromOrganizationAPI(organizationId, userId)
   }
 
-  // Get all dealers
   async getDealers (): Promise<User[]> {
     return getDealersAPI()
   }
 
-  // Get dealer assigned to organization
   async getDealerByOrganization (organizationId: string): Promise<User | null> {
     return getDealerByOrganizationAPI(organizationId)
   }
 
-  // Set dealer for organization
   async setDealerForOrganization (
     organizationId: string,
     dealerId: string | null,
@@ -201,8 +174,4 @@ export class OrganizationService {
   }
 }
 
-// Export singleton instance
 export const organizationService = new OrganizationService()
-
-
-
