@@ -15,15 +15,6 @@ psql "$DATABASE_URL" -f database/01_schema.sql
 psql "$DATABASE_URL" -f database/02_seed_master_data.sql
 
 # 3. Emission master data (if not imported from Supabase dump)
-psql "$DATABASE_URL" -f database/migration_add_scope_categories.sql
-psql "$DATABASE_URL" -f database/migration_add_fuel_resources.sql
-psql "$DATABASE_URL" -f database/migration_add_emission_templates.sql
-psql "$DATABASE_URL" -f database/migration_add_template_activity_groups.sql
-psql "$DATABASE_URL" -f database/migration_drop_template_activity_group_labels.sql
-psql "$DATABASE_URL" -f database/migration_add_activity_group_fuel_resource_mappings.sql
-psql "$DATABASE_URL" -f database/migration_add_app_usage_tracking.sql
-
-# Or use consolidated seeds:
 psql "$DATABASE_URL" -f database/03_seed_scope_categories_and_fuel_resources.sql
 psql "$DATABASE_URL" -f database/04_seed_emission_templates_and_activity_groups.sql
 ```
@@ -42,15 +33,24 @@ Validate row counts for `users`, `organizations`, `fuel_resources`, `emission_te
 
 ## Incremental migrations
 
-Existing Supabase DBs may already have columns from `migration_add_*` files. Skip any that fail with "already exists".
+For **existing Supabase DBs** that predate consolidated `01_schema.sql`, use the `migration_add_*` files. Skip any that fail with "already exists".
 
-| File | Purpose |
-|------|---------|
-| `migration_add_user_approval_status.sql` | User approval |
-| `migration_add_organization_account_type.sql` | Org account types |
-| `migration_add_support_chat.sql` | Support tables |
-| `migration_add_support_message_attachments.sql` | Attachments |
-| `migration_add_support_role.sql` | Support role in users |
+For **greenfield** installs, `01_schema.sql` is sufficient — no migration scripts needed.
+
+| File | Purpose | In `01_schema.sql`? |
+|------|---------|---------------------|
+| `migration_add_scope_categories.sql` | Scope categories table | Yes |
+| `migration_add_fuel_resources.sql` | Fuel resources table | Yes |
+| `migration_add_emission_templates.sql` | Emission templates table | Yes |
+| `migration_add_template_activity_groups.sql` | Activity groups table | Yes |
+| `migration_drop_template_activity_group_labels.sql` | Drop legacy label columns | N/A (never created in greenfield) |
+| `migration_add_activity_group_fuel_resource_mappings.sql` | Junction table | Yes |
+| `migration_add_app_usage_tracking.sql` | Usage telemetry table | Yes |
+| `migration_add_user_approval_status.sql` | User approval | Yes |
+| `migration_add_organization_account_type.sql` | Org account types | Yes |
+| `migration_add_support_chat.sql` | Support tables | Yes |
+| `migration_add_support_message_attachments.sql` | Attachments | Yes |
+| `migration_add_support_role.sql` | Support role in users | Yes |
 
 ## Backup and restore
 

@@ -7,6 +7,12 @@
 -- ===========================================
 
 -- Drop tables that depend on other tables first
+DROP TABLE IF EXISTS template_activity_group_fuel_resources CASCADE;
+DROP TABLE IF EXISTS template_activity_groups CASCADE;
+DROP TABLE IF EXISTS app_usage_tracking CASCADE;
+DROP TABLE IF EXISTS emission_templates CASCADE;
+DROP TABLE IF EXISTS fuel_resources CASCADE;
+DROP TABLE IF EXISTS scope_categories CASCADE;
 DROP TABLE IF EXISTS support_message_attachments CASCADE;
 DROP TABLE IF EXISTS support_messages CASCADE;
 DROP TABLE IF EXISTS support_conversations CASCADE;

@@ -13,12 +13,12 @@ This work lives on branch **`migration/move-to-inet`**. Production on Vercel + S
 | Environment | App | Database | Storage |
 |-------------|-----|----------|---------|
 | Production (unchanged) | Vercel | Supabase Postgres | Supabase Storage |
-| Migration staging | Self-hosted (PM2 + nginx) | `cfo_admin` Postgres | `UPLOAD_DIR` local FS |
+| Migration staging | Self-hosted (PM2 + nginx) | `ideacarb-admin` Postgres | `UPLOAD_DIR` local FS |
 
 ## Required env vars (staging / self-hosted)
 
 ```env
-DATABASE_URL=postgresql://cfo_admin_user:PASSWORD@localhost:5432/cfo_admin
+DATABASE_URL=postgresql://cfo_admin_user:PASSWORD@localhost:5432/ideacarb-admin
 UPLOAD_DIR=/var/cfo-admin-uploads
 APP_URL=https://admin-staging.example.com
 NEXT_PUBLIC_APP_URL=https://admin-staging.example.com
@@ -31,7 +31,7 @@ Supabase vars (`NEXT_PUBLIC_SUPABASE_*`) are **not** required on the migration b
 ## Setup order
 
 1. Provision Postgres: `database/00_setup_postgres.sql`
-2. Import from Supabase OR greenfield: `database/01_schema.sql` + migrations + seeds
+2. Import from Supabase OR greenfield: `database/01_schema.sql` + seeds (`02`, `03`, `04`)
 3. Copy files: `node scripts/migrate-supabase-to-filesystem.js`
 4. Configure `.env.local` and run `pnpm build && pnpm start` (or `dataprep/deploy-admin.sh`)
 5. Run verification checklist below
@@ -42,7 +42,7 @@ Supabase vars (`NEXT_PUBLIC_SUPABASE_*`) are **not** required on the migration b
 # From repo root (cfo-beta)
 ./scripts/migrate-database.sh admin
 
-# Or manual pg_dump from Supabase host, import to cfo_admin
+# Or manual pg_dump from Supabase host, import to ideacarb-admin
 psql "$DATABASE_URL" -f backups/schema_admin.sql
 psql "$DATABASE_URL" -f backups/data_admin.sql
 ```

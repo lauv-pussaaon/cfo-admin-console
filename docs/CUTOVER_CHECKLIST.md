@@ -5,7 +5,7 @@ Run on **self-hosted staging** before production cutover. Production Vercel + Su
 ## Staging setup
 
 - [ ] Branch `migration/move-to-inet` deployed via `dataprep/deploy-admin.sh`
-- [ ] `DATABASE_URL` points to `cfo_admin` (imported from Supabase or greenfield + seeds)
+- [ ] `DATABASE_URL` points to `ideacarb-admin` (imported from Supabase or greenfield + seeds)
 - [ ] `UPLOAD_DIR` set; files migrated via `pnpm migrate:files`
 - [ ] `.env.local` has `APP_URL`, `RESEND_API_KEY`, `SUPPORT_CHAT_BRIDGE_SECRET`
 

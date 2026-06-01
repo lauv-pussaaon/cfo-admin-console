@@ -1,7 +1,6 @@
 -- =============================================================================
 -- 03_seed_scope_categories_and_fuel_resources.sql
--- Run after 01_schema.sql, migration_add_scope_categories.sql,
---           migration_add_fuel_resources.sql, and 02_seed_master_data.sql
+-- Run after 01_schema.sql and 02_seed_master_data.sql
 -- Source: derived from ideacarb-client-app/database/01_setup.sql
 -- Strategy C: scope_categories inserted first; fuel_resources reference them
 --             via SELECT subquery on name_th.

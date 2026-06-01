@@ -64,7 +64,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 APP_NAME="cfo-admin-console"
 UPLOAD_DIR="${UPLOAD_DIR:-/var/cfo-admin-uploads}"
-DB_NAME="cfo_admin"
+DB_NAME="ideacarb-admin"
 
 echo "==> Deploy ${APP_NAME} on port ${PORT}"
 
@@ -82,13 +82,8 @@ if command -v psql >/dev/null 2>&1; then
     echo "==> Importing Supabase dump"
     pg_restore --clean --if-exists --no-owner --no-acl -d "${DATABASE_URL}" "${ROOT_DIR}/database/dumps/supabase_import.dump" || true
   else
-    echo "==> Applying schema (idempotent migrations may warn)"
-    psql "${DATABASE_URL}" -v ON_ERROR_STOP=1 -f "${ROOT_DIR}/database/01_schema.sql" 2>/dev/null || true
-    for f in migration_add_scope_categories.sql migration_add_fuel_resources.sql migration_add_emission_templates.sql \
-      migration_add_template_activity_groups.sql migration_add_activity_group_fuel_resource_mappings.sql \
-      migration_add_app_usage_tracking.sql migration_add_support_chat.sql migration_add_support_message_attachments.sql; do
-      psql "${DATABASE_URL}" -f "${ROOT_DIR}/database/${f}" 2>/dev/null || true
-    done
+    echo "==> Applying schema"
+    psql "${DATABASE_URL}" -v ON_ERROR_STOP=1 -f "${ROOT_DIR}/database/01_schema.sql"
   fi
 else
   echo "Warning: psql not found; skipping DB setup"

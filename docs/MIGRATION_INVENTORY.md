@@ -13,7 +13,7 @@ Captured for cutover planning. Production Vercel + Supabase unchanged.
 | `GET/POST /api/invitations/[token]` | Factory admin invitations |
 | `POST /api/external/support/*` | Support chat bridge |
 
-## Database tables (admin `cfo_admin`)
+## Database tables (admin `ideacarb-admin`)
 
 Core: `users`, `organizations`, `user_organizations`, `organization_invitations`  
 Master: `scope_categories`, `fuel_resources`, `emission_templates`, `template_activity_groups`, `template_activity_group_fuel_resources`  
@@ -36,4 +36,4 @@ See [`.env.example`](.env.example). Required: `DATABASE_URL`. Optional: `UPLOAD_
 
 ## Schema freeze (production Supabase)
 
-Do not run destructive SQL on production Supabase during migration window. All schema work targets staging `cfo_admin` only.
+Do not run destructive SQL on production Supabase during migration window. All schema work targets staging `ideacarb-admin` only.
