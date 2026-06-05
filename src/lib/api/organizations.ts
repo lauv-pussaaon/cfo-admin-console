@@ -358,6 +358,9 @@ export const createOrganization = async (
     description?: string | null
     app_url?: string | null
     factory_admin_email?: string | null
+    contact_first_name?: string | null
+    contact_last_name?: string | null
+    contact_phone?: string | null
     account_type?: AccountType
     created_by?: string | null
     assignedUserId?: string | null
@@ -371,6 +374,9 @@ export const createOrganization = async (
       description: data.description || null,
       app_url: data.app_url || null,
       factory_admin_email: data.factory_admin_email || null,
+      contact_first_name: data.contact_first_name || null,
+      contact_last_name: data.contact_last_name || null,
+      contact_phone: data.contact_phone || null,
       account_type: data.account_type ?? DEFAULT_ACCOUNT_TYPE,
       is_initialized: false,
       created_by: data.created_by || null,
@@ -404,6 +410,9 @@ export const updateOrganization = async (
     is_initialized: boolean
     initialized_at: string | null
     factory_admin_email: string | null
+    contact_first_name: string | null
+    contact_last_name: string | null
+    contact_phone: string | null
     account_type: AccountType
   }>
 ): Promise<Organization> => {

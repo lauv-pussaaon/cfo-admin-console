@@ -55,6 +55,9 @@ const organizationSchema = z.object({
   description: z.string().optional().nullable(),
   app_url: z.string().url('กรุณากรอก URL ที่ถูกต้อง').optional().nullable().or(z.literal('')),
   factory_admin_email: z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').optional().nullable().or(z.literal('')),
+  contact_first_name: z.string().optional().nullable(),
+  contact_last_name: z.string().optional().nullable(),
+  contact_phone: z.string().optional().nullable(),
   is_initialized: z.boolean().optional(),
   dealer_id: z.string().optional().nullable(),
 })
@@ -88,6 +91,9 @@ export default function AdminOrganizationModal({
       description: '',
       app_url: '',
       factory_admin_email: '',
+      contact_first_name: '',
+      contact_last_name: '',
+      contact_phone: '',
       is_initialized: false,
       dealer_id: null,
     }
@@ -163,6 +169,9 @@ export default function AdminOrganizationModal({
           description: initialData.description || '',
           app_url: initialData.app_url || '',
           factory_admin_email: initialData.factory_admin_email || '',
+          contact_first_name: initialData.contact_first_name || '',
+          contact_last_name: initialData.contact_last_name || '',
+          contact_phone: initialData.contact_phone || '',
           is_initialized: initialData.is_initialized || false,
           dealer_id: currentDealerId,
         })
@@ -174,6 +183,9 @@ export default function AdminOrganizationModal({
           description: '',
           app_url: '',
           factory_admin_email: '',
+          contact_first_name: '',
+          contact_last_name: '',
+          contact_phone: '',
           is_initialized: false,
           dealer_id: null,
         })
@@ -199,6 +211,9 @@ export default function AdminOrganizationModal({
             description: data.description || null,
             app_url: data.app_url || null,
             factory_admin_email: data.factory_admin_email || null,
+            contact_first_name: data.contact_first_name || null,
+            contact_last_name: data.contact_last_name || null,
+            contact_phone: data.contact_phone || null,
             is_initialized: data.is_initialized ?? false,
             account_type: data.account_type,
           }
@@ -221,6 +236,9 @@ export default function AdminOrganizationModal({
           description: data.description || null,
           app_url: data.app_url || null,
           factory_admin_email: data.factory_admin_email || null,
+          contact_first_name: data.contact_first_name || null,
+          contact_last_name: data.contact_last_name || null,
+          contact_phone: data.contact_phone || null,
           account_type: data.account_type,
           created_by: user?.id || null,
           assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
@@ -357,6 +375,45 @@ export default function AdminOrganizationModal({
                 type="email"
                 error={!!errors.factory_admin_email}
                 helperText={errors.factory_admin_email?.message || 'อีเมลสำหรับ Factory Admin ที่จะถูกสร้างเมื่อเริ่มต้นใช้งาน'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
+                {...methods.register('contact_first_name')}
+                label="ชื่อผู้ติดต่อ"
+                fullWidth
+                error={!!errors.contact_first_name}
+                helperText={errors.contact_first_name?.message || 'ไม่บังคับ'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
+                {...methods.register('contact_last_name')}
+                label="นามสกุลผู้ติดต่อ"
+                fullWidth
+                error={!!errors.contact_last_name}
+                helperText={errors.contact_last_name?.message || 'ไม่บังคับ'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
+                {...methods.register('contact_phone')}
+                label="เบอร์โทรผู้ติดต่อ"
+                fullWidth
+                error={!!errors.contact_phone}
+                helperText={errors.contact_phone?.message || 'ไม่บังคับ'}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 1,

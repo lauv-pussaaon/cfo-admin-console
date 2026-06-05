@@ -9,6 +9,9 @@ export interface Organization {
   is_initialized: boolean
   initialized_at: string | null
   factory_admin_email: string | null
+  contact_first_name: string | null
+  contact_last_name: string | null
+  contact_phone: string | null
   account_type: AccountType
   created_by: string | null
   created_at: string
@@ -51,6 +54,37 @@ export type { ScopeCategory, FuelResource, FuelResourceWithCategory } from './em
 export interface UserConsent {
   id: string
   user_id: string
+  terms_accepted: boolean
+  privacy_acknowledged: boolean
+  marketing_consent: boolean
+  terms_document_url: string
+  privacy_document_url: string
+  cookie_policy_url: string
+  consented_at: string
+  created_at: string
+}
+
+export type OrganizationTrialRequestStatus = 'pending' | 'approved'
+
+export interface OrganizationTrialRequest {
+  id: string
+  organization_name: string
+  contact_first_name: string
+  contact_last_name: string
+  contact_email: string
+  contact_phone: string
+  status: OrganizationTrialRequestStatus
+  organization_id: string | null
+  approved_account_type: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
+  created_at: string
+  updated_at: string | null
+}
+
+export interface OrganizationTrialRequestConsent {
+  id: string
+  trial_request_id: string
   terms_accepted: boolean
   privacy_acknowledged: boolean
   marketing_consent: boolean

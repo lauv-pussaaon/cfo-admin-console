@@ -51,6 +51,9 @@ CREATE TABLE organizations (
   is_initialized BOOLEAN DEFAULT FALSE,
   initialized_at TIMESTAMPTZ,
   factory_admin_email TEXT,        -- Email for factory admin
+  contact_first_name TEXT,
+  contact_last_name TEXT,
+  contact_phone TEXT,
   account_type TEXT NOT NULL DEFAULT 'general customers',
   created_by UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -68,6 +71,37 @@ CREATE TABLE user_organizations (
   assigned_at TIMESTAMPTZ DEFAULT NOW(),
   assigned_by UUID REFERENCES users(id) ON DELETE SET NULL,
   UNIQUE(user_id, organization_id)
+);
+
+-- Organization trial registration requests (pending until admin approval)
+CREATE TABLE organization_trial_requests (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_name TEXT NOT NULL,
+  contact_first_name TEXT NOT NULL,
+  contact_last_name TEXT NOT NULL,
+  contact_email TEXT NOT NULL,
+  contact_phone TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved')),
+  organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
+  approved_account_type TEXT,
+  reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+  reviewed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- PDPA consent records for trial registration requests
+CREATE TABLE organization_trial_request_consents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  trial_request_id UUID NOT NULL UNIQUE REFERENCES organization_trial_requests(id) ON DELETE CASCADE,
+  terms_accepted BOOLEAN NOT NULL,
+  privacy_acknowledged BOOLEAN NOT NULL,
+  marketing_consent BOOLEAN NOT NULL DEFAULT FALSE,
+  terms_document_url TEXT NOT NULL,
+  privacy_document_url TEXT NOT NULL,
+  cookie_policy_url TEXT NOT NULL,
+  consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Organization Invitations (invitations for client admins)
@@ -142,6 +176,13 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_is_approved ON users(is_approved);
 CREATE INDEX idx_users_invite_hashcode ON users(invite_hashcode);
 CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
+
+-- Organization trial requests indexes
+CREATE INDEX idx_org_trial_requests_status ON organization_trial_requests(status);
+CREATE INDEX idx_org_trial_requests_contact_email ON organization_trial_requests(contact_email);
+CREATE INDEX idx_org_trial_requests_created_at ON organization_trial_requests(created_at);
+CREATE UNIQUE INDEX idx_org_trial_requests_pending_email ON organization_trial_requests(contact_email) WHERE status = 'pending';
+CREATE INDEX idx_org_trial_request_consents_trial_request_id ON organization_trial_request_consents(trial_request_id);
 
 -- Organization invitations indexes
 CREATE UNIQUE INDEX idx_organization_invitations_unique_pending ON organization_invitations(organization_id, email) WHERE status = 'pending';

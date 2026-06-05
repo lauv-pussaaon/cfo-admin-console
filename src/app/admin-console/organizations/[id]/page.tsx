@@ -159,6 +159,15 @@ export default function OrganizationDetailPage () {
           </Grid>
           <DetailRow label="Client Admin Email" value={org.factory_admin_email || '—'} />
           <DetailRow
+            label="ผู้ติดต่อ"
+            value={
+              org.contact_first_name || org.contact_last_name
+                ? `${org.contact_first_name || ''} ${org.contact_last_name || ''}`.trim()
+                : '—'
+            }
+          />
+          <DetailRow label="เบอร์โทรผู้ติดต่อ" value={org.contact_phone || '—'} />
+          <DetailRow
             label="App URL"
             value={
               org.app_url ? (
