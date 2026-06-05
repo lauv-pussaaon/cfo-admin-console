@@ -17,7 +17,7 @@ import {
   Avatar,
 } from '@mui/material'
 import { Close as CloseIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material'
-import { userService } from '@/lib/services'
+import { userService } from '@/lib/services/user.service'
 import { avatarUploadService } from '@/lib/services/avatar-upload.service'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useAuth } from '@/contexts/AuthContext'

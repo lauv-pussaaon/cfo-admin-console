@@ -4,7 +4,7 @@ import {
   getAttachmentById,
 } from '@/lib/api/support-chat'
 import { isBridgeRequestAuthorized } from '@/lib/support-chat/auth'
-import { supportAttachmentUploadService } from '@/lib/services'
+import { supportAttachmentUploadService } from '@/lib/services/support-attachment-upload.service'
 
 export async function DELETE (request: NextRequest) {
   try {

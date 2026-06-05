@@ -16,7 +16,7 @@ import {
 import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin, isSupport, canManageOrganization } from '@/lib/permissions'
-import { organizationService } from '@/lib/services'
+import { organizationService } from '@/lib/services/organization.service'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 

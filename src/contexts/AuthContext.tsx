@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { login as loginAPI, getUserById } from '@/lib/api/auth'
-import { userService } from '@/lib/services'
+import { userService } from '@/lib/services/user.service'
 import type { User } from '@/lib/api/types'
 
 interface AuthContextType {

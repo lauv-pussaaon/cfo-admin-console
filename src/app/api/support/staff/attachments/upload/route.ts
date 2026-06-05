@@ -5,7 +5,7 @@ import {
   ensureOrganizationExists,
   getMessageById,
 } from '@/lib/api/support-chat'
-import { supportAttachmentUploadService } from '@/lib/services'
+import { supportAttachmentUploadService } from '@/lib/services/support-attachment-upload.service'
 
 export async function POST (request: NextRequest) {
   try {

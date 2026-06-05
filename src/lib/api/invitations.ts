@@ -1,11 +1,6 @@
 import type { OrganizationInvitation } from '@/types/database'
 import { fetchJson } from './fetch-client'
 
-export {
-  getInvitationByToken,
-  updateInvitationStatus,
-} from '@/lib/server/invitations'
-
 export const createInvitation = async (
   organizationId: string,
   email: string,

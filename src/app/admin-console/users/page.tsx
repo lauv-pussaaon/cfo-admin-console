@@ -25,7 +25,7 @@ import {
 import UsersTable from '@/components/admin/UsersTable'
 import UserModal from '@/components/admin/UserModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
-import { userService } from '@/lib/services'
+import { userService } from '@/lib/services/user.service'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import type { User } from '@/lib/api/types'

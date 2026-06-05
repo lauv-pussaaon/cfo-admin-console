@@ -1,5 +1,5 @@
 import type { User } from '@/lib/api/types'
-import { organizationService } from '@/lib/services'
+import { organizationService } from '@/lib/services/organization.service'
 
 /**
  * Check if user has admin privileges (can do anything)

@@ -16,7 +16,7 @@ import {
 import { Search as SearchIcon } from '@mui/icons-material'
 import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
 import SupportStaffChatDrawer from '@/components/admin/SupportStaffChatDrawer'
-import { organizationService } from '@/lib/services'
+import { organizationService } from '@/lib/services/organization.service'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'

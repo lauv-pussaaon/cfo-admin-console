@@ -25,7 +25,7 @@ import {
 import {
   Close as CloseIcon,
 } from '@mui/icons-material'
-import { organizationService } from '@/lib/services'
+import { organizationService } from '@/lib/services/organization.service'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Organization } from '@/types/database'
 import type { User } from '@/lib/api/types'

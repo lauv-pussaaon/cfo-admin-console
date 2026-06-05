@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { userService } from '@/lib/services'
+import { userService } from '@/lib/services/user.service'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 
