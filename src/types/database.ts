@@ -48,6 +48,19 @@ export interface AnnualReport {
 // Re-export emission resource types for convenience
 export type { ScopeCategory, FuelResource, FuelResourceWithCategory } from './emission-resources'
 
+export interface UserConsent {
+  id: string
+  user_id: string
+  terms_accepted: boolean
+  privacy_acknowledged: boolean
+  marketing_consent: boolean
+  terms_document_url: string
+  privacy_document_url: string
+  cookie_policy_url: string
+  consented_at: string
+  created_at: string
+}
+
 // Organization Invitation type
 export interface OrganizationInvitation {
   id: string
