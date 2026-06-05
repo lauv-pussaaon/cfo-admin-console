@@ -28,10 +28,11 @@ export async function POST(request: NextRequest) {
       contactPhone: payload.contactPhone,
       termsAccepted: payload.termsAccepted,
       privacyAcknowledged: payload.privacyAcknowledged,
+      collectShareDataConsent: payload.collectShareDataConsent ?? false,
       marketingConsent: payload.marketingConsent ?? false,
       termsDocumentUrl: policyUrls.termsDocumentUrl,
       privacyDocumentUrl: policyUrls.privacyDocumentUrl,
-      cookiePolicyUrl: policyUrls.cookiePolicyUrl,
+      collectShareDataConsentUrl: policyUrls.collectShareDataConsentUrl,
     })
 
     return NextResponse.json({

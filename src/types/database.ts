@@ -57,9 +57,10 @@ export interface UserConsent {
   terms_accepted: boolean
   privacy_acknowledged: boolean
   marketing_consent: boolean
+  collect_share_data_consent: boolean
   terms_document_url: string
   privacy_document_url: string
-  cookie_policy_url: string
+  collect_share_data_consent_url: string
   consented_at: string
   created_at: string
 }
@@ -88,9 +89,10 @@ export interface OrganizationTrialRequestConsent {
   terms_accepted: boolean
   privacy_acknowledged: boolean
   marketing_consent: boolean
+  collect_share_data_consent: boolean
   terms_document_url: string
   privacy_document_url: string
-  cookie_policy_url: string
+  collect_share_data_consent_url: string
   consented_at: string
   created_at: string
 }

@@ -41,10 +41,11 @@ export async function POST(request: NextRequest) {
       await createUserConsent(user.id, {
         termsAccepted: payload.termsAccepted,
         privacyAcknowledged: payload.privacyAcknowledged,
+        collectShareDataConsent: payload.collectShareDataConsent ?? false,
         marketingConsent: payload.marketingConsent ?? false,
         termsDocumentUrl: policyUrls.termsDocumentUrl,
         privacyDocumentUrl: policyUrls.privacyDocumentUrl,
-        cookiePolicyUrl: policyUrls.cookiePolicyUrl,
+        collectShareDataConsentUrl: policyUrls.collectShareDataConsentUrl,
       })
     } catch (consentErr) {
       console.error('Failed to save user consent, rolling back user:', consentErr)

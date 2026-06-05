@@ -6,7 +6,7 @@ import {
 } from '@/lib/register/policy-slugs'
 
 export interface PolicyDocument {
-  key: 'terms' | 'privacy' | 'cookie'
+  key: 'terms' | 'privacy' | 'collectShare'
   slug: PolicySlug
   title: string
   summary: string
@@ -14,7 +14,7 @@ export interface PolicyDocument {
   readFullLabel: string
 }
 
-export const POLICY_DOCUMENTS: PolicyDocument[] = [
+export const REGISTRATION_POLICY_DOCUMENTS: PolicyDocument[] = [
   {
     key: 'terms',
     slug: POLICY_SLUGS.terms,
@@ -34,15 +34,18 @@ export const POLICY_DOCUMENTS: PolicyDocument[] = [
     readFullLabel: 'อ่านนโยบายฉบับเต็ม',
   },
   {
-    key: 'cookie',
-    slug: POLICY_SLUGS.cookie,
-    title: 'นโยบายการใช้คุกกี้',
+    key: 'collectShare',
+    slug: POLICY_SLUGS.collectShare,
+    title: 'หนังสือให้ความยินยอมในการเก็บรวบรวม ใช้ และ/หรือเปิดเผยข้อมูลส่วนบุคคล',
     summary:
-      'เอกสารนี้อธิบายประเภทของคุกกี้ เช่น คุกกี้ที่จำเป็น คุกกี้เพื่อวิเคราะห์การใช้งาน คุกกี้การตั้งค่า และคุกกี้การตลาด',
-    routePath: getPolicyRoutePath(POLICY_SLUGS.cookie),
-    readFullLabel: 'อ่านนโยบายคุกกี้',
+      'เอกสารนี้อธิบายวัตถุประสงค์ ประเภทข้อมูล การเปิดเผย และสิทธิของเจ้าของข้อมูล รวมถึงรายละเอียดความยินยอมสำหรับการใช้งานแพลตฟอร์ม Idea Carb',
+    routePath: getPolicyRoutePath(POLICY_SLUGS.collectShare),
+    readFullLabel: 'อ่านหนังสือให้ความยินยอมฉบับเต็ม',
   },
 ]
+
+/** @deprecated Use REGISTRATION_POLICY_DOCUMENTS for registration consent modal */
+export const POLICY_DOCUMENTS = REGISTRATION_POLICY_DOCUMENTS
 
 export const CONSENT_MODAL_COPY = {
   title: 'ก่อนสมัครใช้งาน IdeaCarb',
@@ -52,19 +55,22 @@ export const CONSENT_MODAL_COPY = {
     'ข้าพเจ้าได้อ่านและยอมรับข้อกำหนดและเงื่อนไขการใช้บริการของแพลตฟอร์ม IdeaCarb',
   privacyCheckboxLabel:
     'ข้าพเจ้าได้รับทราบและเข้าใจนโยบายความเป็นส่วนตัวของบริษัท ซิดเอ็น จำกัด แล้ว',
+  collectShareDataConsentCheckboxLabel:
+    'ข้าพเจ้ายินยอมให้บริษัทเก็บรวบรวม ใช้ และ/หรือเปิดเผยข้อมูลส่วนบุคคลตามหนังสือให้ความยินยอม',
   marketingCheckboxLabel:
     'ข้าพเจ้ายินยอมรับข่าวสาร บทความ กิจกรรม หรือข้อมูลบริการจากบริษัทผ่านช่องทางอิเล็กทรอนิกส์',
+  requiredLabel: 'จำเป็น',
   cancelLabel: 'ยกเลิก',
   confirmLabel: 'ดำเนินการสมัครใช้งาน',
 } as const
 
 export function getPolicyUrls() {
-  const terms = POLICY_DOCUMENTS.find((d) => d.key === 'terms')!
-  const privacy = POLICY_DOCUMENTS.find((d) => d.key === 'privacy')!
-  const cookie = POLICY_DOCUMENTS.find((d) => d.key === 'cookie')!
+  const terms = REGISTRATION_POLICY_DOCUMENTS.find((d) => d.key === 'terms')!
+  const privacy = REGISTRATION_POLICY_DOCUMENTS.find((d) => d.key === 'privacy')!
+  const collectShare = REGISTRATION_POLICY_DOCUMENTS.find((d) => d.key === 'collectShare')!
   return {
     termsDocumentUrl: getPolicyDocumentUrl(terms.slug),
     privacyDocumentUrl: getPolicyDocumentUrl(privacy.slug),
-    cookiePolicyUrl: getPolicyDocumentUrl(cookie.slug),
+    collectShareDataConsentUrl: getPolicyDocumentUrl(collectShare.slug),
   }
 }

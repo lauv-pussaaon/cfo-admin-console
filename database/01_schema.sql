@@ -34,9 +34,10 @@ CREATE TABLE user_consents (
   terms_accepted BOOLEAN NOT NULL,
   privacy_acknowledged BOOLEAN NOT NULL,
   marketing_consent BOOLEAN NOT NULL DEFAULT FALSE,
+  collect_share_data_consent BOOLEAN NOT NULL DEFAULT FALSE,
   terms_document_url TEXT NOT NULL,
   privacy_document_url TEXT NOT NULL,
-  cookie_policy_url TEXT NOT NULL,
+  collect_share_data_consent_url TEXT NOT NULL,
   consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -97,9 +98,10 @@ CREATE TABLE organization_trial_request_consents (
   terms_accepted BOOLEAN NOT NULL,
   privacy_acknowledged BOOLEAN NOT NULL,
   marketing_consent BOOLEAN NOT NULL DEFAULT FALSE,
+  collect_share_data_consent BOOLEAN NOT NULL DEFAULT FALSE,
   terms_document_url TEXT NOT NULL,
   privacy_document_url TEXT NOT NULL,
-  cookie_policy_url TEXT NOT NULL,
+  collect_share_data_consent_url TEXT NOT NULL,
   consented_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

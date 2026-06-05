@@ -88,6 +88,7 @@ function ConsultRegisterForm() {
           ...data,
           termsAccepted: consent.termsAccepted,
           privacyAcknowledged: consent.privacyAcknowledged,
+          collectShareDataConsent: consent.collectShareDataConsent,
           marketingConsent: consent.marketingConsent,
         }),
       })

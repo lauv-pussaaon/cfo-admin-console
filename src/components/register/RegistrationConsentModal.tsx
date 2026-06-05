@@ -13,8 +13,34 @@ import {
   Typography,
 } from '@mui/material'
 import ConsentDocumentSection from './ConsentDocumentSection'
-import { CONSENT_MODAL_COPY, POLICY_DOCUMENTS } from './policy-documents'
+import { CONSENT_MODAL_COPY, REGISTRATION_POLICY_DOCUMENTS } from './policy-documents'
 import type { RegistrationConsentPayload } from './types'
+
+function ConsentCheckboxLabel ({
+  children,
+  required = false,
+}: {
+  children: React.ReactNode
+  required?: boolean
+}) {
+  return (
+    <Typography variant="body2" component="span">
+      {children}
+      {required && (
+        <>
+          {' '}
+          <Typography
+            component="span"
+            variant="caption"
+            sx={{ fontWeight: 600, color: 'error.main' }}
+          >
+            ({CONSENT_MODAL_COPY.requiredLabel})
+          </Typography>
+        </>
+      )}
+    </Typography>
+  )
+}
 
 interface RegistrationConsentModalProps {
   open: boolean
@@ -29,6 +55,7 @@ export default function RegistrationConsentModal({
 }: RegistrationConsentModalProps) {
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false)
+  const [collectShareDataConsent, setCollectShareDataConsent] = useState(false)
   const [marketingConsent, setMarketingConsent] = useState(false)
 
   const canProceed = termsAccepted && privacyAcknowledged
@@ -38,6 +65,7 @@ export default function RegistrationConsentModal({
     onConfirm({
       termsAccepted: true,
       privacyAcknowledged: true,
+      collectShareDataConsent,
       marketingConsent,
     })
   }
@@ -71,7 +99,7 @@ export default function RegistrationConsentModal({
         </Typography>
 
         <Box sx={{ display: 'grid', gap: 1.5, mb: 2.5 }}>
-          {POLICY_DOCUMENTS.map((document) => (
+          {REGISTRATION_POLICY_DOCUMENTS.map((document) => (
             <ConsentDocumentSection key={document.key} document={document} />
           ))}
         </Box>
@@ -85,7 +113,9 @@ export default function RegistrationConsentModal({
               />
             }
             label={
-              <Typography variant="body2">{CONSENT_MODAL_COPY.termsCheckboxLabel}</Typography>
+              <ConsentCheckboxLabel required>
+                {CONSENT_MODAL_COPY.termsCheckboxLabel}
+              </ConsentCheckboxLabel>
             }
           />
           <FormControlLabel
@@ -96,7 +126,22 @@ export default function RegistrationConsentModal({
               />
             }
             label={
-              <Typography variant="body2">{CONSENT_MODAL_COPY.privacyCheckboxLabel}</Typography>
+              <ConsentCheckboxLabel required>
+                {CONSENT_MODAL_COPY.privacyCheckboxLabel}
+              </ConsentCheckboxLabel>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={collectShareDataConsent}
+                onChange={(e) => setCollectShareDataConsent(e.target.checked)}
+              />
+            }
+            label={
+              <Typography variant="body2">
+                {CONSENT_MODAL_COPY.collectShareDataConsentCheckboxLabel}
+              </Typography>
             }
           />
           <FormControlLabel

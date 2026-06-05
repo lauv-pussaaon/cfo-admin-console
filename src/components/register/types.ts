@@ -3,6 +3,7 @@ export type RegisterFlowKey = 'consult' | (string & {})
 export interface RegistrationConsentPayload {
   termsAccepted: true
   privacyAcknowledged: true
+  collectShareDataConsent: boolean
   marketingConsent: boolean
 }
 

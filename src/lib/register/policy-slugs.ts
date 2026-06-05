@@ -1,6 +1,7 @@
 export const POLICY_SLUGS = {
   terms: 'terms-and-conditions',
   privacy: 'privacy-policy',
+  collectShare: 'collect-and-share-data-consent',
   cookie: 'cookie-policy',
 } as const
 

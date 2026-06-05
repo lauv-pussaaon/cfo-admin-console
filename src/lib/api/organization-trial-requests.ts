@@ -15,10 +15,11 @@ export interface CreateTrialRequestInput {
   contactPhone: string
   termsAccepted: boolean
   privacyAcknowledged: boolean
+  collectShareDataConsent: boolean
   marketingConsent: boolean
   termsDocumentUrl: string
   privacyDocumentUrl: string
-  cookiePolicyUrl: string
+  collectShareDataConsentUrl: string
 }
 
 export interface ApproveTrialRequestInput {
@@ -61,10 +62,11 @@ export const createTrialRequest = async (
         trial_request_id: request.id,
         terms_accepted: input.termsAccepted,
         privacy_acknowledged: input.privacyAcknowledged,
+        collect_share_data_consent: input.collectShareDataConsent ?? false,
         marketing_consent: input.marketingConsent ?? false,
         terms_document_url: input.termsDocumentUrl,
         privacy_document_url: input.privacyDocumentUrl,
-        cookie_policy_url: input.cookiePolicyUrl,
+        collect_share_data_consent_url: input.collectShareDataConsentUrl,
       })
       .select()
       .single()
