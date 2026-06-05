@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -47,8 +48,20 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const fromWeb = searchParams.get('fromWeb') === '1'
+
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
+
+  const handleBack = () => {
+    if (fromWeb) {
+      window.location.href = 'https://www.ideacarb.com'
+      return
+    }
+    router.push('/')
+  }
 
   const {
     register,
@@ -100,8 +113,7 @@ export default function RegisterPage() {
     >
       <Container maxWidth="sm">
         <Button
-          component={Link}
-          href="/login"
+          onClick={handleBack}
           startIcon={<ArrowBackIcon />}
           sx={{ mb: 3, textTransform: 'none' }}
         >
