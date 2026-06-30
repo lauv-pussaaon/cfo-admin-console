@@ -26,7 +26,6 @@ import {
   ContentCopy as CopyIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
-import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
 import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
 import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
@@ -338,23 +337,15 @@ export default function AdminConsoleOrganizationsPage() {
           : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
       </Typography>
 
-      {isAdmin(user) ? (
-        <AdminOrganizationsTable
-          data={filteredOrganizations as OrganizationWithCreator[]}
-          loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      ) : (
-        <OrganizationsTable
-          data={filteredOrganizations as OrganizationWithStats[]}
-          loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onExport={handleExportOrganization}
-          onInvite={handleInvite}
-        />
-      )}
+      <OrganizationsTable
+        variant={isAdmin(user) ? 'admin' : 'dealer'}
+        data={filteredOrganizations}
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onExport={isAdmin(user) ? undefined : handleExportOrganization}
+        onInvite={isAdmin(user) ? undefined : handleInvite}
+      />
 
       {/* Unified modal for all roles */}
       <AdminOrganizationModal

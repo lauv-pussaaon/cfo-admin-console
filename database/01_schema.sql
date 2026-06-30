@@ -56,11 +56,13 @@ CREATE TABLE organizations (
   contact_last_name TEXT,
   contact_phone TEXT,
   account_type TEXT NOT NULL DEFAULT 'general customers',
+  package_start DATE,
+  package_end DATE,
   created_by UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT organizations_account_type_check CHECK (
-    account_type IN ('general customers', 'demo', 'อบต', 'อบถ', 'cbis', 'ideacarb')
+    account_type IN ('general customers', 'demo', 'employee', 'project')
   )
 );
 
@@ -82,7 +84,7 @@ CREATE TABLE organization_trial_requests (
   contact_last_name TEXT NOT NULL,
   contact_email TEXT NOT NULL,
   contact_phone TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved')),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'cancelled')),
   organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
   approved_account_type TEXT,
   reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
@@ -183,7 +185,7 @@ CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
 CREATE INDEX idx_org_trial_requests_status ON organization_trial_requests(status);
 CREATE INDEX idx_org_trial_requests_contact_email ON organization_trial_requests(contact_email);
 CREATE INDEX idx_org_trial_requests_created_at ON organization_trial_requests(created_at);
-CREATE UNIQUE INDEX idx_org_trial_requests_pending_email ON organization_trial_requests(contact_email) WHERE status = 'pending';
+CREATE UNIQUE INDEX idx_org_trial_requests_active_email ON organization_trial_requests(contact_email) WHERE status IN ('pending', 'processing');
 CREATE INDEX idx_org_trial_request_consents_trial_request_id ON organization_trial_request_consents(trial_request_id);
 
 -- Organization invitations indexes

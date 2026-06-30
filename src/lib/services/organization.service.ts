@@ -62,6 +62,8 @@ export class OrganizationService {
       contact_last_name?: string | null
       contact_phone?: string | null
       account_type?: AccountType
+      package_start?: string | null
+      package_end?: string | null
       created_by?: string | null
       assignedUserId?: string | null
     }
@@ -148,6 +150,8 @@ export class OrganizationService {
       contact_last_name: string | null
       contact_phone: string | null
       account_type: AccountType
+      package_start: string | null
+      package_end: string | null
     }>
   ): Promise<Organization> {
     return updateOrganizationAPI(id, updates)

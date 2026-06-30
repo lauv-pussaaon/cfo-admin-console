@@ -4,19 +4,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  Alert,
   Box,
   Button,
+  Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Snackbar,
+  Alert,
   TextField,
   Typography,
 } from '@mui/material'
@@ -26,10 +23,13 @@ import { trialRequestService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
-import type { OrganizationTrialRequest } from '@/types/database'
-import { ACCOUNT_TYPE_OPTIONS, type AccountType } from '@/types/account-types'
+import type { OrganizationTrialRequest, OrganizationTrialRequestStatus } from '@/types/database'
+import {
+  TRIAL_REQUEST_STATUS_OPTIONS,
+  getTrialRequestStatusChipColor,
+} from '@/types/trial-request-status'
 
-type StatusFilter = '' | 'pending' | 'approved'
+type StatusFilter = '' | OrganizationTrialRequestStatus
 
 export default function AdminTrialRequestsPage () {
   const { user, isLoading: authLoading } = useAuth()
@@ -38,13 +38,8 @@ export default function AdminTrialRequestsPage () {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('')
-  const [approveTarget, setApproveTarget] = useState<OrganizationTrialRequest | null>(null)
-  const [accountType, setAccountType] = useState<AccountType>('demo')
-  const [approvingId, setApprovingId] = useState<string | null>(null)
-  const [approveError, setApproveError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
     if (!authLoading && user && !isAdmin(user)) {
@@ -72,6 +67,21 @@ export default function AdminTrialRequestsPage () {
     }
   }, [user])
 
+  const statusCounts = useMemo(() => {
+    return TRIAL_REQUEST_STATUS_OPTIONS.reduce<Record<OrganizationTrialRequestStatus, number>>(
+      (counts, option) => {
+        counts[option.value] = requests.filter((request) => request.status === option.value).length
+        return counts
+      },
+      {
+        pending: 0,
+        processing: 0,
+        approved: 0,
+        cancelled: 0,
+      }
+    )
+  }, [requests])
+
   const filteredRequests = useMemo(() => {
     const term = searchTerm.trim().toLowerCase()
     return requests.filter((request) => {
@@ -90,45 +100,8 @@ export default function AdminTrialRequestsPage () {
     })
   }, [requests, searchTerm, statusFilter])
 
-  const notify = (message: string, severity: 'success' | 'error' = 'success') => {
-    setSuccessMessage(message)
-    setSnackbarSeverity(severity)
-    setShowSuccessMessage(true)
-  }
-
-  const handleOpenApprove = (request: OrganizationTrialRequest) => {
-    setApproveTarget(request)
-    setAccountType('demo')
-    setApproveError(null)
-  }
-
-  const handleCloseApprove = () => {
-    if (approvingId) return
-    setApproveTarget(null)
-    setApproveError(null)
-  }
-
-  const handleConfirmApprove = async () => {
-    if (!approveTarget || !user) return
-
-    setApprovingId(approveTarget.id)
-    setApproveError(null)
-
-    try {
-      await trialRequestService.approveTrialRequest(approveTarget.id, {
-        reviewedBy: user.id,
-        accountType,
-      })
-      setApproveTarget(null)
-      notify('อนุมัติคำขอทดลองใช้งานและสร้างองค์กรเรียบร้อยแล้ว')
-      await loadRequests()
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'อนุมัติไม่สำเร็จ'
-      setApproveError(message)
-      notify(message, 'error')
-    } finally {
-      setApprovingId(null)
-    }
+  const handleRowClick = (id: string) => {
+    router.push(`/admin-console/trial-requests/${id}`)
   }
 
   if (authLoading || !user || !isAdmin(user)) {
@@ -154,6 +127,26 @@ export default function AdminTrialRequestsPage () {
         คำขอทดลองใช้งานองค์กร
       </Typography>
 
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
+        <Chip
+          label={`ทั้งหมด ${requests.length}`}
+          clickable
+          color={statusFilter === '' ? 'primary' : 'default'}
+          variant={statusFilter === '' ? 'filled' : 'outlined'}
+          onClick={() => setStatusFilter('')}
+        />
+        {TRIAL_REQUEST_STATUS_OPTIONS.map((option) => (
+          <Chip
+            key={option.value}
+            label={`${option.label} ${statusCounts[option.value]}`}
+            clickable
+            color={statusFilter === option.value ? getTrialRequestStatusChipColor(option.value) : 'default'}
+            variant={statusFilter === option.value ? 'filled' : 'outlined'}
+            onClick={() => setStatusFilter(option.value)}
+          />
+        ))}
+      </Box>
+
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
         <TextField
           placeholder="ค้นหาชื่อองค์กร ผู้ติดต่อ อีเมล..."
@@ -173,8 +166,11 @@ export default function AdminTrialRequestsPage () {
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
           >
             <MenuItem value="">ทั้งหมด</MenuItem>
-            <MenuItem value="pending">รออนุมัติ</MenuItem>
-            <MenuItem value="approved">อนุมัติแล้ว</MenuItem>
+            {TRIAL_REQUEST_STATUS_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -182,67 +178,8 @@ export default function AdminTrialRequestsPage () {
       <TrialRequestsTable
         data={filteredRequests}
         loading={loading}
-        approvingId={approvingId}
-        onApprove={handleOpenApprove}
+        onRowClick={handleRowClick}
       />
-
-      <Dialog open={Boolean(approveTarget)} onClose={handleCloseApprove} maxWidth="sm" fullWidth>
-        <DialogTitle>อนุมัติคำขอทดลองใช้งาน</DialogTitle>
-        <DialogContent>
-          {approveError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {approveError}
-            </Alert>
-          )}
-          {approveTarget && (
-            <Box sx={{ display: 'grid', gap: 1.5 }}>
-              <Typography variant="body2">
-                <strong>ชื่อองค์กร:</strong> {approveTarget.organization_name}
-              </Typography>
-              <Typography variant="body2">
-                <strong>ผู้ติดต่อ:</strong> {approveTarget.contact_first_name} {approveTarget.contact_last_name}
-              </Typography>
-              <Typography variant="body2">
-                <strong>อีเมล:</strong> {approveTarget.contact_email}
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                <strong>เบอร์โทร:</strong> {approveTarget.contact_phone}
-              </Typography>
-              <FormControl fullWidth>
-                <InputLabel>ประเภทบัญชี</InputLabel>
-                <Select
-                  label="ประเภทบัญชี"
-                  value={accountType}
-                  onChange={(e) => setAccountType(e.target.value as AccountType)}
-                  disabled={Boolean(approvingId)}
-                >
-                  {ACCOUNT_TYPE_OPTIONS.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Typography variant="caption" color="text.secondary">
-                ระบบจะสร้างองค์กรใหม่และบันทึกข้อมูลผู้ติดต่อลงในตาราง organizations
-              </Typography>
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseApprove} disabled={Boolean(approvingId)} sx={{ textTransform: 'none' }}>
-            ยกเลิก
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleConfirmApprove}
-            disabled={Boolean(approvingId)}
-            sx={{ textTransform: 'none' }}
-          >
-            {approvingId ? 'กำลังอนุมัติ...' : 'ยืนยันอนุมัติ'}
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       <Snackbar
         open={showSuccessMessage}
@@ -252,7 +189,7 @@ export default function AdminTrialRequestsPage () {
       >
         <Alert
           onClose={() => setShowSuccessMessage(false)}
-          severity={snackbarSeverity}
+          severity="success"
           sx={{ width: '100%' }}
         >
           {successMessage}

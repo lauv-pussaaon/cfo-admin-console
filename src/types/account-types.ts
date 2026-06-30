@@ -1,10 +1,8 @@
 export const ACCOUNT_TYPE_VALUES = [
   'general customers',
   'demo',
-  'อบต',
-  'อบถ',
-  'cbis',
-  'ideacarb',
+  'employee',
+  'project',
 ] as const
 
 export type AccountType = typeof ACCOUNT_TYPE_VALUES[number]
@@ -19,8 +17,6 @@ export interface AccountTypeOption {
 export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
   { value: 'general customers', label: 'general customers' },
   { value: 'demo', label: 'demo' },
-  { value: 'อบต', label: 'อบต' },
-  { value: 'อบถ', label: 'อบถ' },
-  { value: 'cbis', label: 'cbis' },
-  { value: 'ideacarb', label: 'ideacarb' },
+  { value: 'employee', label: 'employee' },
+  { value: 'project', label: 'project' },
 ]

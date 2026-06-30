@@ -113,7 +113,7 @@ export default function AdminConsolePage() {
               <CardContent>
                 <HowToRegIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Trial Requests
+                  คำขอทดลองใช้งาน
                 </Typography>
               </CardContent>
             </Card>

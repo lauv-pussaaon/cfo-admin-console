@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -37,6 +37,7 @@ import {
   DEFAULT_ACCOUNT_TYPE,
   type AccountType,
 } from '@/types/account-types'
+import { getDefaultPackagePeriod } from '@/types/package-periods'
 
 interface AdminOrganizationModalProps {
   open: boolean
@@ -51,6 +52,8 @@ interface AdminOrganizationModalProps {
 const organizationSchema = z.object({
   name: z.string().min(1, 'กรุณากรอกชื่อองค์กร'),
   account_type: z.enum(ACCOUNT_TYPE_VALUES),
+  package_start: z.string().optional().nullable(),
+  package_end: z.string().optional().nullable(),
   code: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   app_url: z.string().url('กรุณากรอก URL ที่ถูกต้อง').optional().nullable().or(z.literal('')),
@@ -60,7 +63,18 @@ const organizationSchema = z.object({
   contact_phone: z.string().optional().nullable(),
   is_initialized: z.boolean().optional(),
   dealer_id: z.string().optional().nullable(),
-})
+}).refine(
+  (data) => {
+    if (!data.package_start || !data.package_end) return true
+    return data.package_end >= data.package_start
+  },
+  { message: 'วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น', path: ['package_end'] }
+)
+
+function toDateInputValue (value: string | null | undefined): string {
+  if (!value) return ''
+  return value.slice(0, 10)
+}
 
 export type AdminOrganizationFormData = z.infer<typeof organizationSchema>
 
@@ -77,6 +91,7 @@ export default function AdminOrganizationModal({
   const [dealers, setDealers] = useState<User[]>([])
   const [loadingDealers, setLoadingDealers] = useState(false)
   const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
+  const skipAccountTypeReset = useRef(false)
   
   const isAdminUser = isAdmin(user)
   const isDealerUser = isDealer(user)
@@ -87,6 +102,8 @@ export default function AdminOrganizationModal({
     defaultValues: {
       name: '',
       account_type: DEFAULT_ACCOUNT_TYPE,
+      package_start: getDefaultPackagePeriod(DEFAULT_ACCOUNT_TYPE).package_start,
+      package_end: getDefaultPackagePeriod(DEFAULT_ACCOUNT_TYPE).package_end ?? '',
       code: '',
       description: '',
       app_url: '',
@@ -100,6 +117,23 @@ export default function AdminOrganizationModal({
   })
 
   const { handleSubmit, reset, formState: { errors }, watch, setValue } = methods
+  const accountType = watch('account_type')
+
+  useEffect(() => {
+    if (open) {
+      skipAccountTypeReset.current = true
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open || skipAccountTypeReset.current) {
+      skipAccountTypeReset.current = false
+      return
+    }
+    const defaults = getDefaultPackagePeriod(accountType)
+    setValue('package_start', defaults.package_start)
+    setValue('package_end', defaults.package_end ?? '')
+  }, [accountType, open, setValue])
 
   // Load dealers when modal opens (only for admins)
   useEffect(() => {
@@ -165,6 +199,8 @@ export default function AdminOrganizationModal({
         reset({
           name: initialData.name || '',
           account_type: initialData.account_type ?? DEFAULT_ACCOUNT_TYPE,
+          package_start: toDateInputValue(initialData.package_start),
+          package_end: toDateInputValue(initialData.package_end),
           code: initialData.code || '',
           description: initialData.description || '',
           app_url: initialData.app_url || '',
@@ -176,9 +212,12 @@ export default function AdminOrganizationModal({
           dealer_id: currentDealerId,
         })
       } else {
+        const defaults = getDefaultPackagePeriod(DEFAULT_ACCOUNT_TYPE)
         reset({
           name: '',
           account_type: DEFAULT_ACCOUNT_TYPE,
+          package_start: defaults.package_start,
+          package_end: defaults.package_end ?? '',
           code: '',
           description: '',
           app_url: '',
@@ -216,6 +255,8 @@ export default function AdminOrganizationModal({
             contact_phone: data.contact_phone || null,
             is_initialized: data.is_initialized ?? false,
             account_type: data.account_type,
+            package_start: data.package_start || null,
+            package_end: data.package_end || null,
           }
         )
         organizationId = updated.id
@@ -240,6 +281,8 @@ export default function AdminOrganizationModal({
           contact_last_name: data.contact_last_name || null,
           contact_phone: data.contact_phone || null,
           account_type: data.account_type,
+          package_start: data.package_start || null,
+          package_end: data.package_end || null,
           created_by: user?.id || null,
           assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
         })
@@ -367,6 +410,36 @@ export default function AdminOrganizationModal({
                   ))}
                 </Select>
               </FormControl>
+
+              <TextField
+                {...methods.register('package_start')}
+                label="วันเริ่มแพ็กเกจ"
+                fullWidth
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.package_start}
+                helperText={errors.package_start?.message}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
+                {...methods.register('package_end')}
+                label="วันสิ้นสุดแพ็กเกจ"
+                fullWidth
+                type="date"
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.package_end}
+                helperText={errors.package_end?.message || 'เว้นว่าง = ไม่มีวันหมดอายุ'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
 
               <TextField
                 {...methods.register('factory_admin_email')}

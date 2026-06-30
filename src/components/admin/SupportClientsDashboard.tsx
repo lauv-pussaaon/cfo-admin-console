@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Search as SearchIcon } from '@mui/icons-material'
-import AdminOrganizationsTable from '@/components/admin/AdminOrganizationsTable'
+import OrganizationsTable from '@/components/admin/OrganizationsTable'
 import SupportStaffChatDrawer from '@/components/admin/SupportStaffChatDrawer'
 import { organizationService } from '@/lib/services'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
@@ -159,7 +159,7 @@ export default function SupportClientsDashboard () {
         />
       </Box>
 
-      <AdminOrganizationsTable
+      <OrganizationsTable
         variant="support"
         data={filteredOrganizations as OrganizationWithCreator[]}
         loading={loading}

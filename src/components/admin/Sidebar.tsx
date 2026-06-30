@@ -25,6 +25,7 @@ import {
   Science as ScienceIcon,
   ViewModule as ViewModuleIcon,
   SupportAgent as SupportAgentIcon,
+  HowToReg as HowToRegIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -43,6 +44,7 @@ interface NavItem {
 const FULL_NAV_ITEMS: NavItem[] = [
   { title: 'Dashboard', path: '/admin-console', icon: <DashboardIcon /> },
   { title: 'Organizations', path: '/admin-console/organizations', icon: <BusinessIcon /> },
+  { title: 'Trial Requests', path: '/admin-console/trial-requests', icon: <HowToRegIcon /> },
   { title: 'Support Clients', path: '/admin-console/support-clients', icon: <SupportAgentIcon /> },
   { title: 'Users', path: '/admin-console/users', icon: <PeopleIcon /> },
   { title: 'Analytics', path: '/admin-console/analytics', icon: <AnalyticsIcon /> },

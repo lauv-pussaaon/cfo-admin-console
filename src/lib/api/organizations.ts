@@ -5,6 +5,7 @@ import type {
 } from '@/types/database'
 import type { AccountType } from '@/types/account-types'
 import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
+import { getDefaultPackagePeriod } from '@/types/package-periods'
 import { handleSupabaseError, ValidationError, throwIfError } from '@/lib/utils/errors'
 import type { User } from './types'
 
@@ -362,10 +363,14 @@ export const createOrganization = async (
     contact_last_name?: string | null
     contact_phone?: string | null
     account_type?: AccountType
+    package_start?: string | null
+    package_end?: string | null
     created_by?: string | null
     assignedUserId?: string | null
   }
 ): Promise<Organization> => {
+  const accountType = data.account_type ?? DEFAULT_ACCOUNT_TYPE
+  const defaultPeriod = getDefaultPackagePeriod(accountType)
   const result = await supabase
     .from('organizations')
     .insert({
@@ -377,7 +382,9 @@ export const createOrganization = async (
       contact_first_name: data.contact_first_name || null,
       contact_last_name: data.contact_last_name || null,
       contact_phone: data.contact_phone || null,
-      account_type: data.account_type ?? DEFAULT_ACCOUNT_TYPE,
+      account_type: accountType,
+      package_start: data.package_start ?? defaultPeriod.package_start,
+      package_end: data.package_end !== undefined ? data.package_end : defaultPeriod.package_end,
       is_initialized: false,
       created_by: data.created_by || null,
     })
@@ -414,6 +421,8 @@ export const updateOrganization = async (
     contact_last_name: string | null
     contact_phone: string | null
     account_type: AccountType
+    package_start: string | null
+    package_end: string | null
   }>
 ): Promise<Organization> => {
   // Get old record before update

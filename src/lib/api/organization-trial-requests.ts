@@ -5,7 +5,9 @@ import type { AccountType } from '@/types/account-types'
 import type {
   OrganizationTrialRequest,
   OrganizationTrialRequestConsent,
+  OrganizationTrialRequestStatus,
 } from '@/types/database'
+import { canTransitionTrialRequestStatus } from '@/types/trial-request-status'
 
 export interface CreateTrialRequestInput {
   organizationName: string
@@ -26,6 +28,13 @@ export interface ApproveTrialRequestInput {
   reviewedBy: string
   accountType: AccountType
 }
+
+export interface UpdateTrialRequestStatusInput {
+  status: 'processing' | 'cancelled'
+  reviewedBy: string
+}
+
+const APPROVABLE_STATUSES: OrganizationTrialRequestStatus[] = ['pending', 'processing']
 
 const deleteTrialRequest = async (id: string): Promise<void> => {
   const result = await supabase
@@ -126,6 +135,45 @@ export const getTrialRequestConsent = async (
   return throwIfError(result)
 }
 
+export const updateTrialRequestStatus = async (
+  id: string,
+  input: UpdateTrialRequestStatusInput
+): Promise<OrganizationTrialRequest> => {
+  const request = await getTrialRequestById(id)
+
+  if (!request) {
+    throw new ValidationError('ไม่พบคำขอทดลองใช้งาน')
+  }
+
+  if (!canTransitionTrialRequestStatus(request.status, input.status)) {
+    throw new ValidationError('ไม่สามารถเปลี่ยนสถานะคำขอนี้ได้')
+  }
+
+  const now = new Date().toISOString()
+  const updatePayload =
+    input.status === 'processing'
+      ? {
+          status: input.status,
+          updated_at: now,
+        }
+      : {
+          status: input.status,
+          reviewed_by: input.reviewedBy,
+          reviewed_at: now,
+          updated_at: now,
+        }
+
+  const updateResult = await supabase
+    .from('organization_trial_requests')
+    .update(updatePayload)
+    .eq('id', id)
+    .in('status', APPROVABLE_STATUSES)
+    .select()
+    .single()
+
+  return throwIfError(updateResult)
+}
+
 export const approveTrialRequest = async (
   id: string,
   input: ApproveTrialRequestInput
@@ -136,8 +184,8 @@ export const approveTrialRequest = async (
     throw new ValidationError('ไม่พบคำขอทดลองใช้งาน')
   }
 
-  if (request.status !== 'pending') {
-    throw new ValidationError('คำขอนี้ได้รับการอนุมัติแล้ว')
+  if (!APPROVABLE_STATUSES.includes(request.status)) {
+    throw new ValidationError('คำขอนี้ไม่สามารถอนุมัติได้')
   }
 
   const organization = await createOrganization({
@@ -161,7 +209,7 @@ export const approveTrialRequest = async (
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
-    .eq('status', 'pending')
+    .in('status', APPROVABLE_STATUSES)
     .select()
     .single()
 

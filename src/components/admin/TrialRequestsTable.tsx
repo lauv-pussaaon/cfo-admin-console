@@ -3,14 +3,18 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
 import { Box, Button, Chip, Paper } from '@mui/material'
+import { ChevronRight as ChevronRightIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import type { OrganizationTrialRequest } from '@/types/database'
+import {
+  getTrialRequestStatusChipColor,
+  getTrialRequestStatusLabel,
+} from '@/types/trial-request-status'
 
 interface Props {
   data: OrganizationTrialRequest[]
   loading: boolean
-  approvingId?: string | null
-  onApprove: (request: OrganizationTrialRequest) => void
+  onRowClick?: (id: string) => void
 }
 
 function formatDate (value: string | null) {
@@ -27,8 +31,7 @@ function formatDate (value: string | null) {
 export default function TrialRequestsTable ({
   data,
   loading,
-  approvingId = null,
-  onApprove,
+  onRowClick,
 }: Props) {
   const rows: GridRowsProp = useMemo(() => {
     return data.map((request) => ({
@@ -41,8 +44,6 @@ export default function TrialRequestsTable ({
       created_at: request.created_at,
       reviewed_at: request.reviewed_at,
       organization_id: request.organization_id,
-      approved_account_type: request.approved_account_type,
-      request,
     }))
   }, [data])
 
@@ -73,17 +74,14 @@ export default function TrialRequestsTable ({
     {
       field: 'status',
       headerName: 'สถานะ',
-      width: 130,
-      renderCell: (params) => {
-        const approved = params.value === 'approved'
-        return (
-          <Chip
-            label={approved ? 'อนุมัติแล้ว' : 'รออนุมัติ'}
-            color={approved ? 'success' : 'warning'}
-            size="small"
-          />
-        )
-      },
+      width: 150,
+      renderCell: (params) => (
+        <Chip
+          label={getTrialRequestStatusLabel(params.value)}
+          color={getTrialRequestStatusChipColor(params.value)}
+          size="small"
+        />
+      ),
     },
     {
       field: 'created_at',
@@ -93,7 +91,7 @@ export default function TrialRequestsTable ({
     },
     {
       field: 'reviewed_at',
-      headerName: 'วันที่อนุมัติ',
+      headerName: 'วันที่ดำเนินการ',
       width: 170,
       valueFormatter: (value) => formatDate(value as string | null),
     },
@@ -101,6 +99,8 @@ export default function TrialRequestsTable ({
       field: 'organization_id',
       headerName: 'องค์กร',
       width: 120,
+      sortable: false,
+      filterable: false,
       renderCell: (params) => {
         if (!params.value) return '—'
         return (
@@ -109,6 +109,7 @@ export default function TrialRequestsTable ({
             href={`/admin-console/organizations/${params.value}`}
             size="small"
             sx={{ textTransform: 'none' }}
+            onClick={(event) => event.stopPropagation()}
           >
             ดู
           </Button>
@@ -117,27 +118,15 @@ export default function TrialRequestsTable ({
     },
     {
       field: 'actions',
-      headerName: 'การดำเนินการ',
-      width: 130,
+      headerName: '',
+      width: 56,
       sortable: false,
       filterable: false,
-      renderCell: (params) => {
-        if (params.row.status !== 'pending') return null
-        const isApproving = approvingId === params.row.id
-        return (
-          <Button
-            variant="contained"
-            size="small"
-            disabled={isApproving}
-            onClick={() => onApprove(params.row.request)}
-            sx={{ textTransform: 'none' }}
-          >
-            {isApproving ? 'กำลังอนุมัติ...' : 'อนุมัติ'}
-          </Button>
-        )
-      },
+      renderCell: () => (
+        <ChevronRightIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+      ),
     },
-  ], [approvingId, onApprove])
+  ], [])
 
   return (
     <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
@@ -148,6 +137,13 @@ export default function TrialRequestsTable ({
           loading={loading}
           autoHeight
           disableRowSelectionOnClick
+          onRowClick={
+            onRowClick
+              ? (params) => {
+                  onRowClick(params.row.id as string)
+                }
+              : undefined
+          }
           pageSizeOptions={[10, 25, 50]}
           initialState={{
             pagination: { paginationModel: { pageSize: 10 } },
@@ -156,6 +152,10 @@ export default function TrialRequestsTable ({
             border: 'none',
             '& .MuiDataGrid-columnHeaders': {
               backgroundColor: 'grey.50',
+            },
+            ...(onRowClick ? { '& .MuiDataGrid-row': { cursor: 'pointer' } } : {}),
+            '& .MuiDataGrid-row:hover': {
+              backgroundColor: 'action.hover',
             },
           }}
         />

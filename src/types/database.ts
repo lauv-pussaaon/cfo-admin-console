@@ -13,6 +13,8 @@ export interface Organization {
   contact_last_name: string | null
   contact_phone: string | null
   account_type: AccountType
+  package_start: string | null
+  package_end: string | null
   created_by: string | null
   created_at: string
   updated_at: string | null
@@ -65,7 +67,8 @@ export interface UserConsent {
   created_at: string
 }
 
-export type OrganizationTrialRequestStatus = 'pending' | 'approved'
+export type OrganizationTrialRequestStatus =
+  'pending' | 'processing' | 'approved' | 'cancelled'
 
 export interface OrganizationTrialRequest {
   id: string

@@ -9,6 +9,8 @@ export interface ExportData {
   status: string
   created_at: string
   account_type: string
+  package_start: string
+  package_end: string
   dealer_name?: string
   dealer_email?: string
 }
@@ -28,6 +30,8 @@ export function exportOrganizationToCSV(
     status,
     created_at: new Date(org.created_at).toLocaleString('th-TH'),
     account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
+    package_start: org.package_start ?? '',
+    package_end: org.package_end ?? '',
     dealer_name: dealerInfo?.name || '',
     dealer_email: dealerInfo?.email || '',
   }
@@ -40,6 +44,8 @@ export function exportOrganizationToCSV(
     'Status',
     'Created At',
     'Account Type',
+    'Package Start',
+    'Package End',
     'Dealer Name',
     'Dealer Email',
   ]
@@ -52,6 +58,8 @@ export function exportOrganizationToCSV(
     exportData.status,
     exportData.created_at,
     exportData.account_type,
+    exportData.package_start,
+    exportData.package_end,
     exportData.dealer_name,
     exportData.dealer_email,
   ]
@@ -83,6 +91,8 @@ export function exportOrganizationToJSON(
     status,
     created_at: new Date(org.created_at).toISOString(),
     account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
+    package_start: org.package_start ?? '',
+    package_end: org.package_end ?? '',
     dealer_name: dealerInfo?.name || undefined,
     dealer_email: dealerInfo?.email || undefined,
   }
