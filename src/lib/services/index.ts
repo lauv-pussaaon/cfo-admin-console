@@ -6,6 +6,10 @@ export { AvatarUploadService, avatarUploadService } from './avatar-upload.servic
 export { TemplateImageUploadService, templateImageUploadService } from './template-image-upload.service'
 export { InvitationService, invitationService } from './invitation.service'
 export { TrialRequestService, trialRequestService } from './trial-request.service'
+export {
+  NotificationRecipientService,
+  notificationRecipientService,
+} from './notification-recipient.service'
 export { SupportAttachmentUploadService, supportAttachmentUploadService } from './support-attachment-upload.service'
 
 // Re-export types

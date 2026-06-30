@@ -100,6 +100,18 @@ export interface OrganizationTrialRequestConsent {
   created_at: string
 }
 
+export type NotificationEventType = 'trial_request'
+
+export interface NotificationRecipient {
+  id: string
+  event_type: NotificationEventType
+  email: string
+  label: string | null
+  is_enabled: boolean
+  created_at: string
+  updated_at: string | null
+}
+
 // Organization Invitation type
 export interface OrganizationInvitation {
   id: string

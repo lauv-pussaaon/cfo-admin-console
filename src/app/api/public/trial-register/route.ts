@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createTrialRequest } from '@/lib/api/organization-trial-requests'
+import { getTrialRequestNotificationEmails } from '@/lib/api/notification-recipients-server'
+import { sendAdminNewTrialRequestNotice } from '@/lib/email/send-admin-new-trial-request-notice'
+import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 import { registrationConsentFields } from '@/components/register/consent-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
 import { AppError, ConflictError } from '@/lib/utils/errors'
@@ -14,13 +17,13 @@ const trialRegistrationSchema = z.object({
   ...registrationConsentFields,
 })
 
-export async function POST(request: NextRequest) {
+export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
     const payload = trialRegistrationSchema.parse(body)
     const policyUrls = getPolicyUrls()
 
-    await createTrialRequest({
+    const trialRequest = await createTrialRequest({
       organizationName: payload.organizationName,
       contactFirstName: payload.contactFirstName,
       contactLastName: payload.contactLastName,
@@ -34,6 +37,30 @@ export async function POST(request: NextRequest) {
       privacyDocumentUrl: policyUrls.privacyDocumentUrl,
       collectShareDataConsentUrl: policyUrls.collectShareDataConsentUrl,
     })
+
+    const requestOrigin = resolveSiteOriginFromRequest(request)
+
+    try {
+      const adminEmails = await getTrialRequestNotificationEmails()
+      const noticeResult = await sendAdminNewTrialRequestNotice({
+        organizationName: trialRequest.organization_name,
+        contactFirstName: trialRequest.contact_first_name,
+        contactLastName: trialRequest.contact_last_name,
+        contactEmail: trialRequest.contact_email,
+        contactPhone: trialRequest.contact_phone,
+        createdAt: trialRequest.created_at,
+        requestOrigin,
+        adminEmails,
+      })
+      if (!noticeResult.sent) {
+        console.warn(
+          '[email] ไม่ได้ส่งอีเมลแจ้ง Admin คำขอทดลองใช้งาน:',
+          noticeResult.skipReason ?? 'unknown'
+        )
+      }
+    } catch (emailErr) {
+      console.error('[email] ส่งอีเมลแจ้ง Admin คำขอทดลองใช้งานไม่สำเร็จ:', emailErr)
+    }
 
     return NextResponse.json({
       success: true,

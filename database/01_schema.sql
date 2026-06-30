@@ -108,6 +108,18 @@ CREATE TABLE organization_trial_request_consents (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Admin notification recipient emails
+CREATE TABLE notification_recipients (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  event_type TEXT NOT NULL CHECK (event_type IN ('trial_request')),
+  email TEXT NOT NULL,
+  label TEXT,
+  is_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (event_type, email)
+);
+
 -- Organization Invitations (invitations for client admins)
 CREATE TABLE organization_invitations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -187,6 +199,9 @@ CREATE INDEX idx_org_trial_requests_contact_email ON organization_trial_requests
 CREATE INDEX idx_org_trial_requests_created_at ON organization_trial_requests(created_at);
 CREATE UNIQUE INDEX idx_org_trial_requests_active_email ON organization_trial_requests(contact_email) WHERE status IN ('pending', 'processing');
 CREATE INDEX idx_org_trial_request_consents_trial_request_id ON organization_trial_request_consents(trial_request_id);
+
+-- Notification recipients indexes
+CREATE INDEX idx_notification_recipients_event_enabled ON notification_recipients(event_type, is_enabled);
 
 -- Organization invitations indexes
 CREATE UNIQUE INDEX idx_organization_invitations_unique_pending ON organization_invitations(organization_id, email) WHERE status = 'pending';
