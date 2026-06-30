@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { Box, IconButton, Paper, Chip, Typography, Badge } from '@mui/material'
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -30,7 +30,8 @@ interface Props {
   unreadByOrganization?: Record<string, boolean>
 }
 
-function ellipsisCell (params: { value: string }) {
+function ellipsisCell (params: GridRenderCellParams) {
+  const value = String(params.value ?? '')
   return (
     <Box
       sx={{
@@ -39,9 +40,9 @@ function ellipsisCell (params: { value: string }) {
         whiteSpace: 'nowrap',
         maxWidth: '100%',
       }}
-      title={params.value}
+      title={value}
     >
-      {params.value}
+      {value}
     </Box>
   )
 }
