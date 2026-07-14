@@ -4,48 +4,98 @@ import type {
   FuelResourceLinking,
 } from '@/types/emission-resources'
 
+const LINKING_SELECT = `
+  *,
+  source_fuel:fuel_resources!fuel_resources_linking_source_fuel_id_fkey(
+    id, resource, unit, sub_category, scope_category_id, version,
+    scope_category:scope_categories(id, scope, name_th, name_en)
+  ),
+  dest_fuel:fuel_resources!fuel_resources_linking_dest_fuel_id_fkey(
+    id, resource, unit, sub_category, scope_category_id, version,
+    scope_category:scope_categories(id, scope, name_th, name_en)
+  )
+`
+
 export async function listFuelResourceLinkings (
   version: string
 ): Promise<FuelResourceLinking[]> {
   const { data, error } = await supabase
     .from('fuel_resources_linking')
-    .select(`
-      *,
-      source_fuel:fuel_resources!fuel_resources_linking_source_fuel_id_fkey(id, resource, unit, scope_category_id, version),
-      dest_fuel:fuel_resources!fuel_resources_linking_dest_fuel_id_fkey(id, resource, unit, scope_category_id, version)
-    `)
+    .select(LINKING_SELECT)
     .eq('version', version)
     .order('created_at', { ascending: false })
   if (error) throw error
   return (data ?? []) as FuelResourceLinking[]
 }
 
+export async function getFuelResourceLinking (
+  id: string
+): Promise<FuelResourceLinking | null> {
+  const { data, error } = await supabase
+    .from('fuel_resources_linking')
+    .select(LINKING_SELECT)
+    .eq('id', id)
+    .maybeSingle()
+  if (error) throw error
+  return data as FuelResourceLinking | null
+}
+
 export async function createFuelResourceLinking (
   input: CreateFuelResourceLinkingInput
 ): Promise<FuelResourceLinking> {
+  if (input.source_fuel_id === input.dest_fuel_id) {
+    throw new Error('source_fuel_id and dest_fuel_id must differ')
+  }
+  const factor = input.unit_conversion_factor ?? 1
+  if (!Number.isFinite(factor) || factor <= 0) {
+    throw new Error('unit_conversion_factor must be a positive number')
+  }
   const now = new Date().toISOString()
   const { data, error } = await supabase
     .from('fuel_resources_linking')
     .insert({
       source_fuel_id: input.source_fuel_id,
       dest_fuel_id: input.dest_fuel_id,
-      unit_conversion_factor: input.unit_conversion_factor ?? 1,
+      unit_conversion_factor: factor,
       version: input.version,
       created_at: now,
       updated_at: now,
     })
-    .select()
+    .select(LINKING_SELECT)
     .single()
   if (error) throw error
   return data as FuelResourceLinking
 }
 
-export async function deleteFuelResourceLinking (id: string): Promise<void> {
+export async function updateFuelResourceLinkingFactor (
+  id: string,
+  unit_conversion_factor: number
+): Promise<FuelResourceLinking> {
+  if (!Number.isFinite(unit_conversion_factor) || unit_conversion_factor <= 0) {
+    throw new Error('unit_conversion_factor must be a positive number')
+  }
+  const { data, error } = await supabase
+    .from('fuel_resources_linking')
+    .update({
+      unit_conversion_factor,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select(LINKING_SELECT)
+    .single()
+  if (error) throw error
+  return data as FuelResourceLinking
+}
+
+export async function deleteFuelResourceLinking (id: string): Promise<FuelResourceLinking | null> {
+  const existing = await getFuelResourceLinking(id)
+  if (!existing) return null
   const { error } = await supabase
     .from('fuel_resources_linking')
     .delete()
     .eq('id', id)
   if (error) throw error
+  return existing
 }
 
 export async function deleteFuelResourceLinkingsByVersion (version: string): Promise<number> {

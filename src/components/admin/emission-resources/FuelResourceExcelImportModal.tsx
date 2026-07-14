@@ -34,7 +34,6 @@ import {
 } from '@mui/icons-material'
 import * as XLSX from 'xlsx'
 import type { ScopeCategory } from '@/types/emission-resources'
-import { EF_VERSION_LABELS, type EfCatalogVersion } from '@/lib/constants/ef-catalog'
 
 type ImportMode = 'create' | 'replace'
 
@@ -56,10 +55,6 @@ interface Props {
 function str (value: unknown): string {
   if (value === null || value === undefined) return ''
   return String(value).trim()
-}
-
-function versionLabel (version: string): string {
-  return EF_VERSION_LABELS[version as EfCatalogVersion] || version
 }
 
 export default function FuelResourceExcelImportModal ({
@@ -284,7 +279,7 @@ export default function FuelResourceExcelImportModal ({
                   >
                     {existingVersions.map((v) => (
                       <MenuItem key={v} value={v}>
-                        {versionLabel(v)}
+                        {v}
                       </MenuItem>
                     ))}
                   </Select>

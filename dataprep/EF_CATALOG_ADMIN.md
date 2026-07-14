@@ -39,19 +39,30 @@ Apply after migrations in filename order. The May catalog is split into three in
 
 Expected rough fuel counts: Feb ~990, May ~1797, TGO ~691.
 
-## Linking import
+## Linking (table + Add modal)
 
 UI: **Fuel Resource Linking** (`/admin-console/fuel-resources-linking`).
 
-- Select version
-- Paste V3-style CSV with business keys: `source_category`, `source_resource`, `dest_category`, `dest_resource`, `factor` (or UUID columns)
-- Replace-import fails the batch if any row is unresolved
+- Version tabs from `ef_catalog_releases`
+- **Table** of links for the selected version (source, dest, factor, edit/delete)
+- Toolbar: **Total: N links** and **Add linkage**
+- **Add linkage** modal: source Scope → Category → Fuel (autocomplete); dest Scope → Category → Sub-category → Fuel (autocomplete); factor (default `1`)
+- **Export CSV** in page header
+- Interactive **Add linkage** only (no bulk CSV UI for now)
 
-Source CSV reference: `ideacarb-client-app/dataprep/scope-linking/Scopes Linking Data V3.csv`
+Storage: directed pairs `(source_fuel_id, dest_fuel_id, unit_conversion_factor, version)`. Formula: `dest_qty = source_qty × factor`. Not bidirectional.
+
+API:
+
+- `GET /api/fuel-resources-linking?version=...`
+- `POST /api/fuel-resources-linking` — create pair
+- `PATCH /api/fuel-resources-linking` — `{ id, unit_conversion_factor }`
+- `DELETE /api/fuel-resources-linking?id=...`
+- Mutations refresh `ef_catalog_releases.link_count`
 
 ## Publish + Excel import/export + version delete
 
-Version tabs on Emission Resources are **dynamic** from `ef_catalog_releases` (a newly imported label appears immediately). Known labels use short display names (Feb / May / TGO); otherwise the raw version string is shown.
+Version tabs on Emission Resources are **dynamic** from `ef_catalog_releases` (a newly imported label appears immediately). Tab labels use the stored version string (e.g. `พฤษภาคม 2569`).
 
 **Page header:** **Import Excel** (not tied to the active tab) and Manage Categories.
 
@@ -95,13 +106,13 @@ Category CSV import is not available. TGO API live sync is planned later.
 ## Admin UI surfaces
 
 - `/admin-console/emission-resources` — dynamic version tabs, read-only fuel table, page-level Import Excel, per-version Delete / Publish / Export
-- `/admin-console/fuel-resources-linking` — linking table + import/export
+- `/admin-console/fuel-resources-linking` — per-version links table, Add linkage modal, CSV export
 
 ## Verification checklist
 
 1. Categories count = 20 with manifest UUIDs
 2. Per-version fuel counts match seeds (approx.)
-3. Linking import: 0 unresolved for target version
+3. Linking: Add linkage → row appears; factor edit persists; delete removes; total count matches
 4. Publish May + TGO from version tabs
 5. Export Excel → edit/add duo-value row → Import Excel (new or replace); IDs stable across re-export
 6. New version import → tab appears; release is draft

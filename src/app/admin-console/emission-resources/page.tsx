@@ -35,14 +35,8 @@ import FuelResourceExcelImportModal from '@/components/admin/emission-resources/
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import {
   EF_CATALOG_VERSIONS,
-  EF_VERSION_LABELS,
   EF_VERSION_MAY,
-  type EfCatalogVersion,
 } from '@/lib/constants/ef-catalog'
-
-function versionTabLabel (version: string): string {
-  return EF_VERSION_LABELS[version as EfCatalogVersion] || version
-}
 
 function orderVersions (versions: string[]): string[] {
   const knownOrder = EF_CATALOG_VERSIONS as readonly string[]
@@ -329,7 +323,7 @@ export default function EmissionResourcesPage() {
               allowScrollButtonsMobile
             >
               {versionTabs.map((v) => (
-                <Tab key={v} value={v} label={versionTabLabel(v)} />
+                <Tab key={v} value={v} label={v} />
               ))}
             </Tabs>
           ) : (

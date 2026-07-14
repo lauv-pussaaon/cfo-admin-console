@@ -1,48 +1,70 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Alert,
   Box,
   Button,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
+  IconButton,
   Paper,
-  Select,
   Snackbar,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Tabs,
   TextField,
   Typography,
 } from '@mui/material'
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  FileDownload as FileDownloadIcon,
+  Save as SaveIcon,
+} from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import {
   EF_CATALOG_VERSIONS,
-  EF_VERSION_LABELS,
   EF_VERSION_MAY,
-  type EfCatalogVersion,
 } from '@/lib/constants/ef-catalog'
-import type { FuelResourceLinking } from '@/types/emission-resources'
+import type {
+  EfCatalogRelease,
+  FuelResourceLinking,
+  ScopeCategory,
+} from '@/types/emission-resources'
+import AddFuelLinkingModal from '@/components/admin/fuel-linking/AddFuelLinkingModal'
+
+function orderVersions (versions: string[]): string[] {
+  const knownOrder = EF_CATALOG_VERSIONS as readonly string[]
+  const unique = [...new Set(versions.filter(Boolean))]
+  const known = knownOrder.filter((v) => unique.includes(v))
+  const rest = unique.filter((v) => !knownOrder.includes(v)).sort((a, b) => a.localeCompare(b))
+  return [...known, ...rest]
+}
 
 export default function FuelResourcesLinkingPage () {
   const router = useRouter()
   const { user, isLoading: authLoading } = useAuth()
-  const [version, setVersion] = useState<EfCatalogVersion>(EF_VERSION_MAY)
-  const [rows, setRows] = useState<FuelResourceLinking[]>([])
-  const [loading, setLoading] = useState(false)
-  const [importText, setImportText] = useState('')
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
-    open: false,
-    message: '',
-    severity: 'success',
-  })
+
+  const [version, setVersion] = useState<string>(EF_VERSION_MAY)
+  const [releases, setReleases] = useState<EfCatalogRelease[]>([])
+  const [categories, setCategories] = useState<ScopeCategory[]>([])
+  const [links, setLinks] = useState<FuelResourceLinking[]>([])
+  const [linksLoading, setLinksLoading] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [addOpen, setAddOpen] = useState(false)
+  const [factorEdits, setFactorEdits] = useState<Record<string, string>>({})
+
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean
+    message: string
+    severity: 'success' | 'error'
+  }>({ open: false, message: '', severity: 'success' })
 
   useEffect(() => {
     if (!authLoading && user && !isAdmin(user)) {
@@ -54,98 +76,115 @@ export default function FuelResourcesLinkingPage () {
     setSnackbar({ open: true, message, severity })
   }
 
-  const fetchRows = useCallback(async () => {
-    setLoading(true)
+  const versionTabs = useMemo(
+    () => orderVersions(releases.map((r) => r.version)),
+    [releases]
+  )
+
+  const fetchReleases = useCallback(async () => {
+    const res = await fetch('/api/ef-catalog/releases')
+    const json = await res.json()
+    if (!res.ok) throw new Error(json.error || 'Failed to load releases')
+    setReleases((json.data ?? []) as EfCatalogRelease[])
+  }, [])
+
+  const fetchCategories = useCallback(async () => {
+    const res = await fetch('/api/emission-categories')
+    const json = await res.json()
+    setCategories((json.data ?? []) as ScopeCategory[])
+  }, [])
+
+  const fetchLinks = useCallback(async () => {
+    if (!version) return
+    setLinksLoading(true)
     try {
-      const res = await fetch(`/api/fuel-resources-linking?version=${encodeURIComponent(version)}`)
+      const res = await fetch(
+        `/api/fuel-resources-linking?version=${encodeURIComponent(version)}`
+      )
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Failed to load')
-      setRows(json.data ?? [])
+      if (!res.ok) throw new Error(json.error || 'Failed to load links')
+      setLinks((json.data ?? []) as FuelResourceLinking[])
+      setFactorEdits({})
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : 'Failed to load links', 'error')
     } finally {
-      setLoading(false)
+      setLinksLoading(false)
     }
   }, [version])
 
   useEffect(() => {
-    fetchRows()
-  }, [fetchRows])
+    fetchCategories().catch(() => undefined)
+    fetchReleases().catch((err) =>
+      showSnackbar(err instanceof Error ? err.message : 'Failed to load releases', 'error')
+    )
+  }, [fetchCategories, fetchReleases])
 
-  const handleDelete = async (id: string) => {
+  useEffect(() => {
+    if (versionTabs.length === 0) return
+    if (!versionTabs.includes(version)) {
+      setVersion(versionTabs.includes(EF_VERSION_MAY) ? EF_VERSION_MAY : versionTabs[0])
+    }
+  }, [versionTabs, version])
+
+  useEffect(() => {
+    fetchLinks()
+  }, [fetchLinks])
+
+  const handleUpdateFactor = async (linkId: string, factor: number) => {
+    setBusy(true)
     try {
-      const res = await fetch(`/api/fuel-resources-linking?id=${encodeURIComponent(id)}`, {
-        method: 'DELETE',
+      const res = await fetch('/api/fuel-resources-linking', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: linkId, unit_conversion_factor: factor }),
       })
-      if (!res.ok) throw new Error('Delete failed')
-      showSnackbar('Link deleted')
-      fetchRows()
-    } catch {
-      showSnackbar('Failed to delete link', 'error')
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Failed to update factor')
+      showSnackbar('Factor updated')
+      await fetchLinks()
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : 'Update failed', 'error')
+    } finally {
+      setBusy(false)
     }
   }
 
-  const parseCsvRows = (text: string) => {
-    const lines = text.trim().split(/\r?\n/).filter(Boolean)
-    if (lines.length < 2) return []
-    const headers = lines[0].split(',').map((h) => h.trim().replace(/^"|"$/g, ''))
-    return lines.slice(1).map((line) => {
-      const cols = line.split(',').map((c) => c.trim().replace(/^"|"$/g, ''))
-      const obj: Record<string, string> = {}
-      headers.forEach((h, i) => {
-        obj[h] = cols[i] ?? ''
-      })
-      return {
-        source_category: obj.source_category || obj['source category'] || '',
-        source_resource: obj.source_resource || obj['source resource'] || '',
-        dest_category: obj.dest_category || obj['dest category'] || '',
-        dest_resource: obj.dest_resource || obj['dest resource'] || '',
-        source_fuel_id: obj.source_fuel_id || '',
-        dest_fuel_id: obj.dest_fuel_id || '',
-        unit_conversion_factor: obj.unit_conversion_factor || obj.factor || '1',
-      }
-    })
-  }
-
-  const handleImport = async () => {
+  const handleDelete = async (linkId: string) => {
+    setBusy(true)
     try {
-      const parsed = parseCsvRows(importText)
-      if (parsed.length === 0) throw new Error('No CSV rows found')
-      const res = await fetch('/api/fuel-resources-linking/import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ version, rows: parsed, replace: true }),
-      })
-      const json = await res.json()
-      if (!res.ok) {
-        const detail = json.errors?.[0]
-          ? ` row ${json.errors[0].row}: ${json.errors[0].error}`
-          : ''
-        throw new Error((json.error || 'Import failed') + detail)
-      }
-      showSnackbar(`Imported ${json.imported} links`)
-      setImportText('')
-      fetchRows()
+      const res = await fetch(
+        `/api/fuel-resources-linking?id=${encodeURIComponent(linkId)}`,
+        { method: 'DELETE' }
+      )
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Delete failed')
+      showSnackbar('Link deleted')
+      await fetchLinks()
+      await fetchReleases()
     } catch (err) {
-      showSnackbar(err instanceof Error ? err.message : 'Import failed', 'error')
+      showSnackbar(err instanceof Error ? err.message : 'Delete failed', 'error')
+    } finally {
+      setBusy(false)
     }
   }
 
   const handleExport = async () => {
-    const res = await fetch(
-      `/api/ef-catalog/export?version=${encodeURIComponent(version)}&artifact=fuel_resources_linking&allow_draft=true`
-    )
-    if (!res.ok) {
+    try {
+      const res = await fetch(
+        `/api/ef-catalog/export?version=${encodeURIComponent(version)}&artifact=fuel_resources_linking&allow_draft=true`
+      )
+      if (!res.ok) throw new Error('Export failed')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `fuel_resources_linking_${version}.csv`
+      a.click()
+      URL.revokeObjectURL(url)
+      showSnackbar('Exported CSV')
+    } catch {
       showSnackbar('Export failed', 'error')
-      return
     }
-    const blob = await res.blob()
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `fuel_resources_linking_${version}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
   }
 
   if (authLoading) {
@@ -158,99 +197,211 @@ export default function FuelResourcesLinkingPage () {
   if (user && !isAdmin(user)) return null
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Fuel Resource Linking
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Scope 1 → Scope 3 Cat 3 links per EF catalog version (import from V3 CSV business keys)
-      </Typography>
-
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-        <FormControl size="small" sx={{ minWidth: 220 }}>
-          <InputLabel>Version</InputLabel>
-          <Select
-            label="Version"
-            value={version}
-            onChange={(e) => setVersion(e.target.value as EfCatalogVersion)}
-          >
-            {EF_CATALOG_VERSIONS.map((v) => (
-              <MenuItem key={v} value={v}>
-                {EF_VERSION_LABELS[v]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button variant="outlined" onClick={handleExport}>
+    <Box sx={{ p: 3, maxWidth: '100%' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          mb: 2,
+          gap: 2,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Box>
+          <Typography variant="h4" fontWeight={700} gutterBottom>
+            Fuel Resource Linking
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Directed pairs per catalog version (source → dest + unit conversion factor)
+          </Typography>
+        </Box>
+        <Button
+          variant="outlined"
+          startIcon={<FileDownloadIcon />}
+          onClick={handleExport}
+          disabled={!version || versionTabs.length === 0}
+        >
           Export CSV
         </Button>
-        <Typography variant="body2" color="text.secondary">
-          {rows.length} links
-        </Typography>
       </Box>
 
-      <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-        <Typography variant="subtitle2" gutterBottom>
-          Import CSV (headers: source_category, source_resource, dest_category, dest_resource, factor)
-        </Typography>
-        <TextField
-          multiline
-          minRows={6}
-          fullWidth
-          value={importText}
-          onChange={(e) => setImportText(e.target.value)}
-          placeholder="source_category,source_resource,dest_category,dest_resource,factor"
-        />
-        <Button sx={{ mt: 1 }} variant="contained" onClick={handleImport}>
-          Replace import for version
-        </Button>
+      <Paper variant="outlined" sx={{ mb: 2 }}>
+        <Box sx={{ px: 2, pt: 1 }}>
+          {versionTabs.length > 0 ? (
+            <Tabs
+              value={version}
+              onChange={(_, v: string) => setVersion(v)}
+              variant="scrollable"
+              allowScrollButtonsMobile
+            >
+              {versionTabs.map((v) => (
+                <Tab key={v} value={v} label={v} />
+              ))}
+            </Tabs>
+          ) : (
+            <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
+              No catalog versions yet. Import fuels on Emission Resources first.
+            </Typography>
+          )}
+        </Box>
       </Paper>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Source</TableCell>
-              <TableCell>Dest</TableCell>
-              <TableCell align="right">Factor</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((r) => (
-              <TableRow key={r.id}>
-                <TableCell>
-                  <Typography variant="body2">{r.source_fuel?.resource || r.source_fuel_id}</Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {r.source_fuel_id}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2">{r.dest_fuel?.resource || r.dest_fuel_id}</Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {r.dest_fuel_id}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right">{r.unit_conversion_factor}</TableCell>
-                <TableCell align="right">
-                  <Button size="small" color="error" onClick={() => handleDelete(r.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      {versionTabs.length > 0 && (
+        <>
+          <Paper variant="outlined" sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                gap: 2,
+                px: 2,
+                py: 1.5,
+                borderBottom: 1,
+                borderColor: 'divider',
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Total: {linksLoading ? '…' : `${links.length} links`}
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setAddOpen(true)}
+              >
+                Add linkage
+              </Button>
+            </Box>
+
+            {linksLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                <CircularProgress size={28} />
+              </Box>
+            ) : links.length === 0 ? (
+              <Typography variant="body2" color="text.secondary" sx={{ p: 3 }}>
+                No links for this version yet. Click Add linkage to create one.
+              </Typography>
+            ) : (
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Source</TableCell>
+                    <TableCell>Destination</TableCell>
+                    <TableCell width={120}>Factor</TableCell>
+                    <TableCell width={100} align="right">
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {links.map((link) => {
+                    const editValue = factorEdits[link.id]
+                    const displayFactor =
+                      editValue !== undefined
+                        ? editValue
+                        : String(link.unit_conversion_factor)
+                    const dirty =
+                      editValue !== undefined &&
+                      Number(editValue) !== Number(link.unit_conversion_factor)
+                    return (
+                      <TableRow key={link.id}>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {link.source_fuel?.resource || link.source_fuel_id}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {link.source_fuel?.scope_category?.name_en ?? ''}
+                            {link.source_fuel?.unit ? ` · ${link.source_fuel.unit}` : ''}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {link.dest_fuel?.resource || link.dest_fuel_id}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {link.dest_fuel?.scope_category?.name_en ?? ''}
+                            {link.dest_fuel?.sub_category
+                              ? ` · ${link.dest_fuel.sub_category}`
+                              : ''}
+                            {link.dest_fuel?.unit ? ` · ${link.dest_fuel.unit}` : ''}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            size="small"
+                            value={displayFactor}
+                            onChange={(e) =>
+                              setFactorEdits((prev) => ({
+                                ...prev,
+                                [link.id]: e.target.value,
+                              }))
+                            }
+                            inputProps={{ inputMode: 'decimal' }}
+                            sx={{ width: 100 }}
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            size="small"
+                            disabled={!dirty || busy}
+                            title="Save factor"
+                            onClick={() => {
+                              const factor = Number(displayFactor)
+                              if (!Number.isFinite(factor) || factor <= 0) {
+                                showSnackbar('Factor must be a positive number', 'error')
+                                return
+                              }
+                              handleUpdateFactor(link.id, factor)
+                            }}
+                          >
+                            <SaveIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            disabled={busy}
+                            title="Delete link"
+                            onClick={() => handleDelete(link.id)}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            )}
+          </Paper>
+        </>
       )}
+
+      <AddFuelLinkingModal
+        open={addOpen}
+        version={version}
+        categories={categories}
+        onClose={() => setAddOpen(false)}
+        onCreated={async () => {
+          setAddOpen(false)
+          showSnackbar('Link added')
+          await fetchLinks()
+          await fetchReleases()
+        }}
+      />
 
       <Snackbar
         open={snackbar.open}
         autoHideDuration={5000}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+        <Alert
+          severity={snackbar.severity}
+          onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+        >
+          {snackbar.message}
+        </Alert>
       </Snackbar>
     </Box>
   )
