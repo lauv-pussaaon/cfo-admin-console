@@ -1,6 +1,6 @@
 # EF Catalog Admin Ops
 
-Admin-console is the **system of record** for emission-factor master data (scope categories, versioned fuel resources, linking, and published releases). Fuels can be loaded via dataprep SQL seeds or **Excel import** (matching Export Excel). Client apps will later sync or bootstrap from exports; do not remove client seeds until a test instance can load from this catalog.
+Admin-console is the **system of record** for emission-factor master data (scope categories, versioned fuel resources, linking, and published releases). Client apps can **sync published catalogs** via the Sync catalog page (Phase 1). Default client deploy still seeds until full cutover; use `SKIP_EF_MASTER_SEEDS=1` for empty test instances.
 
 ## Version labels (exact)
 
@@ -100,8 +100,19 @@ API:
 - `POST /api/fuel-resources/import` body `{ version, mode: 'create' | 'replace', rows }`
 - `DELETE /api/fuel-resources?version=...` soft-delete that version
   - Unpublished exports need `allow_draft=true` (QA)
+- **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
+  - `GET /api/ef-catalog/sync/manifest` — published releases
+  - `GET /api/ef-catalog/sync?version=` — categories + fuels + links + `content_hash`
 
-Category CSV import is not available. TGO API live sync is planned later.
+## Client sync (Phase 1)
+
+1. Set the same `EF_CATALOG_SYNC_SECRET` on admin and client; client needs `NEXT_PUBLIC_ADMIN_CONSOLE_URL`.
+2. Publish ≥1 version on admin (Emission Resources → Publish).
+3. On client: Factory Admin → **ซิงค์แคตตาล็อก EF** → **Sync catalog**.
+4. Empty test deploy: `SKIP_EF_MASTER_SEEDS=1` in `deploy.env` (uses `00_seed_all_no_ef.sql`).
+5. Existing client DBs: apply `database/migration/migrate_add_ef_catalog_sync.sql`.
+
+Category CSV import is not available. TGO API live sync on client remains separate (`/admin/ef-sync`).
 
 ## Admin UI surfaces
 
@@ -114,16 +125,17 @@ Category CSV import is not available. TGO API live sync is planned later.
 2. Per-version fuel counts match seeds (approx.)
 3. Linking: Add linkage → row appears; factor edit persists; delete removes; total count matches
 4. Publish May + TGO from version tabs
-5. Export Excel → edit/add duo-value row → Import Excel (new or replace); IDs stable across re-export
-6. New version import → tab appears; release is draft
-7. Replace existing → fuels reloaded; linking for that version cleared; typed confirmation required
-8. Create with duplicate version name → rejected
-9. Delete version fuels affects only that version
-10. Templates still resolve after category align
+5. Client Sync catalog (empty instance) → categories/fuels/links filled; second sync → Already up to date
+6. Export Excel → edit/add duo-value row → Import Excel (new or replace); IDs stable across re-export
+7. New version import → tab appears; release is draft
+8. Replace existing → fuels reloaded; linking for that version cleared; typed confirmation required
+9. Create with duplicate version name → rejected
+10. Delete version fuels affects only that version
+11. Templates still resolve after category align
 
 ## Out of scope (later)
 
-- Client seed removal / `new-master-data` deploy change
-- Client sync module
+- Client seed removal from default deploy
+- Client sync module schedule / provision auto-sync
 - Historical ID remapping on live tenants
-- Live TGO HTTP ingest
+- Live TGO HTTP ingest on admin (client TGO sync remains for now)
