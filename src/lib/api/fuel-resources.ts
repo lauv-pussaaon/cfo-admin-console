@@ -93,7 +93,16 @@ export async function bulkUpsertScopeCategories(rows: Partial<ScopeCategory>[]) 
 // ─── Fuel Resources ────────────────────────────────────────────────────────────
 
 export async function getFuelResources(query: FuelResourcesQuery): Promise<PaginatedResult<FuelResourceWithCategory>> {
-  const { scope, category_id, sub_category, search, page = 1, per_page = 50, include_deleted = false } = query
+  const {
+    scope,
+    category_id,
+    sub_category,
+    search,
+    version,
+    page = 1,
+    per_page = 50,
+    include_deleted = false,
+  } = query
 
   // When filtering by scope, resolve scope_category_ids first (fuel_resources has no scope column)
   let scopeCategoryIds: string[] | undefined
@@ -116,6 +125,11 @@ export async function getFuelResources(query: FuelResourcesQuery): Promise<Pagin
   if (!include_deleted) {
     countQuery = countQuery.is('deleted_at', null)
     dataQuery = dataQuery.is('deleted_at', null)
+  }
+
+  if (version) {
+    countQuery = countQuery.eq('version', version)
+    dataQuery = dataQuery.eq('version', version)
   }
 
   if (category_id) {
@@ -233,21 +247,57 @@ export async function getDistinctSubCategories(scopeCategoryId: string): Promise
   return values.sort()
 }
 
-/** Hard delete all fuel resources across all scopes. Permanently removes rows from DB. */
-export async function hardDeleteAllFuelResources(): Promise<{ deleted: number }> {
+/** Distinct non-null version labels that still have active fuels. */
+export async function listDistinctFuelVersions (): Promise<string[]> {
   const { data, error } = await supabase
     .from('fuel_resources')
-    .delete()
+    .select('version')
+    .is('deleted_at', null)
+    .not('version', 'is', null)
+  if (error) throw error
+  return [...new Set((data ?? []).map((r) => r.version).filter(Boolean) as string[])]
+}
+
+/** Soft-delete all fuel resources for a version (or all versions if omitted). */
+export async function softDeleteFuelResourcesByVersion(
+  version?: string
+): Promise<{ deleted: number }> {
+  const now = new Date().toISOString()
+  let query = supabase
+    .from('fuel_resources')
+    .update({ deleted_at: now, updated_at: now })
+    .is('deleted_at', null)
     .neq('id', '00000000-0000-0000-0000-000000000000')
-    .select('id')
+  if (version) {
+    query = query.eq('version', version)
+  }
+  const { data, error } = await query.select('id')
   if (error) throw error
   return { deleted: data?.length ?? 0 }
+}
+
+/** @deprecated Prefer softDeleteFuelResourcesByVersion. Hard delete all fuel resources. */
+export async function hardDeleteAllFuelResources(): Promise<{ deleted: number }> {
+  return softDeleteFuelResourcesByVersion()
+}
+
+export async function listFuelResourcesForExport(version: string): Promise<FuelResource[]> {
+  const { data, error } = await supabase
+    .from('fuel_resources')
+    .select('*')
+    .eq('version', version)
+    .is('deleted_at', null)
+    .order('sort_index', { ascending: true, nullsFirst: false })
+    .order('resource', { ascending: true })
+  if (error) throw error
+  return (data ?? []) as FuelResource[]
 }
 
 export async function bulkUpsertFuelResources(rows: Partial<FuelResource>[]) {
   const now = new Date().toISOString()
   const records = rows.map((r) => ({
     ...r,
+    deleted_at: null,
     updated_at: now,
     created_at: r.created_at ?? now,
   }))

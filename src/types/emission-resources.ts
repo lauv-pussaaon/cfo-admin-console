@@ -8,6 +8,8 @@ export type RefSource =
   | 'OTHER'
   | 'SUBSITUTE'
 
+export type EfCatalogReleaseStatus = 'draft' | 'published'
+
 export interface ScopeCategory {
   id: string
   scope: 1 | 2 | 3 | 4
@@ -44,10 +46,13 @@ export interface FuelResource {
   extraghg_ef: number | null
   extraghg_gwp100: number | null
   ref_source: RefSource | null
+  version: string | null
+  ref_code: string | null
+  sort_index: number | null
+  multiplier: number
   created_at: string
   updated_at: string | null
   deleted_at: string | null
-  // Joined fields
   scope_category?: ScopeCategory
 }
 
@@ -55,14 +60,46 @@ export interface FuelResourceWithCategory extends FuelResource {
   scope_category: ScopeCategory
 }
 
-// DTO types for forms / API payloads
-export type CreateFuelResourceInput = Omit<FuelResource, 'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'scope_category'>
+export interface EfCatalogRelease {
+  version: string
+  status: EfCatalogReleaseStatus
+  is_default: boolean
+  content_hash: string | null
+  fuel_count: number
+  link_count: number
+  published_at: string | null
+  published_by: string | null
+  updated_at: string | null
+}
+
+export interface FuelResourceLinking {
+  id: string
+  source_fuel_id: string
+  dest_fuel_id: string
+  unit_conversion_factor: number
+  version: string
+  created_at: string
+  updated_at: string | null
+  source_fuel?: FuelResource | null
+  dest_fuel?: FuelResource | null
+}
+
+export type CreateFuelResourceInput = Omit<
+  FuelResource,
+  'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'scope_category'
+>
 export type UpdateFuelResourceInput = Partial<CreateFuelResourceInput>
 
 export type CreateScopeCategoryInput = Omit<ScopeCategory, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>
 export type UpdateScopeCategoryInput = Partial<CreateScopeCategoryInput>
 
-// CSV import row types
+export type CreateFuelResourceLinkingInput = {
+  source_fuel_id: string
+  dest_fuel_id: string
+  unit_conversion_factor?: number
+  version: string
+}
+
 export interface FuelResourceCSVRow {
   id?: string
   scope_category_id?: string
@@ -90,6 +127,10 @@ export interface FuelResourceCSVRow {
   extraghg_ef?: string
   extraghg_gwp100?: string
   ref_source?: string
+  version?: string
+  ref_code?: string
+  sort_index?: string
+  multiplier?: string
 }
 
 export interface ScopeCategoryCSVRow {
@@ -100,7 +141,17 @@ export interface ScopeCategoryCSVRow {
   display_order?: string
 }
 
-// Validation result for import preview
+export interface FuelResourceLinkingCSVRow {
+  source_fuel_id?: string
+  dest_fuel_id?: string
+  source_category?: string
+  source_resource?: string
+  dest_category?: string
+  dest_resource?: string
+  unit_conversion_factor?: string
+  version?: string
+}
+
 export interface ImportValidationResult<T> {
   row: number
   data: T
@@ -115,12 +166,12 @@ export interface ImportPreviewStats {
   errors: number
 }
 
-// Query params for fuel resources list
 export interface FuelResourcesQuery {
   scope?: number
   category_id?: string
   sub_category?: string
   search?: string
+  version?: string
   page?: number
   per_page?: number
   include_deleted?: boolean

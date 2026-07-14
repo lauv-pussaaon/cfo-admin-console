@@ -37,8 +37,13 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
   },
   {
     title: 'ทรัพยากรการปล่อย',
-    description: 'จัดการแหล่งปล่อย หน่วย และค่า EF',
+    description: 'จัดการแหล่งปล่อย หน่วย และค่า EF ตามเวอร์ชันแคตตาล็อก',
     path: '/admin-console/emission-resources',
+  },
+  {
+    title: 'ลิงก์ทรัพยากรเชื้อเพลิง',
+    description: 'จัดการ fuel_resources_linking ต่อเวอร์ชันแคตตาล็อก',
+    path: '/admin-console/fuel-resources-linking',
   },
   {
     title: 'เทมเพลตการปล่อย',

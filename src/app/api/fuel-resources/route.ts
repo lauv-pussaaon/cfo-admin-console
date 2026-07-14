@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFuelResources, createFuelResource, hardDeleteAllFuelResources } from '@/lib/api/fuel-resources'
+import {
+  getFuelResources,
+  softDeleteFuelResourcesByVersion,
+} from '@/lib/api/fuel-resources'
+import { refreshReleaseCounts } from '@/lib/api/ef-catalog-releases'
 
 export async function GET (request: NextRequest) {
   try {
@@ -8,6 +12,7 @@ export async function GET (request: NextRequest) {
     const category_id = searchParams.get('category_id') ?? undefined
     const sub_category = searchParams.get('sub_category') ?? undefined
     const search = searchParams.get('search') ?? undefined
+    const version = searchParams.get('version') ?? undefined
     const page = parseInt(searchParams.get('page') ?? '1', 10)
     const per_page = parseInt(searchParams.get('per_page') ?? '50', 10)
     const include_deleted = searchParams.get('include_deleted') === 'true'
@@ -17,6 +22,7 @@ export async function GET (request: NextRequest) {
       category_id,
       sub_category,
       search,
+      version,
       page,
       per_page,
       include_deleted,
@@ -29,28 +35,19 @@ export async function GET (request: NextRequest) {
   }
 }
 
-export async function POST (request: NextRequest) {
+export async function DELETE (request: NextRequest) {
   try {
-    const body = await request.json()
-
-    if (!body.scope_category_id || !body.resource) {
-      return NextResponse.json({ error: 'scope_category_id and resource are required' }, { status: 400 })
+    const { searchParams } = new URL(request.url)
+    const version = searchParams.get('version')?.trim()
+    if (!version) {
+      return NextResponse.json({ error: 'version is required' }, { status: 400 })
     }
 
-    const record = await createFuelResource(body)
-    return NextResponse.json(record, { status: 201 })
-  } catch (error) {
-    console.error('POST /api/fuel-resources error:', error)
-    return NextResponse.json({ error: 'Failed to create fuel resource' }, { status: 500 })
-  }
-}
-
-export async function DELETE () {
-  try {
-    const { deleted } = await hardDeleteAllFuelResources()
-    return NextResponse.json({ success: true, deleted })
+    const { deleted } = await softDeleteFuelResourcesByVersion(version)
+    await refreshReleaseCounts(version)
+    return NextResponse.json({ success: true, deleted, version })
   } catch (error) {
     console.error('DELETE /api/fuel-resources error:', error)
-    return NextResponse.json({ error: 'Failed to reset fuel resources' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to delete fuel resources for version' }, { status: 500 })
   }
 }

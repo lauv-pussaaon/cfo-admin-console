@@ -9,7 +9,8 @@
     "lint": "eslint",
     "seed:fuel": "node dataprep/generate_fuel_resources_sql.js",
     "seed:templates": "node dataprep/generate_emission_templates_seed.js",
-    "export:external-templates": "node scripts/export-external-templates.mjs"
+    "export:external-templates": "node scripts/export-external-templates.mjs",
+    "ef-catalog:generate-import": "node dataprep/ef-catalog/generate-import-sql.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

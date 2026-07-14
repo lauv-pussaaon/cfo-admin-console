@@ -1,11 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Box, Chip, IconButton, Tooltip, Typography } from '@mui/material'
+import React from 'react'
+import { Box, Chip, Tooltip, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
-import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 
 const SCOPE_COLORS: Record<number, string> = {
   1: '#ef4444',
@@ -20,8 +18,6 @@ interface Props {
   page: number
   perPage: number
   loading: boolean
-  onEdit: (row: FuelResourceWithCategory) => void
-  onDelete: (id: string) => Promise<void>
   onPageChange: (page: number) => void
   onPerPageChange: (perPage: number) => void
 }
@@ -32,29 +28,9 @@ export default function EmissionResourcesTable({
   page,
   perPage,
   loading,
-  onEdit,
-  onDelete,
   onPageChange,
   onPerPageChange,
 }: Props) {
-  const [deleteTarget, setDeleteTarget] = useState<FuelResourceWithCategory | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteError, setDeleteError] = useState<string | null>(null)
-
-  const handleDeleteConfirm = async () => {
-    if (!deleteTarget) return
-    setIsDeleting(true)
-    setDeleteError(null)
-    try {
-      await onDelete(deleteTarget.id)
-      setDeleteTarget(null)
-    } catch {
-      setDeleteError('Failed to delete the resource. Please try again.')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
-
   const columns: GridColDef[] = [
     {
       field: 'scope',
@@ -168,84 +144,41 @@ export default function EmissionResourcesTable({
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
     },
-    {
-      field: 'actions',
-      headerName: '',
-      width: 90,
-      sortable: false,
-      disableColumnMenu: true,
-      display: 'flex',
-      renderCell: (params) => (
-        <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', height: '100%' }}>
-          <Tooltip title="Edit">
-            <IconButton
-              size="small"
-              onClick={() => onEdit(params.row as FuelResourceWithCategory)}
-              sx={{ color: 'primary.main' }}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete">
-            <IconButton
-              size="small"
-              onClick={() => setDeleteTarget(params.row as FuelResourceWithCategory)}
-              sx={{ color: 'error.main' }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      ),
-    },
   ]
 
   return (
-    <>
-      <Box sx={{ width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          rowCount={total}
-          loading={loading}
-          paginationMode="server"
-          paginationModel={{ page, pageSize: perPage }}
-          onPaginationModelChange={(model) => {
-            if (model.page !== page) onPageChange(model.page)
-            if (model.pageSize !== perPage) onPerPageChange(model.pageSize)
-          }}
-          pageSizeOptions={[25, 50, 100]}
-          disableRowSelectionOnClick
-          autoHeight
-          sx={{
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: 2,
-            '& .MuiDataGrid-columnHeader': {
-              backgroundColor: '#f8fafc',
-              fontWeight: 600,
-            },
-            '& .MuiDataGrid-cell': {
-              display: 'flex',
-              alignItems: 'center',
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.02)',
-            },
-          }}
-        />
-      </Box>
-
-      <DeleteConfirmationDialog
-        open={!!deleteTarget}
-        onClose={() => { setDeleteTarget(null); setDeleteError(null) }}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Emission Resource"
-        message={`Are you sure you want to delete "${deleteTarget?.resource}"?`}
-        description="This action will soft-delete the record. It can be restored via database if needed."
-        isDeleting={isDeleting}
-        error={deleteError}
+    <Box sx={{ width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        rowCount={total}
+        loading={loading}
+        paginationMode="server"
+        paginationModel={{ page, pageSize: perPage }}
+        onPaginationModelChange={(model) => {
+          if (model.page !== page) onPageChange(model.page)
+          if (model.pageSize !== perPage) onPerPageChange(model.pageSize)
+        }}
+        pageSizeOptions={[25, 50, 100]}
+        disableRowSelectionOnClick
+        autoHeight
+        sx={{
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 2,
+          '& .MuiDataGrid-columnHeader': {
+            backgroundColor: '#f8fafc',
+            fontWeight: 600,
+          },
+          '& .MuiDataGrid-cell': {
+            display: 'flex',
+            alignItems: 'center',
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.02)',
+          },
+        }}
       />
-    </>
+    </Box>
   )
 }

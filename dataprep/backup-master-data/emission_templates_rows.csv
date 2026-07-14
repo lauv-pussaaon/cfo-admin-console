@@ -1,0 +1,35 @@
+id,legacy_industry_id,industry_code,name_th,name_en,examples,is_active,feature_image_url,feature_image_path,display_order,created_at,updated_at,deleted_at
+07748d84-3729-4260-9863-597e57eb73a3,1,power-generation,กิจกรรมทั่วไป,General Activities,"- Stationary combustion (fuel use in buildings & equipment)
+- Purchased electricity, heat, and steam
+- Business travel and employee commuting
+- Company vehicles and fleet
+- Waste generation and disposal
+- Purchased goods and services
+- Water consumption",true,https://uwqgzfehcigvexpilmgw.supabase.co/storage/v1/object/public/cfo-emission-template-images/templates/6471f0a3-5120-41ec-a6e2-8f4b0f8d6398_kross-banner.jpg,,1,2026-03-19 05:52:36.696612+00,2026-03-21 14:45:15.124+00,
+4636a6b6-dca8-48bd-b828-27c6e9eb79b4,4,metals-production,อุตสาหกรรมการผลิตโลหะ,Metals Production,"• Processing of non-ferrous metals, including production of alloys
+• Production of coke
+• Metal ore roasting or sintering, including pelletisation
+• Production of pig iron or steel including continuous casting",true,https://images.unsplash.com/photo-1532634993-15f421e42ec0?q=80&w=800&auto=format&fit=crop,,4,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+51eec253-5adc-4924-922f-47d80789827f,12,agriculture-forestry-and-other-land-use-afolu,การเกษตร ป่าไม้ และการใช้ที่ดิน,"Agriculture, Forestry & Other Land Use (AFOLU)","• Farming, forestry, and land use activities (emissions from biological processes)",true,https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop,,12,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+53effe3b-7cda-4376-9e01-b601cd9da0c3,6,mining-and-mineral-production,การทำเหมืองและการผลิตแร่,Mining and Mineral Production,"• Production of cement clinker and production of lime or calcinations of dolomite or magnetite
+• Glass and ceramic, mineral wool",true,https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?q=80&w=800&auto=format&fit=crop,,6,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+59f1e3b5-b320-40f0-837c-c4966485a0fc,10,transport,การขนส่ง,Transport,"• Aviation
+• Road transport, rail, and other transportation services",true,https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop,,10,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+7ab13757-f399-4d00-8c5e-cec49892c6f2,7,pulp-paper-and-print,อุตสาหกรรมการผลิตเยื่อกระดาษ กระดาษ และการพิมพ์,"Pulp, Paper and Print","• Production of pulp from timber or other fibrous materials
+• Production of paper and cardboard
+• Printing and publishing",true,https://images.unsplash.com/photo-1453738773917-9c3eff1db985?q=80&w=800&auto=format&fit=crop,,7,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+802c2770-ade6-48b7-90d6-4e8597538576,5,aluminum-production,อุตสาหกรรมการผลิตอะลูมิเนียม,Aluminum Production,• Primary aluminium production,true,https://images.unsplash.com/photo-1565035010268-a3816f98589a?q=80&w=800&auto=format&fit=crop,,5,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+807ce841-eee0-4fcd-9faa-a3ff703af904,2,general-manufacturing,อุตสาหกรรมการผลิตทั่วไป,General Manufacturing,"• Physical or chemical transformation of materials into new products
+• Manufacturing not covered in specific sectors below",true,https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop,,2,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+85f1569f-d167-4873-ac37-41d389d875d0,8,chemical-production,อุตสาหกรรมการผลิตสารเคมี,Chemical Production,"• Production of carbon black, ammonia, soda ash, and sodium bicarbonate
+• Production of bulk organic chemicals by cracking, reforming, etc.
+• Production of hydrogen and synthesis gas
+• Production of nitric, adipic, glyoxal and glyoxylic acid",true,https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop,,8,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+8e9c14bf-b695-49a6-a471-676d65a4b647,3,oil-and-gas,การสำรวจ การผลิต การกลั่นน้ำมันปิโตรเลียมและก๊าซและการจัดส่งทางท่อ รวมถึงอุตสาหกรรมปิโตรเคมี,Oil and Gas,"• Exploration, extraction, production, refining and pipeline distribution of oil and gas",true,https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=800&auto=format&fit=crop,,3,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+c140f299-6048-40e5-a968-b586c4854ad8,11,waste-handling-and-disposal,การจัดการและกำจัดของเสีย,Waste Handling & Disposal,"• Water and waste water treatment
+• Landfill and Composting Facilities",true,https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop,,11,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+c27e9c5e-18a1-424c-b667-f41f36a286df,13,general-services,กิจกรรมการบริการทั่วไป,General Services,"• Building Services / facilities management
+• Education, Hospitals
+• Others (Office-based activities, IT, retail, etc.)",true,https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop,,13,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,
+cf73b137-9a7c-46c7-ae78-b135528ef12d,9,carbon-capture-storage,การดักจับและเก็บก๊าซเรือนกระจก,Carbon Capture Storage,"• Capture and transport of GHG by pipelines for geological storage
+• Geological storage of GHG in a storage site",true,https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop,,9,2026-03-19 05:52:36.696612+00,2026-03-19 05:52:36.696612+00,

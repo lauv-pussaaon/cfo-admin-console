@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Box,
@@ -11,8 +11,6 @@ import {
   TextField,
   Select,
   MenuItem,
-  Menu,
-  IconButton,
   FormControl,
   InputLabel,
   InputAdornment,
@@ -25,18 +23,34 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import {
-  FileUpload as FileUploadIcon,
-  Add as AddIcon,
   Category as CategoryIcon,
   Search as SearchIcon,
-  MoreVert as MoreVertIcon,
+  FileDownload as FileDownloadIcon,
+  FileUpload as FileUploadIcon,
 } from '@mui/icons-material'
-import type { FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
+import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
-import EmissionResourceForm from '@/components/admin/emission-resources/EmissionResourceForm'
-import EmissionResourceImportModal from '@/components/admin/emission-resources/EmissionResourceImportModal'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
+import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
+import {
+  EF_CATALOG_VERSIONS,
+  EF_VERSION_LABELS,
+  EF_VERSION_MAY,
+  type EfCatalogVersion,
+} from '@/lib/constants/ef-catalog'
+
+function versionTabLabel (version: string): string {
+  return EF_VERSION_LABELS[version as EfCatalogVersion] || version
+}
+
+function orderVersions (versions: string[]): string[] {
+  const knownOrder = EF_CATALOG_VERSIONS as readonly string[]
+  const unique = [...new Set(versions.filter(Boolean))]
+  const known = knownOrder.filter((v) => unique.includes(v))
+  const rest = unique.filter((v) => !knownOrder.includes(v)).sort((a, b) => a.localeCompare(b))
+  return [...known, ...rest]
+}
 
 const SCOPE_TABS = [
   { value: 0, label: 'All' },
@@ -64,6 +78,7 @@ export default function EmissionResourcesPage() {
   }, [user, authLoading, router])
 
   const [scopeTab, setScopeTab] = useState(0)
+  const [catalogVersion, setCatalogVersion] = useState<string>(EF_VERSION_MAY)
   const [categoryId, setCategoryId] = useState<string>('')
   const [search, setSearch] = useState('')
   const [categories, setCategories] = useState<ScopeCategory[]>([])
@@ -73,18 +88,25 @@ export default function EmissionResourcesPage() {
   const [perPage, setPerPage] = useState(50)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  // Modal states
-  const [formOpen, setFormOpen] = useState(false)
-  const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
-  const [importOpen, setImportOpen] = useState(false)
   const [categoriesPanelOpen, setCategoriesPanelOpen] = useState(false)
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
-  const [resetDialogOpen, setResetDialogOpen] = useState(false)
-  const [isResetting, setIsResetting] = useState(false)
-  const [resetError, setResetError] = useState<string | null>(null)
+  const [importOpen, setImportOpen] = useState(false)
+  const [deleteVersionOpen, setDeleteVersionOpen] = useState(false)
+  const [isDeletingVersion, setIsDeletingVersion] = useState(false)
+  const [deleteVersionError, setDeleteVersionError] = useState<string | null>(null)
+  const [releases, setReleases] = useState<EfCatalogRelease[]>([])
+  const [releaseLoading, setReleaseLoading] = useState(false)
+  const [actionBusy, setActionBusy] = useState(false)
 
-  // Snackbar
+  const versionTabs = useMemo(
+    () => orderVersions(releases.map((r) => r.version)),
+    [releases]
+  )
+  const release = useMemo(
+    () => releases.find((r) => r.version === catalogVersion) ?? null,
+    [releases, catalogVersion]
+  )
+  const existingVersions = versionTabs
+
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
     open: false,
     message: '',
@@ -97,19 +119,16 @@ export default function EmissionResourcesPage() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const params = new URLSearchParams()
-      if (scopeTab > 0) params.set('scope', String(scopeTab))
-      const res = await fetch(`/api/emission-categories?${params}`)
+      const res = await fetch('/api/emission-categories')
       const json = await res.json()
       setCategories(json.data ?? [])
-      // Reset category filter when scope changes
       setCategoryId('')
     } catch {
       console.error('Failed to load categories')
     }
-  }, [scopeTab])
+  }, [])
 
-  const fetchResources = useCallback(async () => {
+  const fetchResources = useCallback(async (overrides?: { version?: string; page?: number }) => {
     setLoading(true)
     setError(null)
     try {
@@ -117,7 +136,8 @@ export default function EmissionResourcesPage() {
       if (scopeTab > 0) params.set('scope', String(scopeTab))
       if (categoryId) params.set('category_id', categoryId)
       if (search) params.set('search', search)
-      params.set('page', String(page + 1))
+      params.set('version', overrides?.version ?? catalogVersion)
+      params.set('page', String((overrides?.page ?? page) + 1))
       params.set('per_page', String(perPage))
 
       const res = await fetch(`/api/fuel-resources?${params}`)
@@ -131,87 +151,118 @@ export default function EmissionResourcesPage() {
     } finally {
       setLoading(false)
     }
-  }, [scopeTab, categoryId, search, page, perPage])
+  }, [scopeTab, categoryId, search, page, perPage, catalogVersion])
+
+  const fetchReleases = useCallback(async () => {
+    setReleaseLoading(true)
+    try {
+      const res = await fetch('/api/ef-catalog/releases')
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Failed to load releases')
+      const next = (json.data ?? []) as EfCatalogRelease[]
+      setReleases(next)
+      return next
+    } catch (err) {
+      console.error(err)
+      setReleases([])
+      return [] as EfCatalogRelease[]
+    } finally {
+      setReleaseLoading(false)
+    }
+  }, [])
 
   useEffect(() => { fetchCategories() }, [fetchCategories])
   useEffect(() => { fetchResources() }, [fetchResources])
+  useEffect(() => { fetchReleases() }, [fetchReleases])
+
+  useEffect(() => {
+    if (versionTabs.length === 0) return
+    if (!versionTabs.includes(catalogVersion)) {
+      setCatalogVersion(versionTabs.includes(EF_VERSION_MAY) ? EF_VERSION_MAY : versionTabs[0])
+      setPage(0)
+    }
+  }, [versionTabs, catalogVersion])
 
   const handleScopeChange = (_: React.SyntheticEvent, newValue: number) => {
     setScopeTab(newValue)
+    setCategoryId('')
     setPage(0)
   }
 
-  const handleEdit = (resource: FuelResourceWithCategory) => {
-    setEditTarget(resource)
-    setFormOpen(true)
-  }
-
-  const handleDelete = async (id: string) => {
+  const handlePublish = async () => {
+    setActionBusy(true)
     try {
-      const res = await fetch(`/api/fuel-resources/${id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error('Delete failed')
-      showSnackbar('Emission resource deleted')
-      fetchResources()
-    } catch {
-      showSnackbar('Failed to delete resource', 'error')
-    }
-  }
-
-  const handleFormSave = async (data: Partial<FuelResourceWithCategory>) => {
-    try {
-      const method = editTarget ? 'PUT' : 'POST'
-      const url = editTarget ? `/api/fuel-resources/${editTarget.id}` : '/api/fuel-resources'
-      const res = await fetch(url, {
-        method,
+      const res = await fetch('/api/ef-catalog/releases', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ version: catalogVersion, action: 'publish' }),
       })
-      if (!res.ok) throw new Error('Save failed')
-      showSnackbar(editTarget ? 'Resource updated' : 'Resource added')
-      setFormOpen(false)
-      setEditTarget(null)
-      fetchResources()
-    } catch {
-      showSnackbar('Failed to save resource', 'error')
-    }
-  }
-
-  const handleImportComplete = () => {
-    setImportOpen(false)
-    showSnackbar('Import completed successfully')
-    fetchResources()
-  }
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null)
-  }
-
-  const handleResetClick = () => {
-    handleMenuClose()
-    setResetError(null)
-    setResetDialogOpen(true)
-  }
-
-  const handleResetConfirm = async () => {
-    setIsResetting(true)
-    setResetError(null)
-    try {
-      const res = await fetch('/api/fuel-resources', { method: 'DELETE' })
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error ?? 'Reset failed')
-      setResetDialogOpen(false)
-      showSnackbar(`All emission resources reset (${json.deleted ?? 0} deleted)`)
-      fetchResources()
-      fetchCategories()
+      if (!res.ok) throw new Error(json.error || 'Publish failed')
+      showSnackbar(`Published ${catalogVersion}`)
+      await fetchReleases()
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : 'Failed to reset emission resources')
+      showSnackbar(err instanceof Error ? err.message : 'Publish failed', 'error')
     } finally {
-      setIsResetting(false)
+      setActionBusy(false)
     }
+  }
+
+  const handleExportExcel = async () => {
+    setActionBusy(true)
+    try {
+      const params = new URLSearchParams({
+        version: catalogVersion,
+        artifact: 'fuel_resources',
+      })
+      if (release?.status !== 'published') params.set('allow_draft', 'true')
+      const res = await fetch(`/api/ef-catalog/export?${params}`)
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}))
+        throw new Error(json.error || 'Export failed')
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `fuel_resources_${catalogVersion}.xlsx`
+      a.click()
+      URL.revokeObjectURL(url)
+      showSnackbar('Exported Excel')
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : 'Export failed', 'error')
+    } finally {
+      setActionBusy(false)
+    }
+  }
+
+  const handleDeleteVersionConfirm = async () => {
+    setIsDeletingVersion(true)
+    setDeleteVersionError(null)
+    try {
+      const res = await fetch(
+        `/api/fuel-resources?version=${encodeURIComponent(catalogVersion)}`,
+        { method: 'DELETE' }
+      )
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Delete failed')
+      setDeleteVersionOpen(false)
+      showSnackbar(`Soft-deleted ${json.deleted ?? 0} fuels for ${catalogVersion}`)
+      await Promise.all([fetchResources(), fetchReleases()])
+    } catch (err) {
+      setDeleteVersionError(err instanceof Error ? err.message : 'Failed to delete version fuels')
+    } finally {
+      setIsDeletingVersion(false)
+    }
+  }
+
+  const handleImportComplete = async (version: string) => {
+    setImportOpen(false)
+    setCatalogVersion(version)
+    setPage(0)
+    showSnackbar(`Import completed for ${version}`)
+    await fetchReleases()
+    await fetchResources({ version, page: 0 })
   }
 
   const filteredCategories = categories.filter((c) =>
@@ -232,17 +283,23 @@ export default function EmissionResourcesPage() {
 
   return (
     <Box sx={{ p: 3, maxWidth: '100%' }}>
-      {/* Page Header */}
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
         <Box>
           <Typography variant="h4" fontWeight={700} gutterBottom>
             Emission Resources
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Manage fuel resource emission factors (EF) for all scopes
+            Versioned fuel resource emission factors (Excel import / version delete)
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Button
+            variant="outlined"
+            startIcon={<FileUploadIcon />}
+            onClick={() => setImportOpen(true)}
+          >
+            Import Excel
+          </Button>
           <Button
             variant="outlined"
             startIcon={<CategoryIcon />}
@@ -250,41 +307,6 @@ export default function EmissionResourcesPage() {
           >
             Manage Categories
           </Button>
-          <Button
-            variant="outlined"
-            startIcon={<FileUploadIcon />}
-            onClick={() => setImportOpen(true)}
-          >
-            Import CSV
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => { setEditTarget(null); setFormOpen(true) }}
-          >
-            Add Resource
-          </Button>
-          <IconButton
-            onClick={handleMenuOpen}
-            aria-label="More options"
-            aria-controls={menuAnchorEl ? 'emission-resources-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={menuAnchorEl ? 'true' : undefined}
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            id="emission-resources-menu"
-            anchorEl={menuAnchorEl}
-            open={!!menuAnchorEl}
-            onClose={handleMenuClose}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <MenuItem onClick={handleResetClick} sx={{ color: 'error.main' }}>
-              Reset all emission resources
-            </MenuItem>
-          </Menu>
         </Box>
       </Box>
 
@@ -294,9 +316,92 @@ export default function EmissionResourcesPage() {
         </Alert>
       )}
 
-      {/* Filter Bar */}
       <Paper variant="outlined" sx={{ mb: 2 }}>
-        {/* Scope Tabs */}
+        <Box sx={{ px: 2, pt: 2 }}>
+          {versionTabs.length > 0 ? (
+            <Tabs
+              value={catalogVersion}
+              onChange={(_, v: string) => {
+                setCatalogVersion(v)
+                setPage(0)
+              }}
+              variant="scrollable"
+              allowScrollButtonsMobile
+            >
+              {versionTabs.map((v) => (
+                <Tab key={v} value={v} label={versionTabLabel(v)} />
+              ))}
+            </Tabs>
+          ) : (
+            <Typography variant="body2" color="text.secondary" sx={{ pb: 2 }}>
+              {releaseLoading
+                ? 'Loading versions…'
+                : 'No catalog versions yet. Use Import Excel to create one.'}
+            </Typography>
+          )}
+        </Box>
+
+        {versionTabs.length > 0 && (
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            px: 2,
+            py: 1.5,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        >
+          {releaseLoading ? (
+            <CircularProgress size={20} />
+          ) : (
+            <>
+              <Chip
+                size="small"
+                label={release?.status ?? 'draft'}
+                color={release?.status === 'published' ? 'success' : 'default'}
+              />
+              <Typography variant="body2" color="text.secondary">
+                Links: {release?.link_count ?? 0}
+              </Typography>
+            </>
+          )}
+          <Box sx={{ display: 'flex', gap: 1, ml: 'auto', flexWrap: 'wrap' }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="error"
+              disabled={actionBusy || releaseLoading}
+              onClick={() => {
+                setDeleteVersionError(null)
+                setDeleteVersionOpen(true)
+              }}
+            >
+              Delete version fuels
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={actionBusy || releaseLoading}
+              onClick={handlePublish}
+            >
+              Publish
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              startIcon={<FileDownloadIcon />}
+              disabled={actionBusy || releaseLoading}
+              onClick={handleExportExcel}
+            >
+              Export Excel
+            </Button>
+          </Box>
+        </Box>
+        )}
+
         <Tabs
           value={scopeTab}
           onChange={handleScopeChange}
@@ -327,7 +432,6 @@ export default function EmissionResourcesPage() {
           ))}
         </Tabs>
 
-        {/* Category + Search Row */}
         <Box sx={{ display: 'flex', gap: 2, p: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FormControl size="small" sx={{ minWidth: 260 }}>
             <InputLabel>Category</InputLabel>
@@ -378,37 +482,16 @@ export default function EmissionResourcesPage() {
         </Box>
       </Paper>
 
-      {/* Table */}
       <EmissionResourcesTable
         rows={resources}
         total={total}
         page={page}
         perPage={perPage}
         loading={loading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
         onPageChange={setPage}
         onPerPageChange={(v) => { setPerPage(v); setPage(0) }}
       />
 
-      {/* Add / Edit Modal */}
-      <EmissionResourceForm
-        open={formOpen}
-        onClose={() => { setFormOpen(false); setEditTarget(null) }}
-        onSave={handleFormSave}
-        initialData={editTarget}
-        categories={categories}
-      />
-
-      {/* Import CSV Modal */}
-      <EmissionResourceImportModal
-        open={importOpen}
-        onClose={() => setImportOpen(false)}
-        onComplete={handleImportComplete}
-        categories={categories}
-      />
-
-      {/* Categories Panel */}
       <CategoriesPanel
         open={categoriesPanelOpen}
         onClose={() => setCategoriesPanelOpen(false)}
@@ -416,19 +499,26 @@ export default function EmissionResourcesPage() {
         onCategoriesChanged={fetchCategories}
       />
 
-      {/* Reset all confirmation */}
+      <FuelResourceExcelImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onComplete={handleImportComplete}
+        existingVersions={existingVersions}
+        categories={categories}
+      />
+
       <DeleteConfirmationDialog
-        open={resetDialogOpen}
+        open={deleteVersionOpen}
         onClose={() => {
-          setResetDialogOpen(false)
-          setResetError(null)
+          setDeleteVersionOpen(false)
+          setDeleteVersionError(null)
         }}
-        onConfirm={handleResetConfirm}
-        title="Reset All Emission Resources"
-        message="This will permanently delete all fuel resources in all scopes. This action cannot be undone."
-        description="All emission factors and related data will be removed. Use Import CSV to restore data if needed."
-        isDeleting={isResetting}
-        error={resetError}
+        onConfirm={handleDeleteVersionConfirm}
+        title="Delete Fuels for Version"
+        message={`Soft-delete all fuel resources for version "${catalogVersion}"?`}
+        description="Other versions are not affected. Re-import Excel or re-run dataprep SQL to restore."
+        isDeleting={isDeletingVersion}
+        error={deleteVersionError}
       />
 
       <Snackbar

@@ -29,11 +29,9 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
   Check as CheckIcon,
-  FileUpload as FileUploadIcon,
 } from '@mui/icons-material'
 import type { ScopeCategory } from '@/types/emission-resources'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
-import CategoryImportModal from './CategoryImportModal'
 
 const SCOPE_TABS = [
   { value: 0, label: 'All' },
@@ -82,7 +80,6 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
   const [deleteTarget, setDeleteTarget] = useState<ScopeCategory | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [importOpen, setImportOpen] = useState(false)
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
     open: false, message: '', severity: 'success',
   })
@@ -222,19 +219,9 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
           <Typography variant="h6" fontWeight={600}>
             Manage Categories
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              size="small"
-              startIcon={<FileUploadIcon />}
-              variant="outlined"
-              onClick={() => setImportOpen(true)}
-            >
-              Import CSV
-            </Button>
-            <IconButton onClick={onClose} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Box>
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon />
+          </IconButton>
         </Box>
 
         {/* Scope filter tabs */}
@@ -440,18 +427,6 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
         description="This will soft-delete the category. Fuel resources linked to it will remain but may need reassignment."
         isDeleting={isDeleting}
         error={deleteError}
-      />
-
-      {/* Category Import Modal */}
-      <CategoryImportModal
-        open={importOpen}
-        onClose={() => setImportOpen(false)}
-        onComplete={() => {
-          setImportOpen(false)
-          fetchCategories()
-          onCategoriesChanged()
-          showSnackbar('Categories imported successfully')
-        }}
       />
 
       <Snackbar
