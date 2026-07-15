@@ -204,6 +204,18 @@ export async function updateFuelResource(id: string, input: UpdateFuelResourceIn
   return data as FuelResourceWithCategory
 }
 
+export type FuelResourceEfFields = {
+  ef_value?: number | null
+  value1_label?: string | null
+  value1_unit?: string | null
+  value2_label?: string | null
+  value2_unit?: string | null
+}
+
+export async function updateFuelResourceEfFields (id: string, input: FuelResourceEfFields) {
+  return updateFuelResource(id, input)
+}
+
 export async function softDeleteFuelResource(id: string) {
   const { data, error } = await supabase
     .from('fuel_resources')

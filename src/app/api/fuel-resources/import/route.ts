@@ -3,9 +3,7 @@ import { randomUUID } from 'node:crypto'
 import {
   bulkUpsertFuelResources,
   getScopeCategories,
-  softDeleteFuelResourcesByVersion,
 } from '@/lib/api/fuel-resources'
-import { deleteFuelResourceLinkingsByVersion } from '@/lib/api/fuel-resources-linking'
 import {
   ensureEfCatalogRelease,
   getEfCatalogRelease,
@@ -131,14 +129,23 @@ export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
     const version = String(body.version || '').trim()
-    const mode = String(body.mode || '').trim() as 'create' | 'replace'
+    const mode = String(body.mode || 'create').trim() as 'create' | 'replace'
     const rows = body.rows as Array<Record<string, unknown>> | undefined
 
     if (!version) {
       return NextResponse.json({ error: 'version is required' }, { status: 400 })
     }
-    if (mode !== 'create' && mode !== 'replace') {
-      return NextResponse.json({ error: 'mode must be create or replace' }, { status: 400 })
+    if (mode === 'replace') {
+      return NextResponse.json(
+        {
+          error:
+            'Replace import is disabled. Edit EF and duo values inline on Emission Resources, or import a new version label.',
+        },
+        { status: 400 }
+      )
+    }
+    if (mode !== 'create') {
+      return NextResponse.json({ error: 'mode must be create' }, { status: 400 })
     }
     if (!Array.isArray(rows) || rows.length === 0) {
       return NextResponse.json({ error: 'rows array is required and must not be empty' }, { status: 400 })
@@ -147,25 +154,14 @@ export async function POST (request: NextRequest) {
     const existingRelease = await getEfCatalogRelease(version)
     const activeFuelCount = await countActiveFuels(version)
 
-    if (mode === 'create') {
-      if (existingRelease || activeFuelCount > 0) {
-        return NextResponse.json(
-          {
-            error: `Version "${version}" already exists. Use Update existing version to replace it.`,
-            fuel_count: activeFuelCount,
-          },
-          { status: 409 }
-        )
-      }
-    } else {
-      if (!existingRelease && activeFuelCount === 0) {
-        return NextResponse.json(
-          {
-            error: `Version "${version}" does not exist. Use New version to create it.`,
-          },
-          { status: 404 }
-        )
-      }
+    if (existingRelease || activeFuelCount > 0) {
+      return NextResponse.json(
+        {
+          error: `Version "${version}" already exists. Use inline edit for EF corrections, or choose a new version label.`,
+          fuel_count: activeFuelCount,
+        },
+        { status: 409 }
+      )
     }
 
     const categories = await getScopeCategories()
@@ -180,11 +176,6 @@ export async function POST (request: NextRequest) {
       )
     }
 
-    if (mode === 'replace') {
-      await softDeleteFuelResourcesByVersion(version)
-      await deleteFuelResourceLinkingsByVersion(version)
-    }
-
     await ensureEfCatalogRelease(version)
 
     const chunkSize = 200
@@ -197,7 +188,7 @@ export async function POST (request: NextRequest) {
 
     const release = await refreshReleaseCounts(version)
 
-    return NextResponse.json({ imported, version, mode, release })
+    return NextResponse.json({ imported, version, mode: 'create', release })
   } catch (error) {
     console.error('POST /api/fuel-resources/import error:', error)
     return NextResponse.json({ error: 'Failed to import fuel resources' }, { status: 500 })

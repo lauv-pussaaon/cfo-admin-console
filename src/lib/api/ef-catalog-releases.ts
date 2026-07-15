@@ -63,7 +63,7 @@ export async function computeReleaseContentHash (version: string): Promise<strin
   const [{ data: fuels, error: fuelErr }, { data: links, error: linkErr }] = await Promise.all([
     supabase
       .from('fuel_resources')
-      .select('id, ef_value')
+      .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
       .eq('version', version)
       .is('deleted_at', null)
       .order('id', { ascending: true }),
@@ -78,7 +78,16 @@ export async function computeReleaseContentHash (version: string): Promise<strin
   if (linkErr) throw linkErr
 
   const fuelPart = (fuels ?? [])
-    .map((f) => `${f.id}:${f.ef_value ?? ''}`)
+    .map((f) =>
+      [
+        f.id,
+        f.ef_value ?? '',
+        f.value1_label ?? '',
+        f.value1_unit ?? '',
+        f.value2_label ?? '',
+        f.value2_unit ?? '',
+      ].join(':')
+    )
     .join('|')
   const linkPart = (links ?? [])
     .map((l) => `${l.source_fuel_id}>${l.dest_fuel_id}:${l.unit_conversion_factor}`)

@@ -60,11 +60,11 @@ API:
 - `DELETE /api/fuel-resources-linking?id=...`
 - Mutations refresh `ef_catalog_releases.link_count`
 
-## Publish + Excel import/export + version delete
+## Publish + inline edit + Excel import/export
 
 Version tabs on Emission Resources are **dynamic** from `ef_catalog_releases` (a newly imported label appears immediately). Tab labels use the stored version string (e.g. `พฤษภาคม 2569`).
 
-**Page header:** **Import Excel** (not tied to the active tab) and Manage Categories.
+**Page header:** **Import new version** (not tied to the active tab) and Manage Categories.
 
 Under the selected **version tab**:
 
@@ -72,24 +72,42 @@ Under the selected **version tab**:
 |---------------|--------|
 | Status | `draft` or `published` for that version |
 | Links | `link_count` for that version |
+| Published | `published_at` when status is `published` |
 | Delete version fuels | Soft-delete all fuels for the selected version only |
-| Publish | Set `status=published`, store `content_hash`, `published_at`, refresh counts |
+| Publish / Re-publish | Set `status=published`, refresh `content_hash` + `published_at` + counts |
 | Export Excel | Download `fuel_resources_<version>.xlsx` (fuels only; use as import template) |
 
-### Import Excel modes
+### Inline edit (EF + duo values)
 
-Dialog (page-level Import Excel):
+Table action column → **Edit EF** modal. Editable fields:
 
-1. **New version** — free-text label; creates a draft `ef_catalog_releases` row and inserts fuels. Fails if the label already exists (release or active fuels).
-2. **Update existing version** — pick a release; **soft-delete all fuels for that version**, **delete `fuel_resources_linking` for that version**, then insert from Excel. Requires typing the version label to confirm (clears existing fuels and may affect clients already using those emission factors).
+- `ef_value`
+- Duo values: `value1_label`, `value1_unit`, `value2_label`, `value2_unit`
 
-Shared import rules:
+Identity fields (resource name, category, unit, UUID) stay read-only. Saving does **not** change release status or `published_at`. For published versions, click **Re-publish** so client sync sees the new `content_hash`.
+
+`content_hash` includes EF + duo fields so duo-only edits are detectable after re-publish.
+
+API: `PATCH /api/fuel-resources/:id` body whitelist above only.
+
+### Import new version only
+
+Dialog (page-level **Import new version**):
+
+1. Enter a **new** version label (must not already exist).
+2. Upload `.xlsx` matching Export Excel columns.
+3. Preview + import → creates a draft `ef_catalog_releases` row and inserts fuels.
+
+**Replace / update-existing Excel import is disabled** (preserves fuel UUIDs). Use inline edit for EF corrections.
+
+Import rules:
 
 - Format: `.xlsx` only (same columns as Export Excel)
 - Upsert by `id` when present; missing `id` gets a new UUID
 - File `version` column is ignored; rows use the dialog-selected version
 - Duo-value columns (`value1_*`, `value2_*`) are supported for manual TGO supplements
 - Insert/upsert clears `deleted_at` on matching IDs
+- `mode: 'replace'` is rejected by the API
 
 API:
 
@@ -97,7 +115,8 @@ API:
 - `POST /api/ef-catalog/releases` body `{ version, action: publish | set_default | refresh_counts }`
 - `GET /api/ef-catalog/export?version=...&artifact=fuel_resources` → Excel
 - `GET /api/ef-catalog/export?version=...&artifact=fuel_resources_linking` → CSV (linking page)
-- `POST /api/fuel-resources/import` body `{ version, mode: 'create' | 'replace', rows }`
+- `POST /api/fuel-resources/import` body `{ version, mode: 'create', rows }`
+- `PATCH /api/fuel-resources/:id` — EF + duo fields only
 - `DELETE /api/fuel-resources?version=...` soft-delete that version
   - Unpublished exports need `allow_draft=true` (QA)
 - **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
@@ -116,7 +135,7 @@ Category CSV import is not available. TGO API live sync on client remains separa
 
 ## Admin UI surfaces
 
-- `/admin-console/emission-resources` — dynamic version tabs, read-only fuel table, page-level Import Excel, per-version Delete / Publish / Export
+- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF, Import new version, per-version Delete / Publish / Export
 - `/admin-console/fuel-resources-linking` — per-version links table, Add linkage modal, CSV export
 
 ## Verification checklist
@@ -126,12 +145,13 @@ Category CSV import is not available. TGO API live sync on client remains separa
 3. Linking: Add linkage → row appears; factor edit persists; delete removes; total count matches
 4. Publish May + TGO from version tabs
 5. Client Sync catalog (empty instance) → categories/fuels/links filled; second sync → Already up to date
-6. Export Excel → edit/add duo-value row → Import Excel (new or replace); IDs stable across re-export
-7. New version import → tab appears; release is draft
-8. Replace existing → fuels reloaded; linking for that version cleared; typed confirmation required
-9. Create with duplicate version name → rejected
-10. Delete version fuels affects only that version
-11. Templates still resolve after category align
+6. Inline edit EF on published version → UUID unchanged → Re-publish → client sync shows update
+7. Inline edit duo fields only → Re-publish → content_hash changes
+8. Export Excel → Import new version (new label); IDs stable across re-export when `id` present
+9. New version import → tab appears; release is draft
+10. Create with duplicate version name → rejected; `mode=replace` → rejected
+11. Delete version fuels affects only that version
+12. Templates still resolve after category align
 
 ## Out of scope (later)
 
@@ -139,3 +159,4 @@ Category CSV import is not available. TGO API live sync on client remains separa
 - Client sync module schedule / provision auto-sync
 - Historical ID remapping on live tenants
 - Live TGO HTTP ingest on admin (client TGO sync remains for now)
+- Single-row fuel delete

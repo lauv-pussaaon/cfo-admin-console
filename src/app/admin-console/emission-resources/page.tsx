@@ -32,7 +32,9 @@ import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
+import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
+import { formatDateTime } from '@/lib/utils/datetime'
 import {
   EF_CATALOG_VERSIONS,
   EF_VERSION_MAY,
@@ -90,6 +92,7 @@ export default function EmissionResourcesPage() {
   const [releases, setReleases] = useState<EfCatalogRelease[]>([])
   const [releaseLoading, setReleaseLoading] = useState(false)
   const [actionBusy, setActionBusy] = useState(false)
+  const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
 
   const versionTabs = useMemo(
     () => orderVersions(releases.map((r) => r.version)),
@@ -283,7 +286,7 @@ export default function EmissionResourcesPage() {
             Emission Resources
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Versioned fuel resource emission factors (Excel import / version delete)
+            Versioned emission factors — edit inline or import a new version
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -292,7 +295,7 @@ export default function EmissionResourcesPage() {
             startIcon={<FileUploadIcon />}
             onClick={() => setImportOpen(true)}
           >
-            Import Excel
+            Import new version
           </Button>
           <Button
             variant="outlined"
@@ -330,7 +333,7 @@ export default function EmissionResourcesPage() {
             <Typography variant="body2" color="text.secondary" sx={{ pb: 2 }}>
               {releaseLoading
                 ? 'Loading versions…'
-                : 'No catalog versions yet. Use Import Excel to create one.'}
+                : 'No catalog versions yet. Use Import new version to create one.'}
             </Typography>
           )}
         </Box>
@@ -360,6 +363,11 @@ export default function EmissionResourcesPage() {
               <Typography variant="body2" color="text.secondary">
                 Links: {release?.link_count ?? 0}
               </Typography>
+              {release?.status === 'published' && release.published_at && (
+                <Typography variant="body2" color="text.secondary">
+                  Published: {formatDateTime(release.published_at)}
+                </Typography>
+              )}
             </>
           )}
           <Box sx={{ display: 'flex', gap: 1, ml: 'auto', flexWrap: 'wrap' }}>
@@ -381,7 +389,7 @@ export default function EmissionResourcesPage() {
               disabled={actionBusy || releaseLoading}
               onClick={handlePublish}
             >
-              Publish
+              {release?.status === 'published' ? 'Re-publish' : 'Publish'}
             </Button>
             <Button
               size="small"
@@ -484,6 +492,7 @@ export default function EmissionResourcesPage() {
         loading={loading}
         onPageChange={setPage}
         onPerPageChange={(v) => { setPerPage(v); setPage(0) }}
+        onEdit={setEditTarget}
       />
 
       <CategoriesPanel
@@ -491,6 +500,17 @@ export default function EmissionResourcesPage() {
         onClose={() => setCategoriesPanelOpen(false)}
         initialScope={scopeTab}
         onCategoriesChanged={fetchCategories}
+      />
+
+      <FuelResourceEditModal
+        open={Boolean(editTarget)}
+        resource={editTarget}
+        releaseStatus={release?.status ?? null}
+        onClose={() => setEditTarget(null)}
+        onSaved={() => {
+          showSnackbar('Emission factor saved')
+          void fetchResources()
+        }}
       />
 
       <FuelResourceExcelImportModal

@@ -10,15 +10,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  FormControlLabel,
   IconButton,
-  InputLabel,
   LinearProgress,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -35,13 +28,10 @@ import {
 import * as XLSX from 'xlsx'
 import type { ScopeCategory } from '@/types/emission-resources'
 
-type ImportMode = 'create' | 'replace'
-
 interface ParsedRow {
   rowNum: number
   data: Record<string, unknown>
   errors: string[]
-  willUpdate: boolean
 }
 
 interface Props {
@@ -65,9 +55,7 @@ export default function FuelResourceExcelImportModal ({
   categories,
 }: Props) {
   const [step, setStep] = useState(0)
-  const [mode, setMode] = useState<ImportMode>('create')
   const [version, setVersion] = useState('')
-  const [confirmText, setConfirmText] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [dragging, setDragging] = useState(false)
   const [parseError, setParseError] = useState<string | null>(null)
@@ -88,9 +76,7 @@ export default function FuelResourceExcelImportModal ({
 
   const handleReset = () => {
     setStep(0)
-    setMode('create')
     setVersion('')
-    setConfirmText('')
     setFile(null)
     setParseError(null)
     setParsedRows([])
@@ -145,16 +131,15 @@ export default function FuelResourceExcelImportModal ({
           rowNum: i + 2,
           data: raw,
           errors,
-          willUpdate: !!str(raw.id),
         }
       })
 
       setParsedRows(validated)
-      setStep(mode === 'replace' ? 3 : 4)
+      setStep(2)
     } catch (err) {
       setParseError(`Failed to parse Excel: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
-  }, [categoryById, categoryByName, mode])
+  }, [categoryById, categoryByName])
 
   const handleFileSelect = (f: File) => {
     if (!f.name.toLowerCase().endsWith('.xlsx')) {
@@ -171,11 +156,7 @@ export default function FuelResourceExcelImportModal ({
   }), [parsedRows])
 
   const canProceedVersion =
-    mode === 'create'
-      ? version.trim().length > 0 && !existingVersions.includes(version.trim())
-      : version.trim().length > 0 && existingVersions.includes(version.trim())
-
-  const canConfirmReplace = confirmText.trim() === version.trim()
+    version.trim().length > 0 && !existingVersions.includes(version.trim())
 
   const handleImport = async () => {
     setImporting(true)
@@ -185,7 +166,7 @@ export default function FuelResourceExcelImportModal ({
       const res = await fetch('/api/fuel-resources/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ version: version.trim(), mode, rows: validRows }),
+        body: JSON.stringify({ version: version.trim(), mode: 'create', rows: validRows }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -195,7 +176,7 @@ export default function FuelResourceExcelImportModal ({
         throw new Error((json.error || 'Import failed') + detail)
       }
       setImportResult({ imported: json.imported, version: json.version })
-      setStep(5)
+      setStep(3)
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'Import failed')
     } finally {
@@ -209,7 +190,7 @@ export default function FuelResourceExcelImportModal ({
     <Dialog open={open} onClose={!importing ? handleClose : undefined} maxWidth="md" fullWidth>
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          Import Fuel Resources Excel
+          Import new catalog version
           <IconButton onClick={handleClose} disabled={importing} size="small">
             <CloseIcon />
           </IconButton>
@@ -220,81 +201,27 @@ export default function FuelResourceExcelImportModal ({
         {step === 0 && (
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Choose whether to create a new catalog version or replace an existing one.
+              Excel import bootstraps a <strong>new</strong> version label only. To correct EF or duo
+              values on an existing version, use the edit action on the table.
             </Typography>
-            <RadioGroup
-              value={mode}
-              onChange={(e) => {
-                setMode(e.target.value as ImportMode)
-                setVersion('')
-              }}
-            >
-              <FormControlLabel
-                value="create"
-                control={<Radio />}
-                label="New version — insert fuels under a new version label"
-              />
-              <FormControlLabel
-                value="replace"
-                control={<Radio />}
-                label="Update existing version — clear that version, then insert"
-              />
-            </RadioGroup>
+            <TextField
+              fullWidth
+              size="small"
+              label="Version label"
+              value={version}
+              onChange={(e) => setVersion(e.target.value)}
+              placeholder="e.g. TGO API 2026-07"
+              error={version.trim() !== '' && existingVersions.includes(version.trim())}
+              helperText={
+                version.trim() && existingVersions.includes(version.trim())
+                  ? 'This version already exists'
+                  : ' '
+              }
+            />
           </Box>
         )}
 
         {step === 1 && (
-          <Box>
-            {mode === 'create' ? (
-              <>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Enter a new version label (must not already exist).
-                </Typography>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Version label"
-                  value={version}
-                  onChange={(e) => setVersion(e.target.value)}
-                  placeholder="e.g. TGO API 2026-07"
-                  error={version.trim() !== '' && existingVersions.includes(version.trim())}
-                  helperText={
-                    version.trim() && existingVersions.includes(version.trim())
-                      ? 'This version already exists'
-                      : ' '
-                  }
-                />
-              </>
-            ) : (
-              <>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Select the version to replace.
-                </Typography>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Existing version</InputLabel>
-                  <Select
-                    label="Existing version"
-                    value={version}
-                    onChange={(e) => setVersion(e.target.value)}
-                  >
-                    {existingVersions.map((v) => (
-                      <MenuItem key={v} value={v}>
-                        {v}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {existingVersions.length === 0 && (
-                  <Alert severity="warning" sx={{ mt: 2 }}>
-                    No existing versions found. Use New version instead.
-                  </Alert>
-                )}
-              </>
-            )}
-          </Box>
-        )}
-
-        {step === 2 && (
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Upload an .xlsx matching Export Excel columns. Rows will import into{' '}
@@ -337,35 +264,11 @@ export default function FuelResourceExcelImportModal ({
           </Box>
         )}
 
-        {step === 3 && mode === 'replace' && (
-          <Box>
-            <Alert severity="warning" sx={{ mb: 2 }}>
-              Updating <strong>{version}</strong> will soft-delete all existing fuel resources for
-              this version and remove its linking rows, then insert the Excel data. This may affect
-              clients already using these emission factors.
-            </Alert>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              File: {file?.name} — {stats.valid} valid / {stats.errors} error rows
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Type the version label exactly to confirm:
-            </Typography>
-            <TextField
-              fullWidth
-              size="small"
-              label="Confirm version"
-              value={confirmText}
-              onChange={(e) => setConfirmText(e.target.value)}
-              placeholder={version}
-            />
-          </Box>
-        )}
-
-        {step === 4 && (
+        {step === 2 && (
           <Box>
             <Typography variant="body2" sx={{ mb: 1 }}>
-              Target: <strong>{version}</strong> ({mode === 'create' ? 'new' : 'replace'}) —{' '}
-              {file?.name}: {stats.total} rows · {stats.valid} valid · {stats.errors} errors
+              Target: <strong>{version}</strong> (new version) — {file?.name}: {stats.total} rows ·{' '}
+              {stats.valid} valid · {stats.errors} errors
             </Typography>
             {stats.errors > 0 && (
               <Alert severity="warning" sx={{ mb: 2 }}>
@@ -407,7 +310,7 @@ export default function FuelResourceExcelImportModal ({
           </Box>
         )}
 
-        {step === 5 && importResult && (
+        {step === 3 && importResult && (
           <Box sx={{ textAlign: 'center', py: 3 }}>
             <CheckCircleIcon color="success" sx={{ fontSize: 48, mb: 1 }} />
             <Typography variant="h6">Import complete</Typography>
@@ -422,48 +325,22 @@ export default function FuelResourceExcelImportModal ({
         {step === 0 && (
           <>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button variant="contained" onClick={() => setStep(1)}>Next</Button>
-          </>
-        )}
-        {step === 1 && (
-          <>
-            <Button onClick={() => setStep(0)}>Back</Button>
-            <Button variant="contained" disabled={!canProceedVersion} onClick={() => setStep(2)}>
+            <Button variant="contained" disabled={!canProceedVersion} onClick={() => setStep(1)}>
               Next
             </Button>
           </>
         )}
+        {step === 1 && (
+          <Button onClick={() => { setFile(null); setParseError(null); setStep(0) }}>Back</Button>
+        )}
         {step === 2 && (
-          <Button onClick={() => { setFile(null); setParseError(null); setStep(1) }}>Back</Button>
-        )}
-        {step === 3 && (
-          <>
-            <Button
-              onClick={() => {
-                setConfirmText('')
-                setParsedRows([])
-                setFile(null)
-                setStep(2)
-              }}
-            >
-              Back
-            </Button>
-            <Button
-              variant="contained"
-              color="warning"
-              disabled={!canConfirmReplace || stats.valid === 0}
-              onClick={() => setStep(4)}
-            >
-              Continue to preview
-            </Button>
-          </>
-        )}
-        {step === 4 && (
           <>
             <Button
               onClick={() => {
                 setImportError(null)
-                setStep(mode === 'replace' ? 3 : 2)
+                setParsedRows([])
+                setFile(null)
+                setStep(1)
               }}
               disabled={importing}
             >
@@ -475,11 +352,11 @@ export default function FuelResourceExcelImportModal ({
               disabled={importing || stats.valid === 0}
               startIcon={importing ? <CircularProgress size={16} /> : undefined}
             >
-              {mode === 'replace' ? 'Replace & import' : 'Import'} {stats.valid} rows
+              Import {stats.valid} rows
             </Button>
           </>
         )}
-        {step === 5 && importResult && (
+        {step === 3 && importResult && (
           <Button
             variant="contained"
             onClick={() => {

@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react'
-import { Box, Chip, Tooltip, Typography } from '@mui/material'
+import { Box, Chip, IconButton, Tooltip, Typography } from '@mui/material'
+import { EditOutlined as EditOutlinedIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
 
@@ -12,6 +13,15 @@ const SCOPE_COLORS: Record<number, string> = {
   4: '#8b5cf6',
 }
 
+function hasDuoValues (row: FuelResourceWithCategory): boolean {
+  return Boolean(
+    row.value1_label ||
+    row.value1_unit ||
+    row.value2_label ||
+    row.value2_unit
+  )
+}
+
 interface Props {
   rows: FuelResourceWithCategory[]
   total: number
@@ -20,6 +30,7 @@ interface Props {
   loading: boolean
   onPageChange: (page: number) => void
   onPerPageChange: (perPage: number) => void
+  onEdit: (row: FuelResourceWithCategory) => void
 }
 
 export default function EmissionResourcesTable({
@@ -30,6 +41,7 @@ export default function EmissionResourcesTable({
   loading,
   onPageChange,
   onPerPageChange,
+  onEdit,
 }: Props) {
   const columns: GridColDef[] = [
     {
@@ -96,11 +108,21 @@ export default function EmissionResourcesTable({
       minWidth: 130,
       display: 'flex',
       renderCell: (params) => (
-        <Tooltip title={params.value} enterDelay={300}>
-          <Typography variant="body2" fontWeight={500}>
-            {params.value}
-          </Typography>
-        </Tooltip>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, minWidth: 0 }}>
+          <Tooltip title={params.value} enterDelay={300}>
+            <Typography variant="body2" fontWeight={500} noWrap>
+              {params.value}
+            </Typography>
+          </Tooltip>
+          {hasDuoValues(params.row) && (
+            <Chip
+              label="Duo"
+              size="small"
+              variant="outlined"
+              sx={{ height: 18, fontSize: '0.65rem', flexShrink: 0 }}
+            />
+          )}
+        </Box>
       ),
     },
     {
@@ -143,6 +165,28 @@ export default function EmissionResourcesTable({
         ) : (
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
+    },
+    {
+      field: 'actions',
+      headerName: '',
+      width: 56,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      align: 'center',
+      headerAlign: 'center',
+      display: 'flex',
+      renderCell: (params) => (
+        <Tooltip title="Edit EF">
+          <IconButton
+            size="small"
+            aria-label="Edit EF"
+            onClick={() => onEdit(params.row as FuelResourceWithCategory)}
+          >
+            <EditOutlinedIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      ),
     },
   ]
 
