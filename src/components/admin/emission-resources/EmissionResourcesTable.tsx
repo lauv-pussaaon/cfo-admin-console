@@ -13,12 +13,16 @@ const SCOPE_COLORS: Record<number, string> = {
   4: '#8b5cf6',
 }
 
-function hasDuoValues (row: FuelResourceWithCategory): boolean {
-  return Boolean(
-    row.value1_label ||
-    row.value1_unit ||
-    row.value2_label ||
-    row.value2_unit
+function OptionalTextCell ({ value }: { value: string | null | undefined }) {
+  if (!value) {
+    return <Typography variant="body2" color="text.disabled">—</Typography>
+  }
+  return (
+    <Tooltip title={value} enterDelay={300}>
+      <Typography variant="body2" noWrap>
+        {value}
+      </Typography>
+    </Tooltip>
   )
 }
 
@@ -108,21 +112,11 @@ export default function EmissionResourcesTable({
       minWidth: 130,
       display: 'flex',
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, minWidth: 0 }}>
-          <Tooltip title={params.value} enterDelay={300}>
-            <Typography variant="body2" fontWeight={500} noWrap>
-              {params.value}
-            </Typography>
-          </Tooltip>
-          {hasDuoValues(params.row) && (
-            <Chip
-              label="Duo"
-              size="small"
-              variant="outlined"
-              sx={{ height: 18, fontSize: '0.65rem', flexShrink: 0 }}
-            />
-          )}
-        </Box>
+        <Tooltip title={params.value} enterDelay={300}>
+          <Typography variant="body2" fontWeight={500} noWrap>
+            {params.value}
+          </Typography>
+        </Tooltip>
       ),
     },
     {
@@ -151,6 +145,34 @@ export default function EmissionResourcesTable({
         ) : (
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
+    },
+    {
+      field: 'value1_label',
+      headerName: 'Value 1 label',
+      width: 120,
+      display: 'flex',
+      renderCell: (params) => <OptionalTextCell value={params.value} />,
+    },
+    {
+      field: 'value1_unit',
+      headerName: 'Value 1 unit',
+      width: 100,
+      display: 'flex',
+      renderCell: (params) => <OptionalTextCell value={params.value} />,
+    },
+    {
+      field: 'value2_label',
+      headerName: 'Value 2 label',
+      width: 120,
+      display: 'flex',
+      renderCell: (params) => <OptionalTextCell value={params.value} />,
+    },
+    {
+      field: 'value2_unit',
+      headerName: 'Value 2 unit',
+      width: 100,
+      display: 'flex',
+      renderCell: (params) => <OptionalTextCell value={params.value} />,
     },
     {
       field: 'ref_info',
@@ -205,6 +227,7 @@ export default function EmissionResourcesTable({
         }}
         pageSizeOptions={[25, 50, 100]}
         disableRowSelectionOnClick
+        disableColumnSorting
         autoHeight
         sx={{
           border: '1px solid',

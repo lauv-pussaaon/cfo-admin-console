@@ -92,6 +92,84 @@ export async function bulkUpsertScopeCategories(rows: Partial<ScopeCategory>[]) 
 
 // ─── Fuel Resources ────────────────────────────────────────────────────────────
 
+function sortFuelResourcesByScopeCategoryResource (
+  rows: FuelResourceWithCategory[]
+): FuelResourceWithCategory[] {
+  return [...rows].sort((a, b) => {
+    const scopeA = a.scope_category?.scope ?? 0
+    const scopeB = b.scope_category?.scope ?? 0
+    if (scopeA !== scopeB) return scopeA - scopeB
+
+    const catA = a.scope_category?.name_en ?? ''
+    const catB = b.scope_category?.name_en ?? ''
+    const catCmp = catA.localeCompare(catB, undefined, { sensitivity: 'base' })
+    if (catCmp !== 0) return catCmp
+
+    return (a.resource ?? '').localeCompare(b.resource ?? '', undefined, { sensitivity: 'base' })
+  })
+}
+
+const FUEL_RESOURCES_FETCH_CHUNK = 1000
+
+type FuelResourcesFilterParams = {
+  include_deleted: boolean
+  version?: string
+  category_id?: string
+  sub_category?: string
+  scopeCategoryIds?: string[]
+  search?: string
+}
+
+function buildFuelResourcesSelectQuery (filters: FuelResourcesFilterParams) {
+  let query = supabase
+    .from('fuel_resources')
+    .select('*, scope_category:scope_categories(*)')
+
+  if (!filters.include_deleted) {
+    query = query.is('deleted_at', null)
+  }
+  if (filters.version) {
+    query = query.eq('version', filters.version)
+  }
+  if (filters.category_id) {
+    query = query.eq('scope_category_id', filters.category_id)
+  }
+  if (filters.sub_category) {
+    query = query.eq('sub_category', filters.sub_category)
+  }
+  if (filters.scopeCategoryIds) {
+    query = query.in('scope_category_id', filters.scopeCategoryIds)
+  }
+  if (filters.search) {
+    const like = `%${filters.search}%`
+    query = query.or(`resource.ilike.${like},sub_category.ilike.${like},unit.ilike.${like}`)
+  }
+
+  return query
+}
+
+async function fetchAllMatchingFuelResources (
+  filters: FuelResourcesFilterParams
+): Promise<FuelResourceWithCategory[]> {
+  const all: FuelResourceWithCategory[] = []
+  let offset = 0
+
+  while (true) {
+    const { data, error } = await buildFuelResourcesSelectQuery(filters).range(
+      offset,
+      offset + FUEL_RESOURCES_FETCH_CHUNK - 1
+    )
+    if (error) throw error
+
+    const chunk = (data ?? []) as FuelResourceWithCategory[]
+    all.push(...chunk)
+    if (chunk.length < FUEL_RESOURCES_FETCH_CHUNK) break
+    offset += FUEL_RESOURCES_FETCH_CHUNK
+  }
+
+  return all
+}
+
 export async function getFuelResources(query: FuelResourcesQuery): Promise<PaginatedResult<FuelResourceWithCategory>> {
   const {
     scope,
@@ -114,60 +192,25 @@ export async function getFuelResources(query: FuelResourcesQuery): Promise<Pagin
     }
   }
 
-  let countQuery = supabase
-    .from('fuel_resources')
-    .select('id', { count: 'exact', head: true })
-
-  let dataQuery = supabase
-    .from('fuel_resources')
-    .select('*, scope_category:scope_categories(*)')
-
-  if (!include_deleted) {
-    countQuery = countQuery.is('deleted_at', null)
-    dataQuery = dataQuery.is('deleted_at', null)
-  }
-
-  if (version) {
-    countQuery = countQuery.eq('version', version)
-    dataQuery = dataQuery.eq('version', version)
-  }
-
-  if (category_id) {
-    countQuery = countQuery.eq('scope_category_id', category_id)
-    dataQuery = dataQuery.eq('scope_category_id', category_id)
-  }
-
-  if (sub_category) {
-    countQuery = countQuery.eq('sub_category', sub_category)
-    dataQuery = dataQuery.eq('sub_category', sub_category)
-  }
-
-  if (scopeCategoryIds) {
-    countQuery = countQuery.in('scope_category_id', scopeCategoryIds)
-    dataQuery = dataQuery.in('scope_category_id', scopeCategoryIds)
-  }
-
-  if (search) {
-    const like = `%${search}%`
-    countQuery = countQuery.or(`resource.ilike.${like},sub_category.ilike.${like},unit.ilike.${like}`)
-    dataQuery = dataQuery.or(`resource.ilike.${like},sub_category.ilike.${like},unit.ilike.${like}`)
+  const filters: FuelResourcesFilterParams = {
+    include_deleted,
+    version,
+    category_id,
+    sub_category,
+    scopeCategoryIds,
+    search,
   }
 
   const from = (page - 1) * per_page
   const to = from + per_page - 1
 
-  const [{ count }, { data, error }] = await Promise.all([
-    countQuery,
-    dataQuery
-      .order('created_at', { ascending: false })
-      .range(from, to),
-  ])
-
-  if (error) throw error
+  const allRows = await fetchAllMatchingFuelResources(filters)
+  const sorted = sortFuelResourcesByScopeCategoryResource(allRows)
+  const paged = sorted.slice(from, to + 1)
 
   return {
-    data: data as FuelResourceWithCategory[],
-    total: count ?? 0,
+    data: paged,
+    total: sorted.length,
     page,
     per_page,
   }
