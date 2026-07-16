@@ -67,9 +67,10 @@ Under the selected **version tab**:
 |---------------|--------|
 | Status | `draft` or `published` for that version |
 | Published | `published_at` when status is `published` |
-| Delete version fuels | Soft-delete all fuels for the selected version only |
 | Publish / Re-publish | Set `status=published`, refresh `content_hash` + `published_at` + counts |
 | Export Excel | Download `fuel_resources_<version>.xlsx` (fuels only; use as import template) |
+
+Per-version bulk delete is not offered in the UI (edit individual fuels via **Edit EF** instead).
 
 ### Inline edit (EF + duo values)
 
@@ -107,11 +108,9 @@ API:
 
 - `GET /api/ef-catalog/releases`
 - `POST /api/ef-catalog/releases` body `{ version, action: publish | set_default | refresh_counts }`
-- `GET /api/ef-catalog/export?version=...&artifact=fuel_resources` → Excel
+- `GET /api/ef-catalog/export?version=...&artifact=fuel_resources` → Excel (unpublished: `allow_draft=true` for QA)
 - `POST /api/fuel-resources/import` body `{ version, mode: 'create', rows }`
 - `PATCH /api/fuel-resources/:id` — EF + duo fields only
-- `DELETE /api/fuel-resources?version=...` soft-delete that version
-  - Unpublished exports need `allow_draft=true` (QA)
 - `GET /api/scope-category-links` — fixed category link rules
 - **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
   - `GET /api/ef-catalog/sync/manifest` — published releases
@@ -129,7 +128,7 @@ Category CSV import is not available. TGO API live sync on client remains separa
 
 ## Admin UI surfaces
 
-- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF, Import new version, per-version Delete / Publish / Export
+- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF, Import new version, per-version Publish / Export
 - `/admin-console/emission-templates` — industry templates
 
 ## Verification checklist
@@ -143,7 +142,7 @@ Category CSV import is not available. TGO API live sync on client remains separa
 7. Export Excel → Import new version (new label); IDs stable across re-export when `id` present
 8. New version import → tab appears; release is draft
 9. Create with duplicate version name → rejected; `mode=replace` → rejected
-10. Delete version fuels affects only that version
+10. Version tab has Publish / Export only (no Delete version fuels button)
 11. Linking menu / `fuel_resources_linking` APIs absent; `GET /api/scope-category-links` returns two rules
 12. Templates still resolve after category align
 

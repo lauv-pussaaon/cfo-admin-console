@@ -33,7 +33,6 @@ import EmissionResourcesTable from '@/components/admin/emission-resources/Emissi
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
-import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { formatDateTime } from '@/lib/utils/datetime'
 import {
   EF_CATALOG_VERSIONS,
@@ -86,9 +85,6 @@ export default function EmissionResourcesPage() {
   const [error, setError] = useState<string | null>(null)
   const [categoriesPanelOpen, setCategoriesPanelOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
-  const [deleteVersionOpen, setDeleteVersionOpen] = useState(false)
-  const [isDeletingVersion, setIsDeletingVersion] = useState(false)
-  const [deleteVersionError, setDeleteVersionError] = useState<string | null>(null)
   const [releases, setReleases] = useState<EfCatalogRelease[]>([])
   const [releaseLoading, setReleaseLoading] = useState(false)
   const [actionBusy, setActionBusy] = useState(false)
@@ -233,26 +229,6 @@ export default function EmissionResourcesPage() {
     }
   }
 
-  const handleDeleteVersionConfirm = async () => {
-    setIsDeletingVersion(true)
-    setDeleteVersionError(null)
-    try {
-      const res = await fetch(
-        `/api/fuel-resources?version=${encodeURIComponent(catalogVersion)}`,
-        { method: 'DELETE' }
-      )
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error ?? 'Delete failed')
-      setDeleteVersionOpen(false)
-      showSnackbar(`Soft-deleted ${json.deleted ?? 0} fuels for ${catalogVersion}`)
-      await Promise.all([fetchResources(), fetchReleases()])
-    } catch (err) {
-      setDeleteVersionError(err instanceof Error ? err.message : 'Failed to delete version fuels')
-    } finally {
-      setIsDeletingVersion(false)
-    }
-  }
-
   const handleImportComplete = async (version: string) => {
     setImportOpen(false)
     setCatalogVersion(version)
@@ -368,18 +344,6 @@ export default function EmissionResourcesPage() {
             </>
           )}
           <Box sx={{ display: 'flex', gap: 1, ml: 'auto', flexWrap: 'wrap' }}>
-            <Button
-              size="small"
-              variant="outlined"
-              color="error"
-              disabled={actionBusy || releaseLoading}
-              onClick={() => {
-                setDeleteVersionError(null)
-                setDeleteVersionOpen(true)
-              }}
-            >
-              Delete version fuels
-            </Button>
             <Button
               size="small"
               variant="outlined"
@@ -516,20 +480,6 @@ export default function EmissionResourcesPage() {
         onComplete={handleImportComplete}
         existingVersions={existingVersions}
         categories={categories}
-      />
-
-      <DeleteConfirmationDialog
-        open={deleteVersionOpen}
-        onClose={() => {
-          setDeleteVersionOpen(false)
-          setDeleteVersionError(null)
-        }}
-        onConfirm={handleDeleteVersionConfirm}
-        title="Delete Fuels for Version"
-        message={`Soft-delete all fuel resources for version "${catalogVersion}"?`}
-        description="Other versions are not affected. Re-import Excel or re-run dataprep SQL to restore."
-        isDeleting={isDeletingVersion}
-        error={deleteVersionError}
       />
 
       <Snackbar
