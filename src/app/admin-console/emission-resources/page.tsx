@@ -360,9 +360,6 @@ export default function EmissionResourcesPage() {
                 label={release?.status ?? 'draft'}
                 color={release?.status === 'published' ? 'success' : 'default'}
               />
-              <Typography variant="body2" color="text.secondary">
-                Links: {release?.link_count ?? 0}
-              </Typography>
               {release?.status === 'published' && release.published_at && (
                 <Typography variant="body2" color="text.secondary">
                   Published: {formatDateTime(release.published_at)}

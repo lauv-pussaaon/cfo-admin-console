@@ -1,17 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as XLSX from 'xlsx'
 import { listFuelResourcesForExport } from '@/lib/api/fuel-resources'
-import { listFuelResourceLinkings } from '@/lib/api/fuel-resources-linking'
 import { getEfCatalogRelease } from '@/lib/api/ef-catalog-releases'
-
-function toCsv (headers: string[], rows: Array<Array<string | number | null | undefined>>): string {
-  const escape = (value: string | number | null | undefined) => {
-    const s = value == null ? '' : String(value)
-    if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`
-    return s
-  }
-  return [headers.join(','), ...rows.map((r) => r.map(escape).join(','))].join('\n')
-}
 
 export async function GET (request: NextRequest) {
   try {
@@ -81,36 +71,8 @@ export async function GET (request: NextRequest) {
       })
     }
 
-    if (artifact === 'fuel_resources_linking') {
-      const links = await listFuelResourceLinkings(version)
-      const csv = toCsv(
-        [
-          'source_fuel_id',
-          'dest_fuel_id',
-          'unit_conversion_factor',
-          'version',
-          'source_resource',
-          'dest_resource',
-        ],
-        links.map((l) => [
-          l.source_fuel_id,
-          l.dest_fuel_id,
-          l.unit_conversion_factor,
-          l.version,
-          l.source_fuel?.resource ?? '',
-          l.dest_fuel?.resource ?? '',
-        ])
-      )
-      return new NextResponse(csv, {
-        headers: {
-          'Content-Type': 'text/csv; charset=utf-8',
-          'Content-Disposition': `attachment; filename="fuel_resources_linking_${encodeURIComponent(version)}.csv"`,
-        },
-      })
-    }
-
     return NextResponse.json(
-      { error: 'artifact must be fuel_resources or fuel_resources_linking' },
+      { error: 'artifact must be fuel_resources' },
       { status: 400 }
     )
   } catch (error) {

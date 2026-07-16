@@ -26,7 +26,6 @@ import {
   ViewModule as ViewModuleIcon,
   SupportAgent as SupportAgentIcon,
   HowToReg as HowToRegIcon,
-  Link as LinkIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -50,7 +49,6 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/users': <PeopleIcon />,
   '/admin-console/analytics': <AnalyticsIcon />,
   '/admin-console/emission-resources': <ScienceIcon />,
-  '/admin-console/fuel-resources-linking': <LinkIcon />,
   '/admin-console/emission-templates': <ViewModuleIcon />,
 }
 

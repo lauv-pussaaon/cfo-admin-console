@@ -41,11 +41,6 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     path: '/admin-console/emission-resources',
   },
   {
-    title: 'ลิงก์ทรัพยากรเชื้อเพลิง',
-    description: 'จัดการ fuel_resources_linking ต่อเวอร์ชันแคตตาล็อก',
-    path: '/admin-console/fuel-resources-linking',
-  },
-  {
     title: 'เทมเพลตการปล่อย',
     description: 'จัดการเทมเพลตข้อมูลการปล่อยตามอุตสาหกรรม',
     path: '/admin-console/emission-templates',

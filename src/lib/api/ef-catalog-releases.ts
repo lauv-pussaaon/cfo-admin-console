@@ -50,32 +50,14 @@ async function countFuels (version: string): Promise<number> {
   return count ?? 0
 }
 
-async function countLinks (version: string): Promise<number> {
-  const { count, error } = await supabase
-    .from('fuel_resources_linking')
-    .select('id', { count: 'exact', head: true })
-    .eq('version', version)
-  if (error) throw error
-  return count ?? 0
-}
-
 export async function computeReleaseContentHash (version: string): Promise<string> {
-  const [{ data: fuels, error: fuelErr }, { data: links, error: linkErr }] = await Promise.all([
-    supabase
-      .from('fuel_resources')
-      .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
-      .eq('version', version)
-      .is('deleted_at', null)
-      .order('id', { ascending: true }),
-    supabase
-      .from('fuel_resources_linking')
-      .select('source_fuel_id, dest_fuel_id, unit_conversion_factor')
-      .eq('version', version)
-      .order('source_fuel_id', { ascending: true })
-      .order('dest_fuel_id', { ascending: true }),
-  ])
+  const { data: fuels, error: fuelErr } = await supabase
+    .from('fuel_resources')
+    .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
+    .eq('version', version)
+    .is('deleted_at', null)
+    .order('id', { ascending: true })
   if (fuelErr) throw fuelErr
-  if (linkErr) throw linkErr
 
   const fuelPart = (fuels ?? [])
     .map((f) =>
@@ -89,23 +71,17 @@ export async function computeReleaseContentHash (version: string): Promise<strin
       ].join(':')
     )
     .join('|')
-  const linkPart = (links ?? [])
-    .map((l) => `${l.source_fuel_id}>${l.dest_fuel_id}:${l.unit_conversion_factor}`)
-    .join('|')
-  return createHash('sha256').update(`${version}\n${fuelPart}\n${linkPart}`).digest('hex')
+  return createHash('sha256').update(`${version}\n${fuelPart}`).digest('hex')
 }
 
 export async function refreshReleaseCounts (version: string): Promise<EfCatalogRelease> {
   await ensureEfCatalogRelease(version)
-  const [fuel_count, link_count] = await Promise.all([
-    countFuels(version),
-    countLinks(version),
-  ])
+  const fuel_count = await countFuels(version)
   const { data, error } = await supabase
     .from('ef_catalog_releases')
     .update({
       fuel_count,
-      link_count,
+      link_count: 0,
       updated_at: new Date().toISOString(),
     })
     .eq('version', version)
@@ -120,9 +96,8 @@ export async function publishEfCatalogRelease (
   publishedBy?: string | null
 ): Promise<EfCatalogRelease> {
   await ensureEfCatalogRelease(version)
-  const [fuel_count, link_count, content_hash] = await Promise.all([
+  const [fuel_count, content_hash] = await Promise.all([
     countFuels(version),
-    countLinks(version),
     computeReleaseContentHash(version),
   ])
   const { data, error } = await supabase
@@ -131,7 +106,7 @@ export async function publishEfCatalogRelease (
       status: 'published',
       content_hash,
       fuel_count,
-      link_count,
+      link_count: 0,
       published_at: new Date().toISOString(),
       published_by: publishedBy ?? null,
       updated_at: new Date().toISOString(),

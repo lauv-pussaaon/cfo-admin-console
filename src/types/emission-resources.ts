@@ -72,18 +72,6 @@ export interface EfCatalogRelease {
   updated_at: string | null
 }
 
-export interface FuelResourceLinking {
-  id: string
-  source_fuel_id: string
-  dest_fuel_id: string
-  unit_conversion_factor: number
-  version: string
-  created_at: string
-  updated_at: string | null
-  source_fuel?: FuelResource | null
-  dest_fuel?: FuelResource | null
-}
-
 export type CreateFuelResourceInput = Omit<
   FuelResource,
   'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'scope_category'
@@ -92,13 +80,6 @@ export type UpdateFuelResourceInput = Partial<CreateFuelResourceInput>
 
 export type CreateScopeCategoryInput = Omit<ScopeCategory, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>
 export type UpdateScopeCategoryInput = Partial<CreateScopeCategoryInput>
-
-export type CreateFuelResourceLinkingInput = {
-  source_fuel_id: string
-  dest_fuel_id: string
-  unit_conversion_factor?: number
-  version: string
-}
 
 export interface FuelResourceCSVRow {
   id?: string
@@ -139,17 +120,6 @@ export interface ScopeCategoryCSVRow {
   name_th: string
   name_en: string
   display_order?: string
-}
-
-export interface FuelResourceLinkingCSVRow {
-  source_fuel_id?: string
-  dest_fuel_id?: string
-  source_category?: string
-  source_resource?: string
-  dest_category?: string
-  dest_resource?: string
-  unit_conversion_factor?: string
-  version?: string
 }
 
 export interface ImportValidationResult<T> {

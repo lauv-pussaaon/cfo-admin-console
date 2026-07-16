@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isEfCatalogSyncAuthorized } from '@/lib/ef-catalog-sync-auth'
 import { getEfCatalogRelease } from '@/lib/api/ef-catalog-releases'
 import { getScopeCategories, listFuelResourcesForExport } from '@/lib/api/fuel-resources'
-import { listFuelResourceLinkings } from '@/lib/api/fuel-resources-linking'
 
 export async function GET (request: NextRequest) {
   try {
@@ -23,19 +22,10 @@ export async function GET (request: NextRequest) {
       )
     }
 
-    const [categories, fuels, links] = await Promise.all([
+    const [categories, fuels] = await Promise.all([
       getScopeCategories(undefined, false),
       listFuelResourcesForExport(version),
-      listFuelResourceLinkings(version),
     ])
-
-    const linkRows = links.map((l) => ({
-      id: l.id,
-      source_fuel_id: l.source_fuel_id,
-      dest_fuel_id: l.dest_fuel_id,
-      unit_conversion_factor: l.unit_conversion_factor,
-      version: l.version,
-    }))
 
     return NextResponse.json({
       release: {
@@ -44,7 +34,7 @@ export async function GET (request: NextRequest) {
         content_hash: release.content_hash,
         published_at: release.published_at,
         fuel_count: release.fuel_count,
-        link_count: release.link_count,
+        link_count: 0,
         is_default: release.is_default,
       },
       categories: categories.map((c) => ({
@@ -55,7 +45,7 @@ export async function GET (request: NextRequest) {
         display_order: c.display_order,
       })),
       fuels,
-      links: linkRows,
+      links: [],
       content_hash: release.content_hash,
     })
   } catch (error) {
