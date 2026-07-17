@@ -22,6 +22,7 @@ Apply in order on admin Supabase:
 2. `database/migration_add_ef_catalog_versioning.sql` — `version` / `ref_code` / `sort_index` / `multiplier` on `fuel_resources`; `ef_catalog_releases` (historical; may have created `fuel_resources_linking`)
 3. `database/migration_align_scope_categories_canonical.sql` — 20 fixed category UUIDs + FK remap
 4. `database/migration_drop_fuel_resources_linking.sql` — drop `fuel_resources_linking` (replaced by fixed category rules on client)
+5. `database/migration_update_tgo_cat4_duo_labels.sql` — TGO API Scope 3 Cat 4 duo labels (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal `0% Loading`). After apply, **Re-publish** `TGO API` so client sync sees the new `content_hash`. Client mirror: `ideacarb-client-app/database/migration/migrate_update_tgo_cat4_duo_labels.sql`.
 
 ## Generate + load seed SQL
 
