@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { Suspense, useState, useEffect, useCallback, useMemo } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import {
   Box,
   Typography,
@@ -36,8 +36,10 @@ import FuelResourceEditModal from '@/components/admin/emission-resources/FuelRes
 import { formatDateTime } from '@/lib/utils/datetime'
 import {
   EF_CATALOG_VERSIONS,
-  EF_VERSION_MAY,
+  EF_VERSION_TGO,
 } from '@/lib/constants/ef-catalog'
+
+const DEFAULT_PER_PAGE = 50
 
 function orderVersions (versions: string[]): string[] {
   const knownOrder = EF_CATALOG_VERSIONS as readonly string[]
@@ -62,8 +64,37 @@ const SCOPE_COLORS: Record<number, string> = {
   4: '#8b5cf6',
 }
 
-export default function EmissionResourcesPage() {
+function parseScope (raw: string | null): number {
+  const n = Number(raw)
+  if (!Number.isInteger(n) || n < 0 || n > 4) return 0
+  return n
+}
+
+function parsePageIndex (raw: string | null): number {
+  const n = parseInt(raw ?? '1', 10)
+  if (!Number.isFinite(n) || n < 1) return 0
+  return n - 1
+}
+
+function parsePerPage (raw: string | null): number {
+  const n = parseInt(raw ?? String(DEFAULT_PER_PAGE), 10)
+  if (!Number.isFinite(n) || n < 1 || n > 500) return DEFAULT_PER_PAGE
+  return n
+}
+
+type QueryPatch = {
+  version?: string | null
+  scope?: number | null
+  category_id?: string | null
+  search?: string | null
+  page?: number | null
+  per_page?: number | null
+}
+
+function EmissionResourcesPage () {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { user, isLoading: authLoading } = useAuth()
 
   useEffect(() => {
@@ -72,15 +103,17 @@ export default function EmissionResourcesPage() {
     }
   }, [user, authLoading, router])
 
-  const [scopeTab, setScopeTab] = useState(0)
-  const [catalogVersion, setCatalogVersion] = useState<string>(EF_VERSION_MAY)
-  const [categoryId, setCategoryId] = useState<string>('')
-  const [search, setSearch] = useState('')
+  const catalogVersion = searchParams.get('version')?.trim() || EF_VERSION_TGO
+  const scopeTab = parseScope(searchParams.get('scope'))
+  const categoryId = searchParams.get('category_id')?.trim() || ''
+  const searchFromUrl = searchParams.get('search') ?? ''
+  const page = parsePageIndex(searchParams.get('page'))
+  const perPage = parsePerPage(searchParams.get('per_page'))
+
+  const [searchInput, setSearchInput] = useState(searchFromUrl)
   const [categories, setCategories] = useState<ScopeCategory[]>([])
   const [resources, setResources] = useState<FuelResourceWithCategory[]>([])
   const [total, setTotal] = useState(0)
-  const [page, setPage] = useState(0)
-  const [perPage, setPerPage] = useState(50)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [categoriesPanelOpen, setCategoriesPanelOpen] = useState(false)
@@ -110,28 +143,95 @@ export default function EmissionResourcesPage() {
     setSnackbar({ open: true, message, severity })
   }
 
+  const replaceQuery = useCallback((patch: QueryPatch) => {
+    const next = new URLSearchParams(searchParams.toString())
+
+    const apply = (key: string, value: string | null | undefined, omitWhen?: string) => {
+      if (value == null || value === '' || (omitWhen !== undefined && value === omitWhen)) {
+        next.delete(key)
+      } else {
+        next.set(key, value)
+      }
+    }
+
+    if ('version' in patch) {
+      apply('version', patch.version, EF_VERSION_TGO)
+    }
+    if ('scope' in patch) {
+      const scope = patch.scope
+      apply('scope', scope == null || scope === 0 ? null : String(scope))
+    }
+    if ('category_id' in patch) {
+      apply('category_id', patch.category_id)
+    }
+    if ('search' in patch) {
+      apply('search', patch.search?.trim() || null)
+    }
+    if ('page' in patch) {
+      const pageOneBased = patch.page == null ? null : String(patch.page + 1)
+      apply('page', pageOneBased, '1')
+    }
+    if ('per_page' in patch) {
+      apply(
+        'per_page',
+        patch.per_page == null ? null : String(patch.per_page),
+        String(DEFAULT_PER_PAGE)
+      )
+    }
+
+    // Ensure a stable default version is visible when other filters are present,
+    // or when URL had no version yet.
+    if (!next.get('version') && catalogVersion !== EF_VERSION_TGO) {
+      next.set('version', catalogVersion)
+    }
+
+    const qs = next.toString()
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+  }, [searchParams, router, pathname, catalogVersion])
+
+  useEffect(() => {
+    setSearchInput(searchFromUrl)
+  }, [searchFromUrl])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (searchInput === searchFromUrl) return
+      replaceQuery({ search: searchInput, page: 0 })
+    }, 300)
+    return () => window.clearTimeout(timer)
+  }, [searchInput, searchFromUrl, replaceQuery])
+
   const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch('/api/emission-categories')
       const json = await res.json()
       setCategories(json.data ?? [])
-      setCategoryId('')
     } catch {
       console.error('Failed to load categories')
     }
   }, [])
 
-  const fetchResources = useCallback(async (overrides?: { version?: string; page?: number }) => {
+  const fetchResources = useCallback(async (overrides?: {
+    version?: string
+    page?: number
+    scope?: number
+    categoryId?: string
+    search?: string
+    perPage?: number
+  }) => {
     setLoading(true)
     setError(null)
     try {
       const params = new URLSearchParams()
-      if (scopeTab > 0) params.set('scope', String(scopeTab))
-      if (categoryId) params.set('category_id', categoryId)
-      if (search) params.set('search', search)
+      const scope = overrides?.scope ?? scopeTab
+      const cat = overrides?.categoryId ?? categoryId
+      const q = overrides?.search ?? searchFromUrl
+      if (scope > 0) params.set('scope', String(scope))
+      if (cat) params.set('category_id', cat)
+      if (q) params.set('search', q)
       params.set('version', overrides?.version ?? catalogVersion)
       params.set('page', String((overrides?.page ?? page) + 1))
-      params.set('per_page', String(perPage))
+      params.set('per_page', String(overrides?.perPage ?? perPage))
 
       const res = await fetch(`/api/fuel-resources?${params}`)
       if (!res.ok) throw new Error('Failed to fetch')
@@ -144,7 +244,7 @@ export default function EmissionResourcesPage() {
     } finally {
       setLoading(false)
     }
-  }, [scopeTab, categoryId, search, page, perPage, catalogVersion])
+  }, [scopeTab, categoryId, searchFromUrl, page, perPage, catalogVersion])
 
   const fetchReleases = useCallback(async () => {
     setReleaseLoading(true)
@@ -164,22 +264,19 @@ export default function EmissionResourcesPage() {
     }
   }, [])
 
-  useEffect(() => { fetchCategories() }, [fetchCategories])
-  useEffect(() => { fetchResources() }, [fetchResources])
-  useEffect(() => { fetchReleases() }, [fetchReleases])
+  useEffect(() => { void fetchCategories() }, [fetchCategories])
+  useEffect(() => { void fetchResources() }, [fetchResources])
+  useEffect(() => { void fetchReleases() }, [fetchReleases])
 
   useEffect(() => {
     if (versionTabs.length === 0) return
-    if (!versionTabs.includes(catalogVersion)) {
-      setCatalogVersion(versionTabs.includes(EF_VERSION_MAY) ? EF_VERSION_MAY : versionTabs[0])
-      setPage(0)
-    }
-  }, [versionTabs, catalogVersion])
+    if (versionTabs.includes(catalogVersion)) return
+    const fallback = versionTabs.includes(EF_VERSION_TGO) ? EF_VERSION_TGO : versionTabs[0]
+    replaceQuery({ version: fallback, page: 0 })
+  }, [versionTabs, catalogVersion, replaceQuery])
 
   const handleScopeChange = (_: React.SyntheticEvent, newValue: number) => {
-    setScopeTab(newValue)
-    setCategoryId('')
-    setPage(0)
+    replaceQuery({ scope: newValue, category_id: null, page: 0 })
   }
 
   const handlePublish = async () => {
@@ -231,8 +328,7 @@ export default function EmissionResourcesPage() {
 
   const handleImportComplete = async (version: string) => {
     setImportOpen(false)
-    setCatalogVersion(version)
-    setPage(0)
+    replaceQuery({ version, page: 0 })
     showSnackbar(`Import completed for ${version}`)
     await fetchReleases()
     await fetchResources({ version, page: 0 })
@@ -293,10 +389,9 @@ export default function EmissionResourcesPage() {
         <Box sx={{ px: 2, pt: 2 }}>
           {versionTabs.length > 0 ? (
             <Tabs
-              value={catalogVersion}
+              value={versionTabs.includes(catalogVersion) ? catalogVersion : false}
               onChange={(_, v: string) => {
-                setCatalogVersion(v)
-                setPage(0)
+                replaceQuery({ version: v, page: 0 })
               }}
               variant="scrollable"
               allowScrollButtonsMobile
@@ -400,7 +495,9 @@ export default function EmissionResourcesPage() {
             <InputLabel>Category</InputLabel>
             <Select
               value={categoryId}
-              onChange={(e) => { setCategoryId(e.target.value); setPage(0) }}
+              onChange={(e) => {
+                replaceQuery({ category_id: e.target.value || null, page: 0 })
+              }}
               label="Category"
             >
               <MenuItem value="">All Categories</MenuItem>
@@ -427,8 +524,8 @@ export default function EmissionResourcesPage() {
           <TextField
             size="small"
             placeholder="Search resource, sub-category, unit…"
-            value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(0) }}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -451,8 +548,8 @@ export default function EmissionResourcesPage() {
         page={page}
         perPage={perPage}
         loading={loading}
-        onPageChange={setPage}
-        onPerPageChange={(v) => { setPerPage(v); setPage(0) }}
+        onPageChange={(nextPage) => replaceQuery({ page: nextPage })}
+        onPerPageChange={(v) => replaceQuery({ per_page: v, page: 0 })}
         onEdit={setEditTarget}
       />
 
@@ -493,5 +590,19 @@ export default function EmissionResourcesPage() {
         </Alert>
       </Snackbar>
     </Box>
+  )
+}
+
+export default function EmissionResourcesPageEntry () {
+  return (
+    <Suspense
+      fallback={
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      }
+    >
+      <EmissionResourcesPage />
+    </Suspense>
   )
 }

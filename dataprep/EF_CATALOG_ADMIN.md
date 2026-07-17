@@ -1,6 +1,6 @@
 # EF Catalog Admin Ops
 
-Admin-console is the **system of record** for emission-factor master data (scope categories, versioned fuel resources, and published releases). Client apps **sync published catalogs** via the Sync catalog page (Phase 1). Default client deploy still seeds until full cutover; use `SKIP_EF_MASTER_SEEDS=1` for empty test instances.
+Admin-console is the **system of record** for emission-factor master data (scope categories, versioned fuel resources, and published releases). Client apps **sync published catalogs** via the Sync catalog page and via `deploy.sh` (new/update) after migrations. Default client deploy still seeds until full cutover; use `SKIP_EF_MASTER_SEEDS=1` for empty test instances (deploy auto-sync fills catalog).
 
 Fuel-to-fuel linking UI/table is **removed**. Cross-scope emission linking on clients uses **fixed scope-category rules** + user-selected dest fuel + factor (see client guideline).
 
@@ -10,7 +10,9 @@ Fuel-to-fuel linking UI/table is **removed**. Cross-scope emission linking on cl
 |-------|---------|
 | `กุมภาพันธ์ 2569` | Feb 2569 spreadsheet catalog |
 | `พฤษภาคม 2569` | May 2569 spreadsheet catalog (UUID v5 IDs) |
-| `TGO API` | TGO CFO/CFP catalog rows |
+| `TGO API` | TGO CFO/CFP catalog rows (default selected on Emission Resources) |
+
+Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Default `version` is `TGO API` (omitted from the query when selected).
 
 ## Migrations
 
@@ -120,11 +122,11 @@ API:
 
 1. Set the same `EF_CATALOG_SYNC_SECRET` on admin and client; client needs `NEXT_PUBLIC_ADMIN_CONSOLE_URL`.
 2. Publish ≥1 version on admin (Emission Resources → Publish).
-3. On client: Factory Admin → **ซิงค์แคตตาล็อก EF** → **Sync catalog**.
-4. Empty test deploy: `SKIP_EF_MASTER_SEEDS=1` in `deploy.env` (uses `00_seed_all_no_ef.sql`).
+3. On client: Factory Admin → **ซิงค์แคตตาล็อก EF** → **Sync catalog**, or run `deploy.sh new|update` (calls `scripts/sync-ef-catalog-from-admin.ts`).
+4. Empty test deploy: `SKIP_EF_MASTER_SEEDS=1` in `deploy.env` (uses `00_seed_all_no_ef.sql`); deploy syncs published releases after migrate.
 5. Existing client DBs: apply `database/migration/migrate_add_ef_catalog_sync.sql` and `database/migration/migrate_drop_fuel_resources_linking.sql`.
 
-Category CSV import is not available. TGO API live sync on client remains separate (`/admin/ef-sync`).
+Category CSV import is not available. Client TGO API live sync UI was removed; TGO fuels ship via published catalog sync (or seeds).
 
 ## Admin UI surfaces
 
