@@ -1,7 +1,6 @@
 import {
   SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
   TGO_REF_SOURCE,
-  TGO_VERSION,
   buildCandidateUuid,
   buildCfpRefCode,
   isCat4ZeroLoadingResource,
@@ -64,6 +63,7 @@ function buildMappedRow (input: {
   refCode: string
   mappingReason: string
   sortIndex: number
+  version: string
 }): FuelResourceImportRow {
   return {
     reqLabel: input.reqLabel,
@@ -98,7 +98,7 @@ function buildMappedRow (input: {
     extraghg_ef: null,
     extraghg_gwp100: null,
     ref_source: TGO_REF_SOURCE,
-    version: TGO_VERSION,
+    version: input.version,
     ref_code: input.refCode,
     sort_index: input.sortIndex,
     multiplier: 1,
@@ -136,6 +136,7 @@ export function applyCat4TransportLabels (rows: FuelResourceImportRow[]): FuelRe
 export function buildCfoFuelRows (
   rows: Record<string, string | number>[],
   categories: ScopeCategory[],
+  version: string,
 ): FuelResourceImportRow[] {
   const result: FuelResourceImportRow[] = []
   let sortIndex = 0
@@ -161,6 +162,7 @@ export function buildCfoFuelRows (
         refCode: String(row.code),
         mappingReason: mapping.reason,
         sortIndex,
+        version,
       }),
     )
   }
@@ -171,6 +173,7 @@ export function buildCfoFuelRows (
 export function buildCfpFuelRows (
   rows: Record<string, string | number>[],
   categories: ScopeCategory[],
+  version: string,
 ): FuelResourceImportRow[] {
   const result: FuelResourceImportRow[] = []
   let sortIndex = 0
@@ -200,6 +203,7 @@ export function buildCfpFuelRows (
         refCode: buildCfpRefCode(name, unit, volumn),
         mappingReason: mapping.reason,
         sortIndex,
+        version,
       }),
     )
   }

@@ -4,15 +4,17 @@ Admin-console is the **system of record** for emission-factor master data (scope
 
 Fuel-to-fuel linking UI/table is **removed**. Cross-scope emission linking on clients uses **fixed scope-category rules** + user-selected dest fuel + factor (see client guideline).
 
-## Version labels (exact)
+## Version labels
+
+Version strings are free text on `fuel_resources.version` / `ef_catalog_releases.version`. Common labels:
 
 | Label | Meaning |
 |-------|---------|
 | `กุมภาพันธ์ 2569` | Feb 2569 spreadsheet catalog |
 | `พฤษภาคม 2569` | May 2569 spreadsheet catalog (UUID v5 IDs) |
-| `TGO API` | TGO CFO/CFP catalog rows (default selected on Emission Resources) |
+| `TGO May 2569` | TGO CFO/CFP catalog (renamed from historical `TGO API`) |
 
-Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Default `version` is `TGO API` (omitted from the query when selected).
+Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Default tab is the release with `is_default = true` (omitted from the query when selected). Clients persist that flag on `ef_catalog_sync_state.is_default` during sync.
 
 ## Migrations
 
@@ -22,19 +24,21 @@ Apply in order on admin Supabase:
 2. `database/migration_add_ef_catalog_versioning.sql` — `version` / `ref_code` / `sort_index` / `multiplier` on `fuel_resources`; `ef_catalog_releases` (historical; may have created `fuel_resources_linking`)
 3. `database/migration_align_scope_categories_canonical.sql` — 20 fixed category UUIDs + FK remap
 4. `database/migration_drop_fuel_resources_linking.sql` — drop `fuel_resources_linking` (replaced by fixed category rules on client)
-5. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO API` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** `TGO API` so client sync sees the new `content_hash`.
+5. `database/migration_rename_tgo_api_to_tgo_may_2569.sql` — rename `TGO API` → `TGO May 2569`; set `is_default` when published
+6. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO May 2569` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** so client sync sees the new `content_hash`.
 
 ## TGO EF refresh (offline → Import new version)
 
 When TGO publishes updated emission factors, run from `cfo-admin-console` (set `TGO_EF_REQ_TOKEN` in `.env.local` if needed):
 
 ```bash
-pnpm tgo-ef:fetch          # → dataprep/tgo-ef/raw/tgo-ef-{cfo,cfp}.json
-pnpm tgo-ef:build-import   # → dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
-                           #    + dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
+pnpm tgo-ef:fetch
+pnpm tgo-ef:build-import -- --version "TGO July 2569"
+# → dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
+#    + dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
 ```
 
-Then Admin UI → Emission Resources → **Import new version** → choose a **new** version label → upload `fuel_resources_tgo_import.xlsx` → Publish → clients sync.
+Then Admin UI → Emission Resources → **Import new version** → enter the same version label → upload `fuel_resources_tgo_import.xlsx` → Publish → set as default when ready → clients sync.
 
 Cat 4 transport labels are applied in the build script (not a separate SQL step for new imports): all Cat 4 get `value1`; only rows without ` 0% Loading` get `value2`.
 

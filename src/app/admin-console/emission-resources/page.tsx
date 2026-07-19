@@ -34,19 +34,19 @@ import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPan
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
 import { formatDateTime } from '@/lib/utils/datetime'
-import {
-  EF_CATALOG_VERSIONS,
-  EF_VERSION_TGO,
-} from '@/lib/constants/ef-catalog'
 
 const DEFAULT_PER_PAGE = 50
 
-function orderVersions (versions: string[]): string[] {
-  const knownOrder = EF_CATALOG_VERSIONS as readonly string[]
-  const unique = [...new Set(versions.filter(Boolean))]
-  const known = knownOrder.filter((v) => unique.includes(v))
-  const rest = unique.filter((v) => !knownOrder.includes(v)).sort((a, b) => a.localeCompare(b))
-  return [...known, ...rest]
+function orderReleases (releases: EfCatalogRelease[]): EfCatalogRelease[] {
+  return [...releases].sort((a, b) => {
+    const aPub = a.published_at ? Date.parse(a.published_at) : NaN
+    const bPub = b.published_at ? Date.parse(b.published_at) : NaN
+    const aHas = Number.isFinite(aPub)
+    const bHas = Number.isFinite(bPub)
+    if (aHas && bHas && aPub !== bPub) return bPub - aPub
+    if (aHas !== bHas) return aHas ? -1 : 1
+    return a.version.localeCompare(b.version, 'th')
+  })
 }
 
 const SCOPE_TABS = [
@@ -103,7 +103,7 @@ function EmissionResourcesPage () {
     }
   }, [user, authLoading, router])
 
-  const catalogVersion = searchParams.get('version')?.trim() || EF_VERSION_TGO
+  const urlVersion = searchParams.get('version')?.trim() || null
   const scopeTab = parseScope(searchParams.get('scope'))
   const categoryId = searchParams.get('category_id')?.trim() || ''
   const searchFromUrl = searchParams.get('search') ?? ''
@@ -123,10 +123,16 @@ function EmissionResourcesPage () {
   const [actionBusy, setActionBusy] = useState(false)
   const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
 
+  const orderedReleases = useMemo(() => orderReleases(releases), [releases])
   const versionTabs = useMemo(
-    () => orderVersions(releases.map((r) => r.version)),
-    [releases]
+    () => orderedReleases.map((r) => r.version),
+    [orderedReleases]
   )
+  const defaultVersion = useMemo(() => {
+    const flagged = orderedReleases.find((r) => r.is_default)?.version
+    return flagged ?? versionTabs[0] ?? ''
+  }, [orderedReleases, versionTabs])
+  const catalogVersion = urlVersion || defaultVersion
   const release = useMemo(
     () => releases.find((r) => r.version === catalogVersion) ?? null,
     [releases, catalogVersion]
@@ -155,7 +161,7 @@ function EmissionResourcesPage () {
     }
 
     if ('version' in patch) {
-      apply('version', patch.version, EF_VERSION_TGO)
+      apply('version', patch.version, defaultVersion || undefined)
     }
     if ('scope' in patch) {
       const scope = patch.scope
@@ -179,15 +185,14 @@ function EmissionResourcesPage () {
       )
     }
 
-    // Ensure a stable default version is visible when other filters are present,
-    // or when URL had no version yet.
-    if (!next.get('version') && catalogVersion !== EF_VERSION_TGO) {
+    // Keep non-default version in the URL when other filters are present.
+    if (!next.get('version') && catalogVersion && catalogVersion !== defaultVersion) {
       next.set('version', catalogVersion)
     }
 
     const qs = next.toString()
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
-  }, [searchParams, router, pathname, catalogVersion])
+  }, [searchParams, router, pathname, catalogVersion, defaultVersion])
 
   useEffect(() => {
     setSearchInput(searchFromUrl)
@@ -219,6 +224,12 @@ function EmissionResourcesPage () {
     search?: string
     perPage?: number
   }) => {
+    const version = overrides?.version ?? catalogVersion
+    if (!version) {
+      setResources([])
+      setTotal(0)
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -229,7 +240,7 @@ function EmissionResourcesPage () {
       if (scope > 0) params.set('scope', String(scope))
       if (cat) params.set('category_id', cat)
       if (q) params.set('search', q)
-      params.set('version', overrides?.version ?? catalogVersion)
+      params.set('version', version)
       params.set('page', String((overrides?.page ?? page) + 1))
       params.set('per_page', String(overrides?.perPage ?? perPage))
 
@@ -265,15 +276,17 @@ function EmissionResourcesPage () {
   }, [])
 
   useEffect(() => { void fetchCategories() }, [fetchCategories])
-  useEffect(() => { void fetchResources() }, [fetchResources])
   useEffect(() => { void fetchReleases() }, [fetchReleases])
+  useEffect(() => {
+    if (!catalogVersion) return
+    void fetchResources()
+  }, [catalogVersion, fetchResources])
 
   useEffect(() => {
-    if (versionTabs.length === 0) return
+    if (versionTabs.length === 0 || !catalogVersion) return
     if (versionTabs.includes(catalogVersion)) return
-    const fallback = versionTabs.includes(EF_VERSION_TGO) ? EF_VERSION_TGO : versionTabs[0]
-    replaceQuery({ version: fallback, page: 0 })
-  }, [versionTabs, catalogVersion, replaceQuery])
+    replaceQuery({ version: defaultVersion || versionTabs[0], page: 0 })
+  }, [versionTabs, catalogVersion, defaultVersion, replaceQuery])
 
   const handleScopeChange = (_: React.SyntheticEvent, newValue: number) => {
     replaceQuery({ scope: newValue, category_id: null, page: 0 })

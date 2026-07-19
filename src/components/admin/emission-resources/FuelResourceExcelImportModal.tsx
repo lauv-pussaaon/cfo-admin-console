@@ -210,7 +210,7 @@ export default function FuelResourceExcelImportModal ({
               label="Version label"
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              placeholder="e.g. TGO API 2026-07"
+              placeholder="e.g. TGO July 2569"
               error={version.trim() !== '' && existingVersions.includes(version.trim())}
               helperText={
                 version.trim() && existingVersions.includes(version.trim())

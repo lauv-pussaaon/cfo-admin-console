@@ -1,6 +1,5 @@
 import { createHash } from 'node:crypto'
 
-export const TGO_VERSION = 'TGO API'
 export const TGO_REF_SOURCE = 'TGO'
 
 /** Namespace for deterministic fuel_resource UUIDs from TGO API rows. */
