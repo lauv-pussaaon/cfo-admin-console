@@ -10,7 +10,9 @@
     "seed:fuel": "node dataprep/generate_fuel_resources_sql.js",
     "seed:templates": "node dataprep/generate_emission_templates_seed.js",
     "export:external-templates": "node scripts/export-external-templates.mjs",
-    "ef-catalog:generate-import": "node dataprep/ef-catalog/generate-import-sql.cjs"
+    "ef-catalog:generate-import": "node dataprep/ef-catalog/generate-import-sql.cjs",
+    "tgo-ef:fetch": "npx --yes tsx dataprep/tgo-ef/fetch.ts",
+    "tgo-ef:build-import": "npx --yes tsx dataprep/tgo-ef/build-import.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

@@ -1,6 +1,9 @@
 -- TGO API Scope 3 Category 4: set duo distance/weight labels.
--- Expected counts (from seed 03_fuel_resources_tgo_api.sql): 188 total, 140 with "0% Loading", 48 with value2.
--- Do not use LIKE '%0% Loading%' — % is a wildcard and also matches 50%/75%/100% Loading.
+-- Prefer new imports via `pnpm tgo-ef:build-import` (labels baked into Excel/SQL).
+-- This migration repairs existing `TGO API` rows in the admin DB.
+--
+-- Zero-loading marker is literal ' 0% Loading' (leading space) so '100% Loading'
+-- is not treated as zero-loading. Do not use LIKE '%0% Loading%'.
 
 BEGIN;
 
@@ -16,7 +19,7 @@ WHERE version = 'TGO API'
   AND scope_category_id = 'a1000003-0003-4003-8003-00000000000a'::uuid
   AND deleted_at IS NULL;
 
--- 2) non-0% Loading: set value2
+-- 2) non-zero-loading: set value2
 UPDATE fuel_resources
 SET
   value2_label = 'น้ำหนักที่ขน',
@@ -25,21 +28,18 @@ SET
 WHERE version = 'TGO API'
   AND scope_category_id = 'a1000003-0003-4003-8003-00000000000a'::uuid
   AND deleted_at IS NULL
-  AND strpos(resource, '0% Loading') = 0;
+  AND strpos(resource, ' 0% Loading') = 0;
 
 COMMIT;
 
 -- Verification (optional):
 -- SELECT count(*) FROM fuel_resources
 --   WHERE version = 'TGO API' AND scope_category_id = 'a1000003-0003-4003-8003-00000000000a'::uuid AND deleted_at IS NULL;
--- -- expect 188
 -- SELECT count(*) FROM fuel_resources
 --   WHERE version = 'TGO API' AND scope_category_id = 'a1000003-0003-4003-8003-00000000000a'::uuid
---     AND deleted_at IS NULL AND strpos(resource, '0% Loading') > 0
+--     AND deleted_at IS NULL AND strpos(resource, ' 0% Loading') > 0
 --     AND value2_label IS NULL;
--- -- expect 140
 -- SELECT count(*) FROM fuel_resources
 --   WHERE version = 'TGO API' AND scope_category_id = 'a1000003-0003-4003-8003-00000000000a'::uuid
---     AND deleted_at IS NULL AND strpos(resource, '0% Loading') = 0
+--     AND deleted_at IS NULL AND strpos(resource, ' 0% Loading') = 0
 --     AND value2_label = 'น้ำหนักที่ขน' AND value2_unit = 'ton';
--- -- expect 48

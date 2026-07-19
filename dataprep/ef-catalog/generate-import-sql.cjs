@@ -11,8 +11,11 @@
  *   dataprep/ef-catalog/generated/02a_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/02b_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/02c_fuel_resources_may2569.sql
- *   dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
+ *   dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql  (from pnpm tgo-ef:build-import; not overwritten here)
  *   dataprep/ef-catalog/generated/04_fuel_resources_feb2569.sql
+ *
+ * TGO fuels: run `pnpm tgo-ef:fetch` then `pnpm tgo-ef:build-import` (writes Excel + 03_ SQL).
+ * This script no longer reads ideacarb-client-app TGO seeds.
  *
  * Prerequisites: run migration_add_ef_catalog_versioning.sql and
  * migration_align_scope_categories_canonical.sql first (or apply 01_ first).
@@ -28,7 +31,6 @@ const OUT = path.join(__dirname, 'generated')
 const MANIFEST = path.join(__dirname, 'scope_categories.manifest.json')
 
 const FUEL_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8'
-const TGO_NAMESPACE = 'a1000000-0000-4000-8000-000000000001'
 const VERSION_FEB = 'กุมภาพันธ์ 2569'
 const VERSION_MAY = 'พฤษภาคม 2569'
 const VERSION_TGO = 'TGO API'
@@ -218,116 +220,17 @@ function unquote (sqlLit) {
   return sqlLit
 }
 
-function writeTgoFromClientSeeds () {
-  const files = [
-    path.join(CLIENT, 'database/seeds/seed_tgo_cfo_fuel_resources_v1.sql'),
-    path.join(CLIENT, 'database/seeds/seed_tgo_cfp_fuel_resources_v1.sql'),
-  ]
-  const out = [
-    `-- Generated TGO API fuels for admin SoT`,
-    `-- version = ${VERSION_TGO}`,
-    'BEGIN;',
-    '',
-  ]
-  let count = 0
-
-  for (const file of files) {
-    const text = fs.readFileSync(file, 'utf8')
-    const reqLabel = file.includes('cfo') ? 'CFO' : 'CFP'
-    // Match value tuples: ('uuid', 'resource', ...
-    const valueBlockMatch = text.match(/VALUES\s*\n([\s\S]*?);\s*(?:COMMIT|$)/i)
-    if (!valueBlockMatch) {
-      console.warn(`No VALUES block in ${path.basename(file)}`)
-      continue
-    }
-    const block = valueBlockMatch[1]
-    const tupleRe = /\(([^()]*(?:\([^()]*\)[^()]*)*)\)/g
-    let m
-    while ((m = tupleRe.exec(block)) !== null) {
-      const parts = parseSqlValueTuple(m[1])
-      // Columns: scope_category_id, resource, sub_category, unit, ef_value, ref_info,
-      // ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier
-      if (parts.length < 15) continue
-      const scopeCategoryId = unquote(parts[0])
-      const resource = unquote(parts[1])
-      const unit = unquote(parts[3])
-      const efValue = unquote(parts[4])
-      const refCode = unquote(parts[12])
-      const sortIndex = unquote(parts[13])
-      const id = uuidV5(
-        [reqLabel, String(sortIndex ?? ''), resource ?? '', unit ?? '', efValue ?? 'null', refCode ?? ''].join('|'),
-        TGO_NAMESPACE
-      )
-      const cols = [
-        'id',
-        'scope_category_id',
-        'resource',
-        'sub_category',
-        'unit',
-        'ef_value',
-        'ref_info',
-        'ref_co2',
-        'ref_fossil_ch4',
-        'ref_ch4',
-        'ref_n2o',
-        'ref_source',
-        'version',
-        'ref_code',
-        'sort_index',
-        'multiplier',
-        'created_at',
-        'updated_at',
-      ]
-      const vals = [
-        sqlStr(id),
-        parts[0],
-        parts[1],
-        parts[2],
-        parts[3],
-        parts[4],
-        parts[5],
-        parts[6],
-        parts[7],
-        parts[8],
-        parts[9],
-        parts[10],
-        parts[11],
-        parts[12],
-        parts[13],
-        parts[14],
-        'NOW()',
-        'NOW()',
-      ]
-      out.push(
-        `INSERT INTO fuel_resources (${cols.join(', ')})
-VALUES (${vals.join(', ')})
-ON CONFLICT (id) DO UPDATE SET
-  scope_category_id = EXCLUDED.scope_category_id,
-  resource = EXCLUDED.resource,
-  sub_category = EXCLUDED.sub_category,
-  unit = EXCLUDED.unit,
-  ef_value = EXCLUDED.ef_value,
-  ref_info = EXCLUDED.ref_info,
-  ref_co2 = EXCLUDED.ref_co2,
-  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
-  ref_ch4 = EXCLUDED.ref_ch4,
-  ref_n2o = EXCLUDED.ref_n2o,
-  ref_source = EXCLUDED.ref_source,
-  version = EXCLUDED.version,
-  ref_code = EXCLUDED.ref_code,
-  sort_index = EXCLUDED.sort_index,
-  multiplier = EXCLUDED.multiplier,
-  deleted_at = NULL,
-  updated_at = NOW();`
-      )
-      out.push('')
-      count++
-    }
+function noteTgoSeedFromBuildImport () {
+  const tgoSql = path.join(OUT, '03_fuel_resources_tgo_api.sql')
+  if (fs.existsSync(tgoSql)) {
+    console.log(
+      `Keeping existing 03_fuel_resources_tgo_api.sql (regenerate with: pnpm tgo-ef:build-import)`,
+    )
+    return
   }
-
-  out.push('COMMIT;')
-  fs.writeFileSync(path.join(OUT, '03_fuel_resources_tgo_api.sql'), out.join('\n'))
-  console.log(`Wrote 03_fuel_resources_tgo_api.sql (${count} rows)`)
+  console.warn(
+    `Missing 03_fuel_resources_tgo_api.sql — run: pnpm tgo-ef:fetch && pnpm tgo-ef:build-import`,
+  )
 }
 
 function writeFebFromClientSeed () {
@@ -434,7 +337,7 @@ function main () {
   ensureOut()
   writeCategories()
   writeMayFromClientSeed()
-  writeTgoFromClientSeeds()
+  noteTgoSeedFromBuildImport()
   writeFebFromClientSeed()
   console.log(`\nDone. Apply generated SQL under ${OUT} after migrations.`)
 }

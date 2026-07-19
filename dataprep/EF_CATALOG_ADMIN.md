@@ -22,14 +22,29 @@ Apply in order on admin Supabase:
 2. `database/migration_add_ef_catalog_versioning.sql` — `version` / `ref_code` / `sort_index` / `multiplier` on `fuel_resources`; `ef_catalog_releases` (historical; may have created `fuel_resources_linking`)
 3. `database/migration_align_scope_categories_canonical.sql` — 20 fixed category UUIDs + FK remap
 4. `database/migration_drop_fuel_resources_linking.sql` — drop `fuel_resources_linking` (replaced by fixed category rules on client)
-5. `database/migration_update_tgo_cat4_duo_labels.sql` — TGO API Scope 3 Cat 4 duo labels (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal `0% Loading`). After apply, **Re-publish** `TGO API` so client sync sees the new `content_hash`. Client mirror: `ideacarb-client-app/database/migration/migrate_update_tgo_cat4_duo_labels.sql`.
+5. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO API` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** `TGO API` so client sync sees the new `content_hash`.
+
+## TGO EF refresh (offline → Import new version)
+
+When TGO publishes updated emission factors, run from `cfo-admin-console` (set `TGO_EF_REQ_TOKEN` in `.env.local` if needed):
+
+```bash
+pnpm tgo-ef:fetch          # → dataprep/tgo-ef/raw/tgo-ef-{cfo,cfp}.json
+pnpm tgo-ef:build-import   # → dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
+                           #    + dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
+```
+
+Then Admin UI → Emission Resources → **Import new version** → choose a **new** version label → upload `fuel_resources_tgo_import.xlsx` → Publish → clients sync.
+
+Cat 4 transport labels are applied in the build script (not a separate SQL step for new imports): all Cat 4 get `value1`; only rows without ` 0% Loading` get `value2`.
 
 ## Generate + load seed SQL
 
-From `cfo-admin-console` (requires sibling `ideacarb-client-app` checkout):
+From `cfo-admin-console` (May/Feb still may use sibling `ideacarb-client-app` seeds; TGO SQL comes from `pnpm tgo-ef:build-import`):
 
 ```bash
-npm run ef-catalog:generate-import
+pnpm tgo-ef:fetch && pnpm tgo-ef:build-import   # refresh 03_ TGO SQL + Excel
+npm run ef-catalog:generate-import              # 01_, 02_, 04_ (keeps existing 03_)
 ```
 
 Writes under `dataprep/ef-catalog/generated/`:
@@ -38,12 +53,12 @@ Writes under `dataprep/ef-catalog/generated/`:
 2. `02a_fuel_resources_may2569.sql`
 3. `02b_fuel_resources_may2569.sql`
 4. `02c_fuel_resources_may2569.sql`
-5. `03_fuel_resources_tgo_api.sql`
+5. `03_fuel_resources_tgo_api.sql` — from `tgo-ef:build-import`
 6. `04_fuel_resources_feb2569.sql`
 
 Apply after migrations in filename order. The May catalog is split into three independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
 
-Expected rough fuel counts: Feb ~990, May ~1797, TGO ~691.
+Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
 
 ## Fixed scope-category link rules (read-only API)
 
