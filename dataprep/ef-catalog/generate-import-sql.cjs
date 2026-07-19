@@ -17,8 +17,8 @@
  * TGO fuels: run `pnpm tgo-ef:fetch` then `pnpm tgo-ef:build-import` (writes Excel + 03_ SQL).
  * This script no longer reads ideacarb-client-app TGO seeds.
  *
- * Prerequisites: run migration_add_ef_catalog_versioning.sql and
- * migration_align_scope_categories_canonical.sql first (or apply 01_ first).
+ * Prerequisites: database/01_schema.sql + database/03_seed_ef_catalog_releases.sql
+ * (canonical categories are upserted by generated 01_scope_categories.sql).
  */
 
 const fs = require('fs')

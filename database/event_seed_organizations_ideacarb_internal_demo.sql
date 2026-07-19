@@ -3,7 +3,6 @@
 -- Run after:
 --   01_schema.sql
 --   02_seed_master_data.sql
---   migration_add_employee_account_type.sql
 -- Purpose:
 --   Seed 22 internal demo organizations from ideacarb employee list
 --   (CBiS01..CBiS13, SID-En01..SID-En09).

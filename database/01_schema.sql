@@ -1,6 +1,9 @@
 -- Admin Console Schema
--- This script creates all tables for the admin console application
+-- Baseline schema for the single admin console Supabase instance.
 -- Run order: 00_drop_all.sql -> 01_schema.sql -> 02_seed_master_data.sql
+--   -> 03_seed_ef_catalog_releases.sql -> dataprep/ef-catalog/generated/*
+--   -> 04_seed_emission_templates_and_activity_groups.sql
+--   -> 05_seed_organizations_ideaday.sql / 06_seed_notification_recipients.sql
 
 -- ===========================================
 -- PART 1: CREATE EXTENSIONS
@@ -173,6 +176,133 @@ CREATE TABLE support_message_attachments (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Scope categories (EF catalog)
+CREATE TABLE scope_categories (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  scope INTEGER NOT NULL CHECK (scope IN (1, 2, 3, 4)),
+  name_th TEXT NOT NULL,
+  name_en TEXT NOT NULL,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
+);
+
+-- Fuel resources (versioned EF catalog rows)
+CREATE TABLE fuel_resources (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  scope_category_id UUID NOT NULL REFERENCES scope_categories(id) ON DELETE CASCADE,
+  resource TEXT NOT NULL,
+  sub_category TEXT,
+  unit TEXT,
+  ef_value NUMERIC,
+  value1_label TEXT,
+  value1_unit TEXT,
+  value2_label TEXT,
+  value2_unit TEXT,
+  ref_info TEXT,
+  ref_co2 NUMERIC,
+  ref_fossil_ch4 NUMERIC,
+  ref_ch4 NUMERIC,
+  ref_n2o NUMERIC,
+  ref_sf6 NUMERIC,
+  ref_nf3 NUMERIC,
+  ref_hfcs NUMERIC,
+  ref_pfcs NUMERIC,
+  gwp100_hfcs NUMERIC,
+  gwp100_pfcs NUMERIC,
+  extraghg_ef NUMERIC,
+  extraghg_gwp100 NUMERIC,
+  ref_source TEXT CHECK (ref_source IN ('SELF_COLLECT', 'SUPPLIER', 'TH_LCI', 'TGO', 'THAI_RES', 'INTERNATIONAL', 'OTHER', 'SUBSITUTE')),
+  version TEXT,
+  ref_code TEXT,
+  sort_index INT,
+  multiplier NUMERIC NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
+);
+
+-- EF catalog release metadata (publish / sync SoT)
+CREATE TABLE ef_catalog_releases (
+  version TEXT PRIMARY KEY,
+  status TEXT NOT NULL DEFAULT 'draft'
+    CHECK (status IN ('draft', 'published')),
+  is_default BOOLEAN NOT NULL DEFAULT false,
+  content_hash TEXT,
+  fuel_count INT NOT NULL DEFAULT 0,
+  link_count INT NOT NULL DEFAULT 0,
+  order_index INT NOT NULL DEFAULT 0,
+  published_at TIMESTAMPTZ,
+  published_by UUID,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Emission templates (industry templates)
+CREATE TABLE emission_templates (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  legacy_industry_id INTEGER UNIQUE,
+  industry_code TEXT UNIQUE NOT NULL,
+  name_th TEXT NOT NULL,
+  name_en TEXT NOT NULL,
+  examples TEXT,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  feature_image_url TEXT,
+  feature_image_path TEXT,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
+);
+
+-- Template activity groups
+CREATE TABLE template_activity_groups (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  template_id UUID NOT NULL REFERENCES emission_templates(id) ON DELETE CASCADE,
+  legacy_activity_group_id INTEGER,
+  name_th TEXT NOT NULL,
+  name_en TEXT NOT NULL,
+  scope INTEGER CHECK (scope IN (1, 2, 3, 4)),
+  scope_category_id UUID REFERENCES scope_categories(id) ON DELETE SET NULL,
+  scope_sub_category TEXT,
+  is_common BOOLEAN NOT NULL DEFAULT FALSE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
+);
+
+-- Activity group <-> fuel resource mappings
+CREATE TABLE template_activity_group_fuel_resources (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  template_activity_group_id UUID NOT NULL REFERENCES template_activity_groups(id) ON DELETE CASCADE,
+  fuel_resource_id UUID NOT NULL REFERENCES fuel_resources(id) ON DELETE CASCADE,
+  note TEXT,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(template_activity_group_id, fuel_resource_id)
+);
+
+-- App usage tracking from multi-tenant org-app instances
+CREATE TABLE app_usage_tracking (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  domain TEXT NOT NULL,
+  page TEXT NOT NULL,
+  user_role TEXT,
+  user_id UUID,
+  user_agent TEXT NOT NULL,
+  referrer TEXT,
+  screen_width INTEGER,
+  screen_height INTEGER,
+  language TEXT,
+  timezone TEXT,
+  ip_address TEXT,
+  session_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ===========================================
 -- PART 3: CREATE INDEXES
 -- ===========================================
@@ -219,3 +349,51 @@ CREATE INDEX idx_support_messages_sender_type ON support_messages(sender_type);
 CREATE INDEX idx_support_message_attachments_message_id ON support_message_attachments(message_id);
 CREATE INDEX idx_support_message_attachments_organization_created_at ON support_message_attachments(organization_id, created_at);
 CREATE INDEX idx_support_message_attachments_uploader ON support_message_attachments(uploaded_by_type, uploaded_by_user_id);
+
+-- Scope categories indexes
+CREATE INDEX idx_scope_categories_scope ON scope_categories(scope);
+CREATE INDEX idx_scope_categories_display_order ON scope_categories(scope, display_order);
+CREATE INDEX idx_scope_categories_deleted_at ON scope_categories(deleted_at) WHERE deleted_at IS NULL;
+
+-- Fuel resources indexes
+CREATE INDEX idx_fuel_resources_category ON fuel_resources(scope_category_id);
+CREATE INDEX idx_fuel_resources_resource ON fuel_resources(resource);
+CREATE INDEX idx_fuel_resources_category_resource ON fuel_resources(scope_category_id, resource);
+CREATE INDEX idx_fuel_resources_ref_source ON fuel_resources(ref_source);
+CREATE INDEX idx_fuel_resources_deleted_at ON fuel_resources(deleted_at) WHERE deleted_at IS NULL;
+CREATE INDEX idx_fuel_resources_version ON fuel_resources(version);
+CREATE INDEX idx_fuel_resources_ref_code ON fuel_resources(ref_code);
+CREATE UNIQUE INDEX uq_fuel_resources_ref_source_version_ref_code
+  ON fuel_resources (ref_source, version, ref_code)
+  WHERE ref_code IS NOT NULL AND deleted_at IS NULL;
+
+-- EF catalog releases indexes
+CREATE UNIQUE INDEX uq_ef_catalog_releases_one_default
+  ON ef_catalog_releases (is_default)
+  WHERE is_default = true AND status = 'published';
+
+-- Emission templates indexes
+CREATE INDEX idx_emission_templates_active ON emission_templates(is_active);
+CREATE INDEX idx_emission_templates_display_order ON emission_templates(display_order);
+CREATE INDEX idx_emission_templates_deleted_at ON emission_templates(deleted_at) WHERE deleted_at IS NULL;
+
+-- Template activity groups indexes
+CREATE UNIQUE INDEX idx_template_activity_groups_template_legacy
+  ON template_activity_groups(template_id, legacy_activity_group_id);
+CREATE INDEX idx_template_activity_groups_template_sort
+  ON template_activity_groups(template_id, sort_order);
+CREATE INDEX idx_template_activity_groups_scope_category
+  ON template_activity_groups(scope, scope_category_id);
+CREATE INDEX idx_template_activity_groups_deleted_at
+  ON template_activity_groups(deleted_at) WHERE deleted_at IS NULL;
+
+-- Template activity group fuel mappings indexes
+CREATE INDEX idx_tagfr_activity_group ON template_activity_group_fuel_resources(template_activity_group_id);
+CREATE INDEX idx_tagfr_fuel_resource ON template_activity_group_fuel_resources(fuel_resource_id);
+
+-- App usage tracking indexes
+CREATE INDEX idx_app_usage_tracking_domain ON app_usage_tracking(domain);
+CREATE INDEX idx_app_usage_tracking_created_at ON app_usage_tracking(created_at);
+CREATE INDEX idx_app_usage_tracking_domain_created_at ON app_usage_tracking(domain, created_at);
+CREATE INDEX idx_app_usage_tracking_user_id ON app_usage_tracking(user_id) WHERE user_id IS NOT NULL;
+CREATE INDEX idx_app_usage_tracking_session_id ON app_usage_tracking(session_id) WHERE session_id IS NOT NULL;

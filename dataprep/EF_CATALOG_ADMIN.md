@@ -16,18 +16,11 @@ Version strings are free text on `fuel_resources.version` / `ef_catalog_releases
 
 Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Tabs sort by `ef_catalog_releases.order_index` ascending (10 กุมภาพันธ์ → 20 พฤษภาคม → 30 TGO พฤษภาคม → 40 TGO 1 กรกฎาคม). Default tab is the release with `is_default = true` (omitted from the query when selected). Clients persist `is_default` + `order_index` on `ef_catalog_sync_state` during sync.
 
-## Migrations
+## Schema (baseline only)
 
-Apply in order on admin Supabase:
+Admin uses a single Supabase instance. All DDL lives in `database/01_schema.sql` (no incremental `migration_*.sql`). Fresh install: `00_drop_all.sql` → `01_schema.sql` → `02_seed_master_data.sql` → `03_seed_ef_catalog_releases.sql` (draft releases + `order_index` 10/20/30/40) → generated EF SQL below → publish in UI.
 
-1. Existing fuel/category schema (if not already applied)
-2. `database/migration_add_ef_catalog_versioning.sql` — `version` / `ref_code` / `sort_index` / `multiplier` on `fuel_resources`; `ef_catalog_releases` (historical; may have created `fuel_resources_linking`)
-3. `database/migration_align_scope_categories_canonical.sql` — 20 fixed category UUIDs + FK remap
-4. `database/migration_drop_fuel_resources_linking.sql` — drop `fuel_resources_linking` (replaced by fixed category rules on client)
-5. `database/migration_rename_tgo_api_to_tgo_may_2569.sql` — rename `TGO API` / `TGO May 2569` → `TGO พฤษภาคม 2569`; set `is_default` when published
-6. `database/migration_add_ef_catalog_release_order_index.sql` — add `order_index` + backfill known catalogs
-7. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO พฤษภาคม 2569` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** so client sync sees the new `content_hash`.
-8. `database/migration_ensure_tgo_1_july_2569_release.sql` — after seeding July fuels (`TGO 1 กรกฎาคม 2569`), insert/refresh `ef_catalog_releases` draft + `fuel_count` + `order_index = 40`. Then **Publish** (and set default only when ready to switch clients).
+Cat 4 transport duo labels for TGO are baked by `pnpm tgo-ef:build-import` (not a separate SQL repair). After any fuel SQL load or import, **Publish** (and set default when ready) so clients see the new `content_hash`.
 
 ## TGO EF refresh (offline → Import new version)
 
@@ -62,7 +55,7 @@ Writes under `dataprep/ef-catalog/generated/`:
 5. `03_fuel_resources_tgo_api.sql` — from `tgo-ef:build-import`
 6. `04_fuel_resources_feb2569.sql`
 
-Apply after migrations in filename order. The May catalog is split into three independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
+Apply after `01_schema.sql` + `03_seed_ef_catalog_releases.sql`, in filename order. The May catalog is split into three independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
 
 Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
 

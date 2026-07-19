@@ -48,33 +48,28 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 ## Database Setup
 
+Single admin Supabase instance — baseline schema only (no incremental `migration_*.sql`).
+
 1. Create a new Supabase project for the admin console
-2. Run the database schema:
+2. (Optional reset) `database/00_drop_all.sql`, then run the schema:
    ```bash
    # In Supabase SQL Editor, run:
    database/01_schema.sql
    ```
-3. Seed initial data:
+3. Seed bootstrap data:
    ```bash
    # In Supabase SQL Editor, run:
    database/02_seed_master_data.sql
-   database/05_seed_organizations_clients.sql
+   database/03_seed_ef_catalog_releases.sql
    ```
    **Note**: Update the password hash in `02_seed_master_data.sql` with your actual default admin password hash.
-
-4. Verify seeded client organizations:
-   ```sql
-   -- Expect 23 rows
-   SELECT COUNT(*) AS org_count
-   FROM organizations
-   WHERE code BETWEEN 'cbis0101' AND 'cbis0123';
-
-   -- Verify mapping
-   SELECT code, name, factory_admin_email
-   FROM organizations
-   WHERE code BETWEEN 'cbis0101' AND 'cbis0123'
-   ORDER BY code;
+4. Load EF catalog master data from `dataprep/ef-catalog/generated/` (see [dataprep/EF_CATALOG_ADMIN.md](dataprep/EF_CATALOG_ADMIN.md)), then optionally:
+   ```bash
+   database/04_seed_emission_templates_and_activity_groups.sql
+   database/05_seed_organizations_ideaday.sql
+   database/06_seed_notification_recipients.sql
    ```
+5. Publish catalog versions from Emission Resources UI when ready for client sync.
 
 ## User Roles
 

@@ -106,12 +106,9 @@ function main() {
 -- 04_seed_emission_templates_and_activity_groups.sql
 -- Run after:
 --   01_schema.sql
---   migration_add_scope_categories.sql
---   migration_add_fuel_resources.sql
---   migration_add_emission_templates.sql
---   migration_add_template_activity_groups.sql
 --   02_seed_master_data.sql
---   03_seed_scope_categories_and_fuel_resources.sql
+--   03_seed_ef_catalog_releases.sql
+--   dataprep/ef-catalog/generated/01_scope_categories.sql (+ fuel SQL as needed)
 -- Source: dataprep/Emission Templates 13 Industries.xlsx
 -- =============================================================================
 

@@ -107,7 +107,7 @@ function buildMappedRow (input: {
 }
 
 /**
- * Apply Scope 3 Cat 4 duo labels (mirrors migration_update_tgo_cat4_duo_labels.sql
+ * Apply Scope 3 Cat 4 duo labels (distance/km + weight/ton; distance-only when name has ` 0% Loading`)
  * with improved zero-loading match: leading-space " 0% Loading").
  */
 export function applyCat4TransportLabels (rows: FuelResourceImportRow[]): FuelResourceImportRow[] {

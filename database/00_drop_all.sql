@@ -6,12 +6,22 @@
 -- PART 1: DROP TABLES IN DEPENDENCY ORDER
 -- ===========================================
 
--- Drop tables that depend on other tables first
+DROP TABLE IF EXISTS template_activity_group_fuel_resources CASCADE;
+DROP TABLE IF EXISTS template_activity_groups CASCADE;
+DROP TABLE IF EXISTS emission_templates CASCADE;
+DROP TABLE IF EXISTS fuel_resources CASCADE;
+DROP TABLE IF EXISTS scope_categories CASCADE;
+DROP TABLE IF EXISTS ef_catalog_releases CASCADE;
+DROP TABLE IF EXISTS app_usage_tracking CASCADE;
 DROP TABLE IF EXISTS support_message_attachments CASCADE;
 DROP TABLE IF EXISTS support_messages CASCADE;
 DROP TABLE IF EXISTS support_conversations CASCADE;
 DROP TABLE IF EXISTS organization_invitations CASCADE;
+DROP TABLE IF EXISTS organization_trial_request_consents CASCADE;
+DROP TABLE IF EXISTS organization_trial_requests CASCADE;
+DROP TABLE IF EXISTS notification_recipients CASCADE;
 DROP TABLE IF EXISTS user_organizations CASCADE;
+DROP TABLE IF EXISTS user_consents CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
@@ -21,4 +31,3 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- Note: We don't drop uuid-ossp extension as it may be used by other databases
 -- DROP EXTENSION IF EXISTS "uuid-ossp" CASCADE;
-
