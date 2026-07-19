@@ -12,7 +12,7 @@ Version strings are free text on `fuel_resources.version` / `ef_catalog_releases
 |-------|---------|
 | `กุมภาพันธ์ 2569` | Feb 2569 spreadsheet catalog |
 | `พฤษภาคม 2569` | May 2569 spreadsheet catalog (UUID v5 IDs) |
-| `TGO May 2569` | TGO CFO/CFP catalog (renamed from historical `TGO API`) |
+| `TGO พฤษภาคม 2569` | TGO CFO/CFP catalog (renamed from historical `TGO API` / `TGO May 2569`) |
 
 Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Default tab is the release with `is_default = true` (omitted from the query when selected). Clients persist that flag on `ef_catalog_sync_state.is_default` during sync.
 
@@ -24,8 +24,8 @@ Apply in order on admin Supabase:
 2. `database/migration_add_ef_catalog_versioning.sql` — `version` / `ref_code` / `sort_index` / `multiplier` on `fuel_resources`; `ef_catalog_releases` (historical; may have created `fuel_resources_linking`)
 3. `database/migration_align_scope_categories_canonical.sql` — 20 fixed category UUIDs + FK remap
 4. `database/migration_drop_fuel_resources_linking.sql` — drop `fuel_resources_linking` (replaced by fixed category rules on client)
-5. `database/migration_rename_tgo_api_to_tgo_may_2569.sql` — rename `TGO API` → `TGO May 2569`; set `is_default` when published
-6. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO May 2569` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** so client sync sees the new `content_hash`.
+5. `database/migration_rename_tgo_api_to_tgo_may_2569.sql` — rename `TGO API` / `TGO May 2569` → `TGO พฤษภาคม 2569`; set `is_default` when published
+6. `database/migration_update_tgo_cat4_duo_labels.sql` — optional repair for existing `TGO พฤษภาคม 2569` Cat 4 rows (`value1` = ระยะทาง/km for all; `value2` = น้ำหนักที่ขน/ton except names containing literal ` 0% Loading` with leading space). Prefer baking labels via `pnpm tgo-ef:build-import`. After apply, **Re-publish** so client sync sees the new `content_hash`.
 
 ## TGO EF refresh (offline → Import new version)
 

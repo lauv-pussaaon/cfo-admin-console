@@ -5,7 +5,7 @@ Offline pipeline to refresh TGO CFO/CFP emission factors into an Excel file for 
 ```bash
 # from cfo-admin-console
 pnpm tgo-ef:fetch
-pnpm tgo-ef:build-import -- --version "TGO May 2569"
+pnpm tgo-ef:build-import -- --version "TGO พฤษภาคม 2569"
 # or: TGO_EF_VERSION="TGO July 2569" pnpm tgo-ef:build-import
 ```
 

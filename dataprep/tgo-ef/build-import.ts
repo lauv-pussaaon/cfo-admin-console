@@ -2,7 +2,7 @@
  * Build Emission Resources import Excel (+ optional seed SQL) from fetched TGO JSON.
  *
  * Usage (from cfo-admin-console):
- *   pnpm tgo-ef:build-import -- --version "TGO May 2569"
+ *   pnpm tgo-ef:build-import -- --version "TGO พฤษภาคม 2569"
  *   TGO_EF_VERSION="TGO July 2569" pnpm tgo-ef:build-import
  *
  * Inputs:
@@ -74,7 +74,7 @@ function resolveVersionLabel (argv: string[]): string {
   const fromEnv = process.env.TGO_EF_VERSION?.trim()
   if (fromEnv) return fromEnv
   throw new Error(
-    'Version label required. Pass --version "TGO May 2569" or set TGO_EF_VERSION.',
+    'Version label required. Pass --version "TGO พฤษภาคม 2569" or set TGO_EF_VERSION.',
   )
 }
 
