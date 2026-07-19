@@ -337,15 +337,20 @@ export async function hardDeleteAllFuelResources(): Promise<{ deleted: number }>
 }
 
 export async function listFuelResourcesForExport(version: string): Promise<FuelResource[]> {
-  const { data, error } = await supabase
-    .from('fuel_resources')
-    .select('*')
-    .eq('version', version)
-    .is('deleted_at', null)
-    .order('sort_index', { ascending: true, nullsFirst: false })
-    .order('resource', { ascending: true })
-  if (error) throw error
-  return (data ?? []) as FuelResource[]
+  // Paginate — PostgREST default max rows is 1000; July TGO catalogs exceed that.
+  const rows = await fetchAllMatchingFuelResources({
+    include_deleted: false,
+    version,
+  })
+  return rows
+    .slice()
+    .sort((a, b) => {
+      const ai = a.sort_index ?? Number.POSITIVE_INFINITY
+      const bi = b.sort_index ?? Number.POSITIVE_INFINITY
+      if (ai !== bi) return ai - bi
+      return (a.resource ?? '').localeCompare(b.resource ?? '', undefined, { sensitivity: 'base' })
+    })
+    .map(({ scope_category: _scopeCategory, ...fuel }) => fuel as FuelResource)
 }
 
 export async function bulkUpsertFuelResources(rows: Partial<FuelResource>[]) {

@@ -65,16 +65,41 @@ async function countFuels (version: string): Promise<number> {
   return count ?? 0
 }
 
-export async function computeReleaseContentHash (version: string): Promise<string> {
-  const { data: fuels, error: fuelErr } = await supabase
-    .from('fuel_resources')
-    .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
-    .eq('version', version)
-    .is('deleted_at', null)
-    .order('id', { ascending: true })
-  if (fuelErr) throw fuelErr
+const HASH_FETCH_CHUNK = 1000
 
-  const fuelPart = (fuels ?? [])
+type HashFuelRow = {
+  id: string
+  ef_value: number | string | null
+  value1_label: string | null
+  value1_unit: string | null
+  value2_label: string | null
+  value2_unit: string | null
+}
+
+/** Paginate — PostgREST default max is 1000 rows; May catalogs exceed that. */
+async function listFuelsForContentHash (version: string): Promise<HashFuelRow[]> {
+  const all: HashFuelRow[] = []
+  let offset = 0
+  while (true) {
+    const { data, error } = await supabase
+      .from('fuel_resources')
+      .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
+      .eq('version', version)
+      .is('deleted_at', null)
+      .order('id', { ascending: true })
+      .range(offset, offset + HASH_FETCH_CHUNK - 1)
+    if (error) throw error
+    const chunk = (data ?? []) as HashFuelRow[]
+    all.push(...chunk)
+    if (chunk.length < HASH_FETCH_CHUNK) break
+    offset += HASH_FETCH_CHUNK
+  }
+  return all
+}
+
+export async function computeReleaseContentHash (version: string): Promise<string> {
+  const fuels = await listFuelsForContentHash(version)
+  const fuelPart = fuels
     .map((f) =>
       [
         f.id,
