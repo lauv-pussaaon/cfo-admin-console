@@ -52,8 +52,8 @@ Expected rough fuel counts: Feb ~990, May ~1797, TGO ~691.
 | Rule | Source | Dest category UUID |
 |------|--------|--------------------|
 | `scope_1_2_to_cat3` | Scope 1 or 2 | Cat 3 `a1000003-0003-4003-8003-000000000009` |
-| `scope_1_to_cat4` | Scope 1 | Cat 4 `…00000a` (in addition to Cat 3) |
-| `cat1_to_cat4` | Cat 1 `…000007` | Cat 4 `…00000a` |
+| `scope_1_to_scope4` | Scope 1 | Scope 4 Energy Usage Reporting `…000014` (in addition to Cat 3) |
+| `cat1_to_cat4` | Cat 1 `…000007` | Scope 3 Cat 4 `…00000a` |
 
 Constants: `src/lib/constants/scope-category-links.ts`.
 
@@ -147,7 +147,7 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 8. New version import → tab appears; release is draft
 9. Create with duplicate version name → rejected; `mode=replace` → rejected
 10. Version tab has Publish / Export only (no Delete version fuels button)
-11. Linking menu / `fuel_resources_linking` APIs absent; `GET /api/scope-category-links` returns three rules (Scope1/2→Cat3, Scope1→Cat4, Cat1→Cat4)
+11. Linking menu / `fuel_resources_linking` APIs absent; `GET /api/scope-category-links` returns three rules (Scope1/2→Cat3, Scope1→Scope4, Cat1→Cat4)
 12. Templates still resolve after category align
 
 ## Out of scope (later)
