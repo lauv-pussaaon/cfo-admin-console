@@ -18,6 +18,7 @@ export async function GET (request: NextRequest) {
         fuel_count: r.fuel_count,
         link_count: r.link_count,
         is_default: r.is_default,
+        order_index: r.order_index ?? 0,
       }))
 
     return NextResponse.json({ data })

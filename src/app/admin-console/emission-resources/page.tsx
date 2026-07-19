@@ -39,12 +39,9 @@ const DEFAULT_PER_PAGE = 50
 
 function orderReleases (releases: EfCatalogRelease[]): EfCatalogRelease[] {
   return [...releases].sort((a, b) => {
-    const aPub = a.published_at ? Date.parse(a.published_at) : NaN
-    const bPub = b.published_at ? Date.parse(b.published_at) : NaN
-    const aHas = Number.isFinite(aPub)
-    const bHas = Number.isFinite(bPub)
-    if (aHas && bHas && aPub !== bPub) return bPub - aPub
-    if (aHas !== bHas) return aHas ? -1 : 1
+    const aIdx = a.order_index ?? 0
+    const bIdx = b.order_index ?? 0
+    if (aIdx !== bIdx) return aIdx - bIdx
     return a.version.localeCompare(b.version, 'th')
   })
 }

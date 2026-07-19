@@ -67,6 +67,7 @@ export interface EfCatalogRelease {
   content_hash: string | null
   fuel_count: number
   link_count: number
+  order_index: number
   published_at: string | null
   published_by: string | null
   updated_at: string | null

@@ -1,10 +1,10 @@
--- Generated TGO API fuels for admin SoT (from pnpm tgo-ef:build-import)
+-- Generated TGO 1 กรกฎาคม 2569 fuels for admin SoT (from pnpm tgo-ef:build-import)
 -- Cat4 duo: value1=ระยะทาง/km for all; value2=น้ำหนักที่ขน/ton except resource containing " 0% Loading"
 -- Part 3/5: rows 279-417 of 693
 BEGIN;
 
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e128f6be-4d4a-5fa6-aaed-0c568ed4e0ea', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0403, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-56b8e008dce8', 279, 1, NOW(), NOW())
+VALUES ('e128f6be-4d4a-5fa6-aaed-0c568ed4e0ea', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0403, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-56b8e008dce8', 279, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -28,7 +28,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('eb9fb8f2-230f-5991-873d-80f2fcec2072', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.073, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d1b95af2b21a', 280, 1, NOW(), NOW())
+VALUES ('eb9fb8f2-230f-5991-873d-80f2fcec2072', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.073, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d1b95af2b21a', 280, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -52,7 +52,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4777534a-3a00-5e7a-a009-a24ec1d76db5', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0517, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-6ed40c7cd380', 281, 1, NOW(), NOW())
+VALUES ('4777534a-3a00-5e7a-a009-a24ec1d76db5', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0517, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6ed40c7cd380', 281, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -76,7 +76,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a477390d-8722-5cbe-9087-edcca4d881df', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8652, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a933796f1666', 282, 1, NOW(), NOW())
+VALUES ('a477390d-8722-5cbe-9087-edcca4d881df', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8652, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a933796f1666', 282, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -100,7 +100,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9399791d-ce16-5b13-bf5c-7b9facd57414', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0502, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-299ac33ab363', 283, 1, NOW(), NOW())
+VALUES ('9399791d-ce16-5b13-bf5c-7b9facd57414', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0502, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-299ac33ab363', 283, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -124,7 +124,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d459bd8d-344c-5bc3-aef5-fe46a9b412e3', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0858, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ce9b6b4deb2c', 284, 1, NOW(), NOW())
+VALUES ('d459bd8d-344c-5bc3-aef5-fe46a9b412e3', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0858, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ce9b6b4deb2c', 284, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -148,7 +148,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('066f9937-c382-51ce-8908-e12a91e465e7', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0627, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d85ae3f76874', 285, 1, NOW(), NOW())
+VALUES ('066f9937-c382-51ce-8908-e12a91e465e7', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0627, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d85ae3f76874', 285, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -172,7 +172,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('36952636-cba7-5c45-9617-64b697ab8ef0', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.605, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-3dbc748ac726', 286, 1, NOW(), NOW())
+VALUES ('36952636-cba7-5c45-9617-64b697ab8ef0', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.605, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-3dbc748ac726', 286, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -196,7 +196,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4d616cb6-fbda-50fb-a9b4-e63818ccc4bb', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0488, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4dbc64c47224', 287, 1, NOW(), NOW())
+VALUES ('4d616cb6-fbda-50fb-a9b4-e63818ccc4bb', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0488, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4dbc64c47224', 287, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -220,7 +220,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f5372ffe-20bd-54f0-bdc0-10fda3596280', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.088, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ad0d8415fc2e', 288, 1, NOW(), NOW())
+VALUES ('f5372ffe-20bd-54f0-bdc0-10fda3596280', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.088, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ad0d8415fc2e', 288, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -244,7 +244,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('c1425db5-607e-571d-b4b0-31473d90fcb1', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0616, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-84e028d03151', 289, 1, NOW(), NOW())
+VALUES ('c1425db5-607e-571d-b4b0-31473d90fcb1', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0616, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-84e028d03151', 289, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -268,7 +268,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7deac5c1-1d3a-504b-bbe3-dac1e737072a', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.667, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ec08d198e747', 290, 1, NOW(), NOW())
+VALUES ('7deac5c1-1d3a-504b-bbe3-dac1e737072a', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.667, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ec08d198e747', 290, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -292,7 +292,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('b6c10c18-df10-5266-8dc4-69b31d26dd1d', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0611, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-7c60c68cdfc1', 291, 1, NOW(), NOW())
+VALUES ('b6c10c18-df10-5266-8dc4-69b31d26dd1d', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0611, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7c60c68cdfc1', 291, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -316,7 +316,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('2d23f536-e6cf-5db6-9bee-3596bb566c80', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1018, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-b85f00dcc2fb', 292, 1, NOW(), NOW())
+VALUES ('2d23f536-e6cf-5db6-9bee-3596bb566c80', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1018, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b85f00dcc2fb', 292, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -340,7 +340,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('ca8adb42-f7f2-5e33-9c85-9912d5e96e0a', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0738, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ef8a7dfbdff1', 293, 1, NOW(), NOW())
+VALUES ('ca8adb42-f7f2-5e33-9c85-9912d5e96e0a', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุกเปิด 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0738, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ef8a7dfbdff1', 293, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -364,7 +364,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a654f221-ba9e-5de8-9d0f-efac480020aa', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.492, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-b88dee241516', 294, 1, NOW(), NOW())
+VALUES ('a654f221-ba9e-5de8-9d0f-efac480020aa', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.492, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b88dee241516', 294, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -388,7 +388,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('342e3e6a-c2dd-595b-91db-3df545a2d246', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0474, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4a2bd05b6b17', 295, 1, NOW(), NOW())
+VALUES ('342e3e6a-c2dd-595b-91db-3df545a2d246', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0474, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4a2bd05b6b17', 295, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -412,7 +412,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e3c2662f-348a-5a68-9527-7584d78854dc', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-40a0555126a7', 296, 1, NOW(), NOW())
+VALUES ('e3c2662f-348a-5a68-9527-7584d78854dc', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-40a0555126a7', 296, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -436,7 +436,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('b5ecc6ea-b2a7-5ce8-8206-1f9c5ccc10b3', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0607, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-75ae81d257db', 297, 1, NOW(), NOW())
+VALUES ('b5ecc6ea-b2a7-5ce8-8206-1f9c5ccc10b3', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0607, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-75ae81d257db', 297, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -460,7 +460,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('785f72a8-5549-589c-b278-7dfe56c64abb', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5443, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-518c6f72c80d', 298, 1, NOW(), NOW())
+VALUES ('785f72a8-5549-589c-b278-7dfe56c64abb', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5443, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-518c6f72c80d', 298, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -484,7 +484,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('b3048fb4-8cab-56fe-8e0f-1ea8737daba6', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0552, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-17171ff2e1ef', 299, 1, NOW(), NOW())
+VALUES ('b3048fb4-8cab-56fe-8e0f-1ea8737daba6', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0552, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-17171ff2e1ef', 299, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -508,7 +508,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3ee491ef-757c-55b7-b95a-1c4eaa4a76e2', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0944, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-dbaca9896ac1', 300, 1, NOW(), NOW())
+VALUES ('3ee491ef-757c-55b7-b95a-1c4eaa4a76e2', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0944, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-dbaca9896ac1', 300, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -532,7 +532,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d9615a2c-2af8-5946-9497-39a130db4055', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0693, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-80674536fb59', 301, 1, NOW(), NOW())
+VALUES ('d9615a2c-2af8-5946-9497-39a130db4055', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกขยะ 6 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0693, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-80674536fb59', 301, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -556,7 +556,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('cc970a02-827a-53e7-97a8-7f7137a10a7b', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ  50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0918, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-cb64c8b6a7a0', 302, 1, NOW(), NOW())
+VALUES ('cc970a02-827a-53e7-97a8-7f7137a10a7b', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ  50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0918, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-cb64c8b6a7a0', 302, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -580,7 +580,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f841c035-57b0-541a-bcb8-737821ef1498', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6313, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-87ce7317805e', 303, 1, NOW(), NOW())
+VALUES ('f841c035-57b0-541a-bcb8-737821ef1498', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6313, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-87ce7317805e', 303, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -604,7 +604,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('ceac9d68-5bb9-5670-8add-f324f68d3e7f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.047, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-139a89e6b1b4', 304, 1, NOW(), NOW())
+VALUES ('ceac9d68-5bb9-5670-8add-f324f68d3e7f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.047, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-139a89e6b1b4', 304, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -628,7 +628,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8468d48f-e67a-5852-b391-754714032c99', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0624, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-708dc4a1d832', 305, 1, NOW(), NOW())
+VALUES ('8468d48f-e67a-5852-b391-754714032c99', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0624, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-708dc4a1d832', 305, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -652,7 +652,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('54598e07-0f6d-51fe-97ab-c6df4065a731', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน  50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1097, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-0d73250d5170', 306, 1, NOW(), NOW())
+VALUES ('54598e07-0f6d-51fe-97ab-c6df4065a731', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน  50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1097, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0d73250d5170', 306, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -676,7 +676,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('bf361724-9a3f-5406-abcc-94afb09f8449', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.7378, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-576b91903284', 307, 1, NOW(), NOW())
+VALUES ('bf361724-9a3f-5406-abcc-94afb09f8449', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.7378, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-576b91903284', 307, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -700,7 +700,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f8686a8b-f9db-509e-9c54-67ed9cac77ec', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.061, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4652a514984b', 308, 1, NOW(), NOW())
+VALUES ('f8686a8b-f9db-509e-9c54-67ed9cac77ec', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.061, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4652a514984b', 308, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -724,7 +724,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9ca7052c-da69-5136-9ea2-0f1448755457', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0772, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-1522b51be8ee', 309, 1, NOW(), NOW())
+VALUES ('9ca7052c-da69-5136-9ea2-0f1448755457', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ชนิดโม่ 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0772, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1522b51be8ee', 309, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -748,7 +748,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7030af67-77fe-5434-b981-af3e9aee8a5f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.9454, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-06dfc00583a2', 310, 1, NOW(), NOW())
+VALUES ('7030af67-77fe-5434-b981-af3e9aee8a5f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.9454, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-06dfc00583a2', 310, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -772,7 +772,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7786b170-25e4-52e5-bab9-cbe3fb4d28a4', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0433, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f5d8bf74a1b6', 311, 1, NOW(), NOW())
+VALUES ('7786b170-25e4-52e5-bab9-cbe3fb4d28a4', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0433, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f5d8bf74a1b6', 311, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -796,7 +796,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d3952c75-a617-5ac9-b0e1-992d0d6ac455', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-de6ef8f632bc', 312, 1, NOW(), NOW())
+VALUES ('d3952c75-a617-5ac9-b0e1-992d0d6ac455', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-de6ef8f632bc', 312, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -820,7 +820,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('57c8ed2b-32c3-5d17-820a-fce3c269e5a0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0577, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-2f889bf695b8', 313, 1, NOW(), NOW())
+VALUES ('57c8ed2b-32c3-5d17-820a-fce3c269e5a0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0577, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2f889bf695b8', 313, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -844,7 +844,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e9e63504-c493-51dd-a4cf-64987dc0ff22', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1848, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-1d5405032079', 314, 1, NOW(), NOW())
+VALUES ('e9e63504-c493-51dd-a4cf-64987dc0ff22', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1848, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1d5405032079', 314, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -868,7 +868,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('53d5b095-b9de-5221-9e71-01a159467240', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0591, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-6f464bf019ec', 315, 1, NOW(), NOW())
+VALUES ('53d5b095-b9de-5221-9e71-01a159467240', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0591, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6f464bf019ec', 315, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -892,7 +892,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('15b4b7ca-57aa-5cd7-8d91-5e450e2d3304', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1049, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-517ccaa500aa', 316, 1, NOW(), NOW())
+VALUES ('15b4b7ca-57aa-5cd7-8d91-5e450e2d3304', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1049, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-517ccaa500aa', 316, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -916,7 +916,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('84a1f701-d06a-57ce-bebd-77edfeec8906', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0745, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a581d5e5d4fe', 317, 1, NOW(), NOW())
+VALUES ('84a1f701-d06a-57ce-bebd-77edfeec8906', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดกล้วย) 18 ล้อ วิ่งสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0745, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a581d5e5d4fe', 317, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -940,7 +940,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e532fc2c-eac8-5cb1-9864-b365eb86ad13', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4638, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f5abc5cc08ec', 318, 1, NOW(), NOW())
+VALUES ('e532fc2c-eac8-5cb1-9864-b365eb86ad13', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4638, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f5abc5cc08ec', 318, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -964,7 +964,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('34e4a007-e7b0-59fa-b99c-790a0489cf3a', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0474, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-cc94c5b64f9a', 319, 1, NOW(), NOW())
+VALUES ('34e4a007-e7b0-59fa-b99c-790a0489cf3a', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0474, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-cc94c5b64f9a', 319, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -988,7 +988,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a1f28b8b-b8cf-5a51-bd4f-a28d35576cc5', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0834, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f8b0535991c1', 320, 1, NOW(), NOW())
+VALUES ('a1f28b8b-b8cf-5a51-bd4f-a28d35576cc5', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0834, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f8b0535991c1', 320, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1012,7 +1012,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('b0ceff37-b721-5bb5-b353-a5f262496d6e', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.061, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-031fc1521e69', 321, 1, NOW(), NOW())
+VALUES ('b0ceff37-b721-5bb5-b353-a5f262496d6e', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.061, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-031fc1521e69', 321, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1036,7 +1036,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e7e15faf-909e-58df-b9c1-d8ee1a92faaf', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน  75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0731, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-6325e68af069', 322, 1, NOW(), NOW())
+VALUES ('e7e15faf-909e-58df-b9c1-d8ee1a92faaf', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน  75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0731, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6325e68af069', 322, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1060,7 +1060,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f5cca83b-55a1-5711-ac4c-ce4cae22e263', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4822, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d4621d3df1cd', 323, 1, NOW(), NOW())
+VALUES ('f5cca83b-55a1-5711-ac4c-ce4cae22e263', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4822, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d4621d3df1cd', 323, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1084,7 +1084,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1d4bc960-4a2a-5f45-9903-594bdc7abc73', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0546, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-216416a440c2', 324, 1, NOW(), NOW())
+VALUES ('1d4bc960-4a2a-5f45-9903-594bdc7abc73', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0546, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-216416a440c2', 324, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1108,7 +1108,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e3d2a275-2603-55ac-a8fd-aceb50c9160c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0985, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-e774a5aab977', 325, 1, NOW(), NOW())
+VALUES ('e3d2a275-2603-55ac-a8fd-aceb50c9160c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0985, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e774a5aab977', 325, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1132,7 +1132,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8882122b-b148-52bd-8f9b-2d6358ff3b32', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.9126, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-3d36548bb006', 326, 1, NOW(), NOW())
+VALUES ('8882122b-b148-52bd-8f9b-2d6358ff3b32', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.9126, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-3d36548bb006', 326, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1156,7 +1156,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('32c22b0c-09cc-5089-aece-11960ea8af62', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0461, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d97611b4dedd', 327, 1, NOW(), NOW())
+VALUES ('32c22b0c-09cc-5089-aece-11960ea8af62', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0461, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d97611b4dedd', 327, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1180,7 +1180,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('0f8db72f-30b6-57a8-a82c-045f4558659a', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f43045b47282', 328, 1, NOW(), NOW())
+VALUES ('0f8db72f-30b6-57a8-a82c-045f4558659a', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f43045b47282', 328, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1204,7 +1204,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3625cc8b-df41-54a3-bb2e-8fc63de0864c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0594, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-c8ea8ca19b2a', 329, 1, NOW(), NOW())
+VALUES ('3625cc8b-df41-54a3-bb2e-8fc63de0864c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0594, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c8ea8ca19b2a', 329, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1228,7 +1228,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9a326006-35df-59a4-ad2b-9e217b97a271', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1208, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-bf05181491a1', 330, 1, NOW(), NOW())
+VALUES ('9a326006-35df-59a4-ad2b-9e217b97a271', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1208, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bf05181491a1', 330, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1252,7 +1252,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9f4f67e9-e1ca-5754-9a92-b96fb12ab9cb', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0589, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-541595512d72', 331, 1, NOW(), NOW())
+VALUES ('9f4f67e9-e1ca-5754-9a92-b96fb12ab9cb', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0589, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-541595512d72', 331, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1276,7 +1276,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1413d417-ff5f-55ef-8d30-b8470365f013', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1042, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-937e64fd1e74', 332, 1, NOW(), NOW())
+VALUES ('1413d417-ff5f-55ef-8d30-b8470365f013', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1042, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-937e64fd1e74', 332, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1300,7 +1300,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('c60679a4-2d05-5189-87e3-404c4f1eaea4', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0745, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-61d51fb9911d', 333, 1, NOW(), NOW())
+VALUES ('c60679a4-2d05-5189-87e3-404c4f1eaea4', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกซีเมนต์ผง (ชนิดเต้าและชนิดถ้วย) 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0745, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-61d51fb9911d', 333, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1324,7 +1324,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8ac8322c-e413-50b8-8e8d-5727a977cf3c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5973, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-e701f8ac8112', 334, 1, NOW(), NOW())
+VALUES ('8ac8322c-e413-50b8-8e8d-5727a977cf3c', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5973, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e701f8ac8112', 334, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1348,7 +1348,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('29e5606e-86dd-5108-9945-1813da5a1bd0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0514, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-816430b0c9f8', 335, 1, NOW(), NOW())
+VALUES ('29e5606e-86dd-5108-9945-1813da5a1bd0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0514, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-816430b0c9f8', 335, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1372,7 +1372,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('250129d8-d7fe-5578-80db-b3f137a1defc', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0956, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-5fc1c0f11632', 336, 1, NOW(), NOW())
+VALUES ('250129d8-d7fe-5578-80db-b3f137a1defc', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0956, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5fc1c0f11632', 336, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1396,7 +1396,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1bed7c48-82dc-552b-b7e6-4cc8fe45aec0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0671, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-115f704e42dd', 337, 1, NOW(), NOW())
+VALUES ('1bed7c48-82dc-552b-b7e6-4cc8fe45aec0', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0671, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-115f704e42dd', 337, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1420,7 +1420,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a9ffa825-13e7-52b7-bc5b-354dad7874bf', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6427, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-5ebb93171937', 338, 1, NOW(), NOW())
+VALUES ('a9ffa825-13e7-52b7-bc5b-354dad7874bf', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6427, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5ebb93171937', 338, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1444,7 +1444,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('fdbac4b3-af02-5511-b75f-dd15c2477986', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0573, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-1f41f53cdf1d', 339, 1, NOW(), NOW())
+VALUES ('fdbac4b3-af02-5511-b75f-dd15c2477986', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0573, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1f41f53cdf1d', 339, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1468,7 +1468,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7c32059e-797c-59d6-9731-a5698297577f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1065, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-2b4785ebfaca', 340, 1, NOW(), NOW())
+VALUES ('7c32059e-797c-59d6-9731-a5698297577f', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1065, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2b4785ebfaca', 340, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1492,7 +1492,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8a550161-c1c4-532d-b2ce-a3c784478cf9', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0752, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d71f1ccad535', 341, 1, NOW(), NOW())
+VALUES ('8a550161-c1c4-532d-b2ce-a3c784478cf9', 'a1000003-0003-4003-8003-00000000000a', 'รถบรรทุกเฉพาะกิจ (ติดเครน) 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0752, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d71f1ccad535', 341, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1516,7 +1516,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('92469584-dfd2-5511-aaa3-ec76f367bed3', 'a1000003-0003-4003-8003-00000000000b', 'การกำจัดขยะมูลฝอยชุมชนแบบเทกอง', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 1.0387, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4bc7c98351f1', 342, 1, NOW(), NOW())
+VALUES ('92469584-dfd2-5511-aaa3-ec76f367bed3', 'a1000003-0003-4003-8003-00000000000b', 'การกำจัดขยะมูลฝอยชุมชนแบบเทกอง', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 1.0387, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4bc7c98351f1', 342, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1540,7 +1540,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('73f49066-8fa9-5cbb-a27f-cd952c0a0fd2', 'a1000003-0003-4003-8003-00000000000b', 'การคัดแยกขยะมูลฝอยชุมชน', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0158, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-5123cc5a23f5', 343, 1, NOW(), NOW())
+VALUES ('73f49066-8fa9-5cbb-a27f-cd952c0a0fd2', 'a1000003-0003-4003-8003-00000000000b', 'การคัดแยกขยะมูลฝอยชุมชน', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0158, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5123cc5a23f5', 343, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1564,7 +1564,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d106f5dd-5522-566c-b67d-5fe32dd9739b', 'a1000003-0003-4003-8003-00000000000b', 'การจัดการมูลฝอยสด (การหมักแบบไร้อากาศ)', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.1055, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d5d67d5d9f8a', 344, 1, NOW(), NOW())
+VALUES ('d106f5dd-5522-566c-b67d-5fe32dd9739b', 'a1000003-0003-4003-8003-00000000000b', 'การจัดการมูลฝอยสด (การหมักแบบไร้อากาศ)', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.1055, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d5d67d5d9f8a', 344, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1588,7 +1588,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('906998a0-ac7a-5626-bb65-3f5d76deccef', 'a1000003-0003-4003-8003-00000000000b', 'การจัดเก็บ รวบรวม และขนถ่ายขยะมูลฝอยชุมชน', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0142, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-6f5e45869fe0', 345, 1, NOW(), NOW())
+VALUES ('906998a0-ac7a-5626-bb65-3f5d76deccef', 'a1000003-0003-4003-8003-00000000000b', 'การจัดเก็บ รวบรวม และขนถ่ายขยะมูลฝอยชุมชน', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0142, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6f5e45869fe0', 345, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1612,7 +1612,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('707a9b28-5501-5a3a-a0da-4b89d6be9d6d', 'a1000003-0003-4003-8003-00000000000b', 'การฝังกลบขยะมูลฝอยชุมชนแบบติดตั้งระบบนำก๊าซมีเทนมาใช้ประโยชน์', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0175, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-37fd5a1843a8', 346, 1, NOW(), NOW())
+VALUES ('707a9b28-5501-5a3a-a0da-4b89d6be9d6d', 'a1000003-0003-4003-8003-00000000000b', 'การฝังกลบขยะมูลฝอยชุมชนแบบติดตั้งระบบนำก๊าซมีเทนมาใช้ประโยชน์', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.0175, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-37fd5a1843a8', 346, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1636,7 +1636,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('0e8b00f6-c9cf-5d40-8e71-ab6171e55207', 'a1000003-0003-4003-8003-00000000000b', 'การฝังกลบขยะมูลฝอยชุมชนแบบถูกหลักสุขาภิบาล', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.7933, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ae175755b282', 347, 1, NOW(), NOW())
+VALUES ('0e8b00f6-c9cf-5d40-8e71-ab6171e55207', 'a1000003-0003-4003-8003-00000000000b', 'การฝังกลบขยะมูลฝอยชุมชนแบบถูกหลักสุขาภิบาล', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.7933, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ae175755b282', 347, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1660,7 +1660,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e65c9e66-c893-5b13-80e4-8038fb45aee4', 'a1000003-0003-4003-8003-00000000000b', 'ปุ๋ยหมักอินทรีย์จากการจัดการมูลฝอยสด', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.3323, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-5904d8ccc5e8', 348, 1, NOW(), NOW())
+VALUES ('e65c9e66-c893-5b13-80e4-8038fb45aee4', 'a1000003-0003-4003-8003-00000000000b', 'ปุ๋ยหมักอินทรีย์จากการจัดการมูลฝอยสด', 'กลุ่มการจัดการขยะ (Landfills)', 'kg', 0.3323, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5904d8ccc5e8', 348, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1684,7 +1684,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('753fbb67-d2c2-5b26-8ee1-cb84356dc01f', 'a1000003-0003-4003-8003-00000000000b', 'ปุ๋ยหมักอินทรีย์น้ำจากการจัดการมูลฝอยสด', 'กลุ่มการจัดการขยะ (Landfills)', 'm3', 0.3335, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-b9abbc4eb450', 349, 1, NOW(), NOW())
+VALUES ('753fbb67-d2c2-5b26-8ee1-cb84356dc01f', 'a1000003-0003-4003-8003-00000000000b', 'ปุ๋ยหมักอินทรีย์น้ำจากการจัดการมูลฝอยสด', 'กลุ่มการจัดการขยะ (Landfills)', 'm3', 0.3335, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b9abbc4eb450', 349, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1708,7 +1708,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8d0ac0af-45d6-5e33-bcca-d82430cf3494', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของประเทศ', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1119, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-68a6f295538a', 350, 1, NOW(), NOW())
+VALUES ('8d0ac0af-45d6-5e33-bcca-d82430cf3494', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของประเทศ', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1119, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-68a6f295538a', 350, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1732,7 +1732,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('25f0b778-c611-5d62-a741-8cd673d48e09', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0849, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ba947792e100', 351, 1, NOW(), NOW())
+VALUES ('25f0b778-c611-5d62-a741-8cd673d48e09', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0849, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ba947792e100', 351, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1756,7 +1756,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('275e532d-d448-5b0a-adc2-93e3f22c74a5', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1199, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f63fc92e7813', 352, 1, NOW(), NOW())
+VALUES ('275e532d-d448-5b0a-adc2-93e3f22c74a5', 'a1000003-0003-4003-8003-00000000000b', 'การปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1199, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f63fc92e7813', 352, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1780,7 +1780,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3ef8df94-c446-5e09-af8a-fbb4967db84b', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของประเทศ, ค่าเฉลี่ยประเทศไทย', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0094, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-e6ab25a37493', 353, 1, NOW(), NOW())
+VALUES ('3ef8df94-c446-5e09-af8a-fbb4967db84b', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของประเทศ, ค่าเฉลี่ยประเทศไทย', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0094, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e6ab25a37493', 353, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1804,7 +1804,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('51fbd8d1-5cb0-59d2-ac41-cf46286751d1', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของเมือง ขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0347, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-92aa412c6cdc', 354, 1, NOW(), NOW())
+VALUES ('51fbd8d1-5cb0-59d2-ac41-cf46286751d1', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของเมือง ขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0347, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-92aa412c6cdc', 354, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1828,7 +1828,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('39cf6d50-f717-53c5-8fa4-4b7b01811a22', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของเมือง ขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0018, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-dc6ef7a85995', 355, 1, NOW(), NOW())
+VALUES ('39cf6d50-f717-53c5-8fa4-4b7b01811a22', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมน้ำเสียชุมชนของเมือง ขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.0018, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-dc6ef7a85995', 355, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1852,7 +1852,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('afc75e5a-fc32-5bc9-ab33-fb7762945c7c', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของประเทศ', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1212, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-e012210e3892', 356, 1, NOW(), NOW())
+VALUES ('afc75e5a-fc32-5bc9-ab33-fb7762945c7c', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของประเทศ', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1212, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e012210e3892', 356, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1876,7 +1876,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e9fa1a46-65e1-5e18-83a0-52839f534cfc', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1196, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-aaed1f8cf843', 357, 1, NOW(), NOW())
+VALUES ('e9fa1a46-65e1-5e18-83a0-52839f534cfc', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดกลาง', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1196, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-aaed1f8cf843', 357, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1900,7 +1900,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('0342b124-d5b0-5377-9339-bc5b5734c5dc', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1217, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-8932fb238d78', 358, 1, NOW(), NOW())
+VALUES ('0342b124-d5b0-5377-9339-bc5b5734c5dc', 'a1000003-0003-4003-8003-00000000000b', 'การรวบรวมและการปรับปรุงคุณภาพน้ำเสียชุมชนของเมืองขนาดใหญ่', 'กลุ่มการปรับปรุงน้ำเสียชุมชน (Municipal Wastewater Treatment)', 'm3', 0.1217, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8932fb238d78', 358, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1924,7 +1924,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('23b905eb-ff36-5e31-a834-0ffd5f37dc5f', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การนิคมอุตสาหกรรม', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.2512, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d67bdecd2afb', 359, 1, NOW(), NOW())
+VALUES ('23b905eb-ff36-5e31-a834-0ffd5f37dc5f', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การนิคมอุตสาหกรรม', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.2512, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d67bdecd2afb', 359, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1948,7 +1948,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a16e075d-af5b-5d7d-a53f-3d64fbdaf665', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การประปานครหลวง', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.7836, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-383479fe7e71', 360, 1, NOW(), NOW())
+VALUES ('a16e075d-af5b-5d7d-a53f-3d64fbdaf665', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การประปานครหลวง', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.7836, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-383479fe7e71', 360, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1972,7 +1972,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('67a7a0c0-d06d-5878-bd3e-c05155229883', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การประปาส่วนภูมิภาค', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.5167, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4cbc785d5953', 361, 1, NOW(), NOW())
+VALUES ('67a7a0c0-d06d-5878-bd3e-c05155229883', 'a1000003-0003-4003-8003-000000000007', 'น้ำประปา-การประปาส่วนภูมิภาค', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.5167, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4cbc785d5953', 361, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1996,7 +1996,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('fdb40582-56bb-55ce-b439-636d22ac9a6b', 'a1000003-0003-4003-8003-000000000007', 'น้ำปราศจากไอออน ที่ผลิตโดยเทคโนโลยี Ion Exchange', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 1.9851, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-8ed163c2d768', 362, 1, NOW(), NOW())
+VALUES ('fdb40582-56bb-55ce-b439-636d22ac9a6b', 'a1000003-0003-4003-8003-000000000007', 'น้ำปราศจากไอออน ที่ผลิตโดยเทคโนโลยี Ion Exchange', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 1.9851, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8ed163c2d768', 362, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2020,7 +2020,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1c1af2d3-373b-56b5-be8d-ae6055e49cfe', 'a1000003-0003-4003-8003-000000000007', 'น้ำปราศจากไอออน ที่ผลิตโดยเทคโนโลยี Reverse Osmosis', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 2.0141, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4ef5223f06c5', 363, 1, NOW(), NOW())
+VALUES ('1c1af2d3-373b-56b5-be8d-ae6055e49cfe', 'a1000003-0003-4003-8003-000000000007', 'น้ำปราศจากไอออน ที่ผลิตโดยเทคโนโลยี Reverse Osmosis', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 2.0141, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4ef5223f06c5', 363, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2044,7 +2044,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('caa2063e-b8d3-5ae8-a525-509ab6fa1a9a', 'a1000003-0003-4003-8003-000000000007', 'น้ำอ่อนสำหรับหม้อไอน้ำ', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.9442, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a45ec36f7305', 364, 1, NOW(), NOW())
+VALUES ('caa2063e-b8d3-5ae8-a525-509ab6fa1a9a', 'a1000003-0003-4003-8003-000000000007', 'น้ำอ่อนสำหรับหม้อไอน้ำ', 'กลุ่มน้ำประปาและน้ำอุตสาหกรรม (Tap Water and Industrial Water)', 'm3', 0.9442, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a45ec36f7305', 364, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2068,7 +2068,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('57d802ad-d1b4-5f06-9578-7e940f1f570f', 'a1000003-0003-4003-8003-000000000007', 'น้ำนมดิบจากศูนย์รวบรวมน้ำนม', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 2.4337, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a47a7e9cc2c7', 365, 1, NOW(), NOW())
+VALUES ('57d802ad-d1b4-5f06-9578-7e940f1f570f', 'a1000003-0003-4003-8003-000000000007', 'น้ำนมดิบจากศูนย์รวบรวมน้ำนม', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 2.4337, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a47a7e9cc2c7', 365, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2092,7 +2092,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a64226f0-9fb1-52f6-b6a5-50da2f1b082a', 'a1000003-0003-4003-8003-000000000007', 'น้ำนมดิบจากโค', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 1.5896, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-71d266bb864f', 366, 1, NOW(), NOW())
+VALUES ('a64226f0-9fb1-52f6-b6a5-50da2f1b082a', 'a1000003-0003-4003-8003-000000000007', 'น้ำนมดิบจากโค', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 1.5896, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-71d266bb864f', 366, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2116,7 +2116,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('699f253f-76af-50a8-b716-e91e70ab3fbe', 'a1000003-0003-4003-8003-000000000007', 'ปลาดุก (เลี้ยงในบ่อดิน)', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.7776, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-e1a5c65674c1', 367, 1, NOW(), NOW())
+VALUES ('699f253f-76af-50a8-b716-e91e70ab3fbe', 'a1000003-0003-4003-8003-000000000007', 'ปลาดุก (เลี้ยงในบ่อดิน)', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.7776, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e1a5c65674c1', 367, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2140,7 +2140,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('022bd0eb-34d7-564f-8976-289b119e21e4', 'a1000003-0003-4003-8003-000000000007', 'ปลาทับทิม (เลี้ยงในบ่อดิน)', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 0.4318, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-7863e93a30d0', 368, 1, NOW(), NOW())
+VALUES ('022bd0eb-34d7-564f-8976-289b119e21e4', 'a1000003-0003-4003-8003-000000000007', 'ปลาทับทิม (เลี้ยงในบ่อดิน)', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 0.4318, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7863e93a30d0', 368, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2164,7 +2164,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('14cf0834-5a37-54b0-bb4f-c5a78a8a93cd', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.2045, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-d250467a6ce4', 369, 1, NOW(), NOW())
+VALUES ('14cf0834-5a37-54b0-bb4f-c5a78a8a93cd', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.2045, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d250467a6ce4', 369, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2188,7 +2188,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7ca8dc1d-e334-58a7-97de-f94aaf3b3e35', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.2045, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-60e4df8b9d08', 370, 1, NOW(), NOW())
+VALUES ('7ca8dc1d-e334-58a7-97de-f94aaf3b3e35', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.2045, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-60e4df8b9d08', 370, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2212,7 +2212,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('73542d7e-3456-5753-9ffb-27a6b44e2821', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนมีชีวิต', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.2026, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-3df0ea716f59', 371, 1, NOW(), NOW())
+VALUES ('73542d7e-3456-5753-9ffb-27a6b44e2821', 'a1000003-0003-4003-8003-000000000007', 'สุกรขุนมีชีวิต', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.2026, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-3df0ea716f59', 371, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2236,7 +2236,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3f850b7c-a8e3-5e48-88a1-342f8ef2b789', 'a1000003-0003-4003-8003-000000000007', 'หนังโคสด', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-33e5ba8e9628', 372, 1, NOW(), NOW())
+VALUES ('3f850b7c-a8e3-5e48-88a1-342f8ef2b789', 'a1000003-0003-4003-8003-000000000007', 'หนังโคสด', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-33e5ba8e9628', 372, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2260,7 +2260,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('c78a3bbc-1e7d-58a8-95cf-171d84e2327f', 'a1000003-0003-4003-8003-000000000007', 'เนื้อโคชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-1a1ae8e077f6', 373, 1, NOW(), NOW())
+VALUES ('c78a3bbc-1e7d-58a8-95cf-171d84e2327f', 'a1000003-0003-4003-8003-000000000007', 'เนื้อโคชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1a1ae8e077f6', 373, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2284,7 +2284,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('abdbd754-3cec-5b1a-85e4-40892581ba3c', 'a1000003-0003-4003-8003-000000000007', 'เนื้อโคชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-38989e4dc0f2', 374, 1, NOW(), NOW())
+VALUES ('abdbd754-3cec-5b1a-85e4-40892581ba3c', 'a1000003-0003-4003-8003-000000000007', 'เนื้อโคชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 13.8206, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-38989e4dc0f2', 374, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2308,7 +2308,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3f7d6f8e-0a4c-5a37-a41f-3e8ab07b6acd', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุน 6-12 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 10.0143, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f7b300cb60af', 375, 1, NOW(), NOW())
+VALUES ('3f7d6f8e-0a4c-5a37-a41f-3e8ab07b6acd', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุน 6-12 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 10.0143, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f7b300cb60af', 375, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2332,7 +2332,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('56ad43f1-5c9e-57fc-9444-58d9b312a780', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุนมากกว่า 12 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 12.5479, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-98feca115234', 376, 1, NOW(), NOW())
+VALUES ('56ad43f1-5c9e-57fc-9444-58d9b312a780', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุนมากกว่า 12 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 12.5479, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-98feca115234', 376, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2356,7 +2356,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('96aba75d-bf1f-5159-bfd6-146c823f35e8', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุนไม่เกิน 6 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 8.7657, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ca5d5f4a021e', 377, 1, NOW(), NOW())
+VALUES ('96aba75d-bf1f-5159-bfd6-146c823f35e8', 'a1000003-0003-4003-8003-000000000007', 'โคเนื้อมีชีวิต: ระยะเวลาขุนไม่เกิน 6 เดือน', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 8.7657, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ca5d5f4a021e', 377, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2380,7 +2380,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('0d18c7bb-eeda-5cba-8091-219a46b8caf1', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4988, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-62586155bd5a', 378, 1, NOW(), NOW())
+VALUES ('0d18c7bb-eeda-5cba-8091-219a46b8caf1', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดชำแหละ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4988, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-62586155bd5a', 378, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2404,7 +2404,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('b31d26aa-63a6-588f-8d9b-081b27693baa', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4988, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-9d26acfaa2ce', 379, 1, NOW(), NOW())
+VALUES ('b31d26aa-63a6-588f-8d9b-081b27693baa', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดชำแหละอื่นๆ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4988, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-9d26acfaa2ce', 379, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2428,7 +2428,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4c9e9f69-c32b-5bbe-be1a-1cefc6834d53', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดทั้งตัว', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4201, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f4b027ef215e', 380, 1, NOW(), NOW())
+VALUES ('4c9e9f69-c32b-5bbe-be1a-1cefc6834d53', 'a1000003-0003-4003-8003-000000000007', 'ไก่สดทั้งตัว', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 4.4201, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f4b027ef215e', 380, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2452,7 +2452,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('e3d4c885-a730-5311-b0de-aa4536c0df15', 'a1000003-0003-4003-8003-000000000007', 'ไก่เนื้อมีชีวิตจากฟาร์ม', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.2504, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-13d8425df2e0', 381, 1, NOW(), NOW())
+VALUES ('e3d4c885-a730-5311-b0de-aa4536c0df15', 'a1000003-0003-4003-8003-000000000007', 'ไก่เนื้อมีชีวิตจากฟาร์ม', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 3.2504, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-13d8425df2e0', 381, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2476,7 +2476,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('7b05936f-7af6-5d24-b3a8-53f62683d3d2', 'a1000003-0003-4003-8003-000000000007', 'ไก่เนื้อมีชีวิตจากฟาร์มที่เลี้ยงโดยใช้อาหารที่ไม่มีโปรตีนจากเนื้อสัตว์เป็นองค์ประกอบ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 2.6518, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-753cd9a771cd', 382, 1, NOW(), NOW())
+VALUES ('7b05936f-7af6-5d24-b3a8-53f62683d3d2', 'a1000003-0003-4003-8003-000000000007', 'ไก่เนื้อมีชีวิตจากฟาร์มที่เลี้ยงโดยใช้อาหารที่ไม่มีโปรตีนจากเนื้อสัตว์เป็นองค์ประกอบ', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 2.6518, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-753cd9a771cd', 382, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2500,7 +2500,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('6b06c940-f729-5549-9f7d-13ea2411b2c0', 'a1000003-0003-4003-8003-000000000007', 'ไข่ไก่', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 8.8497, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-0bd848144f19', 383, 1, NOW(), NOW())
+VALUES ('6b06c940-f729-5549-9f7d-13ea2411b2c0', 'a1000003-0003-4003-8003-000000000007', 'ไข่ไก่', 'กลุ่มปศุสัตว์ (Livestock and Products)', 'kg', 8.8497, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0bd848144f19', 383, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2524,7 +2524,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d34d8625-be8e-5cca-a512-9165b79f1fae', 'a1000003-0003-4003-8003-000000000007', 'Acrylonitrile Butadiene Styrene (ABS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 4.5845, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-1f02552738dd', 384, 1, NOW(), NOW())
+VALUES ('d34d8625-be8e-5cca-a512-9165b79f1fae', 'a1000003-0003-4003-8003-000000000007', 'Acrylonitrile Butadiene Styrene (ABS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 4.5845, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1f02552738dd', 384, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2548,7 +2548,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3b5caab7-1175-5966-92b1-0e74d10e2f27', 'a1000003-0003-4003-8003-000000000007', 'Benzene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.6128, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-fc02b55d818a', 385, 1, NOW(), NOW())
+VALUES ('3b5caab7-1175-5966-92b1-0e74d10e2f27', 'a1000003-0003-4003-8003-000000000007', 'Benzene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.6128, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fc02b55d818a', 385, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2572,7 +2572,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4582ed08-378c-5ba4-b674-c316b73af93c', 'a1000003-0003-4003-8003-000000000007', 'Bisphenol A (BPA)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.5411, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-7367485378fa', 386, 1, NOW(), NOW())
+VALUES ('4582ed08-378c-5ba4-b674-c316b73af93c', 'a1000003-0003-4003-8003-000000000007', 'Bisphenol A (BPA)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.5411, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7367485378fa', 386, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2596,7 +2596,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('5c472c77-e7bd-54f0-b305-9e0c042c8f2c', 'a1000003-0003-4003-8003-000000000007', 'Caprolactam (CPL)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.784, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-2eacc295022d', 387, 1, NOW(), NOW())
+VALUES ('5c472c77-e7bd-54f0-b305-9e0c042c8f2c', 'a1000003-0003-4003-8003-000000000007', 'Caprolactam (CPL)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.784, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2eacc295022d', 387, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2620,7 +2620,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('648c5230-f157-5d77-91b2-9ceba644cf3e', 'a1000003-0003-4003-8003-000000000007', 'Cumene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.7067, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a2cf4f519df3', 388, 1, NOW(), NOW())
+VALUES ('648c5230-f157-5d77-91b2-9ceba644cf3e', 'a1000003-0003-4003-8003-000000000007', 'Cumene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.7067, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a2cf4f519df3', 388, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2644,7 +2644,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f087c26f-24c8-5916-afda-954dfe8a1a5a', 'a1000003-0003-4003-8003-000000000007', 'Cyclohexane (CX)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0625, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-bc6a26663fff', 389, 1, NOW(), NOW())
+VALUES ('f087c26f-24c8-5916-afda-954dfe8a1a5a', 'a1000003-0003-4003-8003-000000000007', 'Cyclohexane (CX)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0625, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bc6a26663fff', 389, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2668,7 +2668,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4a556cdb-f172-56ca-be0e-b979e44f62a1', 'a1000003-0003-4003-8003-000000000007', 'Ethylbenzene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.3828, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-af0a7c61e1d8', 390, 1, NOW(), NOW())
+VALUES ('4a556cdb-f172-56ca-be0e-b979e44f62a1', 'a1000003-0003-4003-8003-000000000007', 'Ethylbenzene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.3828, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-af0a7c61e1d8', 390, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2692,7 +2692,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('93fd04ba-a502-5925-9a10-1c8f07c50130', 'a1000003-0003-4003-8003-000000000007', 'Ethylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.9671, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-4a0285b4e2b4', 391, 1, NOW(), NOW())
+VALUES ('93fd04ba-a502-5925-9a10-1c8f07c50130', 'a1000003-0003-4003-8003-000000000007', 'Ethylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.9671, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4a0285b4e2b4', 391, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2716,7 +2716,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('dcabc1c0-3b7c-55f2-8fba-3621a739cee7', 'a1000003-0003-4003-8003-000000000007', 'Ethylene glycol', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.71, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-9912dcbdd517', 392, 1, NOW(), NOW())
+VALUES ('dcabc1c0-3b7c-55f2-8fba-3621a739cee7', 'a1000003-0003-4003-8003-000000000007', 'Ethylene glycol', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.71, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-9912dcbdd517', 392, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2740,7 +2740,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9db92bb3-d51e-5b78-ac46-9a7cb321bc1d', 'a1000003-0003-4003-8003-000000000007', 'Ethylene oxide', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.7986, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-2e25bbe4498a', 393, 1, NOW(), NOW())
+VALUES ('9db92bb3-d51e-5b78-ac46-9a7cb321bc1d', 'a1000003-0003-4003-8003-000000000007', 'Ethylene oxide', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.7986, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2e25bbe4498a', 393, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2764,7 +2764,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('9b736739-5cd3-55fe-b7d6-8c7babab994b', 'a1000003-0003-4003-8003-000000000007', 'General Purposed Polystyrene (GPPS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.1815, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-fa4a76b2f75c', 394, 1, NOW(), NOW())
+VALUES ('9b736739-5cd3-55fe-b7d6-8c7babab994b', 'a1000003-0003-4003-8003-000000000007', 'General Purposed Polystyrene (GPPS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.1815, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fa4a76b2f75c', 394, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2788,7 +2788,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('53157093-b15b-59cc-8da0-9aca560c62ab', 'a1000003-0003-4003-8003-000000000007', 'High Density Polyethylene (HDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.4664, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-17b6f6273c4b', 395, 1, NOW(), NOW())
+VALUES ('53157093-b15b-59cc-8da0-9aca560c62ab', 'a1000003-0003-4003-8003-000000000007', 'High Density Polyethylene (HDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.4664, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-17b6f6273c4b', 395, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2812,7 +2812,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('a6c80b3c-a410-5da4-97d4-a6149c0f59d1', 'a1000003-0003-4003-8003-000000000007', 'High Impact Polystyrene (HIPS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.393, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-46eeff33cfb6', 396, 1, NOW(), NOW())
+VALUES ('a6c80b3c-a410-5da4-97d4-a6149c0f59d1', 'a1000003-0003-4003-8003-000000000007', 'High Impact Polystyrene (HIPS)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.393, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-46eeff33cfb6', 396, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2836,7 +2836,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('91e0be9e-f7f6-5fa3-886d-04baf98e1630', 'a1000003-0003-4003-8003-000000000007', 'Linear Low Density Polyethylene (LLDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.3995, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ab77e97aed32', 397, 1, NOW(), NOW())
+VALUES ('91e0be9e-f7f6-5fa3-886d-04baf98e1630', 'a1000003-0003-4003-8003-000000000007', 'Linear Low Density Polyethylene (LLDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.3995, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ab77e97aed32', 397, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2860,7 +2860,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('caaf2ab0-b0c6-51ef-a539-55eb9e7fa89d', 'a1000003-0003-4003-8003-000000000007', 'Low Density Polyethylene (LDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.4345, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-bc3f4ea826e5', 398, 1, NOW(), NOW())
+VALUES ('caaf2ab0-b0c6-51ef-a539-55eb9e7fa89d', 'a1000003-0003-4003-8003-000000000007', 'Low Density Polyethylene (LDPE)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.4345, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bc3f4ea826e5', 398, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2884,7 +2884,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('8e4a8a5a-bace-5fab-ab48-f026cb710123', 'a1000003-0003-4003-8003-000000000007', 'Mixed C4', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.1263, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-8e72c7dcf853', 399, 1, NOW(), NOW())
+VALUES ('8e4a8a5a-bace-5fab-ab48-f026cb710123', 'a1000003-0003-4003-8003-000000000007', 'Mixed C4', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.1263, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8e72c7dcf853', 399, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2908,7 +2908,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('670630b4-04b5-5771-a79c-9755033651ce', 'a1000003-0003-4003-8003-000000000007', 'P-xylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.3021, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-428e1e878df6', 400, 1, NOW(), NOW())
+VALUES ('670630b4-04b5-5771-a79c-9755033651ce', 'a1000003-0003-4003-8003-000000000007', 'P-xylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.3021, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-428e1e878df6', 400, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2932,7 +2932,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1f703de0-4656-59c1-9101-0fb3a5b6dfbc', 'a1000003-0003-4003-8003-000000000007', 'Phenol', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.5856, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-c86fddbbb86e', 401, 1, NOW(), NOW())
+VALUES ('1f703de0-4656-59c1-9101-0fb3a5b6dfbc', 'a1000003-0003-4003-8003-000000000007', 'Phenol', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.5856, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c86fddbbb86e', 401, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2956,7 +2956,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('1cd9cd7d-ba18-5667-bd66-6f17d1994a31', 'a1000003-0003-4003-8003-000000000007', 'Polyethylene Terephthalate (PET)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.9389, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-223f6a76ed3d', 402, 1, NOW(), NOW())
+VALUES ('1cd9cd7d-ba18-5667-bd66-6f17d1994a31', 'a1000003-0003-4003-8003-000000000007', 'Polyethylene Terephthalate (PET)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.9389, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-223f6a76ed3d', 402, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2980,7 +2980,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('402e7f50-4bbf-5bf8-8823-7c09df2d4b3d', 'a1000003-0003-4003-8003-000000000007', 'Polypropylene (PP)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0366, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-0028d4d23c59', 403, 1, NOW(), NOW())
+VALUES ('402e7f50-4bbf-5bf8-8823-7c09df2d4b3d', 'a1000003-0003-4003-8003-000000000007', 'Polypropylene (PP)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0366, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0028d4d23c59', 403, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3004,7 +3004,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('aa9f7906-8226-54b2-abc8-0ab56e503b0f', 'a1000003-0003-4003-8003-000000000007', 'Polyvinyl Chloride (PVC)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.0658, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-01ffe1979238', 404, 1, NOW(), NOW())
+VALUES ('aa9f7906-8226-54b2-abc8-0ab56e503b0f', 'a1000003-0003-4003-8003-000000000007', 'Polyvinyl Chloride (PVC)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.0658, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-01ffe1979238', 404, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3028,7 +3028,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('f4fae8b7-a71c-5638-848a-25a2e7fb7656', 'a1000003-0003-4003-8003-000000000007', 'Propylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.7096, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-44edc2638565', 405, 1, NOW(), NOW())
+VALUES ('f4fae8b7-a71c-5638-848a-25a2e7fb7656', 'a1000003-0003-4003-8003-000000000007', 'Propylene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.7096, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-44edc2638565', 405, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3052,7 +3052,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('cbeda6ff-b5d7-5ac1-b7bc-ac7075ea1576', 'a1000003-0003-4003-8003-000000000007', 'Purified Terephthalic Acid', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.8081, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-b8420478c9b9', 406, 1, NOW(), NOW())
+VALUES ('cbeda6ff-b5d7-5ac1-b7bc-ac7075ea1576', 'a1000003-0003-4003-8003-000000000007', 'Purified Terephthalic Acid', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.8081, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b8420478c9b9', 406, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3076,7 +3076,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('0e9b199d-c76f-5928-ba9b-10b87dcbe5d3', 'a1000003-0003-4003-8003-000000000007', 'Styrene Acrylonitrile (SAN)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.8395, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-5520c85900d5', 407, 1, NOW(), NOW())
+VALUES ('0e9b199d-c76f-5928-ba9b-10b87dcbe5d3', 'a1000003-0003-4003-8003-000000000007', 'Styrene Acrylonitrile (SAN)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 3.8395, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5520c85900d5', 407, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3100,7 +3100,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d23035d5-144d-5b15-9c19-b69d9d0765ff', 'a1000003-0003-4003-8003-000000000007', 'Styrene Monomer (SM)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0597, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-03ce0ad721ba', 408, 1, NOW(), NOW())
+VALUES ('d23035d5-144d-5b15-9c19-b69d9d0765ff', 'a1000003-0003-4003-8003-000000000007', 'Styrene Monomer (SM)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.0597, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-03ce0ad721ba', 408, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3124,7 +3124,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('59e253ef-4a85-5545-ac01-7e72df357856', 'a1000003-0003-4003-8003-000000000007', 'Toluene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.336, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-a91f9249615f', 409, 1, NOW(), NOW())
+VALUES ('59e253ef-4a85-5545-ac01-7e72df357856', 'a1000003-0003-4003-8003-000000000007', 'Toluene', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 1.336, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a91f9249615f', 409, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3148,7 +3148,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('770bb9b6-2612-5b4a-8ddc-7540a4baa2dd', 'a1000003-0003-4003-8003-000000000007', 'Vinyl Chloride Monomer (VCM)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.7456, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-f56141032c7b', 410, 1, NOW(), NOW())
+VALUES ('770bb9b6-2612-5b4a-8ddc-7540a4baa2dd', 'a1000003-0003-4003-8003-000000000007', 'Vinyl Chloride Monomer (VCM)', 'กลุ่มปิโตรเคมี (Petrochemicals)', 'kg', 2.7456, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f56141032c7b', 410, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3172,7 +3172,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4983dd33-7d9b-5f6a-b222-e04248867527', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซคาร์บอนไดออกไซด์', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.0017, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-37fd7f16b843', 411, 1, NOW(), NOW())
+VALUES ('4983dd33-7d9b-5f6a-b222-e04248867527', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซคาร์บอนไดออกไซด์', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.0017, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-37fd7f16b843', 411, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3196,7 +3196,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('12599abc-fc0e-55f6-9e82-8b20341c40bb', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติ/มีเทน', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.0815, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-9eeeadd8d772', 412, 1, NOW(), NOW())
+VALUES ('12599abc-fc0e-55f6-9e82-8b20341c40bb', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติ/มีเทน', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.0815, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-9eeeadd8d772', 412, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3220,7 +3220,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('ada3a404-70b4-50c1-b19b-008d194d8ee5', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติเหลว', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1083, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-b174bb84bc39', 413, 1, NOW(), NOW())
+VALUES ('ada3a404-70b4-50c1-b19b-008d194d8ee5', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติเหลว', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1083, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b174bb84bc39', 413, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3244,7 +3244,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('d712b1f6-374c-51c2-88d6-6ffd18b756b9', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติแบบผสม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 0.7238, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-ca8f765f818d', 414, 1, NOW(), NOW())
+VALUES ('d712b1f6-374c-51c2-88d6-6ffd18b756b9', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติแบบผสม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 0.7238, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ca8f765f818d', 414, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3268,7 +3268,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('3f50613e-827b-571b-b617-6c309932844a', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติแบบผสม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'm3', 0.5534, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-2a7897cce63a', 415, 1, NOW(), NOW())
+VALUES ('3f50613e-827b-571b-b617-6c309932844a', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซธรรมชาติแบบผสม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'm3', 0.5534, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2a7897cce63a', 415, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3292,7 +3292,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('4f44ebc3-4fc8-5b27-be4d-f3142b9de5ad', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซหุงต้ม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1366, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-176fdb2afe25', 416, 1, NOW(), NOW())
+VALUES ('4f44ebc3-4fc8-5b27-be4d-f3142b9de5ad', 'a1000003-0003-4003-8003-000000000007', 'ก๊าซหุงต้ม', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1366, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-176fdb2afe25', 416, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3316,7 +3316,7 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, created_at, updated_at)
-VALUES ('90d9343f-7599-5ebb-a714-33e2e879d39e', 'a1000003-0003-4003-8003-000000000007', 'อีเทน', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1142, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO API', 'EF006-fdcc63320682', 417, 1, NOW(), NOW())
+VALUES ('90d9343f-7599-5ebb-a714-33e2e879d39e', 'a1000003-0003-4003-8003-000000000007', 'อีเทน', 'กลุ่มผลิตภัณฑ์จากก๊าซธรรมชาติ (Natural Gas)', 'kg', 1.1142, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fdcc63320682', 417, 1, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,

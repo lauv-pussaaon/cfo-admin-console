@@ -36,6 +36,7 @@ export async function GET (request: NextRequest) {
         fuel_count: release.fuel_count,
         link_count: 0,
         is_default: release.is_default,
+        order_index: release.order_index ?? 0,
       },
       categories: categories.map((c) => ({
         id: c.id,

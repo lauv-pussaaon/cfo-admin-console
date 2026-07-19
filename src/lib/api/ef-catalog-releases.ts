@@ -6,6 +6,7 @@ export async function listEfCatalogReleases (): Promise<EfCatalogRelease[]> {
   const { data, error } = await supabase
     .from('ef_catalog_releases')
     .select('*')
+    .order('order_index', { ascending: true })
     .order('version', { ascending: true })
   if (error) throw error
   return (data ?? []) as EfCatalogRelease[]
@@ -21,9 +22,22 @@ export async function getEfCatalogRelease (version: string): Promise<EfCatalogRe
   return data as EfCatalogRelease | null
 }
 
+async function nextReleaseOrderIndex (): Promise<number> {
+  const { data, error } = await supabase
+    .from('ef_catalog_releases')
+    .select('order_index')
+    .order('order_index', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error) throw error
+  const max = typeof data?.order_index === 'number' ? data.order_index : 0
+  return max + 10
+}
+
 export async function ensureEfCatalogRelease (version: string): Promise<EfCatalogRelease> {
   const existing = await getEfCatalogRelease(version)
   if (existing) return existing
+  const order_index = await nextReleaseOrderIndex()
   const { data, error } = await supabase
     .from('ef_catalog_releases')
     .insert({
@@ -32,6 +46,7 @@ export async function ensureEfCatalogRelease (version: string): Promise<EfCatalo
       is_default: false,
       fuel_count: 0,
       link_count: 0,
+      order_index,
       updated_at: new Date().toISOString(),
     })
     .select()
