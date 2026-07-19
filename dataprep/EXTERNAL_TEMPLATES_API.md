@@ -2,13 +2,15 @@
 
 Client apps (e.g. org-app) use this API to fetch emission templates with their activity groups and mapped fuel resources. Clients can select an industry, load its template, and add emission records following the mapped fuel resources of each activity group.
 
+**Org-app consumption:** the client browser calls same-origin `GET /api/external/templates` on the org-app; that route proxies to this admin endpoint using `NEXT_PUBLIC_ADMIN_CONSOLE_URL`.
+
 ## Endpoint
 
 ```
 GET /api/external/templates
 ```
 
-Base URL: your admin-console deployment (e.g. `https://admin.example.com`).
+Base URL: your admin-console deployment (e.g. `https://admin-console.ideacarb.com`).
 
 ## Query Parameters
 

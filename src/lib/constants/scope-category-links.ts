@@ -20,6 +20,12 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     is_linked_cat1: false,
   },
   {
+    id: 'scope_1_to_cat4',
+    source_scopes: [1],
+    dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
+    is_linked_cat1: true,
+  },
+  {
     id: 'cat1_to_cat4',
     source_scope_category_ids: [SCOPE_CAT1_PURCHASED_GOODS_ID],
     dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
@@ -27,17 +33,24 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
   },
 ]
 
+export function matchScopeCategoryLinkRules (input: {
+  scope: number
+  scopeCategoryId: string
+}): ScopeCategoryLinkRule[] {
+  return SCOPE_CATEGORY_LINK_RULES.filter((rule) => {
+    if (rule.source_scope_category_ids?.includes(input.scopeCategoryId)) {
+      return true
+    }
+    if (rule.source_scopes?.includes(input.scope)) {
+      return true
+    }
+    return false
+  })
+}
+
 export function matchScopeCategoryLinkRule (input: {
   scope: number
   scopeCategoryId: string
 }): ScopeCategoryLinkRule | null {
-  for (const rule of SCOPE_CATEGORY_LINK_RULES) {
-    if (rule.source_scope_category_ids?.includes(input.scopeCategoryId)) {
-      return rule
-    }
-    if (rule.source_scopes?.includes(input.scope)) {
-      return rule
-    }
-  }
-  return null
+  return matchScopeCategoryLinkRules(input)[0] ?? null
 }
