@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   Box,
   Typography,
@@ -12,10 +11,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Chip,
 } from '@mui/material'
 import { Search as SearchIcon } from '@mui/icons-material'
-import OrganizationsTable from '@/components/admin/OrganizationsTable'
+import OrganizationsTable, { type SupportInboxMeta } from '@/components/admin/OrganizationsTable'
 import SupportStaffChatDrawer from '@/components/admin/SupportStaffChatDrawer'
+import SupportClientContextDrawer from '@/components/admin/SupportClientContextDrawer'
 import { organizationService } from '@/lib/services'
 import { useOrganizationsFilter } from '@/hooks/useOrganizationsFilter'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
@@ -24,15 +25,36 @@ import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 
+type DrawerMode = 'chat' | 'usage' | null
+
+function sortSupportOrganizations (
+  organizations: OrganizationWithCreator[],
+  inboxByOrganization: Record<string, SupportInboxMeta>
+): OrganizationWithCreator[] {
+  return organizations.slice().sort((a, b) => {
+    const aAt = inboxByOrganization[a.id]?.last_message_at ?? null
+    const bAt = inboxByOrganization[b.id]?.last_message_at ?? null
+
+    if (aAt && bAt) {
+      const byTime = new Date(bAt).getTime() - new Date(aAt).getTime()
+      if (byTime !== 0) return byTime
+      return a.name.localeCompare(b.name, 'th')
+    }
+    if (aAt && !bAt) return -1
+    if (!aAt && bAt) return 1
+    return a.name.localeCompare(b.name, 'th')
+  })
+}
+
 export default function SupportClientsDashboard () {
-  const router = useRouter()
   const { user } = useAuth()
   const [organizations, setOrganizations] = useState<OrganizationWithCreator[]>([])
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [unreadByOrganization, setUnreadByOrganization] = useState<Record<string, boolean>>({})
+  const [inboxByOrganization, setInboxByOrganization] = useState<Record<string, SupportInboxMeta>>({})
   const [selectedOrganization, setSelectedOrganization] = useState<OrganizationWithCreator | null>(null)
-  const [chatOpen, setChatOpen] = useState(false)
+  const [drawerMode, setDrawerMode] = useState<DrawerMode>(null)
+  const [unreadOnly, setUnreadOnly] = useState(false)
 
   const {
     searchTerm,
@@ -70,11 +92,16 @@ export default function SupportClientsDashboard () {
       const response = await authenticatedAdminFetch('/api/support/staff/inbox')
       if (!response.ok) return
       const payload = await response.json()
-      const map: Record<string, boolean> = {}
+      const map: Record<string, SupportInboxMeta> = {}
       for (const row of payload.data ?? []) {
-        map[row.organization_id] = Boolean(row.has_unread_from_client)
+        map[row.organization_id] = {
+          has_unread_from_client: Boolean(row.has_unread_from_client),
+          unread_count: Number(row.unread_count ?? 0),
+          last_message_at: row.last_message_at ?? null,
+          last_message_preview: row.last_message_preview ?? null,
+        }
       }
-      setUnreadByOrganization(map)
+      setInboxByOrganization(map)
     } catch (error) {
       console.error('Failed to load support inbox:', error)
     }
@@ -90,24 +117,49 @@ export default function SupportClientsDashboard () {
     }
   }, [loadInbox])
 
-  const handleRowClick = (id: string) => {
-    router.push(`/admin-console/organizations/${id}`)
-  }
+  const unreadCount = useMemo(
+    () => Object.values(inboxByOrganization).filter((entry) => entry.has_unread_from_client).length,
+    [inboxByOrganization]
+  )
 
-  const handleChatClick = (id: string) => {
+  const sortedOrganizations = useMemo(() => {
+    let list = filteredOrganizations as OrganizationWithCreator[]
+    if (unreadOnly) {
+      list = list.filter((org) => inboxByOrganization[org.id]?.has_unread_from_client)
+    }
+    return sortSupportOrganizations(list, inboxByOrganization)
+  }, [filteredOrganizations, inboxByOrganization, unreadOnly])
+
+  const openChat = (id: string) => {
     const org = organizations.find((item) => item.id === id)
     if (!org) return
     setSelectedOrganization(org)
-    setChatOpen(true)
+    setDrawerMode('chat')
   }
 
-  const handleChatRead = (organizationId: string) => {
-    setUnreadByOrganization((prev) => ({
+  const openUsage = (id: string) => {
+    const org = organizations.find((item) => item.id === id)
+    if (!org) return
+    setSelectedOrganization(org)
+    setDrawerMode('usage')
+  }
+
+  const handleChatRead = useCallback((organizationId: string) => {
+    setInboxByOrganization((prev) => ({
       ...prev,
-      [organizationId]: false,
+      [organizationId]: {
+        ...(prev[organizationId] ?? {
+          has_unread_from_client: false,
+          unread_count: 0,
+          last_message_at: null,
+          last_message_preview: null,
+        }),
+        has_unread_from_client: false,
+        unread_count: 0,
+      },
     }))
     loadInbox()
-  }
+  }, [loadInbox])
 
   return (
     <Box sx={{ py: 2, width: '100%' }}>
@@ -115,7 +167,7 @@ export default function SupportClientsDashboard () {
         {isAdmin(user) ? 'Support Clients' : 'ลูกค้า (ฝ่ายสนับสนุน)'}
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           placeholder="ค้นหาชื่อ รหัส อีเมล Dealer ผู้สร้าง..."
           value={searchTerm}
@@ -159,20 +211,38 @@ export default function SupportClientsDashboard () {
         />
       </Box>
 
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+        <Chip
+          label={`Unread (${unreadCount})`}
+          color={unreadOnly ? 'error' : 'default'}
+          variant={unreadOnly ? 'filled' : 'outlined'}
+          onClick={() => setUnreadOnly((prev) => !prev)}
+          sx={{ fontWeight: 600 }}
+        />
+      </Box>
+
       <OrganizationsTable
         variant="support"
-        data={filteredOrganizations as OrganizationWithCreator[]}
+        data={sortedOrganizations}
         loading={loading}
-        onRowClick={handleRowClick}
-        onChatClick={handleChatClick}
-        unreadByOrganization={unreadByOrganization}
+        onRowClick={openChat}
+        onChatClick={openChat}
+        onUsageClick={openUsage}
+        inboxByOrganization={inboxByOrganization}
       />
 
       <SupportStaffChatDrawer
-        open={chatOpen}
-        onClose={() => setChatOpen(false)}
+        open={drawerMode === 'chat'}
+        onClose={() => setDrawerMode(null)}
         organization={selectedOrganization ? { id: selectedOrganization.id, name: selectedOrganization.name } : null}
         onRead={handleChatRead}
+      />
+
+      <SupportClientContextDrawer
+        open={drawerMode === 'usage'}
+        onClose={() => setDrawerMode(null)}
+        organization={selectedOrganization}
+        onOpenChat={(organizationId) => openChat(organizationId)}
       />
 
       <Snackbar

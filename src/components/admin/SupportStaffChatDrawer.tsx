@@ -19,6 +19,7 @@ import {
   DeleteOutline as DeleteOutlineIcon,
 } from '@mui/icons-material'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
+import { formatMessageDayLabel, isSameCalendarDay } from '@/lib/utils/relative-time'
 
 interface SupportStaffChatDrawerProps {
   open: boolean
@@ -65,6 +66,8 @@ function getInitial (value: string | null | undefined, fallback: string): string
   return normalized ? normalized.charAt(0).toUpperCase() : fallback
 }
 
+const POLL_INTERVAL_MS = 5000
+
 function isAttachmentOnlyMessage (body: string): boolean {
   return body.trim() === '📎 Attachment'
 }
@@ -108,71 +111,145 @@ export default function SupportStaffChatDrawer ({
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const onReadRef = useRef(onRead)
+  const organizationIdRef = useRef(organization?.id)
+  const pollInFlightRef = useRef(false)
+  const previousMessageCountRef = useRef(0)
+  const previousLastMessageIdRef = useRef<string | null>(null)
+
+  onReadRef.current = onRead
+  organizationIdRef.current = organization?.id
 
   const currentUserId = useMemo(
     () => (typeof window !== 'undefined' ? localStorage.getItem('cfo_user_id') : null),
     []
   )
 
-  const loadMessages = useCallback(async (options?: { silent?: boolean }) => {
-    if (!organization?.id) return
+  const loadMessages = useCallback(async (options?: { silent?: boolean; organizationId?: string }) => {
+    const organizationId = options?.organizationId ?? organizationIdRef.current
+    if (!organizationId) return
     const silent = options?.silent ?? false
 
     try {
       if (!silent) {
         setLoading(true)
       }
-      setError(null)
+      if (!silent) {
+        setError(null)
+      }
       const response = await authenticatedAdminFetch(
-        `/api/support/staff/messages?organization_id=${encodeURIComponent(organization.id)}`
+        `/api/support/staff/messages?organization_id=${encodeURIComponent(organizationId)}`
       )
       if (!response.ok) {
         throw new Error('Failed to fetch messages')
       }
       const payload = await response.json()
+      if (organizationIdRef.current !== organizationId) return
       setMessages(payload.data ?? [])
     } catch (err) {
       console.error(err)
-      setError('ไม่สามารถโหลดข้อความได้')
+      if (!silent && organizationIdRef.current === organizationId) {
+        setError('ไม่สามารถโหลดข้อความได้')
+      }
     } finally {
-      if (!silent) {
+      if (!silent && organizationIdRef.current === organizationId) {
         setLoading(false)
       }
     }
-  }, [organization?.id])
+  }, [])
 
-  const markRead = useCallback(async () => {
-    if (!organization?.id) return
+  const markRead = useCallback(async (organizationId: string) => {
     try {
       await authenticatedAdminFetch('/api/support/staff/mark-read', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ organization_id: organization.id }),
+        body: JSON.stringify({ organization_id: organizationId }),
       })
-      onRead?.(organization.id)
+      onReadRef.current?.(organizationId)
     } catch (err) {
       console.error('Failed to mark support messages as read:', err)
     }
-  }, [organization?.id, onRead])
+  }, [])
 
   useEffect(() => {
-    if (!open || !organization?.id) return
-    loadMessages()
-    markRead()
+    if (!open || !organization?.id) {
+      setMessages([])
+      setInput('')
+      setError(null)
+      setLoading(false)
+      previousMessageCountRef.current = 0
+      previousLastMessageIdRef.current = null
+      return
+    }
 
-    const poller = window.setInterval(() => {
-      loadMessages({ silent: true })
-    }, 5000)
+    const organizationId = organization.id
+    setMessages([])
+    setInput('')
+    setError(null)
+    previousMessageCountRef.current = 0
+    previousLastMessageIdRef.current = null
+    loadMessages({ organizationId })
+    markRead(organizationId)
+
+    let cancelled = false
+    let timeoutId: number | undefined
+
+    const schedulePoll = () => {
+      timeoutId = window.setTimeout(async () => {
+        if (cancelled) return
+        if (!pollInFlightRef.current) {
+          pollInFlightRef.current = true
+          try {
+            await loadMessages({ silent: true, organizationId })
+          } finally {
+            pollInFlightRef.current = false
+          }
+        }
+        if (!cancelled) {
+          schedulePoll()
+        }
+      }, POLL_INTERVAL_MS)
+    }
+
+    schedulePoll()
 
     return () => {
-      window.clearInterval(poller)
+      cancelled = true
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId)
+      }
     }
   }, [open, organization?.id, loadMessages, markRead])
 
+  const isNearBottom = () => {
+    const container = messagesContainerRef.current
+    if (!container) return true
+    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight
+    return distanceFromBottom < 120
+  }
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, open])
+    if (!open) return
+
+    const previousCount = previousMessageCountRef.current
+    const previousLastId = previousLastMessageIdRef.current
+    const lastMessage = messages[messages.length - 1]
+    const lastId = lastMessage?.id ?? null
+    const hasNewMessage = messages.length > previousCount || (lastId != null && lastId !== previousLastId)
+    const isOwnStaffMessage =
+      lastMessage?.sender_type === 'staff' && lastMessage.staff_user_id === currentUserId
+    const shouldFollow =
+      hasNewMessage && (isOwnStaffMessage || isNearBottom() || previousCount === 0)
+
+    if (shouldFollow) {
+      messagesEndRef.current?.scrollIntoView({ behavior: previousCount === 0 ? 'auto' : 'smooth' })
+    }
+
+    previousMessageCountRef.current = messages.length
+    previousLastMessageIdRef.current = lastId
+  }, [messages, open, currentUserId])
 
   const sendMessage = async () => {
     if (!organization?.id) return
@@ -213,7 +290,7 @@ export default function SupportStaffChatDrawer ({
 
       setInput('')
       await loadMessages({ silent: true })
-      await markRead()
+      await markRead(organization.id)
     } catch (err) {
       console.error(err)
       setMessages((prev) => prev.filter((message) => message.id !== optimisticMessage.id))
@@ -266,7 +343,9 @@ export default function SupportStaffChatDrawer ({
       setError(null)
       await uploadAttachment(file)
       await loadMessages({ silent: true })
-      await markRead()
+      if (organization?.id) {
+        await markRead(organization.id)
+      }
     } catch (err) {
       console.error(err)
       setError('อัปโหลดไฟล์ไม่สำเร็จ')
@@ -329,29 +408,49 @@ export default function SupportStaffChatDrawer ({
         </Box>
       </Box>
 
-      <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
+      <Box ref={messagesContainerRef} sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
         {messages.length === 0 && !loading ? (
           <Box sx={{ py: 6, textAlign: 'center' }}>
             <Typography color="text.secondary">ยังไม่มีข้อความในแชทนี้</Typography>
           </Box>
         ) : (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {messages.map((message) => {
+            {messages.map((message, index) => {
               const isStaff = message.sender_type === 'staff'
               const senderName = isStaff
                 ? (message.staff_name || message.staff_email || 'Support')
                 : (message.client_display_name || 'Client')
               const avatarSrc = isStaff ? message.staff_avatar_url : message.client_avatar_url
               const alignRight = isStaff && message.staff_user_id === currentUserId
+              const previous = index > 0 ? messages[index - 1] : null
+              const showDayLabel = !previous || !isSameCalendarDay(previous.created_at, message.created_at)
 
               return (
+                <Box key={message.id}>
+                  {showDayLabel && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', my: index === 0 ? 0 : 1 }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          px: 1.25,
+                          py: 0.35,
+                          borderRadius: 999,
+                          bgcolor: 'grey.100',
+                          color: 'text.secondary',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {formatMessageDayLabel(message.created_at)}
+                      </Typography>
+                    </Box>
+                  )}
                 <Box
-                  key={message.id}
                   sx={{
                     display: 'flex',
                     justifyContent: alignRight ? 'flex-end' : 'flex-start',
                     alignItems: 'flex-start',
                     gap: 1,
+                    mt: showDayLabel && index > 0 ? 1 : 0,
                   }}
                 >
                   {!alignRight && (
@@ -449,6 +548,7 @@ export default function SupportStaffChatDrawer ({
                     </Avatar>
                   )}
                 </Box>
+                </Box>
               )
             })}
             <div ref={messagesEndRef} />
@@ -470,13 +570,13 @@ export default function SupportStaffChatDrawer ({
             alignItems: 'center',
           }}
         >
-          {(sending || loading || uploadingAttachment) && (
+          {(sending || uploadingAttachment || (loading && messages.length === 0)) && (
             <Typography
               variant="caption"
               color="text.secondary"
               sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}
             >
-              {sending ? 'Sending' : uploadingAttachment ? 'Uploading file' : 'Refreshing'}
+              {sending ? 'Sending' : uploadingAttachment ? 'Uploading file' : 'Loading'}
               <LoadingDots />
             </Typography>
           )}

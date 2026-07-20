@@ -429,8 +429,42 @@ export async function getConversationUnreadFlags (organizationId: string): Promi
   }
 }
 
-export async function getUnreadFromClientMap (organizationIds: string[]): Promise<Record<string, boolean>> {
-  if (organizationIds.length === 0) return {}
+export interface SupportInboxEntry {
+  organization_id: string
+  has_unread_from_client: boolean
+  unread_count: number
+  last_message_at: string | null
+  last_message_preview: string | null
+}
+
+const PREVIEW_MAX_LENGTH = 80
+
+function truncatePreview (body: string | null | undefined): string | null {
+  if (!body) return null
+  const normalized = body.replace(/\s+/g, ' ').trim()
+  if (!normalized) return null
+  if (normalized === '📎 Attachment') return 'ไฟล์แนบ'
+  if (normalized.length <= PREVIEW_MAX_LENGTH) return normalized
+  return `${normalized.slice(0, PREVIEW_MAX_LENGTH - 1)}…`
+}
+
+export async function getStaffInboxEntries (
+  organizationIds: string[]
+): Promise<SupportInboxEntry[]> {
+  const empty = (organizationId: string): SupportInboxEntry => ({
+    organization_id: organizationId,
+    has_unread_from_client: false,
+    unread_count: 0,
+    last_message_at: null,
+    last_message_preview: null,
+  })
+
+  if (organizationIds.length === 0) return []
+
+  const byOrg = new Map<string, SupportInboxEntry>()
+  organizationIds.forEach((id) => {
+    byOrg.set(id, empty(id))
+  })
 
   const conversationsResponse = await supabase
     .from('support_conversations')
@@ -445,24 +479,52 @@ export async function getUnreadFromClientMap (organizationIds: string[]): Promis
     staff_last_read_at: string | null
   }>
 
-  const result: Record<string, boolean> = {}
-  organizationIds.forEach((id) => { result[id] = false })
-
   await Promise.all(
     conversations.map(async (conversation) => {
       const cursor = conversation.staff_last_read_at ?? '1970-01-01T00:00:00.000Z'
-      const { count, error } = await supabase
-        .from('support_messages')
-        .select('*', { count: 'exact', head: true })
-        .eq('conversation_id', conversation.id)
-        .eq('sender_type', 'client')
-        .gt('created_at', cursor)
+      const [unreadResult, lastMessageResult] = await Promise.all([
+        supabase
+          .from('support_messages')
+          .select('*', { count: 'exact', head: true })
+          .eq('conversation_id', conversation.id)
+          .eq('sender_type', 'client')
+          .gt('created_at', cursor),
+        supabase
+          .from('support_messages')
+          .select('body, created_at')
+          .eq('conversation_id', conversation.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
 
-      if (error) throw error
-      result[conversation.organization_id] = (count ?? 0) > 0
+      if (unreadResult.error) throw unreadResult.error
+      if (lastMessageResult.error) throw lastMessageResult.error
+
+      const unreadCount = unreadResult.count ?? 0
+      const lastMessage = lastMessageResult.data as { body: string; created_at: string } | null
+
+      byOrg.set(conversation.organization_id, {
+        organization_id: conversation.organization_id,
+        has_unread_from_client: unreadCount > 0,
+        unread_count: unreadCount,
+        last_message_at: lastMessage?.created_at ?? null,
+        last_message_preview: truncatePreview(lastMessage?.body),
+      })
     })
   )
 
+  return organizationIds.map((id) => byOrg.get(id) ?? empty(id))
+}
+
+export async function getUnreadFromClientMap (
+  organizationIds: string[]
+): Promise<Record<string, boolean>> {
+  const entries = await getStaffInboxEntries(organizationIds)
+  const result: Record<string, boolean> = {}
+  for (const entry of entries) {
+    result[entry.organization_id] = entry.has_unread_from_client
+  }
   return result
 }
 
