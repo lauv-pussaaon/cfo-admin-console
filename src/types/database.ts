@@ -12,6 +12,8 @@ export interface Organization {
   contact_first_name: string | null
   contact_last_name: string | null
   contact_phone: string | null
+  username: string | null
+  password: string | null
   account_type: AccountType
   package_start: string | null
   package_end: string | null

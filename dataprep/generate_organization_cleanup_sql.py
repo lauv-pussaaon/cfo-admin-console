@@ -34,6 +34,7 @@ ACCOUNT_TYPE_MAP = {
     "demo": "demo",
     "client": "general customers",
     "siden": "employee",
+    "project": "project",
 }
 
 
@@ -120,83 +121,110 @@ def build_sql():
     lines.append("-- -----------------------------------------------------------------------------")
     lines.append("-- Step 1: Rename mismatched codes to match the active instance registry")
     lines.append("-- -----------------------------------------------------------------------------")
-    for o in renames:
-        new_code = CODE_RENAMES[o["code_lower"]]
-        acct = map_account_type(allow[new_code]) if new_code in allow else "employee"
-        lines.append(
-            f"UPDATE organizations SET code = {sql_str(new_code)}, name = {sql_str(new_code)}, "
-            f"app_url = {sql_str(f'https://{new_code}.ideacarb.com')}, account_type = {sql_str(acct)}, updated_at = NOW()"
-        )
-        lines.append(f"WHERE lower(code) = {sql_str(o['code_lower'])};")
+    if not renames:
+        lines.append("-- (none)")
         lines.append("")
+    else:
+        for o in renames:
+            new_code = CODE_RENAMES[o["code_lower"]]
+            acct = map_account_type(allow[new_code]) if new_code in allow else "employee"
+            lines.append(
+                f"UPDATE organizations SET code = {sql_str(new_code)}, name = {sql_str(new_code)}, "
+                f"app_url = {sql_str(f'https://{new_code}.ideacarb.com')}, account_type = {sql_str(acct)}, updated_at = NOW()"
+            )
+            lines.append(f"WHERE lower(code) = {sql_str(o['code_lower'])};")
+            lines.append("")
 
     # Step 2: inserts
     lines.append("-- -----------------------------------------------------------------------------")
     lines.append(f"-- Step 2: Insert {len(missing_ids)} active instances missing from admin console")
     lines.append("-- -----------------------------------------------------------------------------")
-    lines.append("WITH admin_user AS (")
-    lines.append("  SELECT id")
-    lines.append("  FROM users")
-    lines.append("  WHERE email = 'admin@cfo.com'")
-    lines.append("  LIMIT 1")
-    lines.append("),")
-    lines.append("missing_orgs AS (")
-    lines.append("  SELECT *")
-    lines.append("  FROM (")
-    lines.append("    VALUES")
-    value_rows = []
-    for cid in missing_ids:
-        acct = map_account_type(allow[cid])
-        value_rows.append(
-            f"      ({sql_str(cid)}, {sql_str(cid)}, {sql_str(f'https://{cid}.ideacarb.com')}, {sql_str(acct)})"
-        )
-    lines.append(",\n".join(value_rows))
-    lines.append("  ) AS t(name, code, app_url, account_type)")
-    lines.append(")")
-    lines.append("INSERT INTO organizations (")
-    lines.append("  name,")
-    lines.append("  code,")
-    lines.append("  app_url,")
-    lines.append("  account_type,")
-    lines.append("  is_initialized,")
-    lines.append("  created_by")
-    lines.append(")")
-    lines.append("SELECT")
-    lines.append("  mo.name,")
-    lines.append("  mo.code,")
-    lines.append("  mo.app_url,")
-    lines.append("  mo.account_type,")
-    lines.append("  FALSE,")
-    lines.append("  (SELECT id FROM admin_user)")
-    lines.append("FROM missing_orgs mo")
-    lines.append("ON CONFLICT (code) DO UPDATE")
-    lines.append("SET")
-    lines.append("  name = EXCLUDED.name,")
-    lines.append("  app_url = EXCLUDED.app_url,")
-    lines.append("  account_type = EXCLUDED.account_type,")
-    lines.append("  updated_at = NOW();")
-    lines.append("")
+    if not missing_ids:
+        lines.append("-- (none)")
+        lines.append("")
+    else:
+        lines.append("WITH admin_user AS (")
+        lines.append("  SELECT id")
+        lines.append("  FROM users")
+        lines.append("  WHERE email = 'admin@cfo.com'")
+        lines.append("  LIMIT 1")
+        lines.append("),")
+        lines.append("missing_orgs AS (")
+        lines.append("  SELECT *")
+        lines.append("  FROM (")
+        lines.append("    VALUES")
+        value_rows = []
+        for cid in missing_ids:
+            acct = map_account_type(allow[cid])
+            value_rows.append(
+                f"      ({sql_str(cid)}, {sql_str(cid)}, {sql_str(f'https://{cid}.ideacarb.com')}, {sql_str(acct)})"
+            )
+        lines.append(",\n".join(value_rows))
+        lines.append("  ) AS t(name, code, app_url, account_type)")
+        lines.append(")")
+        lines.append("INSERT INTO organizations (")
+        lines.append("  name,")
+        lines.append("  code,")
+        lines.append("  app_url,")
+        lines.append("  account_type,")
+        lines.append("  is_initialized,")
+        lines.append("  created_by")
+        lines.append(")")
+        lines.append("SELECT")
+        lines.append("  mo.name,")
+        lines.append("  mo.code,")
+        lines.append("  mo.app_url,")
+        lines.append("  mo.account_type,")
+        lines.append("  FALSE,")
+        lines.append("  (SELECT id FROM admin_user)")
+        lines.append("FROM missing_orgs mo")
+        lines.append("ON CONFLICT (code) DO UPDATE")
+        lines.append("SET")
+        lines.append("  name = EXCLUDED.name,")
+        lines.append("  app_url = EXCLUDED.app_url,")
+        lines.append("  account_type = EXCLUDED.account_type,")
+        lines.append("  updated_at = NOW();")
+        lines.append("")
 
     # Step 3: deletes
     lines.append("-- -----------------------------------------------------------------------------")
     lines.append(f"-- Step 3: Delete {len(to_delete)} organizations not in the active allowlist")
     lines.append("-- -----------------------------------------------------------------------------")
+    lines.append("-- Related tables (FK to organizations):")
+    lines.append("--   ON DELETE CASCADE: user_organizations, organization_invitations,")
+    lines.append("--     support_conversations, support_messages, support_message_attachments")
+    lines.append("--   ON DELETE SET NULL: organization_trial_requests.organization_id")
+    lines.append("--   (support_messages / support_message_attachments also cascade via conversation)")
+    lines.append("--")
     lines.append("-- Preflight (run before committing to review what will be removed):")
-    lines.append("-- SELECT code, name, id FROM organizations")
-    lines.append("-- WHERE lower(code) NOT IN (")
-    lines.append("--   " + ", ".join(sql_str(cid) for cid in sorted(allow)))
+    lines.append("-- WITH obsolete AS (")
+    lines.append("--   SELECT id, code, name FROM organizations")
+    lines.append("--   WHERE code IS NOT NULL AND code <> ''")
+    lines.append("--     AND lower(code) NOT IN (")
+    lines.append("--       " + ", ".join(sql_str(cid) for cid in sorted(allow)))
+    lines.append("--     )")
     lines.append("-- )")
-    lines.append("-- ORDER BY code;")
+    lines.append("-- SELECT 'organizations' AS table_name, count(*)::bigint AS n FROM obsolete")
+    lines.append("-- UNION ALL SELECT 'user_organizations', count(*) FROM user_organizations uo JOIN obsolete o ON o.id = uo.organization_id")
+    lines.append("-- UNION ALL SELECT 'organization_invitations', count(*) FROM organization_invitations oi JOIN obsolete o ON o.id = oi.organization_id")
+    lines.append("-- UNION ALL SELECT 'support_conversations', count(*) FROM support_conversations sc JOIN obsolete o ON o.id = sc.organization_id")
+    lines.append("-- UNION ALL SELECT 'support_messages', count(*) FROM support_messages sm JOIN obsolete o ON o.id = sm.organization_id")
+    lines.append("-- UNION ALL SELECT 'support_message_attachments', count(*) FROM support_message_attachments sa JOIN obsolete o ON o.id = sa.organization_id")
+    lines.append("-- UNION ALL SELECT 'organization_trial_requests (will SET NULL)', count(*) FROM organization_trial_requests tr JOIN obsolete o ON o.id = tr.organization_id;")
     lines.append("--")
     lines.append("-- Codes targeted for deletion:")
     for o in to_delete:
-        lines.append(f"--   {o['code']}  ({o['name']})")
-    lines.append("DELETE FROM organizations")
-    lines.append("WHERE code IS NOT NULL AND code <> ''")
-    lines.append("  AND lower(code) NOT IN (")
-    lines.append("  " + ",\n  ".join(sql_str(cid) for cid in sorted(allow)))
-    lines.append(");")
-    lines.append("")
+        lines.append(f"--   {o['code']}  ({o['name']})  uuid={o['uuid']}")
+    if not to_delete:
+        lines.append("--   (none)")
+        lines.append("")
+    else:
+        lines.append("DELETE FROM organizations")
+        lines.append("WHERE code IS NOT NULL AND code <> ''")
+        lines.append("  AND lower(code) NOT IN (")
+        lines.append("  " + ",\n  ".join(sql_str(cid) for cid in sorted(allow)))
+        lines.append(");")
+        lines.append("")
 
     lines.append("COMMIT;")
     lines.append("")

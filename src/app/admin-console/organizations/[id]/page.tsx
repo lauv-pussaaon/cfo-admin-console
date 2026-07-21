@@ -14,6 +14,7 @@ import {
   Link as MuiLink,
 } from '@mui/material'
 import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
+import { CredentialField } from '@/components/admin/OrganizationCredentialField'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin, isSupport, canManageOrganization } from '@/lib/permissions'
 import { organizationService } from '@/lib/services'
@@ -167,6 +168,12 @@ export default function OrganizationDetailPage () {
             }
           />
           <DetailRow label="เบอร์โทรผู้ติดต่อ" value={org.contact_phone || '—'} />
+          <Grid item xs={12} sm={6}>
+            <CredentialField label="ชื่อผู้ใช้ (instance login)" value={org.username} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CredentialField label="รหัสผ่าน (instance login)" value={org.password} masked />
+          </Grid>
           <DetailRow
             label="App URL"
             value={

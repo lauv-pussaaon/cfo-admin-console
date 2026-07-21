@@ -362,6 +362,8 @@ export const createOrganization = async (
     contact_first_name?: string | null
     contact_last_name?: string | null
     contact_phone?: string | null
+    username?: string | null
+    password?: string | null
     account_type?: AccountType
     package_start?: string | null
     package_end?: string | null
@@ -382,6 +384,8 @@ export const createOrganization = async (
       contact_first_name: data.contact_first_name || null,
       contact_last_name: data.contact_last_name || null,
       contact_phone: data.contact_phone || null,
+      username: data.username || null,
+      password: data.password || null,
       account_type: accountType,
       package_start: data.package_start ?? defaultPeriod.package_start,
       package_end: data.package_end !== undefined ? data.package_end : defaultPeriod.package_end,
@@ -420,6 +424,8 @@ export const updateOrganization = async (
     contact_first_name: string | null
     contact_last_name: string | null
     contact_phone: string | null
+    username: string | null
+    password: string | null
     account_type: AccountType
     package_start: string | null
     package_end: string | null

@@ -26,6 +26,7 @@ import {
   ContentCopy as CopyIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
+import OrganizationDetailDrawer from '@/components/admin/OrganizationDetailDrawer'
 import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
 import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
@@ -64,6 +65,7 @@ export default function AdminConsoleOrganizationsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [detailOrganization, setDetailOrganization] = useState<(OrganizationWithStats | OrganizationWithCreator) | null>(null)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -127,8 +129,16 @@ export default function AdminConsoleOrganizationsPage() {
   const handleEdit = (id: string) => {
     const org = organizations.find(o => o.id === id)
     if (org) {
+      setDetailOrganization(null)
       setEditingOrganization(org)
       setModalOpen(true)
+    }
+  }
+
+  const handleViewDetail = (id: string) => {
+    const org = organizations.find(o => o.id === id)
+    if (org) {
+      setDetailOrganization(org)
     }
   }
 
@@ -345,6 +355,16 @@ export default function AdminConsoleOrganizationsPage() {
         onDelete={handleDelete}
         onExport={isAdmin(user) ? undefined : handleExportOrganization}
         onInvite={isAdmin(user) ? undefined : handleInvite}
+        onViewDetail={handleViewDetail}
+        onRowClick={handleViewDetail}
+      />
+
+      <OrganizationDetailDrawer
+        open={!!detailOrganization}
+        onClose={() => setDetailOrganization(null)}
+        organization={detailOrganization}
+        onEdit={handleEdit}
+        canEdit={canManageOrganizations(user)}
       />
 
       {/* Unified modal for all roles */}

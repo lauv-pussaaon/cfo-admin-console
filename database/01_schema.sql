@@ -58,6 +58,8 @@ CREATE TABLE organizations (
   contact_first_name TEXT,
   contact_last_name TEXT,
   contact_phone TEXT,
+  username TEXT,
+  password TEXT,
   account_type TEXT NOT NULL DEFAULT 'general customers',
   package_start DATE,
   package_end DATE,

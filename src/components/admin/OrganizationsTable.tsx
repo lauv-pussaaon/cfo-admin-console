@@ -6,6 +6,7 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
+  InfoOutlined as InfoOutlinedIcon,
   FileDownload as FileDownloadIcon,
   PersonAdd as PersonAddIcon,
   ChatBubbleOutline as ChatBubbleOutlineIcon,
@@ -34,6 +35,7 @@ interface Props {
   onDelete?: (id: string) => void
   onExport?: (id: string) => void
   onInvite?: (id: string) => void
+  onViewDetail?: (id: string) => void
   onRowClick?: (id: string) => void
   onChatClick?: (id: string) => void
   onUsageClick?: (id: string) => void
@@ -66,6 +68,7 @@ export default function OrganizationsTable ({
   onDelete,
   onExport,
   onInvite,
+  onViewDetail,
   onRowClick,
   onChatClick,
   onUsageClick,
@@ -342,8 +345,8 @@ export default function OrganizationsTable ({
 
     const actionWidth =
       variant === 'dealer'
-        ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) + 150
-        : 150
+        ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) + (onViewDetail ? 50 : 0) + 150
+        : (onViewDetail ? 50 : 0) + 150
 
     return [
       ...base,
@@ -356,7 +359,10 @@ export default function OrganizationsTable ({
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, height: '100%' }}>
+          <Box
+            sx={{ display: 'flex', justifyContent: 'center', gap: 1, height: '100%' }}
+            onClick={(event) => event.stopPropagation()}
+          >
             {variant === 'dealer' && onExport && (
               <IconButton
                 size="small"
@@ -387,6 +393,22 @@ export default function OrganizationsTable ({
                 title="เชิญ Client Admin"
               >
                 <PersonAddIcon fontSize="small" />
+              </IconButton>
+            )}
+            {onViewDetail && (
+              <IconButton
+                size="small"
+                onClick={() => onViewDetail(params.row.id)}
+                sx={{
+                  color: 'text.secondary',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                    color: 'primary.main',
+                  },
+                }}
+                title="ดูรายละเอียด"
+              >
+                <InfoOutlinedIcon fontSize="small" />
               </IconButton>
             )}
             <IconButton
@@ -421,7 +443,7 @@ export default function OrganizationsTable ({
         ),
       },
     ]
-  }, [variant, onEdit, onDelete, onExport, onInvite, onChatClick, onUsageClick])
+  }, [variant, onEdit, onDelete, onExport, onInvite, onViewDetail, onChatClick, onUsageClick])
 
   return (
     <Paper elevation={0} sx={{ minHeight: 400, width: '100%', backgroundColor: 'transparent', overflowX: 'scroll' }}>

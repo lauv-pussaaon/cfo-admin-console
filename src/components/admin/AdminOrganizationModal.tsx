@@ -21,9 +21,12 @@ import {
   Select,
   FormControl,
   InputLabel,
+  InputAdornment,
 } from '@mui/material'
 import {
   Close as CloseIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material'
 import { organizationService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
@@ -61,6 +64,8 @@ const organizationSchema = z.object({
   contact_first_name: z.string().optional().nullable(),
   contact_last_name: z.string().optional().nullable(),
   contact_phone: z.string().optional().nullable(),
+  username: z.string().optional().nullable(),
+  password: z.string().optional().nullable(),
   is_initialized: z.boolean().optional(),
   dealer_id: z.string().optional().nullable(),
 }).refine(
@@ -90,6 +95,7 @@ export default function AdminOrganizationModal({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [dealers, setDealers] = useState<User[]>([])
   const [loadingDealers, setLoadingDealers] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
   const skipAccountTypeReset = useRef(false)
   
@@ -111,6 +117,8 @@ export default function AdminOrganizationModal({
       contact_first_name: '',
       contact_last_name: '',
       contact_phone: '',
+      username: '',
+      password: '',
       is_initialized: false,
       dealer_id: null,
     }
@@ -208,6 +216,8 @@ export default function AdminOrganizationModal({
           contact_first_name: initialData.contact_first_name || '',
           contact_last_name: initialData.contact_last_name || '',
           contact_phone: initialData.contact_phone || '',
+          username: initialData.username || '',
+          password: initialData.password || '',
           is_initialized: initialData.is_initialized || false,
           dealer_id: currentDealerId,
         })
@@ -225,11 +235,14 @@ export default function AdminOrganizationModal({
           contact_first_name: '',
           contact_last_name: '',
           contact_phone: '',
+          username: '',
+          password: '',
           is_initialized: false,
           dealer_id: null,
         })
       }
       setSubmitError(null)
+      setShowPassword(false)
     }
   }, [open, reset, mode, initialData, currentDealerId])
 
@@ -253,6 +266,8 @@ export default function AdminOrganizationModal({
             contact_first_name: data.contact_first_name || null,
             contact_last_name: data.contact_last_name || null,
             contact_phone: data.contact_phone || null,
+            username: data.username || null,
+            password: data.password || null,
             is_initialized: data.is_initialized ?? false,
             account_type: data.account_type,
             package_start: data.package_start || null,
@@ -280,6 +295,8 @@ export default function AdminOrganizationModal({
           contact_first_name: data.contact_first_name || null,
           contact_last_name: data.contact_last_name || null,
           contact_phone: data.contact_phone || null,
+          username: data.username || null,
+          password: data.password || null,
           account_type: data.account_type,
           package_start: data.package_start || null,
           package_end: data.package_end || null,
@@ -538,6 +555,47 @@ export default function AdminOrganizationModal({
                   }}
                 />
               )}
+
+              <TextField
+                {...methods.register('username')}
+                label="ชื่อผู้ใช้ (instance login)"
+                fullWidth
+                error={!!errors.username}
+                helperText={errors.username?.message || 'ไม่บังคับ — สำหรับ internal/demo'}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+
+              <TextField
+                {...methods.register('password')}
+                label="รหัสผ่าน (instance login)"
+                fullWidth
+                type={showPassword ? 'text' : 'password'}
+                error={!!errors.password}
+                helperText={errors.password?.message || 'ไม่บังคับ — สำหรับ internal/demo'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={showPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
+                        onClick={() => setShowPassword((v) => !v)}
+                        edge="end"
+                        size="small"
+                      >
+                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
+                }}
+              />
 
               {/* Dealer Assignment: Only for admins */}
               {isAdminUser && (
