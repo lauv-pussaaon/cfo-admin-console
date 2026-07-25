@@ -308,6 +308,25 @@ function EmissionResourcesPage () {
     }
   }
 
+  const handleSetDefault = async () => {
+    setActionBusy(true)
+    try {
+      const res = await fetch('/api/ef-catalog/releases', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ version: catalogVersion, action: 'set_default' }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Set default failed')
+      showSnackbar(`Set ${catalogVersion} as default`)
+      await fetchReleases()
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : 'Set default failed', 'error')
+    } finally {
+      setActionBusy(false)
+    }
+  }
+
   const handleExportExcel = async () => {
     setActionBusy(true)
     try {
@@ -449,6 +468,19 @@ function EmissionResourcesPage () {
             </>
           )}
           <Box sx={{ display: 'flex', gap: 1, ml: 'auto', flexWrap: 'wrap' }}>
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={
+                actionBusy ||
+                releaseLoading ||
+                release?.status !== 'published' ||
+                Boolean(release?.is_default)
+              }
+              onClick={handleSetDefault}
+            >
+              {release?.is_default ? 'Default' : 'Make Default'}
+            </Button>
             <Button
               size="small"
               variant="outlined"
