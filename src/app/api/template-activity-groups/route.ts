@@ -8,11 +8,13 @@ export async function GET(request: NextRequest) {
     const template_id = searchParams.get('template_id') ?? undefined
     const search = searchParams.get('search') ?? undefined
     const include_deleted = searchParams.get('include_deleted') === 'true'
+    const version = searchParams.get('version') ?? undefined
 
     const data = await getTemplateActivityGroups({
       template_id,
       search,
       include_deleted,
+      version,
     })
     return NextResponse.json({ data })
   } catch (error) {
@@ -26,6 +28,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     if (!body.template_id || !body.name_th || !body.name_en) {
       return NextResponse.json({ error: 'template_id, name_th, and name_en are required' }, { status: 400 })
+    }
+    if (!body.version) {
+      return NextResponse.json({ error: 'version is required' }, { status: 400 })
     }
     const { fuel_resource_mappings, ...createBody } = body
     const record = await createTemplateActivityGroup(createBody)

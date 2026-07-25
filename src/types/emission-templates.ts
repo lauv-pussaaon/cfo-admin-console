@@ -2,7 +2,6 @@ export type TemplateStatus = 'active' | 'inactive'
 
 export interface EmissionTemplate {
   id: string
-  legacy_industry_id: number | null
   industry_code: string
   name_th: string
   name_en: string
@@ -19,7 +18,6 @@ export interface EmissionTemplate {
 export interface TemplateActivityGroup {
   id: string
   template_id: string
-  legacy_activity_group_id: number | null
   name_th: string
   name_en: string
   scope: 1 | 2 | 3 | 4 | null
@@ -28,9 +26,18 @@ export interface TemplateActivityGroup {
   is_common: boolean
   sort_order: number
   status: TemplateStatus
+  /** Soft-linked to ef_catalog_releases.version (free text, no FK) — one activity-group set per catalog version. */
+  version: string
   created_at: string
   updated_at: string | null
   deleted_at: string | null
+}
+
+/** Template version option for pickers — mirrors client's FuelResourceVersionOption shape. */
+export interface TemplateVersionOption {
+  version: string
+  is_default: boolean
+  order_index: number
 }
 
 export interface ScopeCategoryLite {
@@ -79,6 +86,7 @@ export interface TemplateActivityGroupsQuery {
   template_id?: string
   search?: string
   include_deleted?: boolean
+  version?: string
 }
 
 export interface PaginatedResult<T> {
@@ -112,6 +120,7 @@ export interface ExternalTemplateActivityGroup {
   is_common: boolean
   sort_order: number
   status: string
+  version: string
   fuel_resources: Array<{
     id: string
     resource: string

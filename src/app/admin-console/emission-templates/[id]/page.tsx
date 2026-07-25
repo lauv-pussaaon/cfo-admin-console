@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Alert,
   Box,
@@ -10,6 +10,8 @@ import {
   IconButton,
   Paper,
   Snackbar,
+  Tab,
+  Tabs,
   Table,
   TableBody,
   TableCell,
@@ -25,11 +27,20 @@ import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import ActivityGroupFormDialog from '@/components/admin/emission-templates/ActivityGroupFormDialog'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
-import type { ScopeCategory } from '@/types/emission-resources'
+import type { EfCatalogRelease, ScopeCategory } from '@/types/emission-resources'
 import type {
   EmissionTemplateWithRelations,
   TemplateActivityGroupWithRelations,
 } from '@/types/emission-templates'
+
+function orderReleases (releases: EfCatalogRelease[]): EfCatalogRelease[] {
+  return [...releases].sort((a, b) => {
+    const aIdx = a.order_index ?? 0
+    const bIdx = b.order_index ?? 0
+    if (aIdx !== bIdx) return aIdx - bIdx
+    return a.version.localeCompare(b.version, 'th')
+  })
+}
 
 export default function TemplateDetailPage() {
   const params = useParams<{ id: string }>()
@@ -46,7 +57,10 @@ export default function TemplateDetailPage() {
   const [template, setTemplate] = useState<EmissionTemplateWithRelations | null>(null)
   const [groups, setGroups] = useState<TemplateActivityGroupWithRelations[]>([])
   const [categories, setCategories] = useState<ScopeCategory[]>([])
+  const [releases, setReleases] = useState<EfCatalogRelease[]>([])
+  const [selectedVersion, setSelectedVersion] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [groupsLoading, setGroupsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<TemplateActivityGroupWithRelations | null>(null)
@@ -73,27 +87,36 @@ export default function TemplateDetailPage() {
     setSnackbar({ open: true, message, severity })
   }
 
+  const orderedReleases = useMemo(() => orderReleases(releases), [releases])
+
   const fetchPageData = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const [templateRes, groupsRes, categoriesRes] = await Promise.all([
+      const [templateRes, categoriesRes, releasesRes] = await Promise.all([
         fetch(`/api/emission-templates/${templateId}`),
-        fetch(`/api/template-activity-groups?template_id=${templateId}`),
         fetch('/api/emission-categories'),
+        fetch('/api/ef-catalog/releases'),
       ])
 
       if (!templateRes.ok) throw new Error('Failed to fetch template')
-      if (!groupsRes.ok) throw new Error('Failed to fetch activity groups')
       if (!categoriesRes.ok) throw new Error('Failed to fetch categories')
+      if (!releasesRes.ok) throw new Error('Failed to fetch catalog versions')
 
       const templateJson = await templateRes.json()
-      const groupsJson = await groupsRes.json()
       const categoriesJson = await categoriesRes.json()
+      const releasesJson = await releasesRes.json()
+      const releaseRows: EfCatalogRelease[] = releasesJson.data ?? []
 
       setTemplate(templateJson)
-      setGroups(groupsJson.data ?? [])
       setCategories(categoriesJson.data ?? [])
+      setReleases(releaseRows)
+
+      setSelectedVersion((current) => {
+        if (current && releaseRows.some((r) => r.version === current)) return current
+        const ordered = orderReleases(releaseRows)
+        return ordered.find((r) => r.is_default)?.version ?? ordered[0]?.version ?? ''
+      })
     } catch (err) {
       console.error(err)
       setError('Failed to load template detail')
@@ -101,6 +124,30 @@ export default function TemplateDetailPage() {
       setLoading(false)
     }
   }, [templateId])
+
+  const fetchGroups = useCallback(async () => {
+    if (!selectedVersion) {
+      setGroups([])
+      return
+    }
+    setGroupsLoading(true)
+    try {
+      const params = new URLSearchParams({ template_id: templateId, version: selectedVersion })
+      const res = await fetch(`/api/template-activity-groups?${params}`)
+      if (!res.ok) throw new Error('Failed to fetch activity groups')
+      const json = await res.json()
+      setGroups(json.data ?? [])
+    } catch (err) {
+      console.error(err)
+      setError('Failed to load activity groups')
+    } finally {
+      setGroupsLoading(false)
+    }
+  }, [templateId, selectedVersion])
+
+  useEffect(() => {
+    fetchGroups()
+  }, [fetchGroups])
 
   useEffect(() => {
     fetchPageData()
@@ -116,6 +163,7 @@ export default function TemplateDetailPage() {
     is_common: boolean
     sort_order: number
     status: string
+    version: string
     fuel_resource_mappings?: { fuel_resource_id: string; note?: string | null }[]
   }) => {
     try {
@@ -132,7 +180,7 @@ export default function TemplateDetailPage() {
       setDialogOpen(false)
       setEditTarget(null)
       showSnackbar(editTarget ? 'Activity group updated' : 'Activity group added')
-      fetchPageData()
+      fetchGroups()
     } catch (err) {
       console.error(err)
       showSnackbar('Failed to save activity group', 'error')
@@ -148,7 +196,7 @@ export default function TemplateDetailPage() {
       if (!res.ok) throw new Error('Delete failed')
       setDeleteTarget(null)
       showSnackbar('Activity group deleted')
-      fetchPageData()
+      fetchGroups()
     } catch {
       setDeleteError('Failed to delete activity group. Please try again.')
     } finally {
@@ -191,11 +239,30 @@ export default function TemplateDetailPage() {
         </Alert>
       )}
 
+      {orderedReleases.length > 0 && (
+        <Tabs
+          value={orderedReleases.some((r) => r.version === selectedVersion) ? selectedVersion : false}
+          onChange={(_, value) => setSelectedVersion(value)}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
+        >
+          {orderedReleases.map((rel) => (
+            <Tab key={rel.version} value={rel.version} label={rel.is_default ? `${rel.version} (default)` : rel.version} />
+          ))}
+        </Tabs>
+      )}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
         <Typography variant="subtitle2" color="text.secondary">
-          {(groups.length || 0).toLocaleString()} activity groups
+          {(groups.length || 0).toLocaleString()} activity groups {selectedVersion ? `— ${selectedVersion}` : ''}
         </Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => { setEditTarget(null); setDialogOpen(true) }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          disabled={!selectedVersion}
+          onClick={() => { setEditTarget(null); setDialogOpen(true) }}
+        >
           Add Group
         </Button>
       </Box>
@@ -216,7 +283,7 @@ export default function TemplateDetailPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
+            {loading || groupsLoading ? (
               <TableRow>
                 <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
                   Loading…
@@ -325,6 +392,8 @@ export default function TemplateDetailPage() {
         editTarget={editTarget}
         templateId={templateId}
         categories={categories}
+        versions={orderedReleases}
+        defaultVersion={selectedVersion}
       />
 
       <DeleteConfirmationDialog

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { listEfCatalogReleases } from '@/lib/api/ef-catalog-releases'
 import type {
   EmissionTemplate,
   EmissionTemplateWithRelations,
@@ -11,6 +12,7 @@ import type {
   CreateTemplateActivityGroupInput,
   UpdateTemplateActivityGroupInput,
   TemplateActivityGroupsQuery,
+  TemplateVersionOption,
   ExternalTemplateActivityGroup,
   ExternalTemplateWithHierarchy,
 } from '@/types/emission-templates'
@@ -129,7 +131,7 @@ export async function softDeleteEmissionTemplate (id: string) {
 export async function getTemplateActivityGroups (
   query: TemplateActivityGroupsQuery
 ): Promise<TemplateActivityGroupWithRelations[]> {
-  const { template_id, search, include_deleted = false } = query
+  const { template_id, search, include_deleted = false, version } = query
 
   let q = supabase
     .from('template_activity_groups')
@@ -149,6 +151,7 @@ export async function getTemplateActivityGroups (
 
   if (!include_deleted) q = q.is('deleted_at', null)
   if (template_id) q = q.eq('template_id', template_id)
+  if (version) q = q.eq('version', version)
   if (search) {
     const like = `%${search}%`
     q = q.or(`name_en.ilike.${like},name_th.ilike.${like}`)
@@ -190,12 +193,22 @@ export async function getTemplateActivityGroups (
 export interface GetEmissionTemplatesWithFullHierarchyQuery {
   industry_code?: string
   is_active?: boolean
+  version?: string
+}
+
+/** Resolve the version to scope activity groups to when the caller doesn't pass one explicitly. */
+async function resolveDefaultTemplateVersion (): Promise<string | null> {
+  const releases = await listEfCatalogReleases()
+  const defaultRelease = releases.find((r) => r.is_default) ?? releases[0]
+  return defaultRelease?.version ?? null
 }
 
 export async function getEmissionTemplatesWithFullHierarchy (
   query: GetEmissionTemplatesWithFullHierarchyQuery = {}
 ): Promise<ExternalTemplateWithHierarchy[]> {
   const { industry_code, is_active = true } = query
+  const version = query.version ?? (await resolveDefaultTemplateVersion())
+  if (!version) return []
 
   let q = supabase
     .from('emission_templates')
@@ -217,7 +230,7 @@ export async function getEmissionTemplatesWithFullHierarchy (
   if (!templates || templates.length === 0) return []
 
   const groupsByTemplate = await Promise.all(
-    templates.map((t) => getTemplateActivityGroups({ template_id: t.id }))
+    templates.map((t) => getTemplateActivityGroups({ template_id: t.id, version }))
   )
 
   return templates.map((t, i) => {
@@ -233,6 +246,7 @@ export async function getEmissionTemplatesWithFullHierarchy (
       is_common: g.is_common,
       sort_order: g.sort_order,
       status: g.status,
+      version: g.version,
       fuel_resources: (g.fuel_resource_mappings ?? [])
         .filter((m) => m.fuel_resource)
         .map((m) => ({
@@ -246,6 +260,45 @@ export async function getEmissionTemplatesWithFullHierarchy (
     }))
     return { ...t, activity_groups }
   })
+}
+
+/**
+ * Distinct versions that actually have (non-deleted) activity groups under active templates,
+ * enriched with is_default / order_index from ef_catalog_releases.
+ */
+export async function listTemplateVersions (): Promise<TemplateVersionOption[]> {
+  const [{ data: activeTemplates, error: templatesError }, releases] = await Promise.all([
+    supabase
+      .from('emission_templates')
+      .select('id')
+      .eq('is_active', true)
+      .is('deleted_at', null),
+    listEfCatalogReleases(),
+  ])
+  if (templatesError) throw templatesError
+  const activeTemplateIds = (activeTemplates ?? []).map((t) => t.id)
+  if (activeTemplateIds.length === 0) return []
+
+  const { data, error } = await supabase
+    .from('template_activity_groups')
+    .select('version')
+    .in('template_id', activeTemplateIds)
+    .is('deleted_at', null)
+  if (error) throw error
+
+  const versions = new Set<string>((data ?? []).map((r) => r.version as string).filter(Boolean))
+  const releaseByVersion = new Map(releases.map((r) => [r.version, r]))
+
+  return Array.from(versions)
+    .map((version) => {
+      const release = releaseByVersion.get(version)
+      return {
+        version,
+        is_default: release?.is_default ?? false,
+        order_index: release?.order_index ?? 0,
+      }
+    })
+    .sort((a, b) => a.order_index - b.order_index || a.version.localeCompare(b.version))
 }
 
 export async function getTemplateActivityGroup (id: string) {

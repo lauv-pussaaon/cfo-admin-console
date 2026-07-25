@@ -2,6 +2,9 @@
 /**
  * Generate seed SQL for emission_templates and template_activity_groups
  * from "Emission Templates 13 Industries.xlsx".
+ *
+ * Activity groups are mocked onto TEMPLATE_SEED_VERSION for testing
+ * (same industry/activity content as the Excel source).
  */
 
 const fs = require('fs')
@@ -11,21 +14,24 @@ const XLSX = require('xlsx')
 const EXCEL_PATH = path.join(__dirname, 'Emission Templates 13 Industries.xlsx')
 const OUTPUT_PATH = path.join(__dirname, '..', 'database', '04_seed_emission_templates_and_activity_groups.sql')
 
-const FEATURE_IMAGE_BY_INDUSTRY_ID = {
-  1: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=800&auto=format&fit=crop',
-  2: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop',
-  3: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=800&auto=format&fit=crop',
-  4: 'https://images.unsplash.com/photo-1532634993-15f421e42ec0?q=80&w=800&auto=format&fit=crop',
-  5: 'https://images.unsplash.com/photo-1565035010268-a3816f98589a?q=80&w=800&auto=format&fit=crop',
-  6: 'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?q=80&w=800&auto=format&fit=crop',
-  7: 'https://images.unsplash.com/photo-1453738773917-9c3eff1db985?q=80&w=800&auto=format&fit=crop',
-  8: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop',
-  9: 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop',
-  10: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop',
-  11: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop',
-  12: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop',
-  13: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop',
+const FEATURE_IMAGE_BY_INDUSTRY_CODE = {
+  'power-generation': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=800&auto=format&fit=crop',
+  'general-manufacturing': 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=800&auto=format&fit=crop',
+  'oil-and-gas': 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=800&auto=format&fit=crop',
+  'metals-production': 'https://images.unsplash.com/photo-1532634993-15f421e42ec0?q=80&w=800&auto=format&fit=crop',
+  'aluminum-production': 'https://images.unsplash.com/photo-1565035010268-a3816f98589a?q=80&w=800&auto=format&fit=crop',
+  'mining-and-mineral-production': 'https://images.unsplash.com/photo-1504309092620-4d0ec726efa4?q=80&w=800&auto=format&fit=crop',
+  'pulp-paper-and-print': 'https://images.unsplash.com/photo-1453738773917-9c3eff1db985?q=80&w=800&auto=format&fit=crop',
+  'chemical-production': 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=800&auto=format&fit=crop',
+  'carbon-capture-storage': 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?q=80&w=800&auto=format&fit=crop',
+  'transport': 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop',
+  'waste-handling-and-disposal': 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&auto=format&fit=crop',
+  'agriculture-forestry-and-other-land-use-afolu': 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop',
+  'general-services': 'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=800&auto=format&fit=crop',
 }
+
+// Mock seed version for testing — must match a version in 03_seed_ef_catalog_releases.sql.
+const TEMPLATE_SEED_VERSION = 'TGO 1 กรกฎาคม 2569'
 
 const CATEGORY_TO_SCOPE_NAME_TH = {
   'Stationary Combustion': '1) การเผาไหม้อยู่กับที่ (Stationary combustion)',
@@ -71,29 +77,42 @@ function sqlBool(value) {
   return 'FALSE'
 }
 
-function buildTemplateInsert(industryRows) {
-  const values = industryRows.map((row) => {
+function buildIndustryCodeByLegacyId(industryRows) {
+  const map = new Map()
+  for (const row of industryRows) {
     const legacyId = Number(row['industry_id [PK]'])
-    const nameEn = row.name_en || ''
-    const industryCode = slugify(nameEn)
-    const imageUrl = FEATURE_IMAGE_BY_INDUSTRY_ID[legacyId] || null
-
-    return `  (${sqlInt(legacyId)}, ${sqlText(industryCode)}, ${sqlText(row.name_th)}, ${sqlText(nameEn)}, ${sqlText(row.examples)}, ${sqlBool(row.is_active)}, ${sqlText(imageUrl)}, ${sqlInt(legacyId)})`
-  })
-
-  return `INSERT INTO emission_templates (legacy_industry_id, industry_code, name_th, name_en, examples, is_active, feature_image_url, display_order)\nVALUES\n${values.join(',\n')}\nON CONFLICT (industry_code) DO UPDATE SET\n  legacy_industry_id = EXCLUDED.legacy_industry_id,\n  name_th = EXCLUDED.name_th,\n  name_en = EXCLUDED.name_en,\n  examples = EXCLUDED.examples,\n  is_active = EXCLUDED.is_active,\n  feature_image_url = EXCLUDED.feature_image_url,\n  display_order = EXCLUDED.display_order,\n  updated_at = NOW();`
+    const industryCode = slugify(row.name_en || '')
+    if (Number.isFinite(legacyId) && industryCode) {
+      map.set(legacyId, industryCode)
+    }
+  }
+  return map
 }
 
-function buildActivityGroupInsert(activityRows) {
+function buildTemplateInsert(industryRows) {
+  const values = industryRows.map((row) => {
+    const displayOrder = Number(row['industry_id [PK]'])
+    const nameEn = row.name_en || ''
+    const industryCode = slugify(nameEn)
+    const imageUrl = FEATURE_IMAGE_BY_INDUSTRY_CODE[industryCode] || null
+
+    return `  (${sqlText(industryCode)}, ${sqlText(row.name_th)}, ${sqlText(nameEn)}, ${sqlText(row.examples)}, ${sqlBool(row.is_active)}, ${sqlText(imageUrl)}, ${sqlInt(displayOrder)})`
+  })
+
+  return `INSERT INTO emission_templates (industry_code, name_th, name_en, examples, is_active, feature_image_url, display_order)\nVALUES\n${values.join(',\n')}\nON CONFLICT (industry_code) DO UPDATE SET\n  name_th = EXCLUDED.name_th,\n  name_en = EXCLUDED.name_en,\n  examples = EXCLUDED.examples,\n  is_active = EXCLUDED.is_active,\n  feature_image_url = EXCLUDED.feature_image_url,\n  display_order = EXCLUDED.display_order,\n  updated_at = NOW();`
+}
+
+function buildActivityGroupInsert(activityRows, industryCodeByLegacyId) {
   const values = activityRows.map((row) => {
     const categoryLabel = (row.category || '').trim()
     const targetScopeNameTh = CATEGORY_TO_SCOPE_NAME_TH[categoryLabel] || null
     const scopeSubCategory = (row.subcategory || '').trim() || null
+    const industryCode = industryCodeByLegacyId.get(Number(row['industry_id [FK]'])) || ''
 
-    return `  (${sqlInt(row['industry_id [FK]'])}, ${sqlInt(row['activity_group_id [PK]'])}, ${sqlText(row.name_th)}, ${sqlText(row.name_en)}, ${sqlInt(row.scope)}, ${sqlText(targetScopeNameTh)}, ${sqlText(scopeSubCategory)}, ${sqlBool(row.is_common)}, ${sqlInt(row.sort_order)}, ${sqlText((row.status || 'active').toLowerCase())})`
+    return `  (${sqlText(industryCode)}, ${sqlText(row.name_th)}, ${sqlText(row.name_en)}, ${sqlInt(row.scope)}, ${sqlText(targetScopeNameTh)}, ${sqlText(scopeSubCategory)}, ${sqlBool(row.is_common)}, ${sqlInt(row.sort_order)}, ${sqlText((row.status || 'active').toLowerCase())}, ${sqlText(TEMPLATE_SEED_VERSION)})`
   })
 
-  return `INSERT INTO template_activity_groups (\n  template_id,\n  legacy_activity_group_id,\n  name_th,\n  name_en,\n  scope,\n  scope_category_id,\n  scope_sub_category,\n  is_common,\n  sort_order,\n  status\n)\nSELECT\n  et.id,\n  v.legacy_activity_group_id,\n  v.name_th,\n  v.name_en,\n  v.scope,\n  sc.id,\n  v.scope_sub_category,\n  v.is_common,\n  v.sort_order,\n  v.status\nFROM (\nVALUES\n${values.join(',\n')}\n) AS v(\n  legacy_industry_id,\n  legacy_activity_group_id,\n  name_th,\n  name_en,\n  scope,\n  target_scope_name_th,\n  scope_sub_category,\n  is_common,\n  sort_order,\n  status\n)\nJOIN emission_templates et ON et.legacy_industry_id = v.legacy_industry_id\nLEFT JOIN scope_categories sc ON sc.name_th = v.target_scope_name_th\nON CONFLICT (template_id, legacy_activity_group_id) WHERE legacy_activity_group_id IS NOT NULL DO UPDATE SET\n  name_th = EXCLUDED.name_th,\n  name_en = EXCLUDED.name_en,\n  scope = EXCLUDED.scope,\n  scope_category_id = EXCLUDED.scope_category_id,\n  scope_sub_category = EXCLUDED.scope_sub_category,\n  is_common = EXCLUDED.is_common,\n  sort_order = EXCLUDED.sort_order,\n  status = EXCLUDED.status,\n  updated_at = NOW();`
+  return `INSERT INTO template_activity_groups (\n  template_id,\n  name_th,\n  name_en,\n  scope,\n  scope_category_id,\n  scope_sub_category,\n  is_common,\n  sort_order,\n  status,\n  version\n)\nSELECT\n  et.id,\n  v.name_th,\n  v.name_en,\n  v.scope,\n  sc.id,\n  v.scope_sub_category,\n  v.is_common,\n  v.sort_order,\n  v.status,\n  v.version\nFROM (\nVALUES\n${values.join(',\n')}\n) AS v(\n  industry_code,\n  name_th,\n  name_en,\n  scope,\n  target_scope_name_th,\n  scope_sub_category,\n  is_common,\n  sort_order,\n  status,\n  version\n)\nJOIN emission_templates et ON et.industry_code = v.industry_code\nLEFT JOIN scope_categories sc ON sc.name_th = v.target_scope_name_th\nON CONFLICT (template_id, name_en, version) DO UPDATE SET\n  name_th = EXCLUDED.name_th,\n  scope = EXCLUDED.scope,\n  scope_category_id = EXCLUDED.scope_category_id,\n  scope_sub_category = EXCLUDED.scope_sub_category,\n  is_common = EXCLUDED.is_common,\n  sort_order = EXCLUDED.sort_order,\n  status = EXCLUDED.status,\n  updated_at = NOW();`
 }
 
 function main() {
@@ -101,28 +120,33 @@ function main() {
   const industryRows = XLSX.utils.sheet_to_json(wb.Sheets.Industry, { defval: '' })
   const activityRowsRaw = XLSX.utils.sheet_to_json(wb.Sheets.ActivityGroup, { defval: '' })
   const activityRows = activityRowsRaw.filter((r) => /^[0-9]+$/.test(String(r['activity_group_id [PK]']).trim()))
+  const industryCodeByLegacyId = buildIndustryCodeByLegacyId(industryRows)
 
   const sql = `-- =============================================================================
 -- 04_seed_emission_templates_and_activity_groups.sql
+-- Reseed emission templates + activity groups from scratch (idempotent upserts).
+--
 -- Run after:
---   01_schema.sql
---   02_seed_master_data.sql
---   03_seed_ef_catalog_releases.sql
---   dataprep/ef-catalog/generated/01_scope_categories.sql (+ fuel SQL as needed)
+--   New DB: 01_schema.sql + 02_seed_master_data.sql + 03_seed_ef_catalog_releases.sql
+--           + dataprep/ef-catalog/generated/01_scope_categories.sql (+ fuel SQL as needed)
+--   Existing DB: migrate_reset_emission_templates.sql (DROP/CREATE tables), then this file
+--
 -- Source: dataprep/Emission Templates 13 Industries.xlsx
+-- Activity groups mocked onto version: ${TEMPLATE_SEED_VERSION}
+-- Regenerate: node dataprep/generate_emission_templates_seed.js
 -- =============================================================================
 
 -- ─── EMISSION TEMPLATES ───────────────────────────────────────────────────────
 ${buildTemplateInsert(industryRows)}
 
 -- ─── TEMPLATE ACTIVITY GROUPS ────────────────────────────────────────────────
-${buildActivityGroupInsert(activityRows)}
+${buildActivityGroupInsert(activityRows, industryCodeByLegacyId)}
 
 -- =============================================================================
 `
 
   fs.writeFileSync(OUTPUT_PATH, sql, 'utf8')
-  console.log(`Generated ${OUTPUT_PATH} with ${industryRows.length} templates and ${activityRows.length} activity groups`)
+  console.log(`Generated ${OUTPUT_PATH} with ${industryRows.length} templates and ${activityRows.length} activity groups (version ${TEMPLATE_SEED_VERSION})`)
 }
 
 main()

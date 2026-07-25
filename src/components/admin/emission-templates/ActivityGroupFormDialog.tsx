@@ -24,7 +24,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
-import type { ScopeCategory } from '@/types/emission-resources'
+import type { EfCatalogRelease, ScopeCategory } from '@/types/emission-resources'
 import type { TemplateActivityGroupWithRelations } from '@/types/emission-templates'
 
 interface ActivityGroupFormValues {
@@ -36,6 +36,7 @@ interface ActivityGroupFormValues {
   is_common: boolean
   sort_order: number
   status: 'active' | 'inactive'
+  version: string
 }
 
 interface FuelResourceMapping {
@@ -53,6 +54,7 @@ interface SavePayload {
   is_common: boolean
   sort_order: number
   status: string
+  version: string
   fuel_resource_mappings?: FuelResourceMapping[]
 }
 
@@ -63,6 +65,8 @@ interface Props {
   editTarget: TemplateActivityGroupWithRelations | null
   templateId: string
   categories: ScopeCategory[]
+  versions: EfCatalogRelease[]
+  defaultVersion?: string
 }
 
 export default function ActivityGroupFormDialog({
@@ -72,6 +76,8 @@ export default function ActivityGroupFormDialog({
   editTarget,
   templateId,
   categories,
+  versions,
+  defaultVersion,
 }: Props) {
   const [subCategories, setSubCategories] = useState<string[]>([])
   const [loadingSubCategories, setLoadingSubCategories] = useState(false)
@@ -89,16 +95,18 @@ export default function ActivityGroupFormDialog({
       is_common: false,
       sort_order: 0,
       status: 'active',
+      version: defaultVersion ?? '',
     },
   })
 
   const scope = watch('scope')
   const scopeCategoryId = watch('scope_category_id')
   const scopeSubCategory = watch('scope_sub_category')
+  const version = watch('version')
 
   const filteredCategories = categories.filter((c) => c.scope === scope)
 
-  const fetchFuelResources = useCallback(async (categoryId: string, subCategory?: string) => {
+  const fetchFuelResources = useCallback(async (categoryId: string, subCategory?: string, forVersion?: string) => {
     if (!categoryId) {
       setFuelResources([])
       return
@@ -107,6 +115,7 @@ export default function ActivityGroupFormDialog({
     try {
       const params = new URLSearchParams({ scope_category_id: categoryId })
       if (subCategory) params.set('sub_category', subCategory)
+      if (forVersion) params.set('version', forVersion)
       const res = await fetch(`/api/fuel-resources/by-category?${params}`)
       if (!res.ok) throw new Error('Failed to fetch fuel resources')
       const json = await res.json()
@@ -155,10 +164,11 @@ export default function ActivityGroupFormDialog({
         is_common: !!editTarget.is_common,
         sort_order: editTarget.sort_order ?? 0,
         status: editTarget.status ?? 'active',
+        version: editTarget.version ?? defaultVersion ?? '',
       })
       if (editTarget.scope_category_id) {
         fetchSubCategories(editTarget.scope_category_id)
-        fetchFuelResources(editTarget.scope_category_id, editTarget.scope_sub_category ?? undefined)
+        fetchFuelResources(editTarget.scope_category_id, editTarget.scope_sub_category ?? undefined, editTarget.version ?? defaultVersion)
         const map: Record<string, string> = {}
         for (const m of editTarget.fuel_resource_mappings ?? []) {
           map[m.fuel_resource_id] = m.note ?? ''
@@ -179,12 +189,13 @@ export default function ActivityGroupFormDialog({
         is_common: false,
         sort_order: 0,
         status: 'active',
+        version: defaultVersion ?? '',
       })
       setSubCategories([])
       setFuelResources([])
       setSelectedMappings({})
     }
-  }, [open, editTarget, reset, fetchSubCategories, fetchFuelResources])
+  }, [open, editTarget, defaultVersion, reset, fetchSubCategories, fetchFuelResources])
 
   useEffect(() => {
     if (scopeCategoryId) {
@@ -199,13 +210,13 @@ export default function ActivityGroupFormDialog({
   useEffect(() => {
     if (scopeCategoryId) {
       fetchSubCategories(scopeCategoryId)
-      fetchFuelResources(scopeCategoryId, scopeSubCategory || undefined)
+      fetchFuelResources(scopeCategoryId, scopeSubCategory || undefined, version || undefined)
     } else {
       setSubCategories([])
       setFuelResources([])
       setSelectedMappings({})
     }
-  }, [scopeCategoryId, scopeSubCategory, fetchSubCategories, fetchFuelResources])
+  }, [scopeCategoryId, scopeSubCategory, version, fetchSubCategories, fetchFuelResources])
 
   const showSubCategory = subCategories.length > 0
 
@@ -240,6 +251,7 @@ export default function ActivityGroupFormDialog({
       is_common: values.is_common,
       sort_order: values.sort_order,
       status: values.status,
+      version: values.version,
       fuel_resource_mappings,
     })
   }
@@ -294,6 +306,37 @@ export default function ActivityGroupFormDialog({
                       />
                     )}
                   />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            {/* Catalog Version */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                Catalog Version
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name="version"
+                    control={control}
+                    rules={{ required: 'Catalog version is required' }}
+                    render={({ field }) => (
+                      <FormControl fullWidth size="small" error={!!errors.version}>
+                        <InputLabel>Version</InputLabel>
+                        <Select {...field} label="Version">
+                          {versions.map((rel) => (
+                            <MenuItem key={rel.version} value={rel.version}>
+                              {rel.version}{rel.is_default ? ' (default)' : ''}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                  <Typography variant="caption" color="text.secondary">
+                    Fuel resource mapping below is scoped to this catalog version.
+                  </Typography>
                 </Grid>
               </Grid>
             </Grid>

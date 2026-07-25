@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'scope_category_id is required' }, { status: 400 })
     }
     const subCategory = searchParams.get('sub_category') ?? undefined
-    const data = await getFuelResourcesByCategory(scopeCategoryId, subCategory)
+    const version = searchParams.get('version') ?? undefined
+    const data = await getFuelResourcesByCategory(scopeCategoryId, subCategory, version)
     return NextResponse.json({ data })
   } catch (error) {
     console.error('GET /api/fuel-resources/by-category error:', error)

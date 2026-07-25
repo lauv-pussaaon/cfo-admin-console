@@ -4,6 +4,8 @@
 --   -> 03_seed_ef_catalog_releases.sql -> dataprep/ef-catalog/generated/*
 --   -> 04_seed_emission_templates_and_activity_groups.sql
 --   -> 05_seed_organizations_ideaday.sql / 06_seed_notification_recipients.sql
+-- Existing DBs (template tables only): migrate_reset_emission_templates.sql
+--   then 04_seed_emission_templates_and_activity_groups.sql
 
 -- ===========================================
 -- PART 1: CREATE EXTENSIONS
@@ -243,7 +245,6 @@ CREATE TABLE ef_catalog_releases (
 -- Emission templates (industry templates)
 CREATE TABLE emission_templates (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  legacy_industry_id INTEGER UNIQUE,
   industry_code TEXT UNIQUE NOT NULL,
   name_th TEXT NOT NULL,
   name_en TEXT NOT NULL,
@@ -258,10 +259,12 @@ CREATE TABLE emission_templates (
 );
 
 -- Template activity groups
+-- version: soft-linked to ef_catalog_releases.version (free text, no FK — same convention
+-- as fuel_resources.version). Each EF catalog version has its own activity-group list per
+-- industry template.
 CREATE TABLE template_activity_groups (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   template_id UUID NOT NULL REFERENCES emission_templates(id) ON DELETE CASCADE,
-  legacy_activity_group_id INTEGER,
   name_th TEXT NOT NULL,
   name_en TEXT NOT NULL,
   scope INTEGER CHECK (scope IN (1, 2, 3, 4)),
@@ -270,6 +273,7 @@ CREATE TABLE template_activity_groups (
   is_common BOOLEAN NOT NULL DEFAULT FALSE,
   sort_order INTEGER NOT NULL DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+  version TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   deleted_at TIMESTAMPTZ
@@ -380,14 +384,16 @@ CREATE INDEX idx_emission_templates_display_order ON emission_templates(display_
 CREATE INDEX idx_emission_templates_deleted_at ON emission_templates(deleted_at) WHERE deleted_at IS NULL;
 
 -- Template activity groups indexes
-CREATE UNIQUE INDEX idx_template_activity_groups_template_legacy
-  ON template_activity_groups(template_id, legacy_activity_group_id);
+CREATE UNIQUE INDEX idx_template_activity_groups_template_name_version
+  ON template_activity_groups(template_id, name_en, version);
 CREATE INDEX idx_template_activity_groups_template_sort
   ON template_activity_groups(template_id, sort_order);
 CREATE INDEX idx_template_activity_groups_scope_category
   ON template_activity_groups(scope, scope_category_id);
 CREATE INDEX idx_template_activity_groups_deleted_at
   ON template_activity_groups(deleted_at) WHERE deleted_at IS NULL;
+CREATE INDEX idx_template_activity_groups_version
+  ON template_activity_groups(version);
 
 -- Template activity group fuel mappings indexes
 CREATE INDEX idx_tagfr_activity_group ON template_activity_group_fuel_resources(template_activity_group_id);

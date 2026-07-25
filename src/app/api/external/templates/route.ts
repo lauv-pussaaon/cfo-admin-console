@@ -8,9 +8,12 @@ export async function OPTIONS (request: NextRequest) {
 }
 
 /**
- * GET /api/external/templates?industry_code=xxx&is_active=true
- * Returns emission templates with full hierarchy: activity groups and mapped fuel resources.
+ * GET /api/external/templates?industry_code=xxx&is_active=true&version=xxx
+ * Returns emission templates with full hierarchy: activity groups and mapped fuel resources,
+ * scoped to one EF catalog version (activity groups are version-specific). When `version` is
+ * omitted, falls back to the default published ef_catalog_releases version.
  * Called by client apps (e.g. org-app) to add emission records from templates by industry.
+ * See GET /api/external/templates/versions for the list of available versions.
  */
 export async function GET (request: NextRequest) {
   try {
@@ -19,10 +22,12 @@ export async function GET (request: NextRequest) {
     const industry_code = searchParams.get('industry_code') ?? undefined
     const isActiveParam = searchParams.get('is_active')
     const is_active = isActiveParam == null ? true : isActiveParam === 'true'
+    const version = searchParams.get('version') ?? undefined
 
     const data = await getEmissionTemplatesWithFullHierarchy({
       industry_code,
       is_active,
+      version,
     })
 
     const headers = createCorsHeaders(origin)

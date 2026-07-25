@@ -270,10 +270,11 @@ export async function softDeleteFuelResource(id: string) {
   return data as FuelResource
 }
 
-/** Get all fuel resources for a scope category (and optionally sub_category). No pagination. */
+/** Get all fuel resources for a scope category (and optionally sub_category / catalog version). No pagination. */
 export async function getFuelResourcesByCategory(
   scopeCategoryId: string,
-  subCategory?: string | null
+  subCategory?: string | null,
+  version?: string | null
 ): Promise<FuelResourceWithCategory[]> {
   let query = supabase
     .from('fuel_resources')
@@ -283,6 +284,9 @@ export async function getFuelResourcesByCategory(
     .order('resource', { ascending: true })
   if (subCategory) {
     query = query.eq('sub_category', subCategory)
+  }
+  if (version) {
+    query = query.eq('version', version)
   }
   const { data, error } = await query
   if (error) throw error
