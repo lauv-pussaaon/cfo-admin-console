@@ -182,8 +182,15 @@ function EmissionResourcesPage () {
       )
     }
 
-    // Keep non-default version in the URL when other filters are present.
-    if (!next.get('version') && catalogVersion && catalogVersion !== defaultVersion) {
+    // When other filters change, keep a non-default version in the URL.
+    // Skip when this patch sets version — otherwise selecting the default tab
+    // clears `version` and this would re-inject the previous non-default.
+    if (
+      !('version' in patch) &&
+      !next.get('version') &&
+      catalogVersion &&
+      catalogVersion !== defaultVersion
+    ) {
       next.set('version', catalogVersion)
     }
 

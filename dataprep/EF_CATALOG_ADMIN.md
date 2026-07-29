@@ -14,7 +14,7 @@ Version strings are free text on `fuel_resources.version` / `ef_catalog_releases
 | `พฤษภาคม 2569` | May 2569 spreadsheet catalog (UUID v5 IDs) |
 | `TGO พฤษภาคม 2569` | TGO CFO/CFP catalog (renamed from historical `TGO API` / `TGO May 2569`) |
 
-Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Tabs sort by `ef_catalog_releases.order_index` ascending (10 กุมภาพันธ์ → 20 พฤษภาคม → 30 TGO พฤษภาคม → 40 TGO 1 กรกฎาคม). Default tab is the release with `is_default = true` (omitted from the query when selected). Clients persist `is_default` + `order_index` on `ef_catalog_sync_state` during sync.
+Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id`, `search`, `page`, `per_page`. Tabs sort by `ef_catalog_releases.order_index` ascending (10 กุมภาพันธ์ → 20 พฤษภาคม → 30 TGO พฤษภาคม → 40 TGO 1 กรกฎาคม). Default tab is the release with `is_default = true` (omitted from the query when selected). Changing other filters must not re-inject a prior non-default `version` when the user explicitly selects the default tab. Clients persist `is_default` + `order_index` on `ef_catalog_sync_state` during sync.
 
 ## Schema (baseline only)
 
@@ -63,15 +63,15 @@ Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
 
 `GET /api/scope-category-links` returns hardcoded rules (no DB):
 
-| Rule | Source | Dest category UUID |
-|------|--------|--------------------|
-| `scope_1_2_to_cat3` | Scope 1 or 2 | Cat 3 `a1000003-0003-4003-8003-000000000009` |
-| `scope_1_to_scope4` | Scope 1 | Scope 4 Energy Usage Reporting `…000014` (in addition to Cat 3) |
-| `cat1_to_cat4` | Cat 1 `…000007` | Scope 3 Cat 4 `…00000a` |
+| Rule | Source | Dest category UUID | `enableFactor` |
+|------|--------|--------------------|----------------|
+| `scope_1_2_to_cat3` | Scope 1 or 2 | Cat 3 `a1000003-0003-4003-8003-000000000009` | true |
+| `scope_1_to_scope4` | Scope 1 | Scope 4 Energy Usage Reporting `…000014` (in addition to Cat 3) | true |
+| `cat1_to_cat4` | Cat 1 `…000007` | Scope 3 Cat 4 `…00000a` | false |
 
 Constants: `src/lib/constants/scope-category-links.ts`.
 
-Clients use the same UUIDs locally; users pick dest fuel + conversion factor when creating/editing emissions.
+Clients use the same UUIDs locally; users pick dest fuel (+ conversion factor when `enableFactor` is true; Cat1→Cat4 always factor `1`).
 
 ## Publish + inline edit + Excel import/export
 

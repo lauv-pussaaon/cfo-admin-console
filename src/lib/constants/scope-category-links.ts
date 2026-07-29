@@ -10,6 +10,7 @@ export type ScopeCategoryLinkRule = {
   source_scope_category_ids?: string[]
   dest_scope_category_id: string
   is_linked_cat1: boolean
+  enableFactor: boolean
 }
 
 /** Fixed source→dest category rules (no DB). */
@@ -19,18 +20,21 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     source_scopes: [1, 2],
     dest_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
     is_linked_cat1: false,
+    enableFactor: true,
   },
   {
     id: 'scope_1_to_scope4',
     source_scopes: [1],
     dest_scope_category_id: SCOPE4_ENERGY_REPORTING_ID,
     is_linked_cat1: false,
+    enableFactor: true,
   },
   {
     id: 'cat1_to_cat4',
     source_scope_category_ids: [SCOPE_CAT1_PURCHASED_GOODS_ID],
     dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
     is_linked_cat1: true,
+    enableFactor: false,
   },
 ]
 
