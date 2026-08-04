@@ -47,13 +47,17 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
   },
 ]
 
-export const SUPPORT_NAV_ITEMS: AdminNavItem[] = [
-  {
-    title: 'ลูกค้า',
-    description: 'ดูรายการองค์กรที่ได้รับมอบหมาย',
-    path: '/admin-console',
-  },
-]
+export const SUPPORT_NAV_PATHS = [
+  '/admin-console',
+  '/admin-console/organizations',
+  '/admin-console/trial-requests',
+  '/admin-console/support-clients',
+] as const
+
+export const CONSULT_AUDIT_NAV_PATHS = [
+  '/admin-console',
+  '/admin-console/organizations',
+] as const
 
 export const ADMIN_SETTINGS_NAV_ITEM: AdminNavItem = {
   title: 'การตั้งค่าการแจ้งเตือน',
@@ -63,4 +67,18 @@ export const ADMIN_SETTINGS_NAV_ITEM: AdminNavItem = {
 
 export function getAdminNavItemByPath (path: string): AdminNavItem | undefined {
   return ADMIN_DASHBOARD_NAV_ITEMS.find((item) => item.path === path)
+}
+
+function filterNavByPaths (paths: readonly string[]): AdminNavItem[] {
+  const allowed = new Set(paths)
+  return ADMIN_DASHBOARD_NAV_ITEMS.filter((item) => allowed.has(item.path))
+}
+
+export function getDashboardNavItemsForRole (role: string | undefined | null): AdminNavItem[] {
+  if (role === 'Admin') return ADMIN_DASHBOARD_NAV_ITEMS
+  if (role === 'Support') return filterNavByPaths(SUPPORT_NAV_PATHS)
+  if (role === 'Consult' || role === 'Audit' || role === 'Dealer') {
+    return filterNavByPaths(CONSULT_AUDIT_NAV_PATHS)
+  }
+  return []
 }

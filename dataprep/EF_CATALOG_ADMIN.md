@@ -63,15 +63,16 @@ Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
 
 `GET /api/scope-category-links` returns hardcoded rules (no DB):
 
-| Rule | Source | Dest category UUID | `enableFactor` |
-|------|--------|--------------------|----------------|
-| `scope_1_2_to_cat3` | Scope 1 or 2 | Cat 3 `a1000003-0003-4003-8003-000000000009` | true |
-| `scope_1_to_scope4` | Scope 1 | Scope 4 Energy Usage Reporting `…000014` (in addition to Cat 3) | true |
-| `cat1_to_cat4` | Cat 1 `…000007` | Scope 3 Cat 4 `…00000a` | false |
+| Rule | Source | Dest (fuel) | `save_as` (report) | `enableFactor` |
+|------|--------|-------------|--------------------|----------------|
+| `scope_1_2_to_cat3` | Scope 1 or 2 | Cat 3 `…000009` | same | true |
+| `scope_1_to_scope4` | Scope 1 | Scope 4 `…000014` | same | true |
+| `cat1_to_cat4` | Cat 1 `…000007` | Cat 4 `…00000a` | same | false |
+| `cat5_to_cat4` | Cat 5 `…00000b` | Cat 4 `…00000a` | Cat 5 | true |
 
 Constants: `src/lib/constants/scope-category-links.ts`.
 
-Clients use the same UUIDs locally; users pick dest fuel (+ conversion factor when `enableFactor` is true; Cat1→Cat4 always factor `1`).
+Clients use the same UUIDs locally; users pick dest fuel (+ conversion factor when `enableFactor` is true; Cat1→Cat4 always factor `1`). Cat5→Cat4 stores reporting category as Cat 5 and fuel category on `origin_scope_category_id`.
 
 ## Publish + inline edit + Excel import/export
 

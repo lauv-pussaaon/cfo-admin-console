@@ -2,6 +2,7 @@
 export const SCOPE_CAT1_PURCHASED_GOODS_ID = 'a1000003-0003-4003-8003-000000000007'
 export const SCOPE_CAT3_FUEL_ENERGY_ID = 'a1000003-0003-4003-8003-000000000009'
 export const SCOPE_CAT4_UPSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000a'
+export const SCOPE_CAT5_WASTE_ID = 'a1000003-0003-4003-8003-00000000000b'
 export const SCOPE4_ENERGY_REPORTING_ID = 'a1000004-0004-4004-8004-000000000014'
 
 export type ScopeCategoryLinkRule = {
@@ -9,6 +10,8 @@ export type ScopeCategoryLinkRule = {
   source_scopes?: number[]
   source_scope_category_ids?: string[]
   dest_scope_category_id: string
+  /** Reporting category written to annual_emissions.scope_category_id (usually = dest). */
+  save_as_scope_category_id: string
   is_linked_cat1: boolean
   enableFactor: boolean
 }
@@ -19,6 +22,7 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     id: 'scope_1_2_to_cat3',
     source_scopes: [1, 2],
     dest_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
+    save_as_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
     is_linked_cat1: false,
     enableFactor: true,
   },
@@ -26,6 +30,7 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     id: 'scope_1_to_scope4',
     source_scopes: [1],
     dest_scope_category_id: SCOPE4_ENERGY_REPORTING_ID,
+    save_as_scope_category_id: SCOPE4_ENERGY_REPORTING_ID,
     is_linked_cat1: false,
     enableFactor: true,
   },
@@ -33,8 +38,17 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     id: 'cat1_to_cat4',
     source_scope_category_ids: [SCOPE_CAT1_PURCHASED_GOODS_ID],
     dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
+    save_as_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
     is_linked_cat1: true,
     enableFactor: false,
+  },
+  {
+    id: 'cat5_to_cat4',
+    source_scope_category_ids: [SCOPE_CAT5_WASTE_ID],
+    dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
+    save_as_scope_category_id: SCOPE_CAT5_WASTE_ID,
+    is_linked_cat1: false,
+    enableFactor: true,
   },
 ]
 

@@ -48,6 +48,10 @@ export function canAccessSupportChat (user: User | null): boolean {
   return isAdmin(user) || isSupport(user)
 }
 
+export function canAccessTrialRequests (user: User | null): boolean {
+  return isAdmin(user) || isSupport(user)
+}
+
 /**
  * Check if user can manage organizations
  * Admin, Dealer, Consult, and Audit can manage organizations

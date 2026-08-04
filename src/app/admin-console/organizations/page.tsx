@@ -36,7 +36,7 @@ import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter, type AccountTypeFilter } from '@/hooks/useOrganizationsFilter'
-import { shouldFilterOrganizationsByAssignment, isDealer, isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
+import { isDealer, isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
 
@@ -74,12 +74,6 @@ export default function AdminConsoleOrganizationsPage() {
     }
   }, [user, authLoading, router])
 
-  useEffect(() => {
-    if (!authLoading && user && isSupport(user)) {
-      router.replace('/admin-console')
-    }
-  }, [user, authLoading, router])
-
   // Load organizations
   useEffect(() => {
     if (user) {
@@ -94,8 +88,7 @@ export default function AdminConsoleOrganizationsPage() {
       setLoading(true)
       let data: (OrganizationWithStats | OrganizationWithCreator)[]
       
-      if (isAdmin(user)) {
-        // Admin sees all organizations with creator info
+      if (isAdmin(user) || isSupport(user)) {
         data = await organizationService.getOrganizationsForAdmin()
       } else if (isDealer(user)) {
         // Dealer sees only assigned organizations
@@ -254,10 +247,6 @@ export default function AdminConsoleOrganizationsPage() {
     )
   }
 
-  if (user && isSupport(user)) {
-    return null
-  }
-
   return (
     <Box sx={{ py: 2, width: '100%', px: 3 }}>
       <Link href="/admin-console" style={{ textDecoration: 'none' }}>
@@ -270,7 +259,11 @@ export default function AdminConsoleOrganizationsPage() {
       </Link>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Typography variant="h4" fontWeight="bold">
-          {isDealer(user) ? 'องค์กรที่ดูแล' : isConsult(user) || isAudit(user) ? 'องค์กรที่ดูแล' : isAdmin(user) ? 'จัดการลูกค้า (Admin)' : 'จัดการลูกค้า'}
+          {isDealer(user) || isConsult(user) || isAudit(user)
+            ? 'องค์กรที่ดูแล'
+            : isAdmin(user)
+              ? 'จัดการลูกค้า (Admin)'
+              : 'จัดการลูกค้า'}
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           {/* Display invite hashcode for Consult/Audit */}
@@ -348,13 +341,13 @@ export default function AdminConsoleOrganizationsPage() {
       </Typography>
 
       <OrganizationsTable
-        variant={isAdmin(user) ? 'admin' : 'dealer'}
+        variant={isAdmin(user) || isSupport(user) ? 'admin' : 'dealer'}
         data={filteredOrganizations}
         loading={loading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onExport={isAdmin(user) ? undefined : handleExportOrganization}
-        onInvite={isAdmin(user) ? undefined : handleInvite}
+        onEdit={canManageOrganizations(user) ? handleEdit : undefined}
+        onDelete={canManageOrganizations(user) ? handleDelete : undefined}
+        onExport={canManageOrganizations(user) && !isAdmin(user) ? handleExportOrganization : undefined}
+        onInvite={canManageOrganizations(user) && !isAdmin(user) ? handleInvite : undefined}
         onViewDetail={handleViewDetail}
         onRowClick={handleViewDetail}
       />

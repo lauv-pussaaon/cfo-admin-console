@@ -28,7 +28,7 @@ import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { trialRequestService, userService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
-import { isAdmin } from '@/lib/permissions'
+import { canAccessTrialRequests } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
 import type {
   OrganizationTrialRequest,
@@ -94,7 +94,7 @@ export default function TrialRequestDetailPage () {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
-    if (!authLoading && user && !isAdmin(user)) {
+    if (!authLoading && user && !canAccessTrialRequests(user)) {
       router.replace('/admin-console')
     }
   }, [user, authLoading, router])
@@ -136,7 +136,7 @@ export default function TrialRequestDetailPage () {
   }, [requestId])
 
   useEffect(() => {
-    if (user && isAdmin(user)) {
+    if (user && canAccessTrialRequests(user)) {
       load()
     }
   }, [user, load])
@@ -219,7 +219,7 @@ export default function TrialRequestDetailPage () {
     )
   }
 
-  if (!user || !isAdmin(user)) {
+  if (!user || !canAccessTrialRequests(user)) {
     return null
   }
 

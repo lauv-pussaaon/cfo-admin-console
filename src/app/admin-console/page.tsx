@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
@@ -9,16 +9,20 @@ import {
   Analytics as AnalyticsIcon,
   SupportAgent as SupportAgentIcon,
   HowToReg as HowToRegIcon,
+  Science as ScienceIcon,
+  ViewModule as ViewModuleIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
-import { canManageOrganizations, isAdmin, isConsult, isAudit, isSupport } from '@/lib/permissions'
-import { getAdminNavItemByPath } from '@/constants/admin-console-nav'
-import SupportClientsDashboard from '@/components/admin/SupportClientsDashboard'
+import { getAdminNavItemByPath, getDashboardNavItemsForRole } from '@/constants/admin-console-nav'
 
-interface DashboardCardConfig {
-  path: string
-  icon: React.ReactNode
-  visible: boolean
+const CARD_ICONS: Record<string, React.ReactNode> = {
+  '/admin-console/organizations': <BusinessIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/trial-requests': <HowToRegIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/support-clients': <SupportAgentIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/users': <PeopleIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/analytics': <AnalyticsIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/emission-resources': <ScienceIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/emission-templates': <ViewModuleIcon sx={{ fontSize: 48 }} />,
 }
 
 function DashboardCard ({
@@ -62,42 +66,14 @@ export default function AdminConsolePage () {
   const { user, isLoading } = useAuth()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!isLoading && user && (isConsult(user) || isAudit(user))) {
-      router.push('/admin-console/organizations')
-    }
-  }, [user, isLoading, router])
-
-  const cards = useMemo((): DashboardCardConfig[] => {
+  const cards = useMemo(() => {
     if (!user) return []
-
-    return [
-      {
-        path: '/admin-console/organizations',
-        icon: <BusinessIcon sx={{ fontSize: 48 }} />,
-        visible: canManageOrganizations(user),
-      },
-      {
-        path: '/admin-console/support-clients',
-        icon: <SupportAgentIcon sx={{ fontSize: 48 }} />,
-        visible: isAdmin(user),
-      },
-      {
-        path: '/admin-console/trial-requests',
-        icon: <HowToRegIcon sx={{ fontSize: 48 }} />,
-        visible: isAdmin(user),
-      },
-      {
-        path: '/admin-console/users',
-        icon: <PeopleIcon sx={{ fontSize: 48 }} />,
-        visible: isAdmin(user),
-      },
-      {
-        path: '/admin-console/analytics',
-        icon: <AnalyticsIcon sx={{ fontSize: 48 }} />,
-        visible: isAdmin(user),
-      },
-    ]
+    return getDashboardNavItemsForRole(user.role)
+      .filter((item) => item.path !== '/admin-console')
+      .map((item) => ({
+        path: item.path,
+        icon: CARD_ICONS[item.path] ?? <BusinessIcon sx={{ fontSize: 48 }} />,
+      }))
   }, [user])
 
   if (isLoading) {
@@ -115,14 +91,6 @@ export default function AdminConsolePage () {
     )
   }
 
-  if (user && isSupport(user)) {
-    return <SupportClientsDashboard />
-  }
-
-  if (user && (isConsult(user) || isAudit(user))) {
-    return null
-  }
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
@@ -135,23 +103,21 @@ export default function AdminConsolePage () {
       </Box>
 
       <Grid container spacing={3}>
-        {cards
-          .filter((card) => card.visible)
-          .map((card) => {
-            const navItem = getAdminNavItemByPath(card.path)
-            if (!navItem) return null
+        {cards.map((card) => {
+          const navItem = getAdminNavItemByPath(card.path)
+          if (!navItem) return null
 
-            return (
-              <Grid item xs={12} sm={6} md={4} key={card.path}>
-                <DashboardCard
-                  title={navItem.title}
-                  description={navItem.description}
-                  icon={card.icon}
-                  onClick={() => router.push(card.path)}
-                />
-              </Grid>
-            )
-          })}
+          return (
+            <Grid item xs={12} sm={6} md={4} key={card.path}>
+              <DashboardCard
+                title={navItem.title}
+                description={navItem.description}
+                icon={card.icon}
+                onClick={() => router.push(card.path)}
+              />
+            </Grid>
+          )
+        })}
       </Grid>
     </Container>
   )

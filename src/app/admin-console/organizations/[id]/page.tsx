@@ -123,7 +123,7 @@ export default function OrganizationDetailPage () {
     <Box sx={{ py: 2, width: '100%', maxWidth: 960 }}>
       <Button
         component={Link}
-        href={isSupport(user) ? '/admin-console' : '/admin-console/organizations'}
+        href="/admin-console/organizations"
         startIcon={<ArrowBack />}
         sx={{ mb: 2, textTransform: 'none' }}
       >

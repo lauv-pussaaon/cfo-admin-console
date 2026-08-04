@@ -5,23 +5,14 @@
  */
 export type UserRole =
   | 'Admin'
-  | 'Dealer'
   | 'Consult'
   | 'Audit'
   | 'Support'
 
 /**
- * Legacy roles (for backward compatibility)
- */
-export type LegacyUserRole =
-  | 'project_owner'
-  | 'consultant'
-  | 'project_staff'
-
-/**
  * All possible user roles (current + legacy)
  */
-export type AllUserRole = UserRole | LegacyUserRole
+export type AllUserRole = UserRole
 
 /**
  * Role option for UI components
@@ -36,9 +27,8 @@ export interface RoleOption {
  */
 export const ROLE_OPTIONS: RoleOption[] = [
   { value: 'Admin', label: 'ผู้ดูแลระบบ' },
-  { value: 'Dealer', label: 'ตัวแทนจำหน่าย' },
   { value: 'Consult', label: 'ที่ปรึกษา' },
-  { value: 'Audit', label: 'ผู้ตรวจสอบ' },
+  { value: 'Audit', label: 'ผู้ทวนสอบ' },
   { value: 'Support', label: 'ฝ่ายสนับสนุน' },
 ]
 
@@ -47,13 +37,9 @@ export const ROLE_OPTIONS: RoleOption[] = [
  */
 export const ROLE_LABELS: Record<AllUserRole, string> = {
   'Admin': 'ผู้ดูแลระบบ',
-  'Dealer': 'ตัวแทนจำหน่าย',
   'Consult': 'ที่ปรึกษา',
-  'Audit': 'ผู้ตรวจสอบ',
-  'Support': 'ฝ่ายสนับสนุน',
-  'project_owner': 'เจ้าของโครงการ',
-  'consultant': 'ที่ปรึกษา',
-  'project_staff': 'เจ้าหน้าที่โครงการ',
+  'Audit': 'ผู้ทวนสอบ',
+  'Support': 'ฝ่ายสนับสนุน'
 }
 
 /**
@@ -71,18 +57,10 @@ export function getRoleColor (
   role: string
 ): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' {
   if (role === 'Admin' || role === 'project_owner') return 'error'
-  if (role === 'Dealer') return 'warning'
   if (role === 'Consult' || role === 'consultant') return 'info'
   if (role === 'Audit' || role === 'Internal Audit') return 'secondary'
   if (role === 'Support') return 'success'
   return 'default'
-}
-
-/**
- * Check if role is a legacy role
- */
-export function isLegacyRole (role: string): role is LegacyUserRole {
-  return ['project_owner', 'consultant', 'project_staff'].includes(role)
 }
 
 /**

@@ -29,11 +29,10 @@ import {
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { isSupport } from '@/lib/permissions'
+import { isAdmin } from '@/lib/permissions'
 import {
-  ADMIN_DASHBOARD_NAV_ITEMS,
   ADMIN_SETTINGS_NAV_ITEM,
-  SUPPORT_NAV_ITEMS,
+  getDashboardNavItemsForRole,
   type AdminNavItem,
 } from '@/constants/admin-console-nav'
 import CFOLogo from '../CFOLogo'
@@ -63,9 +62,6 @@ function withIcons (items: AdminNavItem[]): SidebarNavItem[] {
   }))
 }
 
-const FULL_NAV_ITEMS = withIcons(ADMIN_DASHBOARD_NAV_ITEMS)
-const SUPPORT_NAV = withIcons(SUPPORT_NAV_ITEMS)
-
 export default function Sidebar () {
   const [collapsed, setCollapsed] = useState(true)
   const router = useRouter()
@@ -73,9 +69,13 @@ export default function Sidebar () {
   const { user } = useAuth()
 
   const navItems = useMemo(
-    () => (user && isSupport(user) ? SUPPORT_NAV : FULL_NAV_ITEMS),
-    [user]
+    () => withIcons(getDashboardNavItemsForRole(user?.role)),
+    [user?.role]
   )
+
+  const settingsActive =
+    pathname === ADMIN_SETTINGS_NAV_ITEM.path ||
+    pathname.startsWith(`${ADMIN_SETTINGS_NAV_ITEM.path}/`)
 
   const handleToggle = () => {
     setCollapsed(!collapsed)
@@ -87,9 +87,8 @@ export default function Sidebar () {
 
   const renderNavItem = (item: SidebarNavItem) => {
     const isActive =
-      user && isSupport(user) && item.path === '/admin-console'
-        ? pathname === '/admin-console' || pathname.startsWith('/admin-console/organizations')
-        : pathname === item.path || (item.path !== '/admin-console' && pathname.startsWith(item.path))
+      pathname === item.path ||
+      (item.path !== '/admin-console' && pathname.startsWith(item.path))
 
     return (
       <ListItem key={`${item.path}-${item.title}`} disablePadding sx={{ display: 'block' }}>
@@ -227,75 +226,67 @@ export default function Sidebar () {
         </List>
       </Box>
 
-      <Box sx={{ p: 2 }}>
-        <List disablePadding>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <Tooltip
-              title={
-                collapsed
-                  ? `${ADMIN_SETTINGS_NAV_ITEM.title} — ${ADMIN_SETTINGS_NAV_ITEM.description}`
-                  : ''
-              }
-              placement="right"
-            >
-              <ListItemButton
-                onClick={() => navigate(ADMIN_SETTINGS_NAV_ITEM.path)}
-                sx={{
-                  minHeight: collapsed ? 48 : 56,
-                  justifyContent: collapsed ? 'center' : 'initial',
-                  px: 2.5,
-                  py: collapsed ? 0 : 1,
-                  borderRadius: 2,
-                  color:
-                    pathname === ADMIN_SETTINGS_NAV_ITEM.path ||
-                    pathname.startsWith(`${ADMIN_SETTINGS_NAV_ITEM.path}/`)
-                      ? '#10b981'
-                      : '#94a3b8',
-                  backgroundColor:
-                    pathname === ADMIN_SETTINGS_NAV_ITEM.path ||
-                    pathname.startsWith(`${ADMIN_SETTINGS_NAV_ITEM.path}/`)
-                      ? 'rgba(16, 185, 129, 0.15)'
-                      : 'transparent',
-                  '&:hover': {
-                    backgroundColor:
-                      pathname === ADMIN_SETTINGS_NAV_ITEM.path ||
-                      pathname.startsWith(`${ADMIN_SETTINGS_NAV_ITEM.path}/`)
+      {isAdmin(user) && (
+        <Box sx={{ p: 2 }}>
+          <List disablePadding>
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <Tooltip
+                title={
+                  collapsed
+                    ? `${ADMIN_SETTINGS_NAV_ITEM.title} — ${ADMIN_SETTINGS_NAV_ITEM.description}`
+                    : ''
+                }
+                placement="right"
+              >
+                <ListItemButton
+                  onClick={() => navigate(ADMIN_SETTINGS_NAV_ITEM.path)}
+                  sx={{
+                    minHeight: collapsed ? 48 : 56,
+                    justifyContent: collapsed ? 'center' : 'initial',
+                    px: 2.5,
+                    py: collapsed ? 0 : 1,
+                    borderRadius: 2,
+                    color: settingsActive ? '#10b981' : '#94a3b8',
+                    backgroundColor: settingsActive ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    '&:hover': {
+                      backgroundColor: settingsActive
                         ? 'rgba(16, 185, 129, 0.2)'
                         : 'rgba(255, 255, 255, 0.05)',
-                    color: '#ffffff',
-                    '& .MuiListItemText-secondary': {
-                      color: 'rgba(255, 255, 255, 0.55)',
+                      color: '#ffffff',
+                      '& .MuiListItemText-secondary': {
+                        color: 'rgba(255, 255, 255, 0.55)',
+                      },
                     },
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: collapsed ? 0 : 2,
-                    justifyContent: 'center',
-                    color: 'inherit',
                   }}
                 >
-                  <SettingsIcon />
-                </ListItemIcon>
-                {!collapsed && (
-                  <ListItemText
-                    primary={ADMIN_SETTINGS_NAV_ITEM.title}
-                    secondary={ADMIN_SETTINGS_NAV_ITEM.description}
-                    primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500, color: 'inherit' }}
-                    secondaryTypographyProps={{
-                      fontSize: '0.6875rem',
-                      lineHeight: 1.35,
-                      sx: { color: 'rgba(148, 163, 184, 0.85)' },
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: collapsed ? 0 : 2,
+                      justifyContent: 'center',
+                      color: 'inherit',
                     }}
-                  />
-                )}
-              </ListItemButton>
-            </Tooltip>
-          </ListItem>
-        </List>
-      </Box>
+                  >
+                    <SettingsIcon />
+                  </ListItemIcon>
+                  {!collapsed && (
+                    <ListItemText
+                      primary={ADMIN_SETTINGS_NAV_ITEM.title}
+                      secondary={ADMIN_SETTINGS_NAV_ITEM.description}
+                      primaryTypographyProps={{ fontSize: '0.875rem', fontWeight: 500, color: 'inherit' }}
+                      secondaryTypographyProps={{
+                        fontSize: '0.6875rem',
+                        lineHeight: 1.35,
+                        sx: { color: 'rgba(148, 163, 184, 0.85)' },
+                      }}
+                    />
+                  )}
+                </ListItemButton>
+              </Tooltip>
+            </ListItem>
+          </List>
+        </Box>
+      )}
     </Drawer>
   )
 }

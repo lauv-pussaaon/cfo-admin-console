@@ -344,9 +344,11 @@ export default function OrganizationsTable ({
     )
 
     const actionWidth =
-      variant === 'dealer'
-        ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) + (onViewDetail ? 50 : 0) + 150
-        : (onViewDetail ? 50 : 0) + 150
+      (variant === 'dealer' ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) : 0) +
+      (onViewDetail ? 50 : 0) +
+      (onEdit ? 50 : 0) +
+      (onDelete ? 50 : 0) +
+      50
 
     return [
       ...base,
@@ -411,34 +413,38 @@ export default function OrganizationsTable ({
                 <InfoOutlinedIcon fontSize="small" />
               </IconButton>
             )}
-            <IconButton
-              size="small"
-              onClick={() => onEdit?.(params.row.id)}
-              sx={{
-                color: 'primary.main',
-                '&:hover': {
-                  backgroundColor: 'primary.light',
-                  color: 'primary.dark',
-                },
-              }}
-              title="แก้ไข"
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => onDelete?.(params.row.id)}
-              sx={{
-                color: 'error.main',
-                '&:hover': {
-                  backgroundColor: 'error.light',
-                  color: 'error.dark',
-                },
-              }}
-              title="ลบ"
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
+            {onEdit && (
+              <IconButton
+                size="small"
+                onClick={() => onEdit(params.row.id)}
+                sx={{
+                  color: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'primary.light',
+                    color: 'primary.dark',
+                  },
+                }}
+                title="แก้ไข"
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
+            {onDelete && (
+              <IconButton
+                size="small"
+                onClick={() => onDelete(params.row.id)}
+                sx={{
+                  color: 'error.main',
+                  '&:hover': {
+                    backgroundColor: 'error.light',
+                    color: 'error.dark',
+                  },
+                }}
+                title="ลบ"
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
           </Box>
         ),
       },

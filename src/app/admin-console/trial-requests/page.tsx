@@ -21,7 +21,7 @@ import { ArrowBack, Search as SearchIcon } from '@mui/icons-material'
 import TrialRequestsTable from '@/components/admin/TrialRequestsTable'
 import { trialRequestService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
-import { isAdmin } from '@/lib/permissions'
+import { canAccessTrialRequests } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
 import type { OrganizationTrialRequest, OrganizationTrialRequestStatus } from '@/types/database'
 import {
@@ -42,7 +42,7 @@ export default function AdminTrialRequestsPage () {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   useEffect(() => {
-    if (!authLoading && user && !isAdmin(user)) {
+    if (!authLoading && user && !canAccessTrialRequests(user)) {
       router.replace('/admin-console')
     }
   }, [user, authLoading, router])
@@ -62,7 +62,7 @@ export default function AdminTrialRequestsPage () {
   }
 
   useEffect(() => {
-    if (user && isAdmin(user)) {
+    if (user && canAccessTrialRequests(user)) {
       loadRequests()
     }
   }, [user])
@@ -104,7 +104,7 @@ export default function AdminTrialRequestsPage () {
     router.push(`/admin-console/trial-requests/${id}`)
   }
 
-  if (authLoading || !user || !isAdmin(user)) {
+  if (authLoading || !user || !canAccessTrialRequests(user)) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 320 }}>
         <CircularProgress />
