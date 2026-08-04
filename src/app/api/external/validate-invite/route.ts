@@ -27,10 +27,11 @@ export async function GET (request: NextRequest) {
       )
     }
 
-    // Query users table for Consult/Audit with matching invite_hashcode
+    // Query users table for Consult/Audit with matching invite_hashcode.
+    // password_hash is returned for org-app server-to-server invite provisioning only.
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, invite_hashcode')
+      .select('id, username, email, name, avatar_url, role, invite_hashcode, password_hash')
       .eq('invite_hashcode', hashcode)
       .in('role', ['Consult', 'Audit'])
       .single()
@@ -78,7 +79,7 @@ export async function GET (request: NextRequest) {
       )
     }
 
-    // Return user info (without sensitive data)
+    // Return profile + password_hash for org-app local user provisioning (HTTPS server-to-server).
     const headers = createCorsHeaders(origin)
     return NextResponse.json({
       id: data.id,
@@ -87,6 +88,7 @@ export async function GET (request: NextRequest) {
       name: data.name,
       avatar_url: data.avatar_url,
       role: data.role,
+      password_hash: data.password_hash,
     }, { headers })
   } catch (error) {
     const origin = request.headers.get('origin')
