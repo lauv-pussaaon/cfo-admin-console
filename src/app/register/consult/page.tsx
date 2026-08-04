@@ -120,7 +120,7 @@ function ConsultRegisterForm() {
             <>
               <Box sx={{ mb: 3 }}>
                 <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-                  ลงทะเบียนที่ปรึกษาหรือผู้ทวนสอบ
+                  ลงทะเบียนที่ปรึกษาหรือผู้ตรวจสอบ
                 </Typography>
               </Box>
 

@@ -30,7 +30,7 @@ export const ROLE_OPTIONS: RoleOption[] = [
   { value: 'Admin', label: 'ผู้ดูแลระบบ' },
   { value: 'Dealer', label: 'ตัวแทนจำหน่าย' },
   { value: 'Consult', label: 'ที่ปรึกษา' },
-  { value: 'Audit', label: 'ผู้ทวนสอบ' },
+  { value: 'Audit', label: 'ผู้ตรวจสอบ' },
   { value: 'Support', label: 'ฝ่ายสนับสนุน' },
 ]
 
@@ -41,7 +41,7 @@ export const ROLE_LABELS: Record<AllUserRole, string> = {
   Admin: 'ผู้ดูแลระบบ',
   Dealer: 'ตัวแทนจำหน่าย',
   Consult: 'ที่ปรึกษา',
-  Audit: 'ผู้ทวนสอบ',
+  Audit: 'ผู้ตรวจสอบ',
   Support: 'ฝ่ายสนับสนุน',
 }
 
@@ -50,7 +50,7 @@ export const ROLE_LABELS: Record<AllUserRole, string> = {
  */
 export function getRoleLabel (role: string, lang: 'th' | 'en'): string {
   if (lang === 'th') return ROLE_LABELS[role as AllUserRole] || role
-  return role === 'Audit' ? 'Verifier' : role
+  return role === 'Audit' ? 'Auditor' : role
 }
 
 /**
