@@ -25,7 +25,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { Add as AddIcon, Edit as EditIcon, Search as SearchIcon, MoreVert as MoreVertIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material'
+import { Add as AddIcon, ArrowBack, Edit as EditIcon, Search as SearchIcon, MoreVert as MoreVertIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
@@ -33,6 +33,14 @@ import { useForm, Controller } from 'react-hook-form'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { templateImageUploadService } from '@/lib/services/template-image-upload.service'
 import type { EmissionTemplateWithRelations } from '@/types/emission-templates'
+import {
+  adminBackButtonSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
+import Link from 'next/link'
 
 interface TemplateFormValues {
   name_th: string
@@ -248,10 +256,18 @@ export default function EmissionTemplatesPage() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={adminPageShellSx}>
+      <Button
+        component={Link}
+        href="/admin-console"
+        startIcon={<ArrowBack />}
+        sx={adminBackButtonSx}
+      >
+        กลับ
+      </Button>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Box>
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+          <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
             Emission Templates
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -272,7 +288,7 @@ export default function EmissionTemplatesPage() {
                 </InputAdornment>
               ),
             }}
-            sx={{ minWidth: 280 }}
+            sx={adminSearchFieldSx}
           />
           <Button
             variant="contained"
@@ -281,6 +297,7 @@ export default function EmissionTemplatesPage() {
               setEditTarget(null)
               setFormOpen(true)
             }}
+            sx={adminPrimaryButtonSx}
           >
             Add Template
           </Button>

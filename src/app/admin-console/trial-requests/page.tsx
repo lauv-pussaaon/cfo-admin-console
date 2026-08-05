@@ -28,6 +28,13 @@ import {
   TRIAL_REQUEST_STATUS_OPTIONS,
   getTrialRequestStatusChipColor,
 } from '@/types/trial-request-status'
+import {
+  adminBackButtonSx,
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
 
 type StatusFilter = '' | OrganizationTrialRequestStatus
 
@@ -113,17 +120,17 @@ export default function AdminTrialRequestsPage () {
   }
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={adminPageShellSx}>
       <Button
         component={Link}
         href="/admin-console"
         startIcon={<ArrowBack />}
-        sx={{ mb: 2, textTransform: 'none' }}
+        sx={adminBackButtonSx}
       >
         กลับ
       </Button>
 
-      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
         คำขอทดลองใช้งานองค์กร
       </Typography>
 
@@ -134,6 +141,7 @@ export default function AdminTrialRequestsPage () {
           color={statusFilter === '' ? 'primary' : 'default'}
           variant={statusFilter === '' ? 'filled' : 'outlined'}
           onClick={() => setStatusFilter('')}
+          sx={{ borderRadius: 1.5, height: 28, fontWeight: 500 }}
         />
         {TRIAL_REQUEST_STATUS_OPTIONS.map((option) => (
           <Chip
@@ -143,22 +151,23 @@ export default function AdminTrialRequestsPage () {
             color={statusFilter === option.value ? getTrialRequestStatusChipColor(option.value) : 'default'}
             variant={statusFilter === option.value ? 'filled' : 'outlined'}
             onClick={() => setStatusFilter(option.value)}
+            sx={{ borderRadius: 1.5, height: 28, fontWeight: 500 }}
           />
         ))}
       </Box>
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mb: 3, alignItems: 'center' }}>
         <TextField
           placeholder="ค้นหาชื่อองค์กร ผู้ติดต่อ อีเมล..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={{ minWidth: 280, flex: 1 }}
+          sx={adminSearchFieldSx}
           InputProps={{
-            startAdornment: <SearchIcon sx={{ mr: 1, color: 'action.active' }} />,
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
           }}
         />
-        <FormControl size="small" sx={{ minWidth: 180 }}>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel>สถานะ</InputLabel>
           <Select
             label="สถานะ"

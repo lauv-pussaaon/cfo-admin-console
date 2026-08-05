@@ -24,6 +24,9 @@ import {
   Snackbar,
 } from '@mui/material'
 import {
+  adminGhostIconButtonSx,
+} from '@/lib/admin-ui-styles'
+import {
   Close as CloseIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -397,12 +400,12 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
                         </Box>
                         <Box sx={{ display: 'flex', gap: 0.5, flexShrink: 0 }}>
                           <Tooltip title="Edit">
-                            <IconButton size="small" onClick={() => startEdit(cat)}>
+                            <IconButton size="small" onClick={() => startEdit(cat)} sx={adminGhostIconButtonSx.primary}>
                               <EditIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title="Delete">
-                            <IconButton size="small" color="error" onClick={() => setDeleteTarget(cat)}>
+                            <IconButton size="small" onClick={() => setDeleteTarget(cat)} sx={adminGhostIconButtonSx.error}>
                               <DeleteIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>

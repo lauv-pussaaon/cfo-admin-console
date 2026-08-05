@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
+import { Box, Typography, Grid, Card, CardContent } from '@mui/material'
 import {
   Business as BusinessIcon,
   People as PeopleIcon,
@@ -14,6 +14,7 @@ import {
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
 import { getAdminNavItemByPath, getDashboardNavItemsForRole } from '@/constants/admin-console-nav'
+import { adminPageShellSx, adminPageTitleSx } from '@/lib/admin-ui-styles'
 
 const CARD_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/organizations': <BusinessIcon sx={{ fontSize: 48 }} />,
@@ -38,20 +39,26 @@ function DashboardCard ({
 }) {
   return (
     <Card
+      elevation={0}
       sx={{
         height: '100%',
         cursor: 'pointer',
-        transition: 'all 0.2s',
+        transition: 'border-color 0.2s, transform 0.2s, box-shadow 0.2s',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        boxShadow: 'none',
         '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: 4,
+          transform: 'translateY(-2px)',
+          borderColor: 'primary.light',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
         },
       }}
       onClick={onClick}
     >
       <CardContent>
         <Box sx={{ color: 'primary.main', mb: 2 }}>{icon}</Box>
-        <Typography variant="h6" fontWeight="bold" gutterBottom>
+        <Typography variant="h6" fontWeight={600} gutterBottom>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -92,9 +99,9 @@ export default function AdminConsolePage () {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={adminPageShellSx}>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
           แดชบอร์ด
         </Typography>
         <Typography variant="body1" color="text.secondary">
@@ -119,6 +126,6 @@ export default function AdminConsolePage () {
           )
         })}
       </Grid>
-    </Container>
+    </Box>
   )
 }

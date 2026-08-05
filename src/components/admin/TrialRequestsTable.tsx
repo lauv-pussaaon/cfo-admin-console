@@ -10,6 +10,12 @@ import {
   getTrialRequestStatusChipColor,
   getTrialRequestStatusLabel,
 } from '@/types/trial-request-status'
+import {
+  adminDataGridPaperSx,
+  adminDataGridProps,
+  adminDataGridSx,
+  adminQuietChipSx,
+} from '@/lib/admin-ui-styles'
 
 interface Props {
   data: OrganizationTrialRequest[]
@@ -80,6 +86,8 @@ export default function TrialRequestsTable ({
           label={getTrialRequestStatusLabel(params.value)}
           color={getTrialRequestStatusChipColor(params.value)}
           size="small"
+          variant="outlined"
+          sx={adminQuietChipSx}
         />
       ),
     },
@@ -129,14 +137,14 @@ export default function TrialRequestsTable ({
   ], [])
 
   return (
-    <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+    <Paper elevation={0} sx={adminDataGridPaperSx}>
       <Box sx={{ width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
           loading={loading}
-          autoHeight
           disableRowSelectionOnClick
+          {...adminDataGridProps}
           onRowClick={
             onRowClick
               ? (params) => {
@@ -148,16 +156,10 @@ export default function TrialRequestsTable ({
           initialState={{
             pagination: { paginationModel: { pageSize: 10 } },
           }}
-          sx={{
-            border: 'none',
-            '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: 'grey.50',
-            },
-            ...(onRowClick ? { '& .MuiDataGrid-row': { cursor: 'pointer' } } : {}),
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'action.hover',
-            },
-          }}
+          sx={[
+            adminDataGridSx,
+            onRowClick ? { '& .MuiDataGrid-row': { cursor: 'pointer' } } : {},
+          ]}
         />
       </Box>
     </Paper>

@@ -24,6 +24,12 @@ import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
 import type { NotificationRecipient } from '@/types/database'
+import {
+  adminBackButtonSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+} from '@/lib/admin-ui-styles'
 
 export default function NotificationSettingsPage () {
   const { user, isLoading: authLoading } = useAuth()
@@ -164,12 +170,12 @@ export default function NotificationSettingsPage () {
   }
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={adminPageShellSx}>
       <Button
         component={Link}
         href="/admin-console"
         startIcon={<ArrowBack />}
-        sx={{ mb: 2, textTransform: 'none' }}
+        sx={adminBackButtonSx}
       >
         กลับ
       </Button>
@@ -185,7 +191,7 @@ export default function NotificationSettingsPage () {
         }}
       >
         <Box>
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
+          <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
             การตั้งค่าการแจ้งเตือน
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -196,7 +202,7 @@ export default function NotificationSettingsPage () {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleOpenAdd}
-          sx={{ textTransform: 'none' }}
+          sx={adminPrimaryButtonSx}
         >
           เพิ่มอีเมล
         </Button>

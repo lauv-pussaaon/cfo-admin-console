@@ -24,6 +24,12 @@ import { isExpectedError } from '@/lib/utils/errors'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
+import {
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
 
 type DrawerMode = 'chat' | 'usage' | null
 
@@ -162,23 +168,23 @@ export default function SupportClientsDashboard () {
   }, [loadInbox])
 
   return (
-    <Box sx={{ py: 2, width: '100%' }}>
-      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>
+    <Box sx={adminPageShellSx}>
+      <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
         {isAdmin(user) ? 'Support Clients' : 'ลูกค้า (ฝ่ายสนับสนุน)'}
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           placeholder="ค้นหาชื่อ รหัส อีเมล Dealer ผู้สร้าง..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={{ minWidth: 300, flex: '1 1 280px' }}
+          sx={adminSearchFieldSx}
           InputProps={{
-            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
           }}
         />
-        <FormControl size="small" sx={{ minWidth: 180 }}>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel id="support-status-filter">สถานะ deployment</InputLabel>
           <Select
             labelId="support-status-filter"
@@ -198,7 +204,7 @@ export default function SupportClientsDashboard () {
           value={createdFrom}
           onChange={(e) => setCreatedFrom(e.target.value)}
           InputLabelProps={{ shrink: true }}
-          sx={{ minWidth: 160 }}
+          sx={[{ minWidth: 160 }, adminFilterControlSx]}
         />
         <TextField
           label="ถึงวันที่"
@@ -207,7 +213,7 @@ export default function SupportClientsDashboard () {
           value={createdTo}
           onChange={(e) => setCreatedTo(e.target.value)}
           InputLabelProps={{ shrink: true }}
-          sx={{ minWidth: 160 }}
+          sx={[{ minWidth: 160 }, adminFilterControlSx]}
         />
       </Box>
 
@@ -215,9 +221,16 @@ export default function SupportClientsDashboard () {
         <Chip
           label={`Unread (${unreadCount})`}
           color={unreadOnly ? 'error' : 'default'}
-          variant={unreadOnly ? 'filled' : 'outlined'}
+          variant="outlined"
           onClick={() => setUnreadOnly((prev) => !prev)}
-          sx={{ fontWeight: 600 }}
+          sx={{
+            fontWeight: 500,
+            borderRadius: 1.5,
+            height: 28,
+            ...(unreadOnly
+              ? { borderColor: 'error.main', color: 'error.main', bgcolor: 'rgba(239, 68, 68, 0.04)' }
+              : {}),
+          }}
         />
       </Box>
 

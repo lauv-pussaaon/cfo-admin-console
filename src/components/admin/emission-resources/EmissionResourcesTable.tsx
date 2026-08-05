@@ -1,10 +1,16 @@
 'use client'
 
 import React from 'react'
-import { Box, Chip, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, Chip, IconButton, Paper, Tooltip, Typography } from '@mui/material'
 import { EditOutlined as EditOutlinedIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
+import {
+  adminDataGridPaperSx,
+  adminDataGridProps,
+  adminDataGridSx,
+  adminGhostIconButtonSx,
+} from '@/lib/admin-ui-styles'
 
 const SCOPE_COLORS: Record<number, string> = {
   1: '#ef4444',
@@ -204,6 +210,7 @@ export default function EmissionResourcesTable({
             size="small"
             aria-label="Edit EF"
             onClick={() => onEdit(params.row as FuelResourceWithCategory)}
+            sx={adminGhostIconButtonSx.primary}
           >
             <EditOutlinedIcon fontSize="small" />
           </IconButton>
@@ -213,39 +220,26 @@ export default function EmissionResourcesTable({
   ]
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowCount={total}
-        loading={loading}
-        paginationMode="server"
-        paginationModel={{ page, pageSize: perPage }}
-        onPaginationModelChange={(model) => {
-          if (model.page !== page) onPageChange(model.page)
-          if (model.pageSize !== perPage) onPerPageChange(model.pageSize)
-        }}
-        pageSizeOptions={[25, 50, 100]}
-        disableRowSelectionOnClick
-        disableColumnSorting
-        autoHeight
-        sx={{
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 2,
-          '& .MuiDataGrid-columnHeader': {
-            backgroundColor: '#f8fafc',
-            fontWeight: 600,
-          },
-          '& .MuiDataGrid-cell': {
-            display: 'flex',
-            alignItems: 'center',
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.02)',
-          },
-        }}
-      />
-    </Box>
+    <Paper elevation={0} sx={adminDataGridPaperSx}>
+      <Box sx={{ width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          rowCount={total}
+          loading={loading}
+          paginationMode="server"
+          paginationModel={{ page, pageSize: perPage }}
+          onPaginationModelChange={(model) => {
+            if (model.page !== page) onPageChange(model.page)
+            if (model.pageSize !== perPage) onPerPageChange(model.pageSize)
+          }}
+          pageSizeOptions={[25, 50, 100]}
+          disableRowSelectionOnClick
+          disableColumnSorting
+          {...adminDataGridProps}
+          sx={adminDataGridSx}
+        />
+      </Box>
+    </Paper>
   )
 }

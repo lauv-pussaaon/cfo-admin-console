@@ -23,6 +23,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import {
+  ArrowBack,
   Category as CategoryIcon,
   Search as SearchIcon,
   FileDownload as FileDownloadIcon,
@@ -34,6 +35,15 @@ import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPan
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
 import { formatDateTime } from '@/lib/utils/datetime'
+import {
+  adminBackButtonSx,
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
+import Link from 'next/link'
 
 const DEFAULT_PER_PAGE = 50
 
@@ -387,10 +397,18 @@ function EmissionResourcesPage () {
   }
 
   return (
-    <Box sx={{ p: 3, maxWidth: '100%' }}>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
+    <Box sx={adminPageShellSx}>
+      <Button
+        component={Link}
+        href="/admin-console"
+        startIcon={<ArrowBack />}
+        sx={adminBackButtonSx}
+      >
+        กลับ
+      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Box>
-          <Typography variant="h4" fontWeight={700} gutterBottom>
+          <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
             Emission Resources
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -402,6 +420,7 @@ function EmissionResourcesPage () {
             variant="outlined"
             startIcon={<FileUploadIcon />}
             onClick={() => setImportOpen(true)}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
           >
             Import new version
           </Button>
@@ -409,6 +428,7 @@ function EmissionResourcesPage () {
             variant="outlined"
             startIcon={<CategoryIcon />}
             onClick={() => setCategoriesPanelOpen(true)}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
           >
             Manage Categories
           </Button>
@@ -502,6 +522,7 @@ function EmissionResourcesPage () {
               startIcon={<FileDownloadIcon />}
               disabled={actionBusy || releaseLoading}
               onClick={handleExportExcel}
+              sx={adminPrimaryButtonSx}
             >
               Export Excel
             </Button>
@@ -540,7 +561,7 @@ function EmissionResourcesPage () {
         </Tabs>
 
         <Box sx={{ display: 'flex', gap: 2, p: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-          <FormControl size="small" sx={{ minWidth: 260 }}>
+          <FormControl size="small" sx={[{ minWidth: 260 }, adminFilterControlSx]}>
             <InputLabel>Category</InputLabel>
             <Select
               value={categoryId}
@@ -582,7 +603,7 @@ function EmissionResourcesPage () {
                 </InputAdornment>
               ),
             }}
-            sx={{ minWidth: 280 }}
+            sx={adminSearchFieldSx}
           />
 
           <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>

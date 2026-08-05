@@ -2,17 +2,22 @@
 
 import { useMemo } from 'react'
 import {
-  Box,
   Chip,
   IconButton,
   Paper,
   Switch,
   Tooltip,
-  Typography,
 } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import type { NotificationRecipient } from '@/types/database'
+import {
+  adminDataGridPaperSx,
+  adminDataGridProps,
+  adminDataGridSx,
+  adminGhostIconButtonSx,
+  adminQuietChipSx,
+} from '@/lib/admin-ui-styles'
 
 interface Props {
   data: NotificationRecipient[]
@@ -102,7 +107,8 @@ export default function NotificationRecipientsTable ({
             label={enabled ? 'ใช้งาน' : 'ปิด'}
             color={enabled ? 'success' : 'default'}
             size="small"
-            variant={enabled ? 'filled' : 'outlined'}
+            variant="outlined"
+            sx={adminQuietChipSx}
           />
         )
       },
@@ -121,9 +127,9 @@ export default function NotificationRecipientsTable ({
             <span>
               <IconButton
                 size="small"
-                color="error"
                 disabled={isUpdating}
                 onClick={() => onDelete(recipient)}
+                sx={adminGhostIconButtonSx.error}
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>
@@ -135,26 +141,19 @@ export default function NotificationRecipientsTable ({
   ], [onDelete, onToggleEnabled, updatingId])
 
   return (
-    <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
-      <Box sx={{ width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          loading={loading}
-          autoHeight
-          disableRowSelectionOnClick
-          pageSizeOptions={[10, 25]}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 10 } },
-          }}
-          sx={{
-            border: 'none',
-            '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: 'grey.50',
-            },
-          }}
-        />
-      </Box>
+    <Paper elevation={0} sx={adminDataGridPaperSx}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        loading={loading}
+        disableRowSelectionOnClick
+        {...adminDataGridProps}
+        pageSizeOptions={[10, 25]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10 } },
+        }}
+        sx={adminDataGridSx}
+      />
     </Paper>
   )
 }

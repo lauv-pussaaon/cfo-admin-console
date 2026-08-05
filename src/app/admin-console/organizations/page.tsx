@@ -39,6 +39,14 @@ import { useOrganizationsFilter, type AccountTypeFilter } from '@/hooks/useOrgan
 import { isDealer, isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
+import {
+  adminBackButtonSx,
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
 
 export default function AdminConsoleOrganizationsPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -248,17 +256,23 @@ export default function AdminConsoleOrganizationsPage() {
   }
 
   return (
-    <Box sx={{ py: 2, width: '100%', px: 3 }}>
+    <Box sx={adminPageShellSx}>
       <Link href="/admin-console" style={{ textDecoration: 'none' }}>
-        <Button
-          startIcon={<ArrowBack />}
-          sx={{ mb: 2, textTransform: 'none' }}
-        >
+        <Button startIcon={<ArrowBack />} sx={adminBackButtonSx}>
           กลับ
         </Button>
       </Link>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" fontWeight="bold">
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3,
+          gap: 2,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
           {isDealer(user) || isConsult(user) || isAudit(user)
             ? 'องค์กรที่ดูแล'
             : isAdmin(user)
@@ -266,7 +280,6 @@ export default function AdminConsoleOrganizationsPage() {
               : 'จัดการลูกค้า'}
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          {/* Display invite hashcode for Consult/Audit */}
           {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
             <Chip
               label={`Invite Code: ${user.invite_hashcode}`}
@@ -294,10 +307,7 @@ export default function AdminConsoleOrganizationsPage() {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleCreate}
-              sx={{
-                textTransform: 'none',
-                borderRadius: 1,
-              }}
+              sx={adminPrimaryButtonSx}
             >
               สร้างองค์กรใหม่
             </Button>
@@ -305,18 +315,18 @@ export default function AdminConsoleOrganizationsPage() {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 1.5, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={{ minWidth: 300, maxWidth: 350, flex: '1 1 280px' }}
+          sx={adminSearchFieldSx}
           InputProps={{
-            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
           }}
         />
-        <FormControl size="small" sx={{ minWidth: 200 }}>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel id="org-account-type-filter">ประเภทบัญชี</InputLabel>
           <Select
             labelId="org-account-type-filter"

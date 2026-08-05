@@ -21,7 +21,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material'
-import { Add as AddIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
+import { Add as AddIcon, ArrowBack, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
@@ -32,6 +32,12 @@ import type {
   EmissionTemplateWithRelations,
   TemplateActivityGroupWithRelations,
 } from '@/types/emission-templates'
+import {
+  adminBackButtonSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+} from '@/lib/admin-ui-styles'
 
 function orderReleases (releases: EfCatalogRelease[]): EfCatalogRelease[] {
   return [...releases].sort((a, b) => {
@@ -219,13 +225,17 @@ export default function TemplateDetailPage() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Button variant="text" onClick={() => router.push('/admin-console/emission-templates')} sx={{ mb: 2 }}>
-        ← Back to templates
+    <Box sx={adminPageShellSx}>
+      <Button
+        startIcon={<ArrowBack />}
+        onClick={() => router.push('/admin-console/emission-templates')}
+        sx={adminBackButtonSx}
+      >
+        กลับ
       </Button>
 
       <Box sx={{ mb: 2 }}>
-        <Typography variant="h4" fontWeight={700}>
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
           {template?.name_en ?? 'Template'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -262,6 +272,7 @@ export default function TemplateDetailPage() {
           startIcon={<AddIcon />}
           disabled={!selectedVersion}
           onClick={() => { setEditTarget(null); setDialogOpen(true) }}
+          sx={adminPrimaryButtonSx}
         >
           Add Group
         </Button>

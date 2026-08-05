@@ -31,6 +31,14 @@ import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useUsersFilter } from '@/hooks/useUsersFilter'
 import { ROLE_OPTIONS } from '@/types/roles'
+import {
+  adminBackButtonSx,
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  adminSearchFieldSx,
+} from '@/lib/admin-ui-styles'
 
 export default function AdminConsoleUsersPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -236,18 +244,9 @@ export default function AdminConsoleUsersPage() {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, width: '100%', py: 3 }}>
+    <Box sx={adminPageShellSx}>
       <Link href="/admin-console" style={{ textDecoration: 'none' }}>
-        <Button
-          startIcon={<ArrowBack />}
-          sx={{
-            mb: 2,
-            textTransform: 'none',
-            color: 'text.secondary',
-            px: 0,
-            '&:hover': { backgroundColor: 'transparent', color: 'text.primary' },
-          }}
-        >
+        <Button startIcon={<ArrowBack />} sx={adminBackButtonSx}>
           กลับ
         </Button>
       </Link>
@@ -262,24 +261,14 @@ export default function AdminConsoleUsersPage() {
           flexWrap: 'wrap',
         }}
       >
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{ fontWeight: 700, letterSpacing: '-0.02em' }}
-        >
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
           จัดการผู้ใช้
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleCreate}
-          sx={{
-            textTransform: 'none',
-            borderRadius: 2,
-            boxShadow: 'none',
-            px: 2.5,
-            '&:hover': { boxShadow: 'none' },
-          }}
+          sx={adminPrimaryButtonSx}
         >
           สร้างผู้ใช้ใหม่
         </Button>
@@ -299,17 +288,12 @@ export default function AdminConsoleUsersPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={{
-            minWidth: 280,
-            maxWidth: 420,
-            flex: '1 1 280px',
-            '& .MuiOutlinedInput-root': { borderRadius: 2 },
-          }}
+          sx={adminSearchFieldSx}
           InputProps={{
             startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
           }}
         />
-        <FormControl size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel>กรองตามบทบาท</InputLabel>
           <Select
             value={selectedRole}
@@ -326,7 +310,7 @@ export default function AdminConsoleUsersPage() {
             ))}
           </Select>
         </FormControl>
-        <FormControl size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel>กรองตามการอนุมัติ</InputLabel>
           <Select
             value={selectedApproval}

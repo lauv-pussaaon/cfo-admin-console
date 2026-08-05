@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Box,
-  Container,
   Typography,
   CircularProgress,
   TextField,
@@ -18,7 +17,10 @@ import {
   Alert,
   Grid,
   Chip,
+  Button,
 } from '@mui/material'
+import Link from 'next/link'
+import { ArrowBack } from '@mui/icons-material'
 import Autocomplete from '@mui/material/Autocomplete'
 import {
   LineChart,
@@ -36,6 +38,12 @@ import { getUniqueDomains, getAnalyticsData, getTrafficData } from '@/lib/api/an
 import { getDateString, getDaysAgo, getToday, formatDateTime } from '@/lib/utils/datetime'
 import type { AnalyticsDataPoint, TrafficRecord } from '@/types/analytics'
 import AdminGuard from '@/components/admin/AdminGuard'
+import {
+  adminBackButtonSx,
+  adminFilterControlSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+} from '@/lib/admin-ui-styles'
 
 export default function AnalyticsPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -231,16 +239,32 @@ export default function AnalyticsPage() {
 
   return (
     <AdminGuard>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
+      <Box sx={adminPageShellSx}>
+        <Button
+          component={Link}
+          href="/admin-console"
+          startIcon={<ArrowBack />}
+          sx={adminBackButtonSx}
+        >
+          กลับ
+        </Button>
+        <Typography variant="h4" component="h1" gutterBottom sx={adminPageTitleSx}>
           Client Analytics
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
           View usage tracking data across all client domains
         </Typography>
 
-        {/* Filters */}
-        <Paper sx={{ p: 3, mb: 4 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+          }}
+        >
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Autocomplete
@@ -251,6 +275,7 @@ export default function AnalyticsPage() {
                   setSelectedDomains(newValue)
                 }}
                 disabled={loadingDomains}
+                sx={adminFilterControlSx}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -314,6 +339,7 @@ export default function AnalyticsPage() {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                sx={adminFilterControlSx}
               />
             </Grid>
             <Grid item xs={12} md={3}>
@@ -326,20 +352,28 @@ export default function AnalyticsPage() {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                sx={adminFilterControlSx}
               />
             </Grid>
           </Grid>
         </Paper>
 
-        {/* Error Message */}
         {error && (
           <Alert severity="error" sx={{ mb: 4 }} onClose={() => setError(null)}>
             {error}
           </Alert>
         )}
 
-        {/* Chart */}
-        <Paper sx={{ p: 3, mb: 4 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+          }}
+        >
           <Typography variant="h6" gutterBottom>
             Daily Unique Users
           </Typography>
@@ -401,7 +435,15 @@ export default function AnalyticsPage() {
         </Paper>
 
         {/* Data Table */}
-        <Paper sx={{ p: 3 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+          }}
+        >
           <Typography variant="h6" gutterBottom>
             Traffic Data
           </Typography>
@@ -438,7 +480,7 @@ export default function AnalyticsPage() {
             </TableContainer>
           )}
         </Paper>
-      </Container>
+      </Box>
     </AdminGuard>
   )
 }

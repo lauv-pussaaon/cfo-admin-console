@@ -17,6 +17,13 @@ import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 import { formatPackagePeriod } from '@/types/package-periods'
 import { formatRelativeTimeTh } from '@/lib/utils/relative-time'
+import {
+  adminDataGridPaperSx,
+  adminDataGridProps,
+  adminDataGridSx,
+  adminGhostIconButtonSx,
+  adminQuietChipSx,
+} from '@/lib/admin-ui-styles'
 
 export type OrganizationsTableVariant = 'admin' | 'dealer' | 'support'
 
@@ -221,8 +228,8 @@ export default function OrganizationsTable ({
                     onChatClick?.(orgId)
                   }}
                   sx={{
-                    color: hasUnread ? 'error.main' : 'primary.main',
-                    '&:hover': { backgroundColor: 'action.hover' },
+                    color: hasUnread ? 'error.main' : 'text.secondary',
+                    '&:hover': { backgroundColor: 'action.hover', color: hasUnread ? 'error.dark' : 'primary.main' },
                   }}
                   title="Open support chat"
                 >
@@ -242,10 +249,7 @@ export default function OrganizationsTable ({
                     event.stopPropagation()
                     onUsageClick?.(orgId)
                   }}
-                  sx={{
-                    color: 'text.secondary',
-                    '&:hover': { backgroundColor: 'action.hover', color: 'primary.main' },
-                  }}
+                  sx={adminGhostIconButtonSx.primary}
                   title="Client usage"
                 >
                   <InsightsIcon fontSize="small" />
@@ -299,7 +303,8 @@ export default function OrganizationsTable ({
               label={isInitialized ? 'Deployed' : 'Pending Deployment'}
               color={isInitialized ? 'success' : 'warning'}
               size="small"
-              sx={{ fontWeight: 500 }}
+              variant="outlined"
+              sx={adminQuietChipSx}
             />
           )
         },
@@ -323,7 +328,7 @@ export default function OrganizationsTable ({
             label={params.value}
             size="small"
             variant="outlined"
-            sx={{ fontWeight: 500 }}
+            sx={adminQuietChipSx}
           />
         ),
       },
@@ -369,13 +374,7 @@ export default function OrganizationsTable ({
               <IconButton
                 size="small"
                 onClick={() => onExport(params.row.id)}
-                sx={{
-                  color: 'info.main',
-                  '&:hover': {
-                    backgroundColor: 'info.light',
-                    color: 'info.dark',
-                  },
-                }}
+                sx={adminGhostIconButtonSx.primary}
                 title="ส่งออกข้อมูล"
               >
                 <FileDownloadIcon fontSize="small" />
@@ -385,13 +384,7 @@ export default function OrganizationsTable ({
               <IconButton
                 size="small"
                 onClick={() => onInvite(params.row.id)}
-                sx={{
-                  color: 'success.main',
-                  '&:hover': {
-                    backgroundColor: 'success.light',
-                    color: 'success.dark',
-                  },
-                }}
+                sx={adminGhostIconButtonSx.primary}
                 title="เชิญ Client Admin"
               >
                 <PersonAddIcon fontSize="small" />
@@ -401,13 +394,7 @@ export default function OrganizationsTable ({
               <IconButton
                 size="small"
                 onClick={() => onViewDetail(params.row.id)}
-                sx={{
-                  color: 'text.secondary',
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
-                    color: 'primary.main',
-                  },
-                }}
+                sx={adminGhostIconButtonSx.primary}
                 title="ดูรายละเอียด"
               >
                 <InfoOutlinedIcon fontSize="small" />
@@ -417,13 +404,7 @@ export default function OrganizationsTable ({
               <IconButton
                 size="small"
                 onClick={() => onEdit(params.row.id)}
-                sx={{
-                  color: 'primary.main',
-                  '&:hover': {
-                    backgroundColor: 'primary.light',
-                    color: 'primary.dark',
-                  },
-                }}
+                sx={adminGhostIconButtonSx.primary}
                 title="แก้ไข"
               >
                 <EditIcon fontSize="small" />
@@ -433,13 +414,7 @@ export default function OrganizationsTable ({
               <IconButton
                 size="small"
                 onClick={() => onDelete(params.row.id)}
-                sx={{
-                  color: 'error.main',
-                  '&:hover': {
-                    backgroundColor: 'error.light',
-                    color: 'error.dark',
-                  },
-                }}
+                sx={adminGhostIconButtonSx.error}
                 title="ลบ"
               >
                 <DeleteIcon fontSize="small" />
@@ -452,12 +427,13 @@ export default function OrganizationsTable ({
   }, [variant, onEdit, onDelete, onExport, onInvite, onViewDetail, onChatClick, onUsageClick])
 
   return (
-    <Paper elevation={0} sx={{ minHeight: 400, width: '100%', backgroundColor: 'transparent', overflowX: 'scroll' }}>
+    <Paper elevation={0} sx={adminDataGridPaperSx}>
       <DataGrid
         rows={rows}
         columns={columns}
         loading={loading}
         disableRowSelectionOnClick
+        {...adminDataGridProps}
         getRowClassName={(params) => (params.row.has_unread ? 'support-row-unread' : '')}
         onRowClick={
           onRowClick
@@ -472,39 +448,17 @@ export default function OrganizationsTable ({
             paginationModel: { pageSize: 10 },
           },
         }}
-        sx={{
-          border: 'none',
-          backgroundColor: 'transparent',
-          '& .MuiDataGrid-root': {
-            backgroundColor: 'transparent',
+        sx={[
+          adminDataGridSx,
+          {
+            '& .MuiDataGrid-row': {
+              ...(onRowClick ? { cursor: 'pointer' } : {}),
+            },
+            '& .MuiDataGrid-row.support-row-unread': {
+              backgroundColor: 'rgba(239, 68, 68, 0.04)',
+            },
           },
-          '& .MuiDataGrid-main': {
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'grey.50',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-          },
-          '& .MuiDataGrid-row': {
-            backgroundColor: 'transparent',
-            ...(onRowClick ? { cursor: 'pointer' } : {}),
-          },
-          '& .MuiDataGrid-row.support-row-unread': {
-            backgroundColor: 'rgba(211, 47, 47, 0.04)',
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: 'action.hover',
-          },
-          '& .MuiDataGrid-footerContainer': {
-            backgroundColor: 'transparent',
-          },
-        }}
+        ]}
       />
     </Paper>
   )

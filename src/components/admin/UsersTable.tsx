@@ -19,6 +19,13 @@ import {
 } from '@mui/icons-material'
 import type { User } from '@/lib/api/types'
 import { getRoleColor } from '@/types/roles'
+import {
+  adminDataGridPaperSx,
+  adminDataGridProps,
+  adminDataGridSx,
+  adminGhostIconButtonSx,
+  adminQuietChipSx,
+} from '@/lib/admin-ui-styles'
 
 interface Props {
   onEdit: (id: string) => void
@@ -119,11 +126,7 @@ export default function UsersTable({
             color={getRoleColor(params.value)}
             size="small"
             variant="outlined"
-            sx={{
-              fontWeight: 500,
-              borderRadius: 1.5,
-              height: 28,
-            }}
+            sx={adminQuietChipSx}
           />
         </Box>
       ),
@@ -166,7 +169,7 @@ export default function UsersTable({
                 color={approved ? 'success' : 'warning'}
                 size="small"
                 variant="outlined"
-                sx={{ fontWeight: 500, borderRadius: 1.5, height: 28 }}
+                sx={adminQuietChipSx}
               />
             </Box>
           )
@@ -264,11 +267,7 @@ export default function UsersTable({
               size="small"
               onClick={() => onEdit(params.row.id)}
               disabled={isLocked}
-              sx={{
-                color: 'text.secondary',
-                '&:hover': { backgroundColor: 'action.hover', color: 'primary.main' },
-                '&.Mui-disabled': { color: 'text.disabled' },
-              }}
+              sx={adminGhostIconButtonSx.primary}
               title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
             >
               <EditIcon fontSize="small" />
@@ -277,11 +276,7 @@ export default function UsersTable({
               size="small"
               onClick={() => onDelete(params.row.id)}
               disabled={isLocked}
-              sx={{
-                color: 'text.secondary',
-                '&:hover': { backgroundColor: 'action.hover', color: 'error.main' },
-                '&.Mui-disabled': { color: 'text.disabled' },
-              }}
+              sx={adminGhostIconButtonSx.error}
               title={isLocked ? 'ไม่สามารถลบผู้ใช้ admin ได้' : 'ลบ'}
             >
               <DeleteIcon fontSize="small" />
@@ -293,67 +288,20 @@ export default function UsersTable({
   ], [onEdit, onDelete, onApprovalChange, approvalUpdatingId])
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        minHeight: 520,
-        width: '100%',
-        backgroundColor: 'background.paper',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 2,
-        overflow: 'hidden',
-        overflowX: 'auto',
-      }}
-    >
+    <Paper elevation={0} sx={adminDataGridPaperSx}>
       <DataGrid
         rows={rows}
         columns={columns}
         loading={loading}
         disableRowSelectionOnClick
-        disableColumnMenu
-        rowHeight={68}
-        columnHeaderHeight={52}
+        {...adminDataGridProps}
         pageSizeOptions={[10, 25, 50, 100]}
         initialState={{
           pagination: {
             paginationModel: { pageSize: 25 },
           },
         }}
-        sx={{
-          border: 'none',
-          minHeight: 520,
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: 'grey.50',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-          },
-          '& .MuiDataGrid-columnHeaderTitle': {
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            color: 'text.secondary',
-            letterSpacing: '0.02em',
-            textTransform: 'uppercase',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            display: 'flex',
-            alignItems: 'center',
-            py: 0,
-          },
-          '& .MuiDataGrid-row:hover': {
-            backgroundColor: 'action.hover',
-          },
-          '& .MuiDataGrid-footerContainer': {
-            borderTop: '1px solid',
-            borderColor: 'divider',
-            backgroundColor: 'background.paper',
-          },
-          '& .MuiDataGrid-columnSeparator': {
-            display: 'none',
-          },
-        }}
+        sx={adminDataGridSx}
       />
     </Paper>
   )

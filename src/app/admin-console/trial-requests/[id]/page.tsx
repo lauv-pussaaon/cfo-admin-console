@@ -41,6 +41,12 @@ import {
   getTrialRequestStatusLabel,
   isActiveTrialRequestStatus,
 } from '@/types/trial-request-status'
+import {
+  adminBackButtonSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  adminQuietChipSx,
+} from '@/lib/admin-ui-styles'
 
 function DetailRow ({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -225,12 +231,12 @@ export default function TrialRequestDetailPage () {
 
   if (!request) {
     return (
-      <Box sx={{ py: 2 }}>
+      <Box sx={{ py: 3 }}>
         <Button
           component={Link}
           href="/admin-console/trial-requests"
           startIcon={<ArrowBack />}
-          sx={{ mb: 2, textTransform: 'none' }}
+          sx={adminBackButtonSx}
         >
           กลับ
         </Button>
@@ -242,12 +248,12 @@ export default function TrialRequestDetailPage () {
   const canTakeAction = isActiveTrialRequestStatus(request.status)
 
   return (
-    <Box sx={{ py: 2, width: '100%', maxWidth: 960 }}>
+    <Box sx={{ py: 3, width: '100%', maxWidth: 960 }}>
       <Button
         component={Link}
         href="/admin-console/trial-requests"
         startIcon={<ArrowBack />}
-        sx={{ mb: 2, textTransform: 'none' }}
+        sx={adminBackButtonSx}
       >
         กลับ
       </Button>
@@ -263,13 +269,15 @@ export default function TrialRequestDetailPage () {
         }}
       >
         <Box>
-          <Typography variant="h4" fontWeight="bold" sx={{ mb: 1 }}>
+          <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 1 }]}>
             {request.organization_name}
           </Typography>
           <Chip
             label={getTrialRequestStatusLabel(request.status)}
             color={getTrialRequestStatusChipColor(request.status)}
             size="small"
+            variant="outlined"
+            sx={adminQuietChipSx}
           />
         </Box>
 
@@ -280,7 +288,7 @@ export default function TrialRequestDetailPage () {
                 variant="outlined"
                 disabled={actionLoading}
                 onClick={handleStartProcessing}
-                sx={{ textTransform: 'none' }}
+                sx={{ textTransform: 'none', borderRadius: 2 }}
               >
                 เริ่มดำเนินการ
               </Button>
@@ -293,7 +301,7 @@ export default function TrialRequestDetailPage () {
                 setActionError(null)
                 setApproveOpen(true)
               }}
-              sx={{ textTransform: 'none' }}
+              sx={adminPrimaryButtonSx}
             >
               อนุมัติ
             </Button>
@@ -305,7 +313,7 @@ export default function TrialRequestDetailPage () {
                 setActionError(null)
                 setCancelOpen(true)
               }}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: 'none', borderRadius: 2 }}
             >
               ยกเลิก
             </Button>

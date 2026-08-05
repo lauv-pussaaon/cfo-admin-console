@@ -20,6 +20,7 @@ import { isAdmin, isSupport, canManageOrganization } from '@/lib/permissions'
 import { organizationService } from '@/lib/services'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
+import { adminBackButtonSx, adminPageTitleSx, adminQuietChipSx } from '@/lib/admin-ui-styles'
 
 function DetailRow ({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -108,8 +109,8 @@ export default function OrganizationDetailPage () {
 
   if (!org) {
     return (
-      <Box sx={{ py: 2 }}>
-        <Button component={Link} href="/admin-console" startIcon={<ArrowBack />} sx={{ mb: 2, textTransform: 'none' }}>
+      <Box sx={{ py: 3 }}>
+        <Button component={Link} href="/admin-console" startIcon={<ArrowBack />} sx={adminBackButtonSx}>
           กลับ
         </Button>
         <Typography color="text.secondary">ไม่พบองค์กร</Typography>
@@ -120,17 +121,17 @@ export default function OrganizationDetailPage () {
   const isInitialized = org.is_initialized
 
   return (
-    <Box sx={{ py: 2, width: '100%', maxWidth: 960 }}>
+    <Box sx={{ py: 3, width: '100%', maxWidth: 960 }}>
       <Button
         component={Link}
         href="/admin-console/organizations"
         startIcon={<ArrowBack />}
-        sx={{ mb: 2, textTransform: 'none' }}
+        sx={adminBackButtonSx}
       >
         กลับ
       </Button>
 
-      <Typography variant="h4" fontWeight="bold" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
         {org.name}
       </Typography>
 
@@ -147,6 +148,8 @@ export default function OrganizationDetailPage () {
                 label={isInitialized ? 'Deployed' : 'Pending Deployment'}
                 color={isInitialized ? 'success' : 'warning'}
                 size="small"
+                variant="outlined"
+                sx={adminQuietChipSx}
               />
             }
           />
