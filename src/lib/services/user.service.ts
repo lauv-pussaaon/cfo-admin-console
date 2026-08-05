@@ -38,6 +38,13 @@ export class UserService {
     avatar_url?: string | null
     role?: string
     is_approved?: boolean
+    organization_name?: string | null
+    phone?: string | null
+    has_verification?: boolean
+    certified_date?: string | null
+    certification_expiry?: string | null
+    year_experiences?: number | null
+    industries?: string[]
   }): Promise<User> {
     return createUserAPI(data)
   }
@@ -53,6 +60,13 @@ export class UserService {
       avatar_url: string | null
       role: string
       is_approved: boolean
+      organization_name?: string | null
+      phone?: string | null
+      has_verification?: boolean
+      certified_date?: string | null
+      certification_expiry?: string | null
+      year_experiences?: number | null
+      industries?: string[]
     }>
   ): Promise<User> {
     return updateUserAPI(id, updates)

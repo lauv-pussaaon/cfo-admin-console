@@ -11,6 +11,13 @@ export interface User {
   role: UserRole
   is_approved: boolean
   invite_hashcode?: string
+  organization_name?: string | null
+  phone?: string | null
+  has_verification?: boolean
+  certified_date?: string | null
+  certification_expiry?: string | null
+  year_experiences?: number | null
+  industries?: string[]
   created_at: string
   organizations?: Organization[]
   // Note: password_hash is never returned in API responses for security

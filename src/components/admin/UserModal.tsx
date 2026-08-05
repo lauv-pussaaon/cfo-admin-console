@@ -11,6 +11,9 @@ import { isExpectedError } from '@/lib/utils/errors'
 import type { User } from '@/lib/api/types'
 import type { UserRole } from '@/types/roles'
 import { ROLE_OPTIONS } from '@/types/roles'
+import {
+  refineRegistrationProfile,
+} from '@/components/register/registration-profile-schema'
 import UserForm from './UserForm'
 
 interface UserModalProps {
@@ -21,25 +24,120 @@ interface UserModalProps {
   initialData?: User | null
 }
 
+const phonePattern = /^[0-9+\-\s()]{8,20}$/
+
+function isProfileRole (role: string): boolean {
+  return role === 'Consult' || role === 'Audit'
+}
+
+const profileDefaults = {
+  organizationName: '',
+  phone: '',
+  hasVerification: false,
+  certifiedDate: '',
+  certificationExpiry: '',
+  yearExperiences: 0,
+  industries: [] as string[],
+}
+
 // Schema for admin console users (system users only)
-const userSchema = z.object({
-  username: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้').regex(/^[a-zA-Z0-9_]+$/, 'ชื่อผู้ใช้ต้องเป็นตัวอักษร ตัวเลข หรือ _ เท่านั้น'),
-  email: z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').min(1, 'กรุณากรอกอีเมล'),
-  password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร').optional().or(z.literal('')),
-  name: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้'),
-  avatar_url: z.union([
-    z.string().url('กรุณากรอก URL ที่ถูกต้อง'),
-    z.literal(''),
-    z.null()
-  ]).optional(),
-  role: z.enum(['Admin', 'Dealer', 'Consult', 'Audit', 'Support'] as const).refine(
-    (val) => val !== undefined,
-    { message: 'กรุณาเลือกบทบาท' }
-  ),
-  is_approved: z.boolean(),
-})
+const userSchema = z
+  .object({
+    username: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้').regex(/^[a-zA-Z0-9_]+$/, 'ชื่อผู้ใช้ต้องเป็นตัวอักษร ตัวเลข หรือ _ เท่านั้น'),
+    email: z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').min(1, 'กรุณากรอกอีเมล'),
+    password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร').optional().or(z.literal('')),
+    name: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้'),
+    avatar_url: z.union([
+      z.string().url('กรุณากรอก URL ที่ถูกต้อง'),
+      z.literal(''),
+      z.null()
+    ]).optional(),
+    role: z.enum(['Admin', 'Dealer', 'Consult', 'Audit', 'Support'] as const).refine(
+      (val) => val !== undefined,
+      { message: 'กรุณาเลือกบทบาท' }
+    ),
+    is_approved: z.boolean(),
+    organizationName: z.string(),
+    phone: z.string(),
+    hasVerification: z.boolean(),
+    certifiedDate: z.string().optional().or(z.literal('')),
+    certificationExpiry: z.string().optional().or(z.literal('')),
+    yearExperiences: z.number({ message: 'กรุณากรอกปีประสบการณ์' }),
+    industries: z.array(z.string()),
+  })
+  .superRefine((data, ctx) => {
+    if (!isProfileRole(data.role)) return
+
+    if (!data.organizationName.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'กรุณากรอกชื่อองค์กร',
+        path: ['organizationName'],
+      })
+    }
+    if (!data.phone.trim()) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'กรุณากรอกเบอร์โทร',
+        path: ['phone'],
+      })
+    } else if (!phonePattern.test(data.phone)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'รูปแบบเบอร์โทรไม่ถูกต้อง',
+        path: ['phone'],
+      })
+    }
+    if (
+      !Number.isInteger(data.yearExperiences) ||
+      data.yearExperiences < 0 ||
+      data.yearExperiences > 80
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'ปีประสบการณ์ต้องเป็นจำนวนเต็ม 0–80',
+        path: ['yearExperiences'],
+      })
+    }
+    if (data.industries.length < 1) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'กรุณาเลือกอย่างน้อย 1 อุตสาหกรรม',
+        path: ['industries'],
+      })
+    }
+
+    refineRegistrationProfile(data, ctx)
+  })
 
 export type UserFormData = z.infer<typeof userSchema>
+
+function mapProfilePayload (data: UserFormData) {
+  if (!isProfileRole(data.role)) {
+    return {
+      organization_name: null as string | null,
+      phone: null as string | null,
+      has_verification: false,
+      certified_date: null as string | null,
+      certification_expiry: null as string | null,
+      year_experiences: null as number | null,
+      industries: [] as string[],
+    }
+  }
+
+  const hasVerification = data.hasVerification
+  return {
+    organization_name: data.organizationName.trim(),
+    phone: data.phone.trim(),
+    has_verification: hasVerification,
+    certified_date: hasVerification ? (data.certifiedDate || null) : null,
+    certification_expiry: hasVerification
+      ? (data.certificationExpiry || null)
+      : null,
+    year_experiences: data.yearExperiences,
+    industries: data.industries,
+  }
+}
 
 export default function UserModal({
   open,
@@ -68,6 +166,7 @@ export default function UserModal({
       avatar_url: '',
       role: defaultRole,
       is_approved: true,
+      ...profileDefaults,
     }
   })
 
@@ -80,10 +179,18 @@ export default function UserModal({
         reset({
           username: initialData.username || '',
           email: initialData.email || '',
+          password: '',
           name: initialData.name || '',
           avatar_url: initialData.avatar_url || '',
           role: (initialData.role as UserRole) || defaultRole,
           is_approved: initialData.is_approved,
+          organizationName: initialData.organization_name || '',
+          phone: initialData.phone || '',
+          hasVerification: Boolean(initialData.has_verification),
+          certifiedDate: initialData.certified_date?.slice(0, 10) || '',
+          certificationExpiry: initialData.certification_expiry?.slice(0, 10) || '',
+          yearExperiences: initialData.year_experiences ?? 0,
+          industries: initialData.industries ?? [],
         }, {
           keepErrors: false,
         })
@@ -96,6 +203,7 @@ export default function UserModal({
           avatar_url: '',
           role: defaultRole,
           is_approved: true,
+          ...profileDefaults,
         }, {
           keepErrors: false,
         })
@@ -114,9 +222,10 @@ export default function UserModal({
     setIsSubmitting(true)
     setSubmitError(null)
 
+    const profile = mapProfilePayload(data)
+
     try {
       if (mode === 'edit' && initialData) {
-        // Update existing user
         const updateData: {
           username: string
           email: string
@@ -125,6 +234,13 @@ export default function UserModal({
           role: string
           is_approved: boolean
           password?: string
+          organization_name: string | null
+          phone: string | null
+          has_verification: boolean
+          certified_date: string | null
+          certification_expiry: string | null
+          year_experiences: number | null
+          industries: string[]
         } = {
           username: data.username,
           email: data.email,
@@ -132,6 +248,7 @@ export default function UserModal({
           avatar_url: data.avatar_url || null,
           role: data.role as string,
           is_approved: data.is_approved,
+          ...profile,
         }
         
         // Only update password if provided
@@ -156,6 +273,7 @@ export default function UserModal({
           avatar_url: data.avatar_url || null,
           role: data.role as string,
           is_approved: data.is_approved,
+          ...profile,
         })
       }
       

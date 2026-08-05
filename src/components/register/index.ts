@@ -5,6 +5,11 @@ export { useRegisterConsent } from './RegisterConsentContext'
 export { useRegistrationConsent } from './useRegistrationConsent'
 export { registrationConsentFields, registrationConsentSchema } from './consent-schema'
 export {
+  registrationProfileFields,
+  refineRegistrationProfile,
+} from './registration-profile-schema'
+export type { RegistrationProfileFields } from './registration-profile-schema'
+export {
   REGISTRATION_POLICY_DOCUMENTS,
   POLICY_DOCUMENTS,
   CONSENT_MODAL_COPY,

@@ -92,6 +92,25 @@ export async function getEmissionTemplate (id: string) {
   } as EmissionTemplateWithRelations
 }
 
+export type IndustryOption = {
+  industry_code: string
+  name_th: string
+}
+
+/** Active emission-template industries for public registration multi-select. */
+export async function listActiveIndustryOptions (): Promise<IndustryOption[]> {
+  const { data, error } = await supabase
+    .from('emission_templates')
+    .select('industry_code, name_th')
+    .is('deleted_at', null)
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+    .order('name_th', { ascending: true })
+
+  if (error) throw error
+  return (data ?? []) as IndustryOption[]
+}
+
 export async function createEmissionTemplate (input: CreateEmissionTemplateInput) {
   const { data, error } = await supabase
     .from('emission_templates')

@@ -29,6 +29,13 @@ CREATE TABLE users (
   role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit', 'Support')),
   is_approved BOOLEAN NOT NULL DEFAULT FALSE,
   invite_hashcode TEXT UNIQUE,
+  organization_name TEXT,
+  phone TEXT,
+  has_verification BOOLEAN NOT NULL DEFAULT FALSE,
+  certified_date DATE,
+  certification_expiry DATE,
+  year_experiences INTEGER,
+  industries TEXT[] NOT NULL DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -4,13 +4,16 @@ import type { Organization } from '@/types/database'
 import { throwIfError, handleSupabaseError, ValidationError } from '@/lib/utils/errors'
 import { verifyPassword } from '@/lib/utils/password'
 
+const USER_SELECT =
+  'id, username, email, name, avatar_url, role, is_approved, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, year_experiences, industries, created_at'
+
 // Users API
 export const getUsers = async (): Promise<User[]> => {
   try {
     // Get all users
     const result = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, created_at')
+      .select(USER_SELECT)
       .order('name', { ascending: true })
 
     if (result.error) {
@@ -71,7 +74,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
 
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, created_at')
+    .select(USER_SELECT)
     .eq('id', userId)
     .single()
 
@@ -84,7 +87,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
 export const getUserById = async (userId: string): Promise<User | null> => {
   const { data, error } = await supabase
     .from('users')
-    .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, created_at')
+    .select(USER_SELECT)
     .eq('id', userId)
     .single()
 
@@ -133,6 +136,13 @@ export const createUser = async (data: {
   avatar_url?: string | null
   role?: string
   is_approved?: boolean
+  organization_name?: string | null
+  phone?: string | null
+  has_verification?: boolean
+  certified_date?: string | null
+  certification_expiry?: string | null
+  year_experiences?: number | null
+  industries?: string[]
 }): Promise<User> => {
   // Validate role - only allow admin console roles
   const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
@@ -150,16 +160,9 @@ export const createUser = async (data: {
     ? crypto.randomUUID()
     : null
 
-  const insertData: {
-    username: string
-    email: string
-    password_hash: string
-    name: string
-    avatar_url: string | null
-    role: string
-    is_approved: boolean
-    invite_hashcode: string | null
-  } = {
+  const hasVerification = data.has_verification ?? false
+
+  const insertData = {
     username: data.username,
     email: data.email,
     password_hash,
@@ -168,12 +171,20 @@ export const createUser = async (data: {
     role,
     is_approved: data.is_approved ?? true,
     invite_hashcode,
+    organization_name: data.organization_name?.trim() || null,
+    phone: data.phone?.trim() || null,
+    has_verification: hasVerification,
+    certified_date: hasVerification ? (data.certified_date || null) : null,
+    certification_expiry: hasVerification ? (data.certification_expiry || null) : null,
+    year_experiences:
+      typeof data.year_experiences === 'number' ? data.year_experiences : null,
+    industries: data.industries ?? [],
   }
 
   const result = await supabase
     .from('users')
     .insert(insertData)
-    .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, created_at')
+    .select(USER_SELECT)
     .single()
 
   return throwIfError(result)
@@ -189,6 +200,13 @@ export const updateUser = async (
     avatar_url: string | null
     role: string
     is_approved: boolean
+    organization_name?: string | null
+    phone?: string | null
+    has_verification?: boolean
+    certified_date?: string | null
+    certification_expiry?: string | null
+    year_experiences?: number | null
+    industries?: string[]
   }>
 ): Promise<User> => {
   const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
@@ -196,29 +214,57 @@ export const updateUser = async (
     throw new ValidationError(`Invalid role. Allowed roles: ${allowedRoles.join(', ')}`)
   }
 
-  const updateData: {
-    username?: string
-    email?: string
-    password?: string
-    password_hash?: string
-    name?: string
-    avatar_url?: string | null
-    role?: string
-    is_approved?: boolean
-  } = { ...updates }
+  const {
+    password,
+    has_verification,
+    certified_date,
+    certification_expiry,
+    organization_name,
+    phone,
+    year_experiences,
+    industries,
+    ...rest
+  } = updates
+
+  const updateData: Record<string, unknown> = { ...rest }
+
+  if (organization_name !== undefined) {
+    updateData.organization_name = organization_name?.trim() || null
+  }
+  if (phone !== undefined) {
+    updateData.phone = phone?.trim() || null
+  }
+  if (year_experiences !== undefined) {
+    updateData.year_experiences =
+      typeof year_experiences === 'number' ? year_experiences : null
+  }
+  if (industries !== undefined) {
+    updateData.industries = industries ?? []
+  }
+  if (has_verification !== undefined) {
+    updateData.has_verification = has_verification
+    updateData.certified_date = has_verification ? (certified_date || null) : null
+    updateData.certification_expiry = has_verification
+      ? (certification_expiry || null)
+      : null
+  } else {
+    if (certified_date !== undefined) updateData.certified_date = certified_date
+    if (certification_expiry !== undefined) {
+      updateData.certification_expiry = certification_expiry
+    }
+  }
 
   // If password is provided, hash it
-  if (updates.password) {
+  if (password) {
     const { hashPassword } = await import('@/lib/utils/password')
-    updateData.password_hash = await hashPassword(updates.password)
-    delete updateData.password
+    updateData.password_hash = await hashPassword(password)
   }
 
   const result = await supabase
     .from('users')
     .update(updateData)
     .eq('id', id)
-    .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, created_at')
+    .select(USER_SELECT)
     .single()
 
   return throwIfError(result)

@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,12 +11,18 @@ import {
   Button,
   Card,
   CardContent,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
+  FormHelperText,
   InputAdornment,
   InputLabel,
+  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
+  Switch,
   TextField,
   Typography,
 } from '@mui/material'
@@ -27,31 +33,48 @@ import {
   Person as PersonIcon,
   Badge as BadgeIcon,
   ArrowBack as ArrowBackIcon,
+  Business as BusinessIcon,
+  Phone as PhoneIcon,
 } from '@mui/icons-material'
-import { RegisterConsentGate, useRegisterConsent } from '@/components/register'
+import {
+  RegisterConsentGate,
+  useRegisterConsent,
+  registrationProfileFields,
+  refineRegistrationProfile,
+} from '@/components/register'
 import { useRegisterBack } from '@/app/register/useRegisterBack'
 
-const registerSchema = z.object({
-  name: z.string().min(1, 'กรุณากรอกชื่อ-นามสกุล'),
-  username: z
-    .string()
-    .min(3, 'ชื่อผู้ใช้อย่างน้อย 3 ตัวอักษร')
-    .max(50, 'ชื่อผู้ใช้สูงสุด 50 ตัวอักษร')
-    .regex(/^[a-zA-Z0-9_]+$/, 'ใช้ได้เฉพาะ a–z, 0–9 และ _'),
-  email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
-  password: z.string().min(6, 'รหัสผ่านอย่างน้อย 6 ตัว'),
-  role: z.enum(['Consult', 'Audit'], {
-    message: 'กรุณาเลือกบทบาท',
-  }),
-})
+const registerSchema = z
+  .object({
+    name: z.string().min(1, 'กรุณากรอกชื่อ-นามสกุล'),
+    username: z
+      .string()
+      .min(3, 'ชื่อผู้ใช้อย่างน้อย 3 ตัวอักษร')
+      .max(50, 'ชื่อผู้ใช้สูงสุด 50 ตัวอักษร')
+      .regex(/^[a-zA-Z0-9_]+$/, 'ใช้ได้เฉพาะ a–z, 0–9 และ _'),
+    email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
+    password: z.string().min(6, 'รหัสผ่านอย่างน้อย 6 ตัว'),
+    role: z.enum(['Consult', 'Audit'], {
+      message: 'กรุณาเลือกบทบาท',
+    }),
+    ...registrationProfileFields,
+  })
+  .superRefine(refineRegistrationProfile)
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
-function ConsultRegisterForm() {
+type IndustryOption = {
+  industry_code: string
+  name_th: string
+}
+
+function ConsultRegisterForm () {
   const handleBack = useRegisterBack()
   const { consent } = useRegisterConsent()
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [industryOptions, setIndustryOptions] = useState<IndustryOption[]>([])
+  const [industriesLoading, setIndustriesLoading] = useState(true)
 
   const {
     register,
@@ -67,10 +90,47 @@ function ConsultRegisterForm() {
       email: '',
       password: '',
       role: 'Consult',
+      organizationName: '',
+      phone: '',
+      hasVerification: false,
+      certifiedDate: '',
+      certificationExpiry: '',
+      yearExperiences: 0,
+      industries: [],
     },
   })
 
   const roleValue = watch('role')
+  const hasVerification = watch('hasVerification')
+  const industriesValue = watch('industries')
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        setIndustriesLoading(true)
+        const response = await fetch('/api/public/industries')
+        const result = await response.json()
+        if (!response.ok) {
+          throw new Error(result.error || 'โหลดอุตสาหกรรมไม่สำเร็จ')
+        }
+        if (!cancelled) {
+          setIndustryOptions(result.industries ?? [])
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setSubmitError(
+            error instanceof Error ? error.message : 'โหลดอุตสาหกรรมไม่สำเร็จ'
+          )
+        }
+      } finally {
+        if (!cancelled) setIndustriesLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const onSubmit = async (data: RegisterFormData) => {
     if (!consent) {
@@ -86,6 +146,10 @@ function ConsultRegisterForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data,
+          certifiedDate: data.hasVerification ? data.certifiedDate : '',
+          certificationExpiry: data.hasVerification
+            ? data.certificationExpiry
+            : '',
           termsAccepted: consent.termsAccepted,
           privacyAcknowledged: consent.privacyAcknowledged,
           collectShareDataConsent: consent.collectShareDataConsent,
@@ -213,13 +277,166 @@ function ConsultRegisterForm() {
                     <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
                     <MenuItem value="Audit">ผู้ตรวจสอบ</MenuItem>
                   </Select>
+                  {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
+                </FormControl>
+
+                <TextField
+                  label="ชื่อองค์กร"
+                  {...register('organizationName')}
+                  error={!!errors.organizationName}
+                  helperText={errors.organizationName?.message}
+                  disabled={isSubmitting}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BusinessIcon color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <TextField
+                  label="เบอร์โทร"
+                  {...register('phone')}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                  disabled={isSubmitting}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PhoneIcon color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 1,
+                    px: 2,
+                    py: 1,
+                  }}
+                >
+                  <Box>
+                    <Typography variant="subtitle2">มีการรับรอง (Verification)</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      เปิดหากมีใบรับรองที่เกี่ยวข้อง
+                    </Typography>
+                  </Box>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hasVerification}
+                        onChange={(e) => {
+                          setValue('hasVerification', e.target.checked, {
+                            shouldValidate: true,
+                          })
+                          if (!e.target.checked) {
+                            setValue('certifiedDate', '', { shouldValidate: true })
+                            setValue('certificationExpiry', '', {
+                              shouldValidate: true,
+                            })
+                          }
+                        }}
+                        disabled={isSubmitting}
+                      />
+                    }
+                    label={hasVerification ? 'มี' : 'ไม่มี'}
+                    sx={{ mr: 0 }}
+                  />
+                </Box>
+
+                {hasVerification && (
+                  <>
+                    <TextField
+                      label="วันที่ได้รับการรับรอง"
+                      type="date"
+                      {...register('certifiedDate')}
+                      error={!!errors.certifiedDate}
+                      helperText={errors.certifiedDate?.message}
+                      disabled={isSubmitting}
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                      label="วันหมดอายุการรับรอง"
+                      type="date"
+                      {...register('certificationExpiry')}
+                      error={!!errors.certificationExpiry}
+                      helperText={errors.certificationExpiry?.message}
+                      disabled={isSubmitting}
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </>
+                )}
+
+                <TextField
+                  label="ปีประสบการณ์"
+                  type="number"
+                  {...register('yearExperiences', { valueAsNumber: true })}
+                  error={!!errors.yearExperiences}
+                  helperText={errors.yearExperiences?.message}
+                  disabled={isSubmitting}
+                  fullWidth
+                  inputProps={{ min: 0, max: 80, step: 1 }}
+                />
+
+                <FormControl fullWidth error={!!errors.industries}>
+                  <InputLabel id="public-register-industries-label">อุตสาหกรรม</InputLabel>
+                  <Select
+                    labelId="public-register-industries-label"
+                    multiple
+                    value={industriesValue}
+                    onChange={(event) => {
+                      const value = event.target.value
+                      setValue(
+                        'industries',
+                        typeof value === 'string' ? value.split(',') : value,
+                        { shouldValidate: true }
+                      )
+                    }}
+                    input={<OutlinedInput label="อุตสาหกรรม" />}
+                    renderValue={(selected) =>
+                      selected
+                        .map(
+                          (code) =>
+                            industryOptions.find((o) => o.industry_code === code)
+                              ?.name_th || code
+                        )
+                        .join(', ')
+                    }
+                    disabled={isSubmitting || industriesLoading}
+                  >
+                    {industryOptions.map((option) => (
+                      <MenuItem key={option.industry_code} value={option.industry_code}>
+                        <Checkbox
+                          checked={industriesValue.includes(option.industry_code)}
+                        />
+                        <ListItemText primary={option.name_th} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>
+                    {errors.industries?.message ||
+                      (industriesLoading
+                        ? 'กำลังโหลดรายการอุตสาหกรรม...'
+                        : 'เลือกได้อย่างน้อย 1 รายการ')}
+                  </FormHelperText>
                 </FormControl>
 
                 <Button
                   type="submit"
                   variant="contained"
                   size="large"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || industriesLoading}
                   startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
                   sx={{ mt: 1, py: 1.3, fontWeight: 600 }}
                 >
@@ -247,7 +464,7 @@ function ConsultRegisterForm() {
   )
 }
 
-function ConsultRegisterPage() {
+function ConsultRegisterPage () {
   const handleBack = useRegisterBack()
 
   return (
@@ -257,7 +474,7 @@ function ConsultRegisterPage() {
   )
 }
 
-export default function RegisterPage() {
+export default function RegisterPage () {
   return (
     <Suspense fallback={null}>
       <ConsultRegisterPage />

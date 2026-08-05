@@ -8,23 +8,57 @@ import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-regis
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 import { getAdminNotificationEmails } from '@/lib/api/users-admin'
 import { registrationConsentFields } from '@/components/register/consent-schema'
+import {
+  registrationProfileFields,
+  refineRegistrationProfile,
+} from '@/components/register/registration-profile-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
+import { listActiveIndustryOptions } from '@/lib/api/emission-templates'
 
-const publicRegistrationSchema = z.object({
-  username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
-  email: z.string().email(),
-  password: z.string().min(6),
-  name: z.string().min(1).max(120),
-  role: z.enum(['Consult', 'Audit']),
-  ...registrationConsentFields,
-})
+const publicRegistrationSchema = z
+  .object({
+    username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
+    email: z.string().email(),
+    password: z.string().min(6),
+    name: z.string().min(1).max(120),
+    role: z.enum(['Consult', 'Audit']),
+    ...registrationProfileFields,
+    ...registrationConsentFields,
+  })
+  .superRefine(refineRegistrationProfile)
 
-export async function POST(request: NextRequest) {
+export async function POST (request: NextRequest) {
   try {
     const body = await request.json()
     const payload = publicRegistrationSchema.parse(body)
 
     const emailNormalized = payload.email.trim().toLowerCase()
+    const industryOptions = await listActiveIndustryOptions()
+    const allowedCodes = new Set(industryOptions.map((i) => i.industry_code))
+    const industries = [...new Set(payload.industries)].filter((code) =>
+      allowedCodes.has(code)
+    )
+    if (industries.length === 0) {
+      return NextResponse.json(
+        { error: 'กรุณาเลือกอุตสาหกรรมที่ถูกต้อง' },
+        { status: 400 }
+      )
+    }
+
+    const industryLabelByCode = new Map(
+      industryOptions.map((i) => [i.industry_code, i.name_th])
+    )
+    const industryLabels = industries.map(
+      (code) => industryLabelByCode.get(code) || code
+    )
+
+    const hasVerification = payload.hasVerification
+    const certifiedDate = hasVerification
+      ? payload.certifiedDate || null
+      : null
+    const certificationExpiry = hasVerification
+      ? payload.certificationExpiry || null
+      : null
 
     const user = await createUser({
       username: payload.username.trim(),
@@ -33,6 +67,13 @@ export async function POST(request: NextRequest) {
       name: payload.name.trim(),
       role: payload.role,
       is_approved: false,
+      organization_name: payload.organizationName.trim(),
+      phone: payload.phone.trim(),
+      has_verification: hasVerification,
+      certified_date: certifiedDate,
+      certification_expiry: certificationExpiry,
+      year_experiences: payload.yearExperiences,
+      industries,
     })
 
     const policyUrls = getPolicyUrls()
@@ -61,6 +102,15 @@ export async function POST(request: NextRequest) {
     }
 
     const requestOrigin = resolveSiteOriginFromRequest(request)
+    const profile = {
+      organizationName: payload.organizationName.trim(),
+      phone: payload.phone.trim(),
+      hasVerification,
+      certifiedDate,
+      certificationExpiry,
+      yearExperiences: payload.yearExperiences,
+      industryLabels,
+    }
 
     try {
       const emailResult = await sendRegistrationConfirmationEmail({
@@ -69,6 +119,7 @@ export async function POST(request: NextRequest) {
         username: payload.username.trim(),
         email: emailNormalized,
         role: payload.role,
+        profile,
         requestOrigin,
       })
       if (!emailResult.sent) {
@@ -88,6 +139,7 @@ export async function POST(request: NextRequest) {
         username: payload.username.trim(),
         email: emailNormalized,
         role: payload.role,
+        profile,
         requestOrigin,
         adminEmails,
       })

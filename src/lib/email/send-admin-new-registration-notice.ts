@@ -9,6 +9,11 @@ import {
   resolveBaseUrlForEmail,
   buildAdminConsoleUsersUrl,
 } from '@/lib/email/resolve-site-origin'
+import {
+  formatRegistrationProfileHtmlItems,
+  formatRegistrationProfileTextLines,
+  type RegistrationEmailProfile,
+} from '@/lib/email/registration-profile-lines'
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
@@ -30,6 +35,7 @@ export async function sendAdminNewRegistrationNotice (params: {
   username: string
   email: string
   role: 'Consult' | 'Audit'
+  profile: RegistrationEmailProfile
   requestOrigin?: string
   adminEmails: string[]
 }): Promise<{ sent: boolean; skipReason?: string }> {
@@ -77,6 +83,11 @@ export async function sendAdminNewRegistrationNotice (params: {
     roleTh: escapeHtml(roleTh),
     adminUsersHref: escapeHtml(adminUsersUrl),
   }
+  const profileTextLines = formatRegistrationProfileTextLines(params.profile)
+  const profileHtmlItems = formatRegistrationProfileHtmlItems(
+    params.profile,
+    escapeHtml
+  )
 
   const subject =
     '[ผู้ดูแล] มีผู้ใช้ลงทะเบียนใหม่ — รออนุมัติ'
@@ -89,6 +100,7 @@ export async function sendAdminNewRegistrationNotice (params: {
     `- ชื่อผู้ใช้: ${params.username}`,
     `- อีเมล: ${params.email}`,
     `- บทบาท: ${roleTh}`,
+    ...profileTextLines,
     '- สถานะ: รอผู้ดูแลอนุมัติ',
     '',
     `จัดการผู้ใช้: ${adminUsersUrl}`,
@@ -105,6 +117,7 @@ export async function sendAdminNewRegistrationNotice (params: {
     <li>ชื่อผู้ใช้: ${safe.username}</li>
     <li>อีเมล: ${safe.email}</li>
     <li>บทบาท: ${safe.roleTh}</li>
+    ${profileHtmlItems}
     <li>สถานะ: รอผู้ดูแลอนุมัติ</li>
   </ul>
   <p><a href="${safe.adminUsersHref}">ไปหน้าจัดการผู้ใช้</a></p>

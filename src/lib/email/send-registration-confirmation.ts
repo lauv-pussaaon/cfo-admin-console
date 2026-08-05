@@ -9,6 +9,11 @@
 
 import { Resend } from 'resend'
 import { resolveBaseUrlForEmail } from '@/lib/email/resolve-site-origin'
+import {
+  formatRegistrationProfileHtmlItems,
+  formatRegistrationProfileTextLines,
+  type RegistrationEmailProfile,
+} from '@/lib/email/registration-profile-lines'
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
@@ -38,6 +43,7 @@ export async function sendRegistrationConfirmationEmail (params: {
   username: string
   email: string
   role: 'Consult' | 'Audit'
+  profile: RegistrationEmailProfile
   /** Set from the HTTP request (e.g. https://localhost:3000) when env URL is unset */
   requestOrigin?: string
 }): Promise<{ sent: boolean; skipReason?: string }> {
@@ -71,6 +77,11 @@ export async function sendRegistrationConfirmationEmail (params: {
     roleTh: escapeHtml(roleTh),
   }
   const safeLoginHref = escapeHtml(loginUrl)
+  const profileTextLines = formatRegistrationProfileTextLines(params.profile)
+  const profileHtmlItems = formatRegistrationProfileHtmlItems(
+    params.profile,
+    escapeHtml
+  )
 
   const subject = 'รับคำขอเปิดบัญชีแล้ว — รอผู้ดูแลอนุมัติ'
 
@@ -84,6 +95,7 @@ export async function sendRegistrationConfirmationEmail (params: {
     `- ชื่อผู้ใช้: ${params.username}`,
     `- อีเมล: ${params.email}`,
     `- บทบาท: ${roleTh}`,
+    ...profileTextLines,
     '',
     `เข้าสู่ระบบ: ${loginUrl}`,
     '',
@@ -102,6 +114,7 @@ export async function sendRegistrationConfirmationEmail (params: {
     <li>ชื่อผู้ใช้: ${safe.username}</li>
     <li>อีเมล: ${safe.email}</li>
     <li>บทบาท: ${safe.roleTh}</li>
+    ${profileHtmlItems}
   </ul>
   <p><a href="${safeLoginHref}">เข้าสู่ระบบ</a></p>
   <p style="font-size:12px;color:#64748b;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
