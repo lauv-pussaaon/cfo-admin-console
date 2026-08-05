@@ -1,11 +1,23 @@
 import { supabase } from '../supabase'
-import type { User } from './types'
+import type { User, UserStatus } from './types'
 import type { Organization } from '@/types/database'
 import { throwIfError, handleSupabaseError, ValidationError } from '@/lib/utils/errors'
 import { verifyPassword } from '@/lib/utils/password'
 
 const USER_SELECT =
-  'id, username, email, name, avatar_url, role, is_approved, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries, created_at'
+  'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries, created_at'
+
+const TOGGLEABLE_STATUSES: UserStatus[] = ['active', 'inactive']
+
+function statusLoginError (status: string): string {
+  if (status === 'rejected') {
+    return 'บัญชีของคุณถูกปฏิเสธ กรุณาติดต่อผู้ดูแลระบบ'
+  }
+  if (status === 'inactive') {
+    return 'บัญชีของคุณถูกปิดใช้งาน กรุณาติดต่อผู้ดูแลระบบ'
+  }
+  return 'บัญชีของคุณยังไม่ได้รับการอนุมัติ กรุณาติดต่อผู้ดูแลระบบ'
+}
 
 // Users API
 export const getUsers = async (): Promise<User[]> => {
@@ -135,7 +147,7 @@ export const createUser = async (data: {
   name: string
   avatar_url?: string | null
   role?: string
-  is_approved?: boolean
+  status?: UserStatus
   organization_name?: string | null
   phone?: string | null
   has_verification?: boolean
@@ -151,6 +163,12 @@ export const createUser = async (data: {
 
   if (!allowedRoles.includes(role)) {
     throw new ValidationError(`Invalid role. Allowed roles: ${allowedRoles.join(', ')}`)
+  }
+
+  const status = data.status ?? 'active'
+  const allowedStatuses: UserStatus[] = ['requested', 'active', 'rejected', 'inactive']
+  if (!allowedStatuses.includes(status)) {
+    throw new ValidationError(`Invalid status. Allowed: ${allowedStatuses.join(', ')}`)
   }
 
   const { hashPassword } = await import('@/lib/utils/password')
@@ -170,7 +188,8 @@ export const createUser = async (data: {
     name: data.name,
     avatar_url: data.avatar_url || null,
     role,
-    is_approved: data.is_approved ?? true,
+    status,
+    rejection_reason: null,
     invite_hashcode,
     organization_name: data.organization_name?.trim() || null,
     phone: data.phone?.trim() || null,
@@ -203,7 +222,7 @@ export const updateUser = async (
     name: string
     avatar_url: string | null
     role: string
-    is_approved: boolean
+    status: UserStatus
     organization_name?: string | null
     phone?: string | null
     has_verification?: boolean
@@ -219,6 +238,23 @@ export const updateUser = async (
     throw new ValidationError(`Invalid role. Allowed roles: ${allowedRoles.join(', ')}`)
   }
 
+  if (updates.status !== undefined) {
+    if (!TOGGLEABLE_STATUSES.includes(updates.status)) {
+      throw new ValidationError('สถานะนี้เปลี่ยนได้เฉพาะผ่านการอนุมัติหรือปฏิเสธ')
+    }
+    const { data: current, error: currentError } = await supabase
+      .from('users')
+      .select('status')
+      .eq('id', id)
+      .single()
+    if (currentError) {
+      handleSupabaseError(currentError)
+    }
+    if (!current || !TOGGLEABLE_STATUSES.includes(current.status as UserStatus)) {
+      throw new ValidationError('เปลี่ยนสถานะใช้งานได้เฉพาะผู้ใช้ที่อนุมัติแล้ว')
+    }
+  }
+
   const {
     password,
     has_verification,
@@ -229,10 +265,18 @@ export const updateUser = async (
     phone,
     year_experiences,
     industries,
+    status,
     ...rest
   } = updates
 
   const updateData: Record<string, unknown> = { ...rest }
+
+  if (status !== undefined) {
+    updateData.status = status
+    if (status === 'active') {
+      updateData.rejection_reason = null
+    }
+  }
 
   if (organization_name !== undefined) {
     updateData.organization_name = organization_name?.trim() || null
@@ -306,8 +350,8 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
     throw new ValidationError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
   }
 
-  if (!user.is_approved) {
-    throw new ValidationError('บัญชีของคุณยังไม่ได้รับการอนุมัติ กรุณาติดต่อผู้ดูแลระบบ')
+  if (user.status !== 'active') {
+    throw new ValidationError(statusLoginError(user.status))
   }
 
   // Return user without password_hash

@@ -2,6 +2,8 @@
 import type { UserRole } from '@/types/roles'
 import type { Organization } from '@/types/database'
 
+export type UserStatus = 'requested' | 'active' | 'rejected' | 'inactive'
+
 export interface User {
   id: string
   username: string
@@ -9,7 +11,8 @@ export interface User {
   name: string
   avatar_url?: string
   role: UserRole
-  is_approved: boolean
+  status: UserStatus
+  rejection_reason?: string | null
   invite_hashcode?: string
   organization_name?: string | null
   phone?: string | null

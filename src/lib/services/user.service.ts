@@ -1,6 +1,6 @@
 import { supabase } from '../supabase'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { User } from '../api/types'
+import type { User, UserStatus } from '../api/types'
 import {
   createUser as createUserAPI,
   updateUser as updateUserAPI,
@@ -37,7 +37,7 @@ export class UserService {
     name: string
     avatar_url?: string | null
     role?: string
-    is_approved?: boolean
+    status?: UserStatus
     organization_name?: string | null
     phone?: string | null
     has_verification?: boolean
@@ -60,7 +60,7 @@ export class UserService {
       name: string
       avatar_url: string | null
       role: string
-      is_approved: boolean
+      status: UserStatus
       organization_name?: string | null
       phone?: string | null
       has_verification?: boolean

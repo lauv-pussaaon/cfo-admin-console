@@ -11,14 +11,16 @@ import {
   Tooltip,
   CircularProgress,
   Typography,
+  Button,
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'
-import type { User } from '@/lib/api/types'
+import type { User, UserStatus } from '@/lib/api/types'
 import { getRoleColor } from '@/types/roles'
+import { USER_STATUS_LABELS } from '@/lib/user-status'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
@@ -30,17 +32,30 @@ import {
 interface Props {
   onEdit: (id: string) => void
   onDelete: (id: string) => void
-  onApprovalChange?: (id: string, isApproved: boolean) => void | Promise<void>
-  approvalUpdatingId?: string | null
+  onApprove?: (id: string) => void | Promise<void>
+  onReject?: (id: string) => void
+  onStatusToggle?: (id: string, nextStatus: 'active' | 'inactive') => void | Promise<void>
+  statusUpdatingId?: string | null
   data: User[]
   loading: boolean
+}
+
+function statusChipColor (
+  status: UserStatus
+): 'default' | 'success' | 'warning' | 'error' {
+  if (status === 'active') return 'success'
+  if (status === 'requested') return 'warning'
+  if (status === 'rejected') return 'error'
+  return 'default'
 }
 
 export default function UsersTable({
   onEdit,
   onDelete,
-  onApprovalChange,
-  approvalUpdatingId = null,
+  onApprove,
+  onReject,
+  onStatusToggle,
+  statusUpdatingId = null,
   data,
   loading,
 }: Props) {
@@ -55,7 +70,8 @@ export default function UsersTable({
       username: user.username,
       email: user.email,
       role: user.role,
-      is_approved: user.is_approved,
+      status: user.status,
+      rejection_reason: user.rejection_reason,
       avatar_url: user.avatar_url,
       organizations: user.organizations || [],
     }))
@@ -123,8 +139,8 @@ export default function UsersTable({
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <Chip
             label={params.value}
-            color={getRoleColor(params.value)}
             size="small"
+            color={getRoleColor(params.value)}
             variant="outlined"
             sx={adminQuietChipSx}
           />
@@ -133,10 +149,10 @@ export default function UsersTable({
     },
     {
       field: 'email',
-      headerName: 'อีเมล์',
-      width: 250,
-      flex: 1.5,
-      minWidth: 200,
+      headerName: 'อีเมล',
+      width: 200,
+      flex: 1.2,
+      minWidth: 160,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', minWidth: 0 }}>
           <Typography
@@ -150,23 +166,24 @@ export default function UsersTable({
       ),
     },
     {
-      field: 'is_approved',
-      headerName: 'การอนุมัติ',
-      width: 180,
+      field: 'status',
+      headerName: 'สถานะ',
+      width: 240,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       renderCell: (params) => {
         const locked = isLockedAdmin({ role: params.row.role, username: params.row.username })
-        const busy = approvalUpdatingId === params.row.id
-        const approved = Boolean(params.value)
+        const busy = statusUpdatingId === params.row.id
+        const status = params.row.status as UserStatus
+        const label = USER_STATUS_LABELS[status] || status
 
         if (locked) {
           return (
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
               <Chip
-                label={approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
-                color={approved ? 'success' : 'warning'}
+                label={label}
+                color={statusChipColor(status)}
                 size="small"
                 variant="outlined"
                 sx={adminQuietChipSx}
@@ -175,34 +192,106 @@ export default function UsersTable({
           )
         }
 
-        return (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 0.75,
-              height: '100%',
-              width: '100%',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Tooltip title={approved ? 'ปิดการอนุมัติ' : 'อนุมัติ'}>
-              <span>
-                <Switch
+        if (status === 'requested') {
+          return (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+                height: '100%',
+                width: '100%',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button
+                size="small"
+                variant="contained"
+                color="success"
+                disabled={busy || !onApprove}
+                onClick={() => {
+                  if (onApprove) void onApprove(params.row.id as string)
+                }}
+              >
+                อนุมัติ
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                color="error"
+                disabled={busy || !onReject}
+                onClick={() => {
+                  if (onReject) onReject(params.row.id as string)
+                }}
+              >
+                ปฏิเสธ
+              </Button>
+              {busy && <CircularProgress size={16} thickness={4} />}
+            </Box>
+          )
+        }
+
+        if (status === 'rejected') {
+          const reason = (params.row.rejection_reason as string | null) || ''
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <Tooltip title={reason || 'ไม่มีเหตุผลระบุ'}>
+                <Chip
+                  label={label}
+                  color="error"
                   size="small"
-                  checked={approved}
-                  disabled={busy || !onApprovalChange}
-                  onChange={(_, checked) => {
-                    if (onApprovalChange) {
-                      void onApprovalChange(params.row.id as string, checked)
-                    }
-                  }}
-                  inputProps={{ 'aria-label': approved ? 'ปิดการอนุมัติ' : 'อนุมัติ' }}
+                  variant="outlined"
+                  sx={adminQuietChipSx}
                 />
-              </span>
-            </Tooltip>
-            {busy && <CircularProgress size={16} thickness={4} />}
+              </Tooltip>
+            </Box>
+          )
+        }
+
+        if (status === 'active' || status === 'inactive') {
+          const isActive = status === 'active'
+          return (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 0.75,
+                height: '100%',
+                width: '100%',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Tooltip title={isActive ? 'ปิดใช้งาน' : 'เปิดใช้งาน'}>
+                <span>
+                  <Switch
+                    size="small"
+                    checked={isActive}
+                    disabled={busy || !onStatusToggle}
+                    onChange={(_, checked) => {
+                      if (onStatusToggle) {
+                        void onStatusToggle(
+                          params.row.id as string,
+                          checked ? 'active' : 'inactive'
+                        )
+                      }
+                    }}
+                    inputProps={{ 'aria-label': isActive ? 'ปิดใช้งาน' : 'เปิดใช้งาน' }}
+                  />
+                </span>
+              </Tooltip>
+              <Typography variant="caption" color="text.secondary">
+                {label}
+              </Typography>
+              {busy && <CircularProgress size={16} thickness={4} />}
+            </Box>
+          )
+        }
+
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <Chip label={label} size="small" variant="outlined" sx={adminQuietChipSx} />
           </Box>
         )
       },
@@ -285,7 +374,7 @@ export default function UsersTable({
         )
       },
     },
-  ], [onEdit, onDelete, onApprovalChange, approvalUpdatingId])
+  ], [onEdit, onDelete, onApprove, onReject, onStatusToggle, statusUpdatingId])
 
   return (
     <Paper elevation={0} sx={adminDataGridPaperSx}>

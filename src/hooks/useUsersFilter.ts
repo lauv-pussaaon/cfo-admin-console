@@ -1,45 +1,41 @@
 import { useState, useMemo } from 'react'
-import type { User } from '@/lib/api/types'
+import type { User, UserStatus } from '@/lib/api/types'
 import type { UserRole } from '@/types/roles'
 
 export function useUsersFilter(users: User[]) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRole, setSelectedRole] = useState<UserRole | ''>('')
-  const [selectedApproval, setSelectedApproval] = useState<'approved' | 'unapproved' | ''>('')
+  const [selectedStatus, setSelectedStatus] = useState<UserStatus | ''>('')
 
   const filteredUsers = useMemo(() => {
     let filtered = users
 
-    // Filter by role
     if (selectedRole) {
       filtered = filtered.filter((user) => user.role === selectedRole)
     }
 
-    if (selectedApproval) {
-      filtered = filtered.filter((user) => (
-        selectedApproval === 'approved' ? user.is_approved : !user.is_approved
-      ))
+    if (selectedStatus) {
+      filtered = filtered.filter((user) => user.status === selectedStatus)
     }
 
-    // Filter by search term
     if (searchTerm) {
       const query = searchTerm.toLowerCase()
-      filtered = filtered.filter((user) => 
+      filtered = filtered.filter((user) =>
         user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query)
       )
     }
 
     return filtered
-  }, [users, searchTerm, selectedRole, selectedApproval])
+  }, [users, searchTerm, selectedRole, selectedStatus])
 
   return {
     searchTerm,
     setSearchTerm,
     selectedRole,
     setSelectedRole,
-    selectedApproval,
-    setSelectedApproval,
+    selectedStatus,
+    setSelectedStatus,
     filteredUsers,
   }
 }

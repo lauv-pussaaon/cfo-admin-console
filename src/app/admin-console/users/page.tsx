@@ -24,14 +24,17 @@ import {
 } from '@mui/icons-material'
 import UsersTable from '@/components/admin/UsersTable'
 import UserModal from '@/components/admin/UserModal'
+import RejectUserModal from '@/components/admin/RejectUserModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { userService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
-import type { User } from '@/lib/api/types'
+import type { User, UserStatus } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useUsersFilter } from '@/hooks/useUsersFilter'
 import { ROLE_OPTIONS } from '@/types/roles'
+import { USER_STATUS_FILTER_OPTIONS } from '@/lib/user-status'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
   adminBackButtonSx,
   adminFilterControlSx,
@@ -58,8 +61,8 @@ export default function AdminConsoleUsersPage() {
     setSearchTerm,
     selectedRole,
     setSelectedRole,
-    selectedApproval,
-    setSelectedApproval,
+    selectedStatus,
+    setSelectedStatus,
     filteredUsers,
   } = useUsersFilter(users)
   const [modalOpen, setModalOpen] = useState(false)
@@ -72,7 +75,11 @@ export default function AdminConsoleUsersPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
-  const [approvalUpdatingId, setApprovalUpdatingId] = useState<string | null>(null)
+  const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(null)
+  const [rejectModalOpen, setRejectModalOpen] = useState(false)
+  const [rejectingUser, setRejectingUser] = useState<User | null>(null)
+  const [isRejecting, setIsRejecting] = useState(false)
+  const [rejectError, setRejectError] = useState<string | null>(null)
 
   const notify = (message: string, severity: 'success' | 'error' = 'success') => {
     setSuccessMessage(message)
@@ -80,7 +87,6 @@ export default function AdminConsoleUsersPage() {
     setShowSuccessMessage(true)
   }
 
-  // Load users
   useEffect(() => {
     if (user) {
       loadUsers()
@@ -91,10 +97,8 @@ export default function AdminConsoleUsersPage() {
     try {
       setLoading(true)
       const data = await userService.getUsers()
-      // userService.getUsers() already filters to admin console roles
       setUsers(data)
     } catch (error) {
-      // Only log unexpected errors
       if (!isExpectedError(error)) {
         console.error('Error loading users:', error)
       }
@@ -110,22 +114,20 @@ export default function AdminConsoleUsersPage() {
   }
 
   const handleEdit = (id: string) => {
-    const user = users.find(u => u.id === id)
-    if (user) {
-      // Prevent editing the locked admin user
-      if (user.role === 'Admin' && user.username === 'admin') {
+    const row = users.find(u => u.id === id)
+    if (row) {
+      if (row.role === 'Admin' && row.username === 'admin') {
         notify('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
         return
       }
-      setEditingUser(user)
+      setEditingUser(row)
       setModalOpen(true)
     }
   }
 
   const handleDelete = async (id: string) => {
-    // Prevent deleting the locked admin user
-    const user = users.find(u => u.id === id)
-    if (user && user.role === 'Admin' && user.username === 'admin') {
+    const row = users.find(u => u.id === id)
+    if (row && row.role === 'Admin' && row.username === 'admin') {
       notify('ไม่สามารถลบผู้ใช้ admin ได้')
       return
     }
@@ -134,13 +136,12 @@ export default function AdminConsoleUsersPage() {
     setDeleteError(null)
     
     try {
-      if (user) {
-        setDeletingItemName(`${user.name} (${user.email})`)
+      if (row) {
+        setDeletingItemName(`${row.name} (${row.email})`)
       } else {
         setDeletingItemName(`User ID: ${id}`)
       }
     } catch {
-      // Error is already handled, just set fallback name
       setDeletingItemName(`User ID: ${id}`)
     }
     
@@ -150,9 +151,8 @@ export default function AdminConsoleUsersPage() {
   const handleDeleteConfirm = async () => {
     if (!deletingId) return
     
-    // Double-check: Prevent deleting the locked admin user
-    const user = users.find(u => u.id === deletingId)
-    if (user && user.role === 'Admin' && user.username === 'admin') {
+    const row = users.find(u => u.id === deletingId)
+    if (row && row.role === 'Admin' && row.username === 'admin') {
       setDeleteDialogOpen(false)
       setDeletingId(null)
       setDeletingItemName('')
@@ -171,16 +171,13 @@ export default function AdminConsoleUsersPage() {
       setDeletingItemName('')
       setIsDeleting(false)
       
-      // Reload users
       await loadUsers()
       
       notify('ลบผู้ใช้เรียบร้อยแล้ว')
       
     } catch (error) {
-      // Error message is already user-friendly from ValidationError
       setDeleteError(error instanceof Error ? error.message : 'การลบข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้ง')
       setIsDeleting(false)
-      // Only log unexpected errors
       if (!isExpectedError(error)) {
         console.error('Unexpected error deleting user:', error)
       }
@@ -215,7 +212,7 @@ export default function AdminConsoleUsersPage() {
     }
   }
 
-  const handleApprovalChange = async (id: string, nextApproved: boolean) => {
+  const handleApprove = async (id: string) => {
     const row = users.find((u) => u.id === id)
     if (!row) return
     if (row.role === 'Admin' && row.username === 'admin') {
@@ -223,22 +220,115 @@ export default function AdminConsoleUsersPage() {
       return
     }
 
-    setApprovalUpdatingId(id)
+    setStatusUpdatingId(id)
     try {
-      await userService.updateUser(id, { is_approved: nextApproved })
-      setUsers((prev) =>
-        prev.map((u) => (u.id === id ? { ...u, is_approved: nextApproved } : u))
+      const response = await authenticatedAdminFetch(
+        `/api/admin-console/users/${id}/approve`,
+        { method: 'POST' }
       )
-      notify(nextApproved ? 'อนุมัติผู้ใช้แล้ว' : 'ตั้งเป็นยังไม่อนุมัติแล้ว')
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'อนุมัติผู้ใช้ไม่สำเร็จ')
+      }
+      const updated = result.user as User
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, ...updated } : u))
+      )
+      notify('อนุมัติผู้ใช้แล้ว')
     } catch (error) {
       const msg =
-        error instanceof Error ? error.message : 'อัปเดตสถานะการอนุมัติไม่สำเร็จ'
+        error instanceof Error ? error.message : 'อนุมัติผู้ใช้ไม่สำเร็จ'
       notify(msg, 'error')
       if (!isExpectedError(error)) {
-        console.error('Unexpected error updating approval:', error)
+        console.error('Unexpected error approving user:', error)
       }
     } finally {
-      setApprovalUpdatingId(null)
+      setStatusUpdatingId(null)
+    }
+  }
+
+  const handleRejectOpen = (id: string) => {
+    const row = users.find((u) => u.id === id)
+    if (!row) return
+    if (row.role === 'Admin' && row.username === 'admin') {
+      notify('ไม่สามารถเปลี่ยนสถานะผู้ใช้ admin ได้')
+      return
+    }
+    setRejectingUser(row)
+    setRejectError(null)
+    setRejectModalOpen(true)
+  }
+
+  const handleRejectClose = () => {
+    if (isRejecting) return
+    setRejectModalOpen(false)
+    setRejectingUser(null)
+    setRejectError(null)
+  }
+
+  const handleRejectConfirm = async (reason: string) => {
+    if (!rejectingUser) return
+
+    setIsRejecting(true)
+    setRejectError(null)
+    setStatusUpdatingId(rejectingUser.id)
+    try {
+      const response = await authenticatedAdminFetch(
+        `/api/admin-console/users/${rejectingUser.id}/reject`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason }),
+        }
+      )
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'ปฏิเสธผู้ใช้ไม่สำเร็จ')
+      }
+      const updated = result.user as User
+      setUsers((prev) =>
+        prev.map((u) => (u.id === rejectingUser.id ? { ...u, ...updated } : u))
+      )
+      setRejectModalOpen(false)
+      setRejectingUser(null)
+      notify('ปฏิเสธผู้ใช้แล้ว')
+    } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : 'ปฏิเสธผู้ใช้ไม่สำเร็จ'
+      setRejectError(msg)
+      if (!isExpectedError(error)) {
+        console.error('Unexpected error rejecting user:', error)
+      }
+    } finally {
+      setIsRejecting(false)
+      setStatusUpdatingId(null)
+    }
+  }
+
+  const handleStatusToggle = async (id: string, nextStatus: 'active' | 'inactive') => {
+    const row = users.find((u) => u.id === id)
+    if (!row) return
+    if (row.role === 'Admin' && row.username === 'admin') {
+      notify('ไม่สามารถเปลี่ยนสถานะผู้ใช้ admin ได้')
+      return
+    }
+
+    setStatusUpdatingId(id)
+    try {
+      await userService.updateUser(id, { status: nextStatus })
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, status: nextStatus } : u))
+      )
+      notify(nextStatus === 'active' ? 'เปิดใช้งานผู้ใช้แล้ว' : 'ปิดใช้งานผู้ใช้แล้ว')
+    } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : 'อัปเดตสถานะไม่สำเร็จ'
+      notify(msg, 'error')
+      if (!isExpectedError(error)) {
+        console.error('Unexpected error updating status:', error)
+      }
+    } finally {
+      setStatusUpdatingId(null)
     }
   }
 
@@ -332,17 +422,20 @@ export default function AdminConsoleUsersPage() {
           </Select>
         </FormControl>
         <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
-          <InputLabel>กรองตามการอนุมัติ</InputLabel>
+          <InputLabel>กรองตามสถานะ</InputLabel>
           <Select
-            value={selectedApproval}
-            label="กรองตามการอนุมัติ"
-            onChange={(e) => setSelectedApproval(e.target.value as '' | 'approved' | 'unapproved')}
+            value={selectedStatus}
+            label="กรองตามสถานะ"
+            onChange={(e) => setSelectedStatus(e.target.value as '' | UserStatus)}
           >
             <MenuItem value="">
               <em>ทั้งหมด</em>
             </MenuItem>
-            <MenuItem value="approved">อนุมัติแล้ว</MenuItem>
-            <MenuItem value="unapproved">ยังไม่อนุมัติ</MenuItem>
+            {USER_STATUS_FILTER_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -352,8 +445,10 @@ export default function AdminConsoleUsersPage() {
         loading={loading}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onApprovalChange={handleApprovalChange}
-        approvalUpdatingId={approvalUpdatingId}
+        onApprove={handleApprove}
+        onReject={handleRejectOpen}
+        onStatusToggle={handleStatusToggle}
+        statusUpdatingId={statusUpdatingId}
       />
 
       <UserModal
@@ -362,6 +457,15 @@ export default function AdminConsoleUsersPage() {
         onSuccess={handleModalSuccess}
         mode={editingUser ? 'edit' : 'create'}
         initialData={editingUser}
+      />
+
+      <RejectUserModal
+        open={rejectModalOpen}
+        userName={rejectingUser ? `${rejectingUser.name} (${rejectingUser.email})` : ''}
+        isSubmitting={isRejecting}
+        error={rejectError}
+        onClose={handleRejectClose}
+        onConfirm={handleRejectConfirm}
       />
 
       <DeleteConfirmationDialog
@@ -389,4 +493,3 @@ export default function AdminConsoleUsersPage() {
     </Box>
   )
 }
-

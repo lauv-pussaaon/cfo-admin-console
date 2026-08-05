@@ -57,7 +57,6 @@ const userSchema = z
       (val) => val !== undefined,
       { message: 'กรุณาเลือกบทบาท' }
     ),
-    is_approved: z.boolean(),
     organizationName: z.string(),
     phone: z.string(),
     hasVerification: z.boolean(),
@@ -171,7 +170,6 @@ export default function UserModal({
       name: '',
       avatar_url: '',
       role: defaultRole,
-      is_approved: true,
       ...profileDefaults,
     }
   })
@@ -189,7 +187,6 @@ export default function UserModal({
           name: initialData.name || '',
           avatar_url: initialData.avatar_url || '',
           role: (initialData.role as UserRole) || defaultRole,
-          is_approved: initialData.is_approved,
           organizationName: initialData.organization_name || '',
           phone: initialData.phone || '',
           hasVerification: Boolean(initialData.has_verification),
@@ -209,7 +206,6 @@ export default function UserModal({
           name: '',
           avatar_url: '',
           role: defaultRole,
-          is_approved: true,
           ...profileDefaults,
         }, {
           keepErrors: false,
@@ -239,7 +235,6 @@ export default function UserModal({
           name: string
           avatar_url: string | null
           role: string
-          is_approved: boolean
           password?: string
           organization_name: string | null
           phone: string | null
@@ -255,7 +250,6 @@ export default function UserModal({
           name: data.name,
           avatar_url: data.avatar_url || null,
           role: data.role as string,
-          is_approved: data.is_approved,
           ...profile,
         }
         
@@ -280,7 +274,7 @@ export default function UserModal({
           name: data.name,
           avatar_url: data.avatar_url || null,
           role: data.role as string,
-          is_approved: data.is_approved,
+          status: 'active',
           ...profile,
         })
       }

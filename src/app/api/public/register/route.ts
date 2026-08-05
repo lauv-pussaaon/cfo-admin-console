@@ -69,7 +69,7 @@ export async function POST (request: NextRequest) {
       password: payload.password,
       name: payload.name.trim(),
       role: payload.role,
-      is_approved: false,
+      status: 'requested',
       organization_name: payload.organizationName.trim(),
       phone: payload.phone.trim(),
       has_verification: hasVerification,

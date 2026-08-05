@@ -27,7 +27,9 @@ CREATE TABLE users (
   name TEXT NOT NULL,
   avatar_url TEXT,
   role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit', 'Support')),
-  is_approved BOOLEAN NOT NULL DEFAULT FALSE,
+  status TEXT NOT NULL DEFAULT 'requested'
+    CHECK (status IN ('requested', 'active', 'rejected', 'inactive')),
+  rejection_reason TEXT,
   invite_hashcode TEXT UNIQUE,
   organization_name TEXT,
   phone TEXT,
@@ -333,7 +335,7 @@ CREATE INDEX idx_organizations_created_at ON organizations(created_at);
 -- Users indexes
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_is_approved ON users(is_approved);
+CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_users_invite_hashcode ON users(invite_hashcode);
 CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
 

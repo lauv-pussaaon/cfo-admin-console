@@ -30,7 +30,7 @@ export async function POST (request: NextRequest) {
     // Note: We need to filter by role after finding the user, so we query first then filter
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, is_approved, invite_hashcode, password_hash')
+      .select('id, username, email, name, avatar_url, role, status, invite_hashcode, password_hash')
       .or(`username.eq.${usernameOrEmail},email.eq.${usernameOrEmail}`)
       .limit(1)
 
@@ -62,10 +62,16 @@ export async function POST (request: NextRequest) {
       )
     }
 
-    if (!user.is_approved) {
+    if (user.status !== 'active') {
       const headers = createCorsHeaders(origin)
+      const message =
+        user.status === 'rejected'
+          ? 'บัญชีถูกปฏิเสธ'
+          : user.status === 'inactive'
+            ? 'บัญชีถูกปิดใช้งาน'
+            : 'บัญชียังไม่ได้รับการอนุมัติ'
       return NextResponse.json(
-        { error: 'บัญชียังไม่ได้รับการอนุมัติ' },
+        { error: message },
         { status: 403, headers }
       )
     }
