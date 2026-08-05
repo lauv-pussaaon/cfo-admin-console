@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Box,
-  Container,
   Typography,
   Button,
   Snackbar,
@@ -237,119 +236,151 @@ export default function AdminConsoleUsersPage() {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: '100vh', backgroundColor: 'background.default' }}>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Link href="/admin-console" style={{ textDecoration: 'none' }}>
-          <Button
-            startIcon={<ArrowBack />}
-            sx={{ mb: 2, textTransform: 'none' }}
-          >
-            กลับ
-          </Button>
-        </Link>
-        {/* Header */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Typography variant="h4" component="h1" fontWeight="bold">
-            จัดการผู้ใช้
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreate}
-            sx={{ textTransform: 'none' }}
-          >
-            สร้างผู้ใช้ใหม่
-          </Button>
-        </Box>
-
-        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-          <TextField
-            placeholder="ค้นหาชื่อผู้ใช้หรืออีเมล..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            size="small"
-            sx={{ minWidth: 300 }}
-            InputProps={{
-              startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
-            }}
-          />
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>กรองตามบทบาท</InputLabel>
-            <Select
-              value={selectedRole}
-              label="กรองตามบทบาท"
-              onChange={(e) => setSelectedRole(e.target.value as '' | typeof ROLE_OPTIONS[number]['value'])}
-            >
-              <MenuItem value="">
-                <em>ทั้งหมด</em>
-              </MenuItem>
-              {ROLE_OPTIONS.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>กรองตามการอนุมัติ</InputLabel>
-            <Select
-              value={selectedApproval}
-              label="กรองตามการอนุมัติ"
-              onChange={(e) => setSelectedApproval(e.target.value as '' | 'approved' | 'unapproved')}
-            >
-              <MenuItem value="">
-                <em>ทั้งหมด</em>
-              </MenuItem>
-              <MenuItem value="approved">อนุมัติแล้ว</MenuItem>
-              <MenuItem value="unapproved">ยังไม่อนุมัติ</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Table */}
-        <UsersTable
-          data={filteredUsers}
-          loading={loading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onApprovalChange={handleApprovalChange}
-          approvalUpdatingId={approvalUpdatingId}
-        />
-
-        {/* Create/Edit Modal */}
-        <UserModal
-          open={modalOpen}
-          onClose={handleModalClose}
-          onSuccess={handleModalSuccess}
-          mode={editingUser ? 'edit' : 'create'}
-          initialData={editingUser}
-        />
-
-        {/* Delete Confirmation Dialog */}
-        <DeleteConfirmationDialog
-          open={deleteDialogOpen}
-          onClose={handleDeleteCancel}
-          onConfirm={handleDeleteConfirm}
-          title="ยืนยันการลบผู้ใช้"
-          message={`คุณแน่ใจหรือไม่ที่จะลบผู้ใช้ "${deletingItemName}"?`}
-          description="การลบนี้ไม่สามารถยกเลิกได้"
-          itemName={deletingItemName}
-          isDeleting={isDeleting}
-          error={deleteError}
-        />
-
-        {/* Success Snackbar */}
-        <Snackbar
-          open={showSuccessMessage}
-          autoHideDuration={6000}
-          onClose={() => setShowSuccessMessage(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+    <Box sx={{ flexGrow: 1, width: '100%', py: 3 }}>
+      <Link href="/admin-console" style={{ textDecoration: 'none' }}>
+        <Button
+          startIcon={<ArrowBack />}
+          sx={{
+            mb: 2,
+            textTransform: 'none',
+            color: 'text.secondary',
+            px: 0,
+            '&:hover': { backgroundColor: 'transparent', color: 'text.primary' },
+          }}
         >
-          <Alert onClose={() => setShowSuccessMessage(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {successMessage}
-          </Alert>
-        </Snackbar>
-      </Container>
+          กลับ
+        </Button>
+      </Link>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          mb: 3,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ fontWeight: 700, letterSpacing: '-0.02em' }}
+        >
+          จัดการผู้ใช้
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleCreate}
+          sx={{
+            textTransform: 'none',
+            borderRadius: 2,
+            boxShadow: 'none',
+            px: 2.5,
+            '&:hover': { boxShadow: 'none' },
+          }}
+        >
+          สร้างผู้ใช้ใหม่
+        </Button>
+      </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1.5,
+          mb: 3,
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}
+      >
+        <TextField
+          placeholder="ค้นหาชื่อผู้ใช้หรืออีเมล..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          size="small"
+          sx={{
+            minWidth: 280,
+            maxWidth: 420,
+            flex: '1 1 280px',
+            '& .MuiOutlinedInput-root': { borderRadius: 2 },
+          }}
+          InputProps={{
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
+          }}
+        />
+        <FormControl size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
+          <InputLabel>กรองตามบทบาท</InputLabel>
+          <Select
+            value={selectedRole}
+            label="กรองตามบทบาท"
+            onChange={(e) => setSelectedRole(e.target.value as '' | typeof ROLE_OPTIONS[number]['value'])}
+          >
+            <MenuItem value="">
+              <em>ทั้งหมด</em>
+            </MenuItem>
+            {ROLE_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 180, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
+          <InputLabel>กรองตามการอนุมัติ</InputLabel>
+          <Select
+            value={selectedApproval}
+            label="กรองตามการอนุมัติ"
+            onChange={(e) => setSelectedApproval(e.target.value as '' | 'approved' | 'unapproved')}
+          >
+            <MenuItem value="">
+              <em>ทั้งหมด</em>
+            </MenuItem>
+            <MenuItem value="approved">อนุมัติแล้ว</MenuItem>
+            <MenuItem value="unapproved">ยังไม่อนุมัติ</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <UsersTable
+        data={filteredUsers}
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onApprovalChange={handleApprovalChange}
+        approvalUpdatingId={approvalUpdatingId}
+      />
+
+      <UserModal
+        open={modalOpen}
+        onClose={handleModalClose}
+        onSuccess={handleModalSuccess}
+        mode={editingUser ? 'edit' : 'create'}
+        initialData={editingUser}
+      />
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="ยืนยันการลบผู้ใช้"
+        message={`คุณแน่ใจหรือไม่ที่จะลบผู้ใช้ "${deletingItemName}"?`}
+        description="การลบนี้ไม่สามารถยกเลิกได้"
+        itemName={deletingItemName}
+        isDeleting={isDeleting}
+        error={deleteError}
+      />
+
+      <Snackbar
+        open={showSuccessMessage}
+        autoHideDuration={6000}
+        onClose={() => setShowSuccessMessage(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setShowSuccessMessage(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

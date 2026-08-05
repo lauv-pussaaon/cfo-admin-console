@@ -1,10 +1,20 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, IconButton, Paper, Chip, Avatar, Switch, Tooltip, CircularProgress } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  Paper,
+  Chip,
+  Avatar,
+  Switch,
+  Tooltip,
+  CircularProgress,
+  Typography,
+} from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import { 
-  Edit as EditIcon, 
+import {
+  Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'
 import type { User } from '@/lib/api/types'
@@ -27,7 +37,6 @@ export default function UsersTable({
   data,
   loading,
 }: Props) {
-  // Helper function to check if user is the locked admin
   const isLockedAdmin = (user: { role: string; username: string }) => {
     return user.role === 'Admin' && user.username === 'admin'
   }
@@ -53,17 +62,33 @@ export default function UsersTable({
       flex: 1.5,
       minWidth: 200,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, height: '100%', minWidth: 0 }}>
           <Avatar
             src={params.row.avatar_url || undefined}
             alt={params.row.name}
-            sx={{ width: 40, height: 40 }}
+            sx={{
+              width: 44,
+              height: 44,
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              bgcolor: 'grey.100',
+              color: 'text.secondary',
+            }}
           >
             {params.row.name.charAt(0).toUpperCase()}
           </Avatar>
-          <Box component="span" sx={{ fontWeight: 'medium' }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 600,
+              color: 'text.primary',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {params.row.name}
-          </Box>
+          </Typography>
         </Box>
       ),
     },
@@ -73,6 +98,13 @@ export default function UsersTable({
       width: 150,
       flex: 1,
       minWidth: 120,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <Typography variant="body2" color="text.secondary">
+            {params.value}
+          </Typography>
+        </Box>
+      ),
     },
     {
       field: 'role',
@@ -81,14 +113,19 @@ export default function UsersTable({
       align: 'center',
       headerAlign: 'center',
       renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={getRoleColor(params.value)}
-          size="small"
-          sx={{
-            fontWeight: 'medium',
-          }}
-        />
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Chip
+            label={params.value}
+            color={getRoleColor(params.value)}
+            size="small"
+            variant="outlined"
+            sx={{
+              fontWeight: 500,
+              borderRadius: 1.5,
+              height: 28,
+            }}
+          />
+        </Box>
       ),
     },
     {
@@ -97,11 +134,22 @@ export default function UsersTable({
       width: 250,
       flex: 1.5,
       minWidth: 200,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', minWidth: 0 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+          >
+            {params.value}
+          </Typography>
+        </Box>
+      ),
     },
     {
       field: 'is_approved',
       headerName: 'การอนุมัติ',
-      width: 200,
+      width: 180,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -112,12 +160,15 @@ export default function UsersTable({
 
         if (locked) {
           return (
-            <Chip
-              label={approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
-              color={approved ? 'success' : 'warning'}
-              size="small"
-              sx={{ fontWeight: 'medium' }}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <Chip
+                label={approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
+                color={approved ? 'success' : 'warning'}
+                size="small"
+                variant="outlined"
+                sx={{ fontWeight: 500, borderRadius: 1.5, height: 28 }}
+              />
+            </Box>
           )
         }
 
@@ -127,7 +178,7 @@ export default function UsersTable({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 1,
+              gap: 0.75,
               height: '100%',
               width: '100%',
             }}
@@ -148,7 +199,7 @@ export default function UsersTable({
                 />
               </span>
             </Tooltip>
-            {busy && <CircularProgress size={18} />}
+            {busy && <CircularProgress size={16} thickness={4} />}
           </Box>
         )
       },
@@ -156,17 +207,35 @@ export default function UsersTable({
     {
       field: 'organizations',
       headerName: 'องค์กรที่ดูแล',
-      width: 300,
-      flex: 2,
-      minWidth: 250,
+      width: 180,
+      flex: 1,
+      minWidth: 140,
       renderCell: (params) => {
         const orgs = params.row.organizations || []
         if (orgs.length === 0) {
-          return <Box sx={{ color: 'text.secondary', fontStyle: 'italic' }}>-</Box>
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+              <Typography variant="body2" color="text.disabled">
+                —
+              </Typography>
+            </Box>
+          )
         }
         return (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {params.row.organizations.length}
+          <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+            <Chip
+              label={`${orgs.length} องค์กร`}
+              size="small"
+              variant="outlined"
+              sx={{
+                height: 28,
+                borderRadius: 1.5,
+                fontWeight: 500,
+                color: 'text.secondary',
+                borderColor: 'divider',
+                bgcolor: 'transparent',
+              }}
+            />
           </Box>
         )
       },
@@ -174,7 +243,7 @@ export default function UsersTable({
     {
       field: 'actions',
       headerName: 'การดำเนินการ',
-      width: 150,
+      width: 120,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -182,28 +251,36 @@ export default function UsersTable({
       renderCell: (params) => {
         const isLocked = isLockedAdmin({ role: params.row.role, username: params.row.username })
         return (
-          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <IconButton 
-              size="small" 
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 0.5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <IconButton
+              size="small"
               onClick={() => onEdit(params.row.id)}
               disabled={isLocked}
-              sx={{ 
-                color: 'primary.main',
-                '&:hover': { backgroundColor: 'primary.light', color: 'white' },
-                '&.Mui-disabled': { color: 'text.disabled' }
+              sx={{
+                color: 'text.secondary',
+                '&:hover': { backgroundColor: 'action.hover', color: 'primary.main' },
+                '&.Mui-disabled': { color: 'text.disabled' },
               }}
               title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
             >
               <EditIcon fontSize="small" />
             </IconButton>
-            <IconButton 
-              size="small" 
+            <IconButton
+              size="small"
               onClick={() => onDelete(params.row.id)}
               disabled={isLocked}
-              sx={{ 
-                color: 'error.main',
-                '&:hover': { backgroundColor: 'error.light', color: 'white' },
-                '&.Mui-disabled': { color: 'text.disabled' }
+              sx={{
+                color: 'text.secondary',
+                '&:hover': { backgroundColor: 'action.hover', color: 'error.main' },
+                '&.Mui-disabled': { color: 'text.disabled' },
               }}
               title={isLocked ? 'ไม่สามารถลบผู้ใช้ admin ได้' : 'ลบ'}
             >
@@ -216,12 +293,27 @@ export default function UsersTable({
   ], [onEdit, onDelete, onApprovalChange, approvalUpdatingId])
 
   return (
-    <Paper elevation={0} sx={{ height: 600, width: '100%', backgroundColor: 'transparent' }}>
+    <Paper
+      elevation={0}
+      sx={{
+        minHeight: 520,
+        width: '100%',
+        backgroundColor: 'background.paper',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 2,
+        overflow: 'hidden',
+        overflowX: 'auto',
+      }}
+    >
       <DataGrid
         rows={rows}
         columns={columns}
         loading={loading}
         disableRowSelectionOnClick
+        disableColumnMenu
+        rowHeight={68}
+        columnHeaderHeight={52}
         pageSizeOptions={[10, 25, 50, 100]}
         initialState={{
           pagination: {
@@ -230,35 +322,39 @@ export default function UsersTable({
         }}
         sx={{
           border: 'none',
-          backgroundColor: 'transparent',
-          '& .MuiDataGrid-root': {
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-main': {
-            backgroundColor: 'transparent',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            backgroundColor: 'transparent',
-          },
+          minHeight: 520,
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: 'grey.50',
             borderBottom: '1px solid',
             borderColor: 'divider',
           },
-          '& .MuiDataGrid-row': {
-            backgroundColor: 'transparent',
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            color: 'text.secondary',
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            alignItems: 'center',
+            py: 0,
           },
           '& .MuiDataGrid-row:hover': {
             backgroundColor: 'action.hover',
           },
           '& .MuiDataGrid-footerContainer': {
-            backgroundColor: 'transparent',
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            backgroundColor: 'background.paper',
+          },
+          '& .MuiDataGrid-columnSeparator': {
+            display: 'none',
           },
         }}
       />
     </Paper>
   )
 }
-
