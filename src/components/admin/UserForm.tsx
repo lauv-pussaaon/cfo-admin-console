@@ -95,7 +95,7 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
       setValue(
         'verificationDocuments',
         [...verificationDocuments, ...uploaded],
-        { shouldValidate: true }
+        { shouldValidate: true, shouldDirty: true, shouldTouch: true }
       )
     } catch (error) {
       setDocsUploadError(
@@ -223,13 +223,14 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
         )}
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Typography variant="subtitle1" fontWeight={600}>
-          ข้อมูลวิชาชีพ
-        </Typography>        
+      {showProfile && (
+        <>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              ข้อมูลวิชาชีพ
+            </Typography>        
 
-        {showProfile && (
-          <>
+        
             <TextField
               fullWidth
               label="ชื่อองค์กร *"
@@ -314,14 +315,13 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
 
                 <Box>
                   <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                    เอกสารการรับรอง * (สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์)
+                    เอกสารการรับรอง (สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์)
                   </Typography>
                   <input
                     ref={docsInputRef}
                     type="file"
                     accept={VERIFICATION_DOCUMENT_ACCEPT}
                     multiple
-                    hidden
                     onChange={handleVerificationDocsChange}
                     disabled={
                       isSubmitting ||
@@ -329,8 +329,10 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
                       docsUploading ||
                       verificationDocuments.length >= MAX_VERIFICATION_DOCUMENTS
                     }
+                    style={{ display: 'none' }}
                   />
                   <Button
+                    type="button"
                     variant="outlined"
                     startIcon={
                       docsUploading ? <CircularProgress size={16} /> : <UploadFileIcon />
@@ -350,9 +352,9 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
                     รองรับรูปภาพ, PDF, Word, Excel — ไฟล์ละไม่เกิน 5MB
                   </Typography>
                   {(docsUploadError || errors.verificationDocuments) && (
-                    <FormHelperText error sx={{ mx: 0, mt: 1 }}>
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}>
                       {docsUploadError || errors.verificationDocuments?.message}
-                    </FormHelperText>
+                    </Typography>
                   )}
                   {verificationDocuments.length > 0 && (
                     <Box sx={{ mt: 1.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -502,10 +504,10 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
                 label={formData.is_approved ? 'อนุมัติแล้ว' : 'ยังไม่อนุมัติ'}
                 sx={{ mr: 0 }}
               />
-            </Box>
-          </>
-        )}
-      </Box>
+            </Box>          
+          </Box>
+        </>
+      )}
     </Box>
   )
 }

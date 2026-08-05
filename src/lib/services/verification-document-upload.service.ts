@@ -34,6 +34,12 @@ const ALLOWED_EXTENSIONS = [
   '.docx',
 ]
 
+/** Prefer dedicated bucket; fall back to an existing public bucket if it is missing. */
+const BUCKET_CANDIDATES = [
+  storageBuckets.registrationVerificationDocuments,
+  storageBuckets.userAvatars,
+] as const
+
 export type VerificationDocumentUploadResult = {
   success: boolean
   fileUrl?: string
@@ -53,15 +59,17 @@ export function validateVerificationDocument (file: File): {
     }
   }
 
-  if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+  const ext = '.' + (file.name.split('.').pop()?.toLowerCase() || '')
+  const typeOk = !file.type || ALLOWED_FILE_TYPES.includes(file.type)
+  const extOk = ALLOWED_EXTENSIONS.includes(ext)
+
+  if (!typeOk && !extOk) {
     return {
       isValid: false,
       error: 'ชนิดไฟล์ไม่รองรับ (อนุญาต: รูปภาพ, PDF, Word, Excel)',
     }
   }
-
-  const ext = '.' + (file.name.split('.').pop()?.toLowerCase() || '')
-  if (!ALLOWED_EXTENSIONS.includes(ext)) {
+  if (!extOk) {
     return {
       isValid: false,
       error: `นามสกุลไฟล์ไม่รองรับ (${ALLOWED_EXTENSIONS.join(', ')})`,
@@ -77,6 +85,39 @@ function generateFilePath (fileName: string): string {
   return `registration-verification/${Date.now()}_${uuid}_${safeName}`
 }
 
+async function ensureBucket (bucket: string): Promise<boolean> {
+  const service = getServiceSupabase()
+  if (!service) return false
+
+  const { data: buckets } = await service.storage.listBuckets()
+  if ((buckets ?? []).some((b) => b.name === bucket)) return true
+
+  const { error } = await service.storage.createBucket(bucket, {
+    public: true,
+    fileSizeLimit: MAX_VERIFICATION_DOCUMENT_BYTES,
+  })
+  if (error && !/already exists/i.test(error.message)) {
+    console.error('[verification-docs] createBucket failed:', error.message)
+    return false
+  }
+  return true
+}
+
+async function uploadToBucket (
+  bucket: string,
+  filePath: string,
+  file: File
+): Promise<{ ok: boolean; error?: string }> {
+  const client = getServiceSupabase() ?? supabase
+  const { error } = await client.storage.from(bucket).upload(filePath, file, {
+    cacheControl: '3600',
+    upsert: false,
+    contentType: file.type || undefined,
+  })
+  if (!error) return { ok: true }
+  return { ok: false, error: error.message }
+}
+
 export async function uploadVerificationDocument (
   file: File
 ): Promise<VerificationDocumentUploadResult> {
@@ -85,25 +126,36 @@ export async function uploadVerificationDocument (
     return { success: false, error: validation.error }
   }
 
-  const bucket = storageBuckets.efCertificates
   const filePath = generateFilePath(file.name)
-  const client = getServiceSupabase() ?? supabase
+  let lastError = 'อัปโหลดไม่สำเร็จ'
 
-  const { error } = await client.storage.from(bucket).upload(filePath, file, {
-    cacheControl: '3600',
-    upsert: false,
-  })
+  for (const bucket of BUCKET_CANDIDATES) {
+    await ensureBucket(bucket)
 
-  if (error) {
-    return { success: false, error: `อัปโหลดไม่สำเร็จ: ${error.message}` }
+    let result = await uploadToBucket(bucket, filePath, file)
+    if (!result.ok && /bucket not found/i.test(result.error || '')) {
+      const created = await ensureBucket(bucket)
+      if (created) {
+        result = await uploadToBucket(bucket, filePath, file)
+      }
+    }
+
+    if (result.ok) {
+      const client = getServiceSupabase() ?? supabase
+      const { data: urlData } = client.storage.from(bucket).getPublicUrl(filePath)
+      return {
+        success: true,
+        fileUrl: urlData.publicUrl,
+        fileName: file.name,
+        filePath,
+      }
+    }
+
+    lastError = result.error || lastError
+    if (!/bucket not found/i.test(result.error || '')) {
+      break
+    }
   }
 
-  const { data: urlData } = client.storage.from(bucket).getPublicUrl(filePath)
-
-  return {
-    success: true,
-    fileUrl: urlData.publicUrl,
-    fileName: file.name,
-    filePath,
-  }
+  return { success: false, error: `อัปโหลดไม่สำเร็จ: ${lastError}` }
 }

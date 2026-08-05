@@ -235,7 +235,7 @@ function ConsultRegisterForm () {
       setValue(
         'verificationDocuments',
         [...verificationDocuments, ...uploaded],
-        { shouldValidate: true }
+        { shouldValidate: true, shouldDirty: true, shouldTouch: true }
       )
     } catch (error) {
       setDocsUploadError(
@@ -533,22 +533,23 @@ function ConsultRegisterForm () {
 
                     <Box>
                       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                        เอกสารการรับรอง * (สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์)
+                        เอกสารการรับรอง (สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์)
                       </Typography>
                       <input
                         ref={docsInputRef}
                         type="file"
                         accept={VERIFICATION_DOCUMENT_ACCEPT}
                         multiple
-                        hidden
                         onChange={handleVerificationDocsChange}
                         disabled={
                           isSubmitting ||
                           docsUploading ||
                           verificationDocuments.length >= MAX_VERIFICATION_DOCUMENTS
                         }
+                        style={{ display: 'none' }}
                       />
                       <Button
+                        type="button"
                         variant="outlined"
                         startIcon={
                           docsUploading ? (
@@ -571,9 +572,9 @@ function ConsultRegisterForm () {
                         รองรับรูปภาพ, PDF, Word, Excel — ไฟล์ละไม่เกิน 5MB
                       </Typography>
                       {(docsUploadError || errors.verificationDocuments) && (
-                        <FormHelperText error sx={{ mx: 0, mt: 1 }}>
+                        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
                           {docsUploadError || errors.verificationDocuments?.message}
-                        </FormHelperText>
+                        </Typography>
                       )}
                       {verificationDocuments.length > 0 && (
                         <Box sx={{ mt: 1.5, display: 'flex', flexDirection: 'column', gap: 1 }}>

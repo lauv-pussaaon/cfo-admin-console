@@ -62,13 +62,6 @@ export function refineRegistrationProfile (
   }
 
   const docs = data.verificationDocuments ?? []
-  if (docs.length < 1) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'กรุณาอัปโหลดเอกสารการรับรองอย่างน้อย 1 ไฟล์',
-      path: ['verificationDocuments'],
-    })
-  }
   if (docs.length > MAX_VERIFICATION_DOCUMENTS) {
     ctx.addIssue({
       code: 'custom',
