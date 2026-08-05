@@ -83,7 +83,7 @@ export const adminDataGridSx = {
     borderColor: 'divider',
   },
   '& .MuiDataGrid-columnHeaderTitle': {
-    fontSize: '0.75rem',
+    fontSize: '0.875rem',
     fontWeight: 600,
     color: 'text.secondary',
     letterSpacing: '0.02em',
