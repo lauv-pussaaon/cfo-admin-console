@@ -43,6 +43,7 @@ export class UserService {
     has_verification?: boolean
     certified_date?: string | null
     certification_expiry?: string | null
+    verification_documents?: string[]
     year_experiences?: number | null
     industries?: string[]
   }): Promise<User> {
@@ -65,6 +66,7 @@ export class UserService {
       has_verification?: boolean
       certified_date?: string | null
       certification_expiry?: string | null
+      verification_documents?: string[]
       year_experiences?: number | null
       industries?: string[]
     }>

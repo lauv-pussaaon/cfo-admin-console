@@ -28,6 +28,34 @@ export function formatDateTime (date: string | Date | number): string {
 }
 
 /**
+ * Format a YYYY-MM-DD date string as dd MMM yyyy (local calendar day).
+ * @param dateString Date string in YYYY-MM-DD format
+ * @returns Formatted string like "05 Jan 2024", or empty string if invalid
+ */
+export function formatDateDdMmmYyyy (dateString: string): string {
+  if (!dateString) return ''
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateString)
+  if (!match) return ''
+
+  const year = Number(match[1])
+  const monthIndex = Number(match[2]) - 1
+  const day = Number(match[3])
+  const date = new Date(year, monthIndex, day)
+  if (
+    isNaN(date.getTime()) ||
+    date.getFullYear() !== year ||
+    date.getMonth() !== monthIndex ||
+    date.getDate() !== day
+  ) {
+    return ''
+  }
+
+  const dayText = String(day).padStart(2, '0')
+  const monthText = date.toLocaleString('en-US', { month: 'short' })
+  return `${dayText} ${monthText} ${year}`
+}
+
+/**
  * Format date as YYYY-MM-DD string for input fields
  * @param date Date object
  * @returns Formatted string like "2024-01-15"

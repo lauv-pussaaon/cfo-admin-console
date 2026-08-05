@@ -19,6 +19,7 @@ import {
 import {
   Add as AddIcon,
   ArrowBack,
+  ContentCopy as ContentCopyIcon,
   Search as SearchIcon,
 } from '@mui/icons-material'
 import UsersTable from '@/components/admin/UsersTable'
@@ -204,6 +205,16 @@ export default function AdminConsoleUsersPage() {
     notify(editingUser ? 'แก้ไขผู้ใช้เรียบร้อยแล้ว' : 'สร้างผู้ใช้เรียบร้อยแล้ว')
   }
 
+  const handleCopyRegistrationUrl = async () => {
+    const url = `${window.location.origin}/register/consult`
+    try {
+      await navigator.clipboard.writeText(url)
+      notify('คัดลอกลิงก์แบบฟอร์มสมัครแล้ว')
+    } catch {
+      notify('คัดลอกลิงก์ไม่สำเร็จ', 'error')
+    }
+  }
+
   const handleApprovalChange = async (id: string, nextApproved: boolean) => {
     const row = users.find((u) => u.id === id)
     if (!row) return
@@ -264,14 +275,24 @@ export default function AdminConsoleUsersPage() {
         <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
           จัดการผู้ใช้
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleCreate}
-          sx={adminPrimaryButtonSx}
-        >
-          สร้างผู้ใช้ใหม่
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={handleCopyRegistrationUrl}
+            sx={adminPrimaryButtonSx}
+          >
+            คัดลอกลิงก์สมัคร Consult/Audit
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleCreate}
+            sx={adminPrimaryButtonSx}
+          >
+            สร้างผู้ใช้ใหม่
+          </Button>
+        </Box>
       </Box>
 
       <Box

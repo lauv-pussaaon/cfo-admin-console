@@ -34,6 +34,7 @@ CREATE TABLE users (
   has_verification BOOLEAN NOT NULL DEFAULT FALSE,
   certified_date DATE,
   certification_expiry DATE,
+  verification_documents TEXT[] NOT NULL DEFAULT '{}',
   year_experiences INTEGER,
   industries TEXT[] NOT NULL DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()

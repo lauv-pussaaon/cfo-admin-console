@@ -5,7 +5,7 @@ import { throwIfError, handleSupabaseError, ValidationError } from '@/lib/utils/
 import { verifyPassword } from '@/lib/utils/password'
 
 const USER_SELECT =
-  'id, username, email, name, avatar_url, role, is_approved, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, year_experiences, industries, created_at'
+  'id, username, email, name, avatar_url, role, is_approved, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries, created_at'
 
 // Users API
 export const getUsers = async (): Promise<User[]> => {
@@ -141,6 +141,7 @@ export const createUser = async (data: {
   has_verification?: boolean
   certified_date?: string | null
   certification_expiry?: string | null
+  verification_documents?: string[]
   year_experiences?: number | null
   industries?: string[]
 }): Promise<User> => {
@@ -176,6 +177,9 @@ export const createUser = async (data: {
     has_verification: hasVerification,
     certified_date: hasVerification ? (data.certified_date || null) : null,
     certification_expiry: hasVerification ? (data.certification_expiry || null) : null,
+    verification_documents: hasVerification
+      ? (data.verification_documents ?? [])
+      : [],
     year_experiences:
       typeof data.year_experiences === 'number' ? data.year_experiences : null,
     industries: data.industries ?? [],
@@ -205,6 +209,7 @@ export const updateUser = async (
     has_verification?: boolean
     certified_date?: string | null
     certification_expiry?: string | null
+    verification_documents?: string[]
     year_experiences?: number | null
     industries?: string[]
   }>
@@ -219,6 +224,7 @@ export const updateUser = async (
     has_verification,
     certified_date,
     certification_expiry,
+    verification_documents,
     organization_name,
     phone,
     year_experiences,
@@ -247,10 +253,16 @@ export const updateUser = async (
     updateData.certification_expiry = has_verification
       ? (certification_expiry || null)
       : null
+    updateData.verification_documents = has_verification
+      ? (verification_documents ?? [])
+      : []
   } else {
     if (certified_date !== undefined) updateData.certified_date = certified_date
     if (certification_expiry !== undefined) {
       updateData.certification_expiry = certification_expiry
+    }
+    if (verification_documents !== undefined) {
+      updateData.verification_documents = verification_documents ?? []
     }
   }
 

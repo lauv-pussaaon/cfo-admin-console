@@ -11,6 +11,10 @@ export {
   notificationRecipientService,
 } from './notification-recipient.service'
 export { SupportAttachmentUploadService, supportAttachmentUploadService } from './support-attachment-upload.service'
+export {
+  uploadVerificationDocument,
+  validateVerificationDocument,
+} from './verification-document-upload.service'
 
 // Re-export types
 export type { User } from '../api/types'

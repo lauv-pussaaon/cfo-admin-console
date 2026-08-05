@@ -4,6 +4,7 @@ export type RegistrationEmailProfile = {
   hasVerification: boolean
   certifiedDate?: string | null
   certificationExpiry?: string | null
+  verificationDocuments?: string[]
   yearExperiences: number
   industryLabels: string[]
 }
@@ -20,6 +21,12 @@ export function formatRegistrationProfileTextLines (
   if (profile.hasVerification) {
     lines.push(`- วันที่ได้รับการรับรอง: ${profile.certifiedDate || '-'}`)
     lines.push(`- วันหมดอายุการรับรอง: ${profile.certificationExpiry || '-'}`)
+    const docs = profile.verificationDocuments ?? []
+    lines.push(
+      `- เอกสารการรับรอง: ${
+        docs.length > 0 ? docs.map((url, i) => `[${i + 1}] ${url}`).join(' ') : '-'
+      }`
+    )
   }
 
   lines.push(`- ปีประสบการณ์: ${profile.yearExperiences}`)
@@ -50,6 +57,19 @@ export function formatRegistrationProfileHtmlItems (
     )
     items.push(
       `<li>วันหมดอายุการรับรอง: ${escapeHtml(profile.certificationExpiry || '-')}</li>`
+    )
+    const docs = profile.verificationDocuments ?? []
+    items.push(
+      `<li>เอกสารการรับรอง: ${
+        docs.length > 0
+          ? docs
+              .map(
+                (url, i) =>
+                  `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">ไฟล์ ${i + 1}</a>`
+              )
+              .join(', ')
+          : '-'
+      }</li>`
     )
   }
 

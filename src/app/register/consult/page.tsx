@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,6 +16,7 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  IconButton,
   InputAdornment,
   InputLabel,
   ListItemText,
@@ -35,6 +36,9 @@ import {
   ArrowBack as ArrowBackIcon,
   Business as BusinessIcon,
   Phone as PhoneIcon,
+  CalendarToday as CalendarTodayIcon,
+  DeleteOutline as DeleteOutlineIcon,
+  UploadFile as UploadFileIcon,
 } from '@mui/icons-material'
 import {
   RegisterConsentGate,
@@ -43,6 +47,11 @@ import {
   refineRegistrationProfile,
 } from '@/components/register'
 import { useRegisterBack } from '@/app/register/useRegisterBack'
+import { formatDateDdMmmYyyy } from '@/lib/utils/datetime'
+import {
+  MAX_VERIFICATION_DOCUMENTS,
+  VERIFICATION_DOCUMENT_ACCEPT,
+} from '@/lib/register/verification-documents'
 
 const registerSchema = z
   .object({
@@ -68,6 +77,86 @@ type IndustryOption = {
   name_th: string
 }
 
+function FormattedDateField ({
+  label,
+  value,
+  onChange,
+  error,
+  helperText,
+  disabled,
+}: {
+  label: string
+  value: string
+  onChange: (value: string) => void
+  error?: boolean
+  helperText?: string
+  disabled?: boolean
+}) {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const openPicker = () => {
+    const input = inputRef.current
+    if (!input || disabled) return
+    const withPicker = input as HTMLInputElement & { showPicker?: () => void }
+    if (typeof withPicker.showPicker === 'function') {
+      try {
+        withPicker.showPicker()
+        return
+      } catch {
+        // fall through
+      }
+    }
+    input.focus()
+    input.click()
+  }
+
+  return (
+    <Box sx={{ position: 'relative' }}>
+      <TextField
+        label={label}
+        value={value ? formatDateDdMmmYyyy(value) : ''}
+        onClick={openPicker}
+        error={error}
+        helperText={helperText}
+        disabled={disabled}
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        InputProps={{
+          readOnly: true,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                edge="end"
+                size="small"
+                onClick={openPicker}
+                disabled={disabled}
+                aria-label={label}
+              >
+                <CalendarTodayIcon fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+      <input
+        ref={inputRef}
+        type="date"
+        value={value || ''}
+        onChange={(e) => onChange(e.target.value)}
+        tabIndex={-1}
+        disabled={disabled}
+        style={{
+          position: 'absolute',
+          opacity: 0,
+          pointerEvents: 'none',
+          width: 0,
+          height: 0,
+        }}
+      />
+    </Box>
+  )
+}
+
 function ConsultRegisterForm () {
   const handleBack = useRegisterBack()
   const { consent } = useRegisterConsent()
@@ -75,6 +164,9 @@ function ConsultRegisterForm () {
   const [isSuccess, setIsSuccess] = useState(false)
   const [industryOptions, setIndustryOptions] = useState<IndustryOption[]>([])
   const [industriesLoading, setIndustriesLoading] = useState(true)
+  const [docsUploading, setDocsUploading] = useState(false)
+  const [docsUploadError, setDocsUploadError] = useState<string | null>(null)
+  const docsInputRef = useRef<HTMLInputElement>(null)
 
   const {
     register,
@@ -95,6 +187,7 @@ function ConsultRegisterForm () {
       hasVerification: false,
       certifiedDate: '',
       certificationExpiry: '',
+      verificationDocuments: [],
       yearExperiences: 0,
       industries: [],
     },
@@ -102,7 +195,64 @@ function ConsultRegisterForm () {
 
   const roleValue = watch('role')
   const hasVerification = watch('hasVerification')
+  const certifiedDate = watch('certifiedDate')
+  const certificationExpiry = watch('certificationExpiry')
+  const verificationDocuments = watch('verificationDocuments') || []
   const industriesValue = watch('industries')
+
+  const handleVerificationDocsChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files
+    event.target.value = ''
+    if (!files?.length) return
+
+    const remaining = MAX_VERIFICATION_DOCUMENTS - verificationDocuments.length
+    if (remaining <= 0) {
+      setDocsUploadError(`อัปโหลดได้สูงสุด ${MAX_VERIFICATION_DOCUMENTS} ไฟล์`)
+      return
+    }
+
+    const selected = Array.from(files).slice(0, remaining)
+    setDocsUploading(true)
+    setDocsUploadError(null)
+
+    try {
+      const uploaded: string[] = []
+      for (const file of selected) {
+        const formData = new FormData()
+        formData.append('file', file)
+        const response = await fetch('/api/public/register/verification-documents', {
+          method: 'POST',
+          body: formData,
+        })
+        const result = await response.json()
+        if (!response.ok) {
+          throw new Error(result.error || `อัปโหลด ${file.name} ไม่สำเร็จ`)
+        }
+        uploaded.push(result.url as string)
+      }
+      setValue(
+        'verificationDocuments',
+        [...verificationDocuments, ...uploaded],
+        { shouldValidate: true }
+      )
+    } catch (error) {
+      setDocsUploadError(
+        error instanceof Error ? error.message : 'อัปโหลดเอกสารไม่สำเร็จ'
+      )
+    } finally {
+      setDocsUploading(false)
+    }
+  }
+
+  const removeVerificationDocument = (index: number) => {
+    setValue(
+      'verificationDocuments',
+      verificationDocuments.filter((_, i) => i !== index),
+      { shouldValidate: true }
+    )
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -150,6 +300,9 @@ function ConsultRegisterForm () {
           certificationExpiry: data.hasVerification
             ? data.certificationExpiry
             : '',
+          verificationDocuments: data.hasVerification
+            ? data.verificationDocuments
+            : [],
           termsAccepted: consent.termsAccepted,
           privacyAcknowledged: consent.privacyAcknowledged,
           collectShareDataConsent: consent.collectShareDataConsent,
@@ -195,6 +348,26 @@ function ConsultRegisterForm () {
               )}
 
               <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'grid', gap: 2 }}>
+
+                <FormControl fullWidth error={!!errors.role}>
+                  <InputLabel id="public-register-role-label">ลงทะเบียนในบทบาท</InputLabel>
+                  <Select
+                    labelId="public-register-role-label"
+                    label="ลงทะเบียนในบทบาท"
+                    value={roleValue}
+                    onChange={(event) =>
+                      setValue('role', event.target.value as 'Consult' | 'Audit', {
+                        shouldValidate: true,
+                      })
+                    }
+                    disabled={isSubmitting}
+                  >
+                    <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
+                    <MenuItem value="Audit">ผู้ทวนสอบ</MenuItem>
+                  </Select>
+                  {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
+                </FormControl>
+
                 <TextField
                   label="ชื่อ-นามสกุล"
                   {...register('name')}
@@ -259,26 +432,7 @@ function ConsultRegisterForm () {
                       </InputAdornment>
                     ),
                   }}
-                />
-
-                <FormControl fullWidth error={!!errors.role}>
-                  <InputLabel id="public-register-role-label">บทบาท</InputLabel>
-                  <Select
-                    labelId="public-register-role-label"
-                    label="บทบาท"
-                    value={roleValue}
-                    onChange={(event) =>
-                      setValue('role', event.target.value as 'Consult' | 'Audit', {
-                        shouldValidate: true,
-                      })
-                    }
-                    disabled={isSubmitting}
-                  >
-                    <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
-                    <MenuItem value="Audit">ผู้ตรวจสอบ</MenuItem>
-                  </Select>
-                  {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
-                </FormControl>
+                />                
 
                 <TextField
                   label="ชื่อองค์กร"
@@ -325,10 +479,7 @@ function ConsultRegisterForm () {
                   }}
                 >
                   <Box>
-                    <Typography variant="subtitle2">มีการรับรอง (Verification)</Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      เปิดหากมีใบรับรองที่เกี่ยวข้อง
-                    </Typography>
+                    <Typography variant="subtitle2">ได้รับการรับรอง (Verification)</Typography>
                   </Box>
                   <FormControlLabel
                     control={
@@ -343,9 +494,13 @@ function ConsultRegisterForm () {
                             setValue('certificationExpiry', '', {
                               shouldValidate: true,
                             })
+                            setValue('verificationDocuments', [], {
+                              shouldValidate: true,
+                            })
+                            setDocsUploadError(null)
                           }
                         }}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || docsUploading}
                       />
                     }
                     label={hasVerification ? 'มี' : 'ไม่มี'}
@@ -355,26 +510,122 @@ function ConsultRegisterForm () {
 
                 {hasVerification && (
                   <>
-                    <TextField
+                    <FormattedDateField
                       label="วันที่ได้รับการรับรอง"
-                      type="date"
-                      {...register('certifiedDate')}
+                      value={certifiedDate || ''}
+                      onChange={(next) =>
+                        setValue('certifiedDate', next, { shouldValidate: true })
+                      }
                       error={!!errors.certifiedDate}
                       helperText={errors.certifiedDate?.message}
-                      disabled={isSubmitting}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
+                      disabled={isSubmitting || docsUploading}
                     />
-                    <TextField
+                    <FormattedDateField
                       label="วันหมดอายุการรับรอง"
-                      type="date"
-                      {...register('certificationExpiry')}
+                      value={certificationExpiry || ''}
+                      onChange={(next) =>
+                        setValue('certificationExpiry', next, { shouldValidate: true })
+                      }
                       error={!!errors.certificationExpiry}
                       helperText={errors.certificationExpiry?.message}
-                      disabled={isSubmitting}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
+                      disabled={isSubmitting || docsUploading}
                     />
+
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                        เอกสารการรับรอง * (สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์)
+                      </Typography>
+                      <input
+                        ref={docsInputRef}
+                        type="file"
+                        accept={VERIFICATION_DOCUMENT_ACCEPT}
+                        multiple
+                        hidden
+                        onChange={handleVerificationDocsChange}
+                        disabled={
+                          isSubmitting ||
+                          docsUploading ||
+                          verificationDocuments.length >= MAX_VERIFICATION_DOCUMENTS
+                        }
+                      />
+                      <Button
+                        variant="outlined"
+                        startIcon={
+                          docsUploading ? (
+                            <CircularProgress size={16} />
+                          ) : (
+                            <UploadFileIcon />
+                          )
+                        }
+                        onClick={() => docsInputRef.current?.click()}
+                        disabled={
+                          isSubmitting ||
+                          docsUploading ||
+                          verificationDocuments.length >= MAX_VERIFICATION_DOCUMENTS
+                        }
+                        sx={{ textTransform: 'none', mb: 1 }}
+                      >
+                        {docsUploading ? 'กำลังอัปโหลด...' : 'อัปโหลดเอกสาร'}
+                      </Button>
+                      <Typography variant="caption" color="text.secondary" display="block">
+                        รองรับรูปภาพ, PDF, Word, Excel — ไฟล์ละไม่เกิน 5MB
+                      </Typography>
+                      {(docsUploadError || errors.verificationDocuments) && (
+                        <FormHelperText error sx={{ mx: 0, mt: 1 }}>
+                          {docsUploadError || errors.verificationDocuments?.message}
+                        </FormHelperText>
+                      )}
+                      {verificationDocuments.length > 0 && (
+                        <Box sx={{ mt: 1.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          {verificationDocuments.map((url, index) => {
+                            const name =
+                              decodeURIComponent(url.split('/').pop() || '') ||
+                              `เอกสาร ${index + 1}`
+                            return (
+                              <Box
+                                key={`${url}-${index}`}
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  gap: 1,
+                                  border: '1px solid',
+                                  borderColor: 'divider',
+                                  borderRadius: 1,
+                                  px: 1.5,
+                                  py: 0.75,
+                                }}
+                              >
+                                <Typography
+                                  variant="body2"
+                                  component="a"
+                                  href={url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  sx={{
+                                    color: 'primary.main',
+                                    textDecoration: 'none',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  {name}
+                                </Typography>
+                                <IconButton
+                                  size="small"
+                                  onClick={() => removeVerificationDocument(index)}
+                                  disabled={isSubmitting || docsUploading}
+                                  aria-label="ลบเอกสาร"
+                                >
+                                  <DeleteOutlineIcon fontSize="small" />
+                                </IconButton>
+                              </Box>
+                            )
+                          })}
+                        </Box>
+                      )}
+                    </Box>
                   </>
                 )}
 
@@ -436,7 +687,7 @@ function ConsultRegisterForm () {
                   type="submit"
                   variant="contained"
                   size="large"
-                  disabled={isSubmitting || industriesLoading}
+                  disabled={isSubmitting || industriesLoading || docsUploading}
                   startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
                   sx={{ mt: 1, py: 1.3, fontWeight: 600 }}
                 >

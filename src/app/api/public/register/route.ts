@@ -59,6 +59,9 @@ export async function POST (request: NextRequest) {
     const certificationExpiry = hasVerification
       ? payload.certificationExpiry || null
       : null
+    const verificationDocuments = hasVerification
+      ? [...new Set(payload.verificationDocuments)].slice(0, 5)
+      : []
 
     const user = await createUser({
       username: payload.username.trim(),
@@ -72,6 +75,7 @@ export async function POST (request: NextRequest) {
       has_verification: hasVerification,
       certified_date: certifiedDate,
       certification_expiry: certificationExpiry,
+      verification_documents: verificationDocuments,
       year_experiences: payload.yearExperiences,
       industries,
     })
@@ -108,6 +112,7 @@ export async function POST (request: NextRequest) {
       hasVerification,
       certifiedDate,
       certificationExpiry,
+      verificationDocuments,
       yearExperiences: payload.yearExperiences,
       industryLabels,
     }
