@@ -9,10 +9,6 @@ type UserProfileRow = {
   role: string
   organization_name?: string | null
   phone?: string | null
-  has_verification?: boolean | null
-  certified_date?: string | null
-  certification_expiry?: string | null
-  verification_documents?: string[] | null
   year_experiences?: number | null
   industries?: string[] | null
 }
@@ -42,10 +38,6 @@ export async function buildRegistrationEmailProfile (
   return {
     organizationName,
     phone,
-    hasVerification: Boolean(user.has_verification),
-    certifiedDate: user.certified_date,
-    certificationExpiry: user.certification_expiry,
-    verificationDocuments: user.verification_documents ?? [],
     yearExperiences:
       typeof user.year_experiences === 'number' ? user.year_experiences : 0,
     industryLabels,

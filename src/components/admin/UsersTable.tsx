@@ -35,9 +35,12 @@ interface Props {
   onApprove?: (id: string) => void | Promise<void>
   onReject?: (id: string) => void
   onStatusToggle?: (id: string, nextStatus: 'active' | 'inactive') => void | Promise<void>
+  onReviewDocuments?: (id: string) => void
   statusUpdatingId?: string | null
   data: User[]
   loading: boolean
+  showReviewDocuments?: boolean
+  verificationDocumentCounts?: Record<string, number>
 }
 
 function statusChipColor (
@@ -55,9 +58,12 @@ export default function UsersTable({
   onApprove,
   onReject,
   onStatusToggle,
+  onReviewDocuments,
   statusUpdatingId = null,
   data,
   loading,
+  showReviewDocuments = false,
+  verificationDocumentCounts = {},
 }: Props) {
   const isLockedAdmin = (user: { role: string; username: string }) => {
     return user.role === 'Admin' && user.username === 'admin'
@@ -74,10 +80,12 @@ export default function UsersTable({
       rejection_reason: user.rejection_reason,
       avatar_url: user.avatar_url,
       organizations: user.organizations || [],
+      document_count: verificationDocumentCounts[user.id] ?? 0,
     }))
-  }, [data])
+  }, [data, verificationDocumentCounts])
 
-  const columns: GridColDef[] = useMemo(() => [
+  const columns: GridColDef[] = useMemo(() => {
+    const cols: GridColDef[] = [
     {
       field: 'name',
       headerName: 'ผู้ใช้',
@@ -296,85 +304,144 @@ export default function UsersTable({
         )
       },
     },
-    {
-      field: 'organizations',
-      headerName: 'องค์กรที่ดูแล',
-      width: 180,
-      flex: 1,
-      minWidth: 140,
-      renderCell: (params) => {
-        const orgs = params.row.organizations || []
-        if (orgs.length === 0) {
+    ]
+
+    if (showReviewDocuments) {
+      cols.push({
+        field: 'document_count',
+        headerName: 'Review documents',
+        width: 160,
+        align: 'center',
+        headerAlign: 'center',
+        sortable: false,
+        renderCell: (params) => {
+          const role = params.row.role as string
+          if (role !== 'Consult' && role !== 'Audit') {
+            return (
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <Typography variant="body2" color="text.disabled">
+                  —
+                </Typography>
+              </Box>
+            )
+          }
+          const count = Number(params.row.document_count) || 0
           return (
-            <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-              <Typography variant="body2" color="text.disabled">
-                —
-              </Typography>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button
+                size="small"
+                variant="text"
+                onClick={() => onReviewDocuments?.(params.row.id as string)}
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 0,
+                  fontWeight: 600,
+                  color: count === 0 ? 'text.disabled' : 'primary.main',
+                }}
+              >
+                {count} ไฟล์
+              </Button>
             </Box>
           )
-        }
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-            <Chip
-              label={`${orgs.length} องค์กร`}
-              size="small"
-              variant="outlined"
+        },
+      })
+    }
+
+    cols.push(
+      {
+        field: 'organizations',
+        headerName: 'องค์กรที่ดูแล',
+        width: 180,
+        flex: 1,
+        minWidth: 140,
+        renderCell: (params) => {
+          const orgs = params.row.organizations || []
+          if (orgs.length === 0) {
+            return (
+              <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                <Typography variant="body2" color="text.disabled">
+                  —
+                </Typography>
+              </Box>
+            )
+          }
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+              <Chip
+                label={`${orgs.length} องค์กร`}
+                size="small"
+                variant="outlined"
+                sx={{
+                  height: 28,
+                  borderRadius: 1.5,
+                  fontWeight: 500,
+                  color: 'text.secondary',
+                  borderColor: 'divider',
+                  bgcolor: 'transparent',
+                }}
+              />
+            </Box>
+          )
+        },
+      },
+      {
+        field: 'actions',
+        headerName: 'การดำเนินการ',
+        width: 120,
+        align: 'center',
+        headerAlign: 'center',
+        sortable: false,
+        filterable: false,
+        renderCell: (params) => {
+          const isLocked = isLockedAdmin({ role: params.row.role, username: params.row.username })
+          return (
+            <Box
               sx={{
-                height: 28,
-                borderRadius: 1.5,
-                fontWeight: 500,
-                color: 'text.secondary',
-                borderColor: 'divider',
-                bgcolor: 'transparent',
+                display: 'flex',
+                gap: 0.5,
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
               }}
-            />
-          </Box>
-        )
-      },
-    },
-    {
-      field: 'actions',
-      headerName: 'การดำเนินการ',
-      width: 120,
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => {
-        const isLocked = isLockedAdmin({ role: params.row.role, username: params.row.username })
-        return (
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 0.5,
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
-            <IconButton
-              size="small"
-              onClick={() => onEdit(params.row.id)}
-              disabled={isLocked}
-              sx={adminGhostIconButtonSx.primary}
-              title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
             >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => onDelete(params.row.id)}
-              disabled={isLocked}
-              sx={adminGhostIconButtonSx.error}
-              title={isLocked ? 'ไม่สามารถลบผู้ใช้ admin ได้' : 'ลบ'}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        )
-      },
-    },
-  ], [onEdit, onDelete, onApprove, onReject, onStatusToggle, statusUpdatingId])
+              <IconButton
+                size="small"
+                onClick={() => onEdit(params.row.id)}
+                disabled={isLocked}
+                sx={adminGhostIconButtonSx.primary}
+                title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={() => onDelete(params.row.id)}
+                disabled={isLocked}
+                sx={adminGhostIconButtonSx.error}
+                title={isLocked ? 'ไม่สามารถลบผู้ใช้ admin ได้' : 'ลบ'}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )
+        },
+      }
+    )
+
+    return cols
+  }, [
+    onEdit,
+    onDelete,
+    onApprove,
+    onReject,
+    onStatusToggle,
+    onReviewDocuments,
+    statusUpdatingId,
+    showReviewDocuments,
+  ])
 
   return (
     <Paper elevation={0} sx={adminDataGridPaperSx}>

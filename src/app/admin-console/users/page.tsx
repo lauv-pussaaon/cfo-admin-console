@@ -25,6 +25,7 @@ import {
 import UsersTable from '@/components/admin/UsersTable'
 import UserModal from '@/components/admin/UserModal'
 import RejectUserModal from '@/components/admin/RejectUserModal'
+import ReviewDocumentsModal from '@/components/admin/ReviewDocumentsModal'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { userService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
@@ -80,6 +81,10 @@ export default function AdminConsoleUsersPage() {
   const [rejectingUser, setRejectingUser] = useState<User | null>(null)
   const [isRejecting, setIsRejecting] = useState(false)
   const [rejectError, setRejectError] = useState<string | null>(null)
+  const [verificationDocumentCounts, setVerificationDocumentCounts] = useState<
+    Record<string, number>
+  >({})
+  const [reviewDocsUser, setReviewDocsUser] = useState<User | null>(null)
 
   const notify = (message: string, severity: 'success' | 'error' = 'success') => {
     setSuccessMessage(message)
@@ -93,11 +98,37 @@ export default function AdminConsoleUsersPage() {
     }
   }, [user])
 
+  const loadVerificationSummaries = async () => {
+    try {
+      const response = await authenticatedAdminFetch(
+        '/api/admin-console/verifications'
+      )
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'โหลดเอกสารยืนยันไม่สำเร็จ')
+      }
+      const counts: Record<string, number> = {}
+      for (const row of result.verifications ?? []) {
+        if (row?.user_id) {
+          counts[row.user_id as string] = Number(row.document_count) || 0
+        }
+      }
+      setVerificationDocumentCounts(counts)
+    } catch (error) {
+      if (!isExpectedError(error)) {
+        console.error('Error loading verification summaries:', error)
+      }
+    }
+  }
+
   const loadUsers = async () => {
     try {
       setLoading(true)
       const data = await userService.getUsers()
       setUsers(data)
+      if (user && isAdmin(user)) {
+        await loadVerificationSummaries()
+      }
     } catch (error) {
       if (!isExpectedError(error)) {
         console.error('Error loading users:', error)
@@ -448,7 +479,13 @@ export default function AdminConsoleUsersPage() {
         onApprove={handleApprove}
         onReject={handleRejectOpen}
         onStatusToggle={handleStatusToggle}
+        onReviewDocuments={(id) => {
+          const row = users.find((u) => u.id === id) || null
+          setReviewDocsUser(row)
+        }}
         statusUpdatingId={statusUpdatingId}
+        showReviewDocuments={Boolean(user && isAdmin(user))}
+        verificationDocumentCounts={verificationDocumentCounts}
       />
 
       <UserModal
@@ -457,6 +494,17 @@ export default function AdminConsoleUsersPage() {
         onSuccess={handleModalSuccess}
         mode={editingUser ? 'edit' : 'create'}
         initialData={editingUser}
+      />
+
+      <ReviewDocumentsModal
+        open={Boolean(reviewDocsUser)}
+        userId={reviewDocsUser?.id ?? null}
+        userName={
+          reviewDocsUser
+            ? `${reviewDocsUser.name} (${reviewDocsUser.email})`
+            : undefined
+        }
+        onClose={() => setReviewDocsUser(null)}
       />
 
       <RejectUserModal

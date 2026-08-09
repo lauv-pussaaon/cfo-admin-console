@@ -2,30 +2,30 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createUser, deleteUser } from '@/lib/api/auth'
 import { createUserConsent } from '@/lib/api/user-consents'
+import {
+  buildVerificationUploadUrl,
+  createConsultAuditVerification,
+} from '@/lib/api/consult-audit-verification'
 import { AppError } from '@/lib/utils/errors'
 import { sendRegistrationConfirmationEmail } from '@/lib/email/send-registration-confirmation'
 import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-registration-notice'
-import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
+import { resolveSiteOriginFromRequest, resolveBaseUrlForEmail } from '@/lib/email/resolve-site-origin'
 import { getAdminNotificationEmails } from '@/lib/api/users-admin'
 import { registrationConsentFields } from '@/components/register/consent-schema'
-import {
-  registrationProfileFields,
-  refineRegistrationProfile,
-} from '@/components/register/registration-profile-schema'
+import { registrationProfileFields } from '@/components/register/registration-profile-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
 import { listActiveIndustryOptions } from '@/lib/api/emission-templates'
+import { supabase } from '@/lib/supabase'
 
-const publicRegistrationSchema = z
-  .object({
-    username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
-    email: z.string().email(),
-    password: z.string().min(6),
-    name: z.string().min(1).max(120),
-    role: z.enum(['Consult', 'Audit']),
-    ...registrationProfileFields,
-    ...registrationConsentFields,
-  })
-  .superRefine(refineRegistrationProfile)
+const publicRegistrationSchema = z.object({
+  username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
+  email: z.string().email(),
+  password: z.string().min(6),
+  name: z.string().min(1).max(120),
+  role: z.enum(['Consult', 'Audit']),
+  ...registrationProfileFields,
+  ...registrationConsentFields,
+})
 
 export async function POST (request: NextRequest) {
   try {
@@ -52,17 +52,6 @@ export async function POST (request: NextRequest) {
       (code) => industryLabelByCode.get(code) || code
     )
 
-    const hasVerification = payload.hasVerification
-    const certifiedDate = hasVerification
-      ? payload.certifiedDate || null
-      : null
-    const certificationExpiry = hasVerification
-      ? payload.certificationExpiry || null
-      : null
-    const verificationDocuments = hasVerification
-      ? [...new Set(payload.verificationDocuments)].slice(0, 5)
-      : []
-
     const user = await createUser({
       username: payload.username.trim(),
       email: emailNormalized,
@@ -72,10 +61,6 @@ export async function POST (request: NextRequest) {
       status: 'requested',
       organization_name: payload.organizationName.trim(),
       phone: payload.phone.trim(),
-      has_verification: hasVerification,
-      certified_date: certifiedDate,
-      certification_expiry: certificationExpiry,
-      verification_documents: verificationDocuments,
       year_experiences: payload.yearExperiences,
       industries,
     })
@@ -105,14 +90,33 @@ export async function POST (request: NextRequest) {
       )
     }
 
+    let verificationToken = ''
+    try {
+      const verification = await createConsultAuditVerification(supabase, user.id)
+      verificationToken = verification.token
+    } catch (verificationErr) {
+      console.error('Failed to create verification row, rolling back user:', verificationErr)
+      try {
+        await deleteUser(user.id)
+      } catch (rollbackErr) {
+        console.error('Failed to rollback user after verification error:', rollbackErr)
+      }
+      return NextResponse.json(
+        { error: 'ส่งไม่สำเร็จ ลองใหม่ภายหลัง' },
+        { status: 500 }
+      )
+    }
+
     const requestOrigin = resolveSiteOriginFromRequest(request)
+    const baseUrl = resolveBaseUrlForEmail(requestOrigin)
+    const verificationUploadUrl = buildVerificationUploadUrl(
+      baseUrl || requestOrigin,
+      verificationToken
+    )
+
     const profile = {
       organizationName: payload.organizationName.trim(),
       phone: payload.phone.trim(),
-      hasVerification,
-      certifiedDate,
-      certificationExpiry,
-      verificationDocuments,
       yearExperiences: payload.yearExperiences,
       industryLabels,
     }
@@ -125,6 +129,7 @@ export async function POST (request: NextRequest) {
         email: emailNormalized,
         role: payload.role,
         profile,
+        verificationUploadUrl,
         requestOrigin,
       })
       if (!emailResult.sent) {
@@ -160,7 +165,7 @@ export async function POST (request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'ส่งคำขอแล้ว รอผู้ดูแลอนุมัติ',
+      message: 'ส่งคำขอแล้ว กรุณาตรวจอีเมลเพื่ออัปโหลดเอกสารยืนยัน',
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

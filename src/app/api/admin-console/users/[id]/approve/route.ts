@@ -2,8 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-service'
 import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
 import { buildRegistrationEmailProfile } from '@/lib/api/user-registration-profile'
+import {
+  addYearsToDate,
+  getVerificationByUserId,
+  listDocumentsForVerification,
+  todayUtcDate,
+  updateVerificationStatus,
+} from '@/lib/api/consult-audit-verification'
 import { sendRegistrationApprovedEmail } from '@/lib/email/send-registration-approved'
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
+
+const USER_SELECT =
+  'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, year_experiences, industries, created_at'
 
 export async function POST (
   request: NextRequest,
@@ -31,7 +41,7 @@ export async function POST (
     const { data: user, error: fetchError } = await supabase
       .from('users')
       .select(
-        'id, username, email, name, role, status, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries'
+        'id, username, email, name, role, status, organization_name, phone, year_experiences, industries'
       )
       .eq('id', id)
       .single()
@@ -54,14 +64,32 @@ export async function POST (
       )
     }
 
+    if (user.role === 'Consult' || user.role === 'Audit') {
+      const verification = await getVerificationByUserId(supabase, id)
+      if (!verification || verification.status !== 'pending_review') {
+        return NextResponse.json(
+          { error: 'อนุมัติได้เมื่อผู้ใช้ส่งเอกสารยืนยันแล้วเท่านั้น' },
+          { status: 400 }
+        )
+      }
+      const documents = await listDocumentsForVerification(
+        supabase,
+        verification.id
+      )
+      if (documents.length < 1) {
+        return NextResponse.json(
+          { error: 'ต้องมีเอกสารยืนยันอย่างน้อย 1 ไฟล์ก่อนอนุมัติ' },
+          { status: 400 }
+        )
+      }
+    }
+
     const { data: updated, error: updateError } = await supabase
       .from('users')
       .update({ status: 'active', rejection_reason: null })
       .eq('id', id)
       .eq('status', 'requested')
-      .select(
-        'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries, created_at'
-      )
+      .select(USER_SELECT)
       .single()
 
     if (updateError || !updated) {
@@ -70,6 +98,18 @@ export async function POST (
         { error: 'อนุมัติผู้ใช้ไม่สำเร็จ' },
         { status: 500 }
       )
+    }
+
+    const verifiedDate = todayUtcDate()
+    const expiredDate = addYearsToDate(verifiedDate, 2)
+    const verification = await getVerificationByUserId(supabase, id)
+    if (verification) {
+      await updateVerificationStatus(supabase, verification.id, {
+        status: 'approved',
+        verified_date: verifiedDate,
+        expired_date: expiredDate,
+        rejection_reason: null,
+      })
     }
 
     const requestOrigin = resolveSiteOriginFromRequest(request)
@@ -83,6 +123,8 @@ export async function POST (
         email: updated.email,
         role: updated.role,
         profile,
+        verifiedDate,
+        expiredDate,
         requestOrigin,
       })
       if (!emailResult.sent) {

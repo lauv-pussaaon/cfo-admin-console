@@ -1,32 +1,28 @@
 /**
- * Notify applicant after admin rejects registration (API route only).
+ * Thank-you email after verification documents are submitted (API route only).
  */
 
 import { resolveBaseUrlForEmail } from '@/lib/email/resolve-site-origin'
 import { sendResendEmail } from '@/lib/email/templates/resend-client'
-import { buildVerificationRejectedContent } from '@/lib/email/templates/verification-rejected'
+import { buildDocumentsSubmittedContent } from '@/lib/email/templates/documents-submitted'
 
-export async function sendRegistrationRejectedEmail (params: {
+export async function sendDocumentsSubmittedEmail (params: {
   to: string
   name: string
-  username: string
-  email: string
-  reason: string
+  documentCount: number
   requestOrigin?: string
 }): Promise<{ sent: boolean; skipReason?: string }> {
   const baseUrl = resolveBaseUrlForEmail(params.requestOrigin ?? '')
   if (!baseUrl) {
     const reason =
       'ไม่พบ URL แอป (ตั้ง APP_URL หรือ NEXT_PUBLIC_APP_URL หรือส่ง requestOrigin)'
-    console.warn(`[email] ข้ามส่งอีเมลปฏิเสธ: ${reason}`)
+    console.warn(`[email] ข้ามส่งอีเมลรับเอกสาร: ${reason}`)
     return { sent: false, skipReason: reason }
   }
 
-  const content = buildVerificationRejectedContent({
+  const content = buildDocumentsSubmittedContent({
     name: params.name,
-    username: params.username,
-    email: params.email,
-    reason: params.reason,
+    documentCount: params.documentCount,
     baseUrl,
   })
 
@@ -38,15 +34,15 @@ export async function sendRegistrationRejectedEmail (params: {
       html: content.html,
     })
     if (!result.sent) {
-      console.warn(`[email] ข้ามส่งอีเมลปฏิเสธ: ${result.skipReason}`)
+      console.warn(`[email] ข้ามส่งอีเมลรับเอกสาร: ${result.skipReason}`)
       return { sent: false, skipReason: result.skipReason }
     }
     if (process.env.NODE_ENV === 'development') {
-      console.log('[email] ส่งอีเมลปฏิเสธแล้ว id=', result.id)
+      console.log('[email] ส่งอีเมลรับเอกสารแล้ว id=', result.id)
     }
     return { sent: true }
   } catch (error) {
-    console.error('[email] Resend API error (rejected):', error)
+    console.error('[email] Resend API error (documents submitted):', error)
     throw error
   }
 }

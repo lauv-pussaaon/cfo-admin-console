@@ -11,9 +11,6 @@ import { isExpectedError } from '@/lib/utils/errors'
 import type { User } from '@/lib/api/types'
 import type { UserRole } from '@/types/roles'
 import { ROLE_OPTIONS } from '@/types/roles'
-import {
-  refineRegistrationProfile,
-} from '@/components/register/registration-profile-schema'
 import UserForm from './UserForm'
 
 interface UserModalProps {
@@ -33,10 +30,6 @@ function isProfileRole (role: string): boolean {
 const profileDefaults = {
   organizationName: '',
   phone: '',
-  hasVerification: false,
-  certifiedDate: '',
-  certificationExpiry: '',
-  verificationDocuments: [] as string[],
   yearExperiences: 0,
   industries: [] as string[],
 }
@@ -59,10 +52,6 @@ const userSchema = z
     ),
     organizationName: z.string(),
     phone: z.string(),
-    hasVerification: z.boolean(),
-    certifiedDate: z.string().optional().or(z.literal('')),
-    certificationExpiry: z.string().optional().or(z.literal('')),
-    verificationDocuments: z.array(z.string()),
     yearExperiences: z.number({ message: 'กรุณากรอกปีประสบการณ์' }),
     industries: z.array(z.string()),
   })
@@ -107,8 +96,6 @@ const userSchema = z
         path: ['industries'],
       })
     }
-
-    refineRegistrationProfile(data, ctx)
   })
 
 export type UserFormData = z.infer<typeof userSchema>
@@ -118,27 +105,14 @@ function mapProfilePayload (data: UserFormData) {
     return {
       organization_name: null as string | null,
       phone: null as string | null,
-      has_verification: false,
-      certified_date: null as string | null,
-      certification_expiry: null as string | null,
-      verification_documents: [] as string[],
       year_experiences: null as number | null,
       industries: [] as string[],
     }
   }
 
-  const hasVerification = data.hasVerification
   return {
     organization_name: data.organizationName.trim(),
     phone: data.phone.trim(),
-    has_verification: hasVerification,
-    certified_date: hasVerification ? (data.certifiedDate || null) : null,
-    certification_expiry: hasVerification
-      ? (data.certificationExpiry || null)
-      : null,
-    verification_documents: hasVerification
-      ? data.verificationDocuments
-      : [],
     year_experiences: data.yearExperiences,
     industries: data.industries,
   }
@@ -189,10 +163,6 @@ export default function UserModal({
           role: (initialData.role as UserRole) || defaultRole,
           organizationName: initialData.organization_name || '',
           phone: initialData.phone || '',
-          hasVerification: Boolean(initialData.has_verification),
-          certifiedDate: initialData.certified_date?.slice(0, 10) || '',
-          certificationExpiry: initialData.certification_expiry?.slice(0, 10) || '',
-          verificationDocuments: initialData.verification_documents ?? [],
           yearExperiences: initialData.year_experiences ?? 0,
           industries: initialData.industries ?? [],
         }, {
@@ -238,10 +208,6 @@ export default function UserModal({
           password?: string
           organization_name: string | null
           phone: string | null
-          has_verification: boolean
-          certified_date: string | null
-          certification_expiry: string | null
-          verification_documents: string[]
           year_experiences: number | null
           industries: string[]
         } = {

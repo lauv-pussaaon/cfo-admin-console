@@ -40,10 +40,6 @@ export class UserService {
     status?: UserStatus
     organization_name?: string | null
     phone?: string | null
-    has_verification?: boolean
-    certified_date?: string | null
-    certification_expiry?: string | null
-    verification_documents?: string[]
     year_experiences?: number | null
     industries?: string[]
   }): Promise<User> {
@@ -63,10 +59,6 @@ export class UserService {
       status: UserStatus
       organization_name?: string | null
       phone?: string | null
-      has_verification?: boolean
-      certified_date?: string | null
-      certification_expiry?: string | null
-      verification_documents?: string[]
       year_experiences?: number | null
       industries?: string[]
     }>
@@ -82,4 +74,3 @@ export class UserService {
 
 // Export singleton instance
 export const userService = new UserService()
-

@@ -33,13 +33,33 @@ CREATE TABLE users (
   invite_hashcode TEXT UNIQUE,
   organization_name TEXT,
   phone TEXT,
-  has_verification BOOLEAN NOT NULL DEFAULT FALSE,
-  certified_date DATE,
-  certification_expiry DATE,
-  verification_documents TEXT[] NOT NULL DEFAULT '{}',
   year_experiences INTEGER,
   industries TEXT[] NOT NULL DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Consult/Audit verification (post-registration document review)
+CREATE TABLE consult_audit_verification (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  token TEXT UNIQUE NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending_upload'
+    CHECK (status IN ('pending_upload', 'pending_review', 'approved', 'rejected')),
+  verified_date DATE,
+  expired_date DATE,
+  rejection_reason TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Uploaded verification proof documents
+CREATE TABLE verification_documents (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  consult_audit_verification_id UUID NOT NULL
+    REFERENCES consult_audit_verification(id) ON DELETE CASCADE,
+  file_url TEXT NOT NULL,
+  file_name TEXT NOT NULL,
+  uploaded_date TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- User consents (PDPA registration consent audit trail)

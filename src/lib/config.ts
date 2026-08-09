@@ -48,8 +48,8 @@ export const storageBuckets = {
   efCertificates: 'cfo-ef-certificates',
   userAvatars: 'cfo-user-avatar',
   emissionTemplateImages: 'cfo-emission-template-images',
-  /** Consult/Audit verification proof docs (public register + admin UserForm) */
-  registrationVerificationDocuments: 'cfo-registration-verification-documents',
+  /** Consult/Audit verification proof docs */
+  verification: 'verification',
 } as const
 
 

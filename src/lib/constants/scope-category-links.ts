@@ -1,4 +1,5 @@
 /** Canonical scope-category IDs (scope_categories.manifest.json). */
+export const SCOPE2_PURCHASED_ELECTRICITY_ID = 'a1000002-0002-4002-8002-000000000006'
 export const SCOPE_CAT1_PURCHASED_GOODS_ID = 'a1000003-0003-4003-8003-000000000007'
 export const SCOPE_CAT3_FUEL_ENERGY_ID = 'a1000003-0003-4003-8003-000000000009'
 export const SCOPE_CAT4_UPSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000a'
@@ -19,12 +20,20 @@ export type ScopeCategoryLinkRule = {
 /** Fixed source→dest category rules (no DB). */
 export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
   {
-    id: 'scope_1_2_to_cat3',
-    source_scopes: [1, 2],
+    id: 'scope_1_to_cat3',
+    source_scopes: [1],
     dest_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
     save_as_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
     is_linked_cat1: false,
     enableFactor: true,
+  },
+  {
+    id: 'scope_2_to_scope2_save_cat3',
+    source_scopes: [2],
+    dest_scope_category_id: SCOPE2_PURCHASED_ELECTRICITY_ID,
+    save_as_scope_category_id: SCOPE_CAT3_FUEL_ENERGY_ID,
+    is_linked_cat1: false,
+    enableFactor: false,
   },
   {
     id: 'scope_1_to_scope4',

@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getServiceSupabase } from '@/lib/supabase-service'
 import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
+import {
+  getVerificationByUserId,
+  updateVerificationStatus,
+} from '@/lib/api/consult-audit-verification'
 import { sendRegistrationRejectedEmail } from '@/lib/email/send-registration-rejected'
+import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 
 const rejectBodySchema = z.object({
   reason: z.string().trim().min(1, 'กรุณาระบุเหตุผล').max(2000),
 })
+
+const USER_SELECT =
+  'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, year_experiences, industries, created_at'
 
 export async function POST (
   request: NextRequest,
@@ -70,9 +78,7 @@ export async function POST (
       .update({ status: 'rejected', rejection_reason: reason })
       .eq('id', id)
       .eq('status', 'requested')
-      .select(
-        'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, has_verification, certified_date, certification_expiry, verification_documents, year_experiences, industries, created_at'
-      )
+      .select(USER_SELECT)
       .single()
 
     if (updateError || !updated) {
@@ -83,6 +89,16 @@ export async function POST (
       )
     }
 
+    const verification = await getVerificationByUserId(supabase, id)
+    if (verification) {
+      await updateVerificationStatus(supabase, verification.id, {
+        status: 'rejected',
+        rejection_reason: reason,
+        verified_date: null,
+        expired_date: null,
+      })
+    }
+
     try {
       const emailResult = await sendRegistrationRejectedEmail({
         to: updated.email,
@@ -90,6 +106,7 @@ export async function POST (
         username: updated.username,
         email: updated.email,
         reason,
+        requestOrigin: resolveSiteOriginFromRequest(request),
       })
       if (!emailResult.sent) {
         console.warn(
