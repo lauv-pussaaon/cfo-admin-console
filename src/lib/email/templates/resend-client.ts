@@ -15,6 +15,7 @@ export async function sendResendEmail (params: {
   subject: string
   text: string
   html: string
+  bcc?: string | string[]
 }): Promise<{ sent: boolean; id?: string; skipReason?: string }> {
   const apiKey = getResendApiKey()
   if (!apiKey) {
@@ -25,6 +26,7 @@ export async function sendResendEmail (params: {
   const result = await resend.emails.send({
     from: getResendFrom(),
     to: params.to,
+    ...(params.bcc ? { bcc: params.bcc } : {}),
     subject: params.subject,
     text: params.text,
     html: params.html,

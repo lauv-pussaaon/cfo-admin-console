@@ -25,6 +25,7 @@ import {
 } from '@mui/material'
 import {
   Close as CloseIcon,
+  MailOutline as MailOutlineIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material'
@@ -34,6 +35,7 @@ import type { Organization } from '@/types/database'
 import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { isAdmin, isDealer } from '@/lib/permissions'
+import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
 import {
   ACCOUNT_TYPE_OPTIONS,
   ACCOUNT_TYPE_VALUES,
@@ -97,6 +99,8 @@ export default function AdminOrganizationModal({
   const [loadingDealers, setLoadingDealers] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
+  const [onboardDialogOpen, setOnboardDialogOpen] = useState(false)
+  const [onboardSuccess, setOnboardSuccess] = useState<string | null>(null)
   const skipAccountTypeReset = useRef(false)
   
   const isAdminUser = isAdmin(user)
@@ -203,6 +207,8 @@ export default function AdminOrganizationModal({
 
   useEffect(() => {
     if (open) {
+      setOnboardSuccess(null)
+      setOnboardDialogOpen(false)
       if (mode === 'edit' && initialData) {
         reset({
           name: initialData.name || '',
@@ -335,6 +341,7 @@ export default function AdminOrganizationModal({
   const isInitialized = watch('is_initialized')
 
   return (
+    <>
     <Dialog
       open={open}
       onClose={onClose}
@@ -379,6 +386,12 @@ export default function AdminOrganizationModal({
               >
                 <Typography variant="body2">{submitError}</Typography>
               </Box>
+            )}
+
+            {onboardSuccess && (
+              <Alert severity="success" sx={{ mb: 2 }} onClose={() => setOnboardSuccess(null)}>
+                {onboardSuccess}
+              </Alert>
             )}
 
             {mode === 'edit' && initialData?.is_initialized && (
@@ -649,7 +662,26 @@ export default function AdminOrganizationModal({
             </Box>
           </DialogContent>
 
-          <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
+          <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', gap: 1 }}>
+            {isAdminUser && mode === 'edit' && initialData?.id && (
+              <Button
+                type="button"
+                variant="outlined"
+                startIcon={<MailOutlineIcon />}
+                disabled={isSubmitting}
+                onClick={() => {
+                  setOnboardSuccess(null)
+                  setOnboardDialogOpen(true)
+                }}
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: 1,
+                  mr: 'auto',
+                }}
+              >
+                ส่งอีเมลต้อนรับ
+              </Button>
+            )}
             <Button
               onClick={onClose}
               disabled={isSubmitting}
@@ -676,6 +708,16 @@ export default function AdminOrganizationModal({
         </form>
       </FormProvider>
     </Dialog>
+
+    {isAdminUser && mode === 'edit' && initialData && (
+      <SendOnboardEmailDialog
+        open={onboardDialogOpen}
+        onClose={() => setOnboardDialogOpen(false)}
+        organization={initialData}
+        onSuccess={() => setOnboardSuccess('ส่งอีเมลต้อนรับสำเร็จ')}
+      />
+    )}
+    </>
   )
 }
 

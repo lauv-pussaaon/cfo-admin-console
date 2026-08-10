@@ -3,6 +3,7 @@
  */
 
 import { sendResendEmail } from '@/lib/email/templates/resend-client'
+import { SUPPORT_EMAIL } from '@/lib/email/templates/shared'
 import { buildOrganizationOnboardContent } from '@/lib/email/templates/organization-onboard'
 
 export async function sendOrganizationOnboardEmail (params: {
@@ -32,8 +33,13 @@ export async function sendOrganizationOnboardEmail (params: {
   })
 
   try {
+    const bcc =
+      params.to.trim().toLowerCase() === SUPPORT_EMAIL.toLowerCase()
+        ? undefined
+        : SUPPORT_EMAIL
     const result = await sendResendEmail({
       to: params.to,
+      ...(bcc ? { bcc } : {}),
       subject: content.subject,
       text: content.text,
       html: content.html,
