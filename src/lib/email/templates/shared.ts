@@ -2,6 +2,8 @@ export const CONTACT_PAGE_URL = 'https://www.ideacarb.com/th/contact'
 export const SUPPORT_EMAIL = 'support@ideacarb.com'
 export const ADMIN_CONSOLE_PUBLIC_URL = 'https://admin-console.ideacarb.com'
 export const LINE_OA_QR_URL = `${ADMIN_CONSOLE_PUBLIC_URL}/images/ideacarb-line-oa.png`
+export const BRAND_LOGO_URL = `${ADMIN_CONSOLE_PUBLIC_URL}/ideacarb-logo-square.png`
+export const EMAIL_ACCENT_COLOR = '#0f766e'
 
 export function escapeHtml (s: string): string {
   return s
@@ -37,12 +39,21 @@ export function contactFooterHtml (): string {
   `.trim()
 }
 
-export function emailShellHtml (bodyHtml: string): string {
+export function brandedHeaderHtml (): string {
+  return `
+  <div style="margin:0 0 20px;">
+    <img src="${escapeHtml(BRAND_LOGO_URL)}" alt="Ideacarb" width="56" height="56" style="display:block;border:0;border-radius:12px;" />
+  </div>
+  `.trim()
+}
+
+export function emailShellHtml (bodyHtml: string, options?: { branded?: boolean }): string {
+  const header = options?.branded ? `${brandedHeaderHtml()}\n  ` : ''
   return `
 <!DOCTYPE html>
 <html>
 <body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #0f172a;">
-  ${bodyHtml}
+  ${header}${bodyHtml}
   ${contactFooterHtml()}
   <p style="font-size:12px;color:#64748b;margin-top:20px;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
 </body>

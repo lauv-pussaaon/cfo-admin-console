@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
+  Alert,
   Box,
   Button,
   Typography,
@@ -12,9 +13,11 @@ import {
   Grid,
   CircularProgress,
   Link as MuiLink,
+  Snackbar,
 } from '@mui/material'
-import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
+import { ArrowBack, Launch as LaunchIcon, MailOutline as MailOutlineIcon } from '@mui/icons-material'
 import { CredentialField } from '@/components/admin/OrganizationCredentialField'
+import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin, isSupport, canManageOrganization } from '@/lib/permissions'
 import { organizationService } from '@/lib/services'
@@ -41,6 +44,8 @@ export default function OrganizationDetailPage () {
   const [org, setOrg] = useState<OrganizationWithCreator | null>(null)
   const [loading, setLoading] = useState(true)
   const [accessDenied, setAccessDenied] = useState(false)
+  const [onboardDialogOpen, setOnboardDialogOpen] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     if (!orgId) return
@@ -131,9 +136,30 @@ export default function OrganizationDetailPage () {
         กลับ
       </Button>
 
-      <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
-        {org.name}
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          flexWrap: 'wrap',
+          mb: 3,
+        }}
+      >
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
+          {org.name}
+        </Typography>
+        {isAdmin(user) && (
+          <Button
+            variant="outlined"
+            startIcon={<MailOutlineIcon />}
+            onClick={() => setOnboardDialogOpen(true)}
+            sx={{ textTransform: 'none' }}
+          >
+            ส่งอีเมลต้อนรับ
+          </Button>
+        )}
+      </Box>
 
       <Paper elevation={0} sx={{ p: 3, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
         <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
@@ -245,6 +271,24 @@ export default function OrganizationDetailPage () {
           )}
         </Grid>
       </Paper>
+
+      <SendOnboardEmailDialog
+        open={onboardDialogOpen}
+        onClose={() => setOnboardDialogOpen(false)}
+        organization={org}
+        onSuccess={() => setSuccessMessage('ส่งอีเมลต้อนรับสำเร็จ')}
+      />
+
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={6000}
+        onClose={() => setSuccessMessage(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSuccessMessage(null)} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

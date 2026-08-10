@@ -16,6 +16,7 @@ import {
   Close as CloseIcon,
   Edit as EditIcon,
   Launch as LaunchIcon,
+  MailOutline as MailOutlineIcon,
   OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
@@ -32,6 +33,8 @@ interface OrganizationDetailDrawerProps {
   organization: OrganizationDetail | null
   onEdit?: (id: string) => void
   canEdit?: boolean
+  onSendOnboard?: (id: string) => void
+  canSendOnboard?: boolean
 }
 
 function InfoRow ({ label, value }: { label: string; value: ReactNode }) {
@@ -53,6 +56,8 @@ export default function OrganizationDetailDrawer ({
   organization,
   onEdit,
   canEdit = false,
+  onSendOnboard,
+  canSendOnboard = false,
 }: OrganizationDetailDrawerProps) {
   const packageLabel = organization
     ? formatPackagePeriod(organization.package_start ?? null, organization.package_end ?? null)
@@ -114,6 +119,16 @@ export default function OrganizationDetailDrawer ({
                 onClick={() => onEdit(organization.id)}
               >
                 แก้ไข
+              </Button>
+            )}
+            {canSendOnboard && onSendOnboard && (
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<MailOutlineIcon />}
+                onClick={() => onSendOnboard(organization.id)}
+              >
+                ส่งอีเมลต้อนรับ
               </Button>
             )}
             <Button

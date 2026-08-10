@@ -29,6 +29,7 @@ import OrganizationsTable from '@/components/admin/OrganizationsTable'
 import OrganizationDetailDrawer from '@/components/admin/OrganizationDetailDrawer'
 import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
 import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
+import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { organizationService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
@@ -74,6 +75,8 @@ export default function AdminConsoleOrganizationsPage() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
   const [detailOrganization, setDetailOrganization] = useState<(OrganizationWithStats | OrganizationWithCreator) | null>(null)
+  const [onboardDialogOpen, setOnboardDialogOpen] = useState(false)
+  const [onboardOrganization, setOnboardOrganization] = useState<(OrganizationWithStats | OrganizationWithCreator) | null>(null)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -228,6 +231,19 @@ export default function AdminConsoleOrganizationsPage() {
     setShowSuccessMessage(true)
   }
 
+  const handleSendOnboard = (organizationId: string) => {
+    const org = organizations.find(o => o.id === organizationId)
+    if (org) {
+      setOnboardOrganization(org)
+      setOnboardDialogOpen(true)
+    }
+  }
+
+  const handleOnboardSuccess = () => {
+    setSuccessMessage('ส่งอีเมลต้อนรับสำเร็จ')
+    setShowSuccessMessage(true)
+  }
+
   const handleCopyHashcode = async () => {
     if (user?.invite_hashcode) {
       try {
@@ -358,6 +374,7 @@ export default function AdminConsoleOrganizationsPage() {
         onDelete={canManageOrganizations(user) ? handleDelete : undefined}
         onExport={canManageOrganizations(user) && !isAdmin(user) ? handleExportOrganization : undefined}
         onInvite={canManageOrganizations(user) && !isAdmin(user) ? handleInvite : undefined}
+        onSendOnboard={isAdmin(user) ? handleSendOnboard : undefined}
         onViewDetail={handleViewDetail}
         onRowClick={handleViewDetail}
       />
@@ -368,6 +385,8 @@ export default function AdminConsoleOrganizationsPage() {
         organization={detailOrganization}
         onEdit={handleEdit}
         canEdit={canManageOrganizations(user)}
+        onSendOnboard={handleSendOnboard}
+        canSendOnboard={isAdmin(user)}
       />
 
       {/* Unified modal for all roles */}
@@ -408,6 +427,16 @@ export default function AdminConsoleOrganizationsPage() {
         description={`คุณแน่ใจหรือไม่ว่าต้องการลบองค์กร "${deletingItemName}"? การดำเนินการนี้ไม่สามารถยกเลิกได้`}
         error={deleteError}
         isDeleting={isDeleting}
+      />
+
+      <SendOnboardEmailDialog
+        open={onboardDialogOpen}
+        onClose={() => {
+          setOnboardDialogOpen(false)
+          setOnboardOrganization(null)
+        }}
+        organization={onboardOrganization}
+        onSuccess={handleOnboardSuccess}
       />
 
       <Snackbar

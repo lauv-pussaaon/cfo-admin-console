@@ -9,6 +9,7 @@ import {
   InfoOutlined as InfoOutlinedIcon,
   FileDownload as FileDownloadIcon,
   PersonAdd as PersonAddIcon,
+  MailOutline as MailOutlineIcon,
   ChatBubbleOutline as ChatBubbleOutlineIcon,
   Insights as InsightsIcon,
 } from '@mui/icons-material'
@@ -42,6 +43,7 @@ interface Props {
   onDelete?: (id: string) => void
   onExport?: (id: string) => void
   onInvite?: (id: string) => void
+  onSendOnboard?: (id: string) => void
   onViewDetail?: (id: string) => void
   onRowClick?: (id: string) => void
   onChatClick?: (id: string) => void
@@ -75,6 +77,7 @@ export default function OrganizationsTable ({
   onDelete,
   onExport,
   onInvite,
+  onSendOnboard,
   onViewDetail,
   onRowClick,
   onChatClick,
@@ -350,6 +353,7 @@ export default function OrganizationsTable ({
 
     const actionWidth =
       (variant === 'dealer' ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) : 0) +
+      (onSendOnboard ? 50 : 0) +
       (onViewDetail ? 50 : 0) +
       (onEdit ? 50 : 0) +
       (onDelete ? 50 : 0) +
@@ -390,6 +394,16 @@ export default function OrganizationsTable ({
                 <PersonAddIcon fontSize="small" />
               </IconButton>
             )}
+            {onSendOnboard && (
+              <IconButton
+                size="small"
+                onClick={() => onSendOnboard(params.row.id)}
+                sx={adminGhostIconButtonSx.primary}
+                title="ส่งอีเมลต้อนรับ"
+              >
+                <MailOutlineIcon fontSize="small" />
+              </IconButton>
+            )}
             {onViewDetail && (
               <IconButton
                 size="small"
@@ -424,7 +438,7 @@ export default function OrganizationsTable ({
         ),
       },
     ]
-  }, [variant, onEdit, onDelete, onExport, onInvite, onViewDetail, onChatClick, onUsageClick])
+  }, [variant, onEdit, onDelete, onExport, onInvite, onSendOnboard, onViewDetail, onChatClick, onUsageClick])
 
   return (
     <Paper elevation={0} sx={adminDataGridPaperSx}>
