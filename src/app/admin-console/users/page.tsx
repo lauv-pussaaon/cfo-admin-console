@@ -19,7 +19,7 @@ import {
 import {
   Add as AddIcon,
   ArrowBack,
-  ContentCopy as ContentCopyIcon,
+  OpenInNew as OpenInNewIcon,
   Search as SearchIcon,
 } from '@mui/icons-material'
 import UsersTable from '@/components/admin/UsersTable'
@@ -233,14 +233,12 @@ export default function AdminConsoleUsersPage() {
     notify(editingUser ? 'แก้ไขผู้ใช้เรียบร้อยแล้ว' : 'สร้างผู้ใช้เรียบร้อยแล้ว')
   }
 
-  const handleCopyRegistrationUrl = async () => {
-    const url = `${window.location.origin}/register/consult`
-    try {
-      await navigator.clipboard.writeText(url)
-      notify('คัดลอกลิงก์แบบฟอร์มสมัครแล้ว')
-    } catch {
-      notify('คัดลอกลิงก์ไม่สำเร็จ', 'error')
-    }
+  const handleOpenTrialRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/trial`, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleOpenRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/consult`, '_blank', 'noopener,noreferrer')
   }
 
   const handleApprove = async (id: string) => {
@@ -399,11 +397,19 @@ export default function AdminConsoleUsersPage() {
         <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
           <Button
             variant="outlined"
-            startIcon={<ContentCopyIcon />}
-            onClick={handleCopyRegistrationUrl}
+            startIcon={<OpenInNewIcon />}
+            onClick={handleOpenTrialRegistrationUrl}
             sx={adminPrimaryButtonSx}
           >
-            คัดลอกลิงก์สมัคร Consult/Audit
+            ลิงก์สมัครทดลองใช้งาน
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            onClick={handleOpenRegistrationUrl}
+            sx={adminPrimaryButtonSx}
+          >
+            ลิงก์สมัคร Consult/Audit
           </Button>
           <Button
             variant="contained"

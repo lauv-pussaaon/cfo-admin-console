@@ -135,11 +135,11 @@ function TrialRegisterForm() {
         <CardContent sx={{ p: { xs: 3, md: 5 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
             <Image
-              src="/images/ideacarb-logo.png"
+              src="/ideacarb-logo-square.png"
               alt="IdeaCarb"
-              width={180}
-              height={48}
-              style={{ width: 'auto', height: 48, objectFit: 'contain' }}
+              width={72}
+              height={72}
+              style={{ width: 72, height: 72, objectFit: 'contain' }}
               priority
             />
           </Box>

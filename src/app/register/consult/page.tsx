@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,6 +26,7 @@ import {
   Typography,
 } from '@mui/material'
 import {
+  CheckCircle as CheckCircleIcon,
   CheckCircleOutline as CheckCircleOutlineIcon,
   Email as EmailIcon,
   Lock as LockIcon,
@@ -63,6 +65,31 @@ type IndustryOption = {
   name_th: string
 }
 
+const usernamePattern = /^[a-zA-Z0-9_]+$/
+const phonePattern = /^[0-9+\-\s()]{8,20}$/
+
+function fieldIsValid (
+  value: string | undefined,
+  error: unknown,
+  options?: { email?: boolean; username?: boolean; password?: boolean; phone?: boolean }
+): boolean {
+  const trimmed = (value ?? '').trim()
+  if (!trimmed || error) return false
+  if (options?.email) {
+    return z.string().email().safeParse(trimmed).success
+  }
+  if (options?.username) {
+    return trimmed.length >= 3 && trimmed.length <= 50 && usernamePattern.test(trimmed)
+  }
+  if (options?.password) {
+    return trimmed.length >= 6
+  }
+  if (options?.phone) {
+    return phonePattern.test(trimmed)
+  }
+  return true
+}
+
 function ConsultRegisterForm () {
   const handleBack = useRegisterBack()
   const { consent } = useRegisterConsent()
@@ -76,9 +103,10 @@ function ConsultRegisterForm () {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       username: '',
@@ -87,13 +115,15 @@ function ConsultRegisterForm () {
       role: 'Consult',
       organizationName: '',
       phone: '',
-      yearExperiences: 0,
+      yearExperiences: undefined as unknown as number,
       industries: [],
     },
   })
 
-  const roleValue = watch('role')
-  const industriesValue = watch('industries')
+  const values = watch()
+  const roleValue = values.role
+  const industriesValue = values.industries ?? []
+  const yearExperiencesValue = values.yearExperiences
 
   useEffect(() => {
     let cancelled = false
@@ -155,6 +185,22 @@ function ConsultRegisterForm () {
     }
   }
 
+  const endCheck = (show: boolean) =>
+    show ? (
+      <InputAdornment position="end">
+        <CheckCircleIcon color="success" fontSize="small" />
+      </InputAdornment>
+    ) : null
+
+  const roleValid = roleValue === 'Consult' || roleValue === 'Audit'
+  const yearsValid =
+    !errors.yearExperiences &&
+    typeof yearExperiencesValue === 'number' &&
+    Number.isInteger(yearExperiencesValue) &&
+    yearExperiencesValue >= 0 &&
+    yearExperiencesValue <= 80
+  const industriesValid = !errors.industries && industriesValue.length >= 1
+
   return (
     <>
       <Button
@@ -162,16 +208,36 @@ function ConsultRegisterForm () {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 3, textTransform: 'none' }}
       >
-        กลับหน้าเข้าสู่ระบบ
+        กลับ
       </Button>
 
-      <Card sx={{ borderRadius: 3, boxShadow: '0 16px 40px rgba(15, 23, 42, 0.10)' }}>
-        <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+      <Card
+        sx={{
+          borderRadius: 3,
+          boxShadow: '0 20px 48px rgba(15, 23, 42, 0.10)',
+          overflow: 'hidden',
+        }}
+      >
+        <CardContent sx={{ p: { xs: 3, md: 5 } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <Image
+              src="/ideacarb-logo-square.png"
+              alt="IdeaCarb"
+              width={72}
+              height={72}
+              style={{ width: 72, height: 72, objectFit: 'contain' }}
+              priority
+            />
+          </Box>
+
           {!isSuccess ? (
             <>
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 3.5, textAlign: 'center' }}>
                 <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
                   ลงทะเบียนที่ปรึกษาหรือผู้ตรวจสอบ
+                </Typography>
+                <Typography color="text.secondary" sx={{ maxWidth: 520, mx: 'auto' }}>
+                  กรอกข้อมูลบัญชีและโปรไฟล์ จากนั้นอัปโหลดเอกสารยืนยันตัวตนตามลิงก์ในอีเมล
                 </Typography>
               </Box>
 
@@ -181,8 +247,16 @@ function ConsultRegisterForm () {
                 </Alert>
               )}
 
-              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'grid', gap: 2 }}>
-                <FormControl fullWidth error={!!errors.role}>
+              <Box
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                sx={{
+                  display: 'grid',
+                  gap: 2.5,
+                  gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                }}
+              >
+                <FormControl fullWidth error={!!errors.role} sx={{ gridColumn: '1 / -1' }}>
                   <InputLabel id="public-register-role-label">ลงทะเบียนในบทบาท</InputLabel>
                   <Select
                     labelId="public-register-role-label"
@@ -194,6 +268,13 @@ function ConsultRegisterForm () {
                       })
                     }
                     disabled={isSubmitting}
+                    endAdornment={
+                      roleValid ? (
+                        <InputAdornment position="end" sx={{ mr: 3 }}>
+                          <CheckCircleIcon color="success" fontSize="small" />
+                        </InputAdornment>
+                      ) : undefined
+                    }
                   >
                     <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
                     <MenuItem value="Audit">ผู้ตรวจสอบ</MenuItem>
@@ -214,6 +295,7 @@ function ConsultRegisterForm () {
                         <PersonIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(fieldIsValid(values.name, errors.name)),
                   }}
                 />
 
@@ -229,6 +311,9 @@ function ConsultRegisterForm () {
                       <InputAdornment position="start">
                         <BadgeIcon color="action" />
                       </InputAdornment>
+                    ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.username, errors.username, { username: true })
                     ),
                   }}
                 />
@@ -247,6 +332,9 @@ function ConsultRegisterForm () {
                         <EmailIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.email, errors.email, { email: true })
+                    ),
                   }}
                 />
 
@@ -264,6 +352,9 @@ function ConsultRegisterForm () {
                         <LockIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.password, errors.password, { password: true })
+                    ),
                   }}
                 />
 
@@ -279,6 +370,9 @@ function ConsultRegisterForm () {
                       <InputAdornment position="start">
                         <BusinessIcon color="action" />
                       </InputAdornment>
+                    ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.organizationName, errors.organizationName)
                     ),
                   }}
                 />
@@ -296,6 +390,9 @@ function ConsultRegisterForm () {
                         <PhoneIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.phone, errors.phone, { phone: true })
+                    ),
                   }}
                 />
 
@@ -307,10 +404,14 @@ function ConsultRegisterForm () {
                   helperText={errors.yearExperiences?.message}
                   disabled={isSubmitting}
                   fullWidth
+                  sx={{ gridColumn: '1 / -1' }}
                   inputProps={{ min: 0, max: 80, step: 1 }}
+                  InputProps={{
+                    endAdornment: endCheck(yearsValid),
+                  }}
                 />
 
-                <FormControl fullWidth error={!!errors.industries}>
+                <FormControl fullWidth error={!!errors.industries} sx={{ gridColumn: '1 / -1' }}>
                   <InputLabel id="public-register-industries-label">อุตสาหกรรม</InputLabel>
                   <Select
                     labelId="public-register-industries-label"
@@ -335,6 +436,13 @@ function ConsultRegisterForm () {
                         .join(', ')
                     }
                     disabled={isSubmitting || industriesLoading}
+                    endAdornment={
+                      industriesValid ? (
+                        <InputAdornment position="end" sx={{ mr: 3 }}>
+                          <CheckCircleIcon color="success" fontSize="small" />
+                        </InputAdornment>
+                      ) : undefined
+                    }
                   >
                     {industryOptions.map((option) => (
                       <MenuItem key={option.industry_code} value={option.industry_code}>
@@ -357,9 +465,15 @@ function ConsultRegisterForm () {
                   type="submit"
                   variant="contained"
                   size="large"
-                  disabled={isSubmitting || industriesLoading}
+                  disabled={isSubmitting || industriesLoading || !isValid}
                   startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
-                  sx={{ mt: 1, py: 1.3, fontWeight: 600 }}
+                  sx={{
+                    mt: 0.5,
+                    py: 1.4,
+                    fontWeight: 600,
+                    gridColumn: '1 / -1',
+                    textTransform: 'none',
+                  }}
                 >
                   {isSubmitting ? 'กำลังส่ง...' : 'ส่งคำขอ'}
                 </Button>
