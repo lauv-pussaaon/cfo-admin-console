@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useState } from 'react'
+import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,6 +19,7 @@ import {
 import {
   ArrowBack as ArrowBackIcon,
   Business as BusinessIcon,
+  CheckCircle as CheckCircleIcon,
   CheckCircleOutline as CheckCircleOutlineIcon,
   Email as EmailIcon,
   Person as PersonIcon,
@@ -36,6 +38,19 @@ const trialRegisterSchema = z.object({
 
 type TrialRegisterFormData = z.infer<typeof trialRegisterSchema>
 
+function fieldIsValid (
+  value: string | undefined,
+  error: unknown,
+  options?: { email?: boolean }
+): boolean {
+  const trimmed = (value ?? '').trim()
+  if (!trimmed || error) return false
+  if (options?.email) {
+    return z.string().email().safeParse(trimmed).success
+  }
+  return true
+}
+
 function TrialRegisterForm() {
   const handleBack = useRegisterBack()
   const { consent } = useRegisterConsent()
@@ -45,9 +60,11 @@ function TrialRegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    watch,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<TrialRegisterFormData>({
     resolver: zodResolver(trialRegisterSchema),
+    mode: 'onChange',
     defaultValues: {
       organizationName: '',
       contactFirstName: '',
@@ -56,6 +73,8 @@ function TrialRegisterForm() {
       contactPhone: '',
     },
   })
+
+  const values = watch()
 
   const onSubmit = async (data: TrialRegisterFormData) => {
     if (!consent) {
@@ -89,6 +108,13 @@ function TrialRegisterForm() {
     }
   }
 
+  const endCheck = (show: boolean) =>
+    show ? (
+      <InputAdornment position="end">
+        <CheckCircleIcon color="success" fontSize="small" />
+      </InputAdornment>
+    ) : null
+
   return (
     <>
       <Button
@@ -96,19 +122,37 @@ function TrialRegisterForm() {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 3, textTransform: 'none' }}
       >
-        กลับหน้าเข้าสู่ระบบ
+        กลับ
       </Button>
 
-      <Card sx={{ borderRadius: 3, boxShadow: '0 16px 40px rgba(15, 23, 42, 0.10)' }}>
-        <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+      <Card
+        sx={{
+          borderRadius: 3,
+          boxShadow: '0 20px 48px rgba(15, 23, 42, 0.10)',
+          overflow: 'hidden',
+        }}
+      >
+        <CardContent sx={{ p: { xs: 3, md: 5 } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <Image
+              src="/images/ideacarb-logo.png"
+              alt="IdeaCarb"
+              width={180}
+              height={48}
+              style={{ width: 'auto', height: 48, objectFit: 'contain' }}
+              priority
+            />
+          </Box>
+
           {!isSuccess ? (
             <>
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 3.5, textAlign: 'center' }}>
                 <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
                   ลงทะเบียนทดลองใช้งานสำหรับองค์กร
                 </Typography>
-                <Typography color="text.secondary">
-                  กรอกข้อมูลองค์กรและผู้ติดต่อ ระบบจะส่งคำขอให้ผู้ดูแลอนุมัติก่อนเปิดใช้งาน
+                <Typography color="text.secondary" sx={{ maxWidth: 520, mx: 'auto' }}>
+                  กรอกข้อมูลองค์กรและผู้ติดต่อ เพื่อขอทดลองใช้งาน Demo 30 วัน
+                  ทีม Ideacarb จะติดต่อกลับพร้อมคำแนะนำในการเริ่มใช้งาน
                 </Typography>
               </Box>
 
@@ -118,7 +162,15 @@ function TrialRegisterForm() {
                 </Alert>
               )}
 
-              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'grid', gap: 2 }}>
+              <Box
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                sx={{
+                  display: 'grid',
+                  gap: 2.5,
+                  gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                }}
+              >
                 <TextField
                   label="ชื่อองค์กร"
                   {...register('organizationName')}
@@ -126,11 +178,15 @@ function TrialRegisterForm() {
                   helperText={errors.organizationName?.message}
                   disabled={isSubmitting}
                   fullWidth
+                  sx={{ gridColumn: '1 / -1' }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
                         <BusinessIcon color="action" />
                       </InputAdornment>
+                    ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.organizationName, errors.organizationName)
                     ),
                   }}
                 />
@@ -148,6 +204,9 @@ function TrialRegisterForm() {
                         <PersonIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.contactFirstName, errors.contactFirstName)
+                    ),
                   }}
                 />
 
@@ -163,6 +222,9 @@ function TrialRegisterForm() {
                       <InputAdornment position="start">
                         <PersonIcon color="action" />
                       </InputAdornment>
+                    ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.contactLastName, errors.contactLastName)
                     ),
                   }}
                 />
@@ -181,6 +243,11 @@ function TrialRegisterForm() {
                         <EmailIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.contactEmail, errors.contactEmail, {
+                        email: true,
+                      })
+                    ),
                   }}
                 />
 
@@ -197,6 +264,9 @@ function TrialRegisterForm() {
                         <PhoneIcon color="action" />
                       </InputAdornment>
                     ),
+                    endAdornment: endCheck(
+                      fieldIsValid(values.contactPhone, errors.contactPhone)
+                    ),
                   }}
                 />
 
@@ -204,9 +274,15 @@ function TrialRegisterForm() {
                   type="submit"
                   variant="contained"
                   size="large"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isValid}
                   startIcon={isSubmitting ? <CircularProgress size={16} color="inherit" /> : null}
-                  sx={{ mt: 1, py: 1.3, fontWeight: 600 }}
+                  sx={{
+                    mt: 0.5,
+                    py: 1.4,
+                    fontWeight: 600,
+                    gridColumn: '1 / -1',
+                    textTransform: 'none',
+                  }}
                 >
                   {isSubmitting ? 'กำลังส่ง...' : 'ส่งคำขอทดลองใช้งาน'}
                 </Button>
@@ -216,10 +292,11 @@ function TrialRegisterForm() {
             <Box sx={{ textAlign: 'center', py: 2 }}>
               <CheckCircleOutlineIcon color="success" sx={{ fontSize: 80, mb: 2 }} />
               <Typography variant="h4" fontWeight={700} gutterBottom>
-                ส่งคำขอแล้ว
+                ได้รับคำขอแล้ว
               </Typography>
-              <Typography color="text.secondary" sx={{ maxWidth: 420, mx: 'auto', mb: 3 }}>
-                คำขอทดลองใช้งานของคุณถูกส่งแล้ว รอการอนุมัติจากผู้ดูแลระบบ
+              <Typography color="text.secondary" sx={{ maxWidth: 480, mx: 'auto', mb: 3 }}>
+                ทีม Ideacarb ได้รับคำขอทดลองใช้งาน Demo 30 วันของท่านแล้ว
+                ทีมงานจะติดต่อกลับในเร็ว ๆ นี้ เพื่อแจ้งขั้นตอนและคำแนะนำในการเริ่มใช้งาน
               </Typography>
               <Button onClick={handleBack} variant="outlined" sx={{ textTransform: 'none' }}>
                 กลับ

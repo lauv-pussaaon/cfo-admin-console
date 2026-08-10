@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createTrialRequest } from '@/lib/api/organization-trial-requests'
 import { getTrialRequestNotificationEmails } from '@/lib/api/notification-recipients-server'
 import { sendAdminNewTrialRequestNotice } from '@/lib/email/send-admin-new-trial-request-notice'
+import { sendTrialRequestConfirmationEmail } from '@/lib/email/send-trial-request-confirmation'
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 import { registrationConsentFields } from '@/components/register/consent-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
@@ -62,9 +63,28 @@ export async function POST (request: NextRequest) {
       console.error('[email] ส่งอีเมลแจ้ง Admin คำขอทดลองใช้งานไม่สำเร็จ:', emailErr)
     }
 
+    try {
+      const confirmResult = await sendTrialRequestConfirmationEmail({
+        to: trialRequest.contact_email,
+        contactFirstName: trialRequest.contact_first_name,
+        contactLastName: trialRequest.contact_last_name,
+        organizationName: trialRequest.organization_name,
+        contactEmail: trialRequest.contact_email,
+        contactPhone: trialRequest.contact_phone,
+      })
+      if (!confirmResult.sent) {
+        console.warn(
+          '[email] ไม่ได้ส่งอีเมลยืนยันคำขอทดลองใช้งานถึงผู้สมัคร:',
+          confirmResult.skipReason ?? 'unknown'
+        )
+      }
+    } catch (emailErr) {
+      console.error('[email] ส่งอีเมลยืนยันคำขอทดลองใช้งานไม่สำเร็จ:', emailErr)
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'ส่งคำขอทดลองใช้งานแล้ว รอการอนุมัติจากผู้ดูแลระบบ',
+      message: 'ส่งคำขอทดลองใช้งานแล้ว ทีมงานจะติดต่อกลับในเร็ว ๆ นี้',
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

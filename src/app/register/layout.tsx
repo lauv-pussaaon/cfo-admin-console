@@ -7,6 +7,9 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
   const pathname = usePathname()
   const isPolicyPage = pathname?.startsWith('/register/policy')
   const isVerifyPage = pathname?.includes('/register/consult/verify/')
+  const isTrialPage = pathname === '/register/trial'
+
+  const wideContainer = isVerifyPage || isTrialPage
 
   return (
     <Box
@@ -16,7 +19,10 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
         py: { xs: 4, md: 8 },
       }}
     >
-      <Container maxWidth={isVerifyPage ? false : isPolicyPage ? 'md' : 'sm'} sx={isVerifyPage ? { maxWidth: 800 } : undefined}>
+      <Container
+        maxWidth={wideContainer ? false : isPolicyPage ? 'md' : 'sm'}
+        sx={wideContainer ? { maxWidth: isTrialPage ? 720 : 800 } : undefined}
+      >
         {children}
       </Container>
     </Box>
