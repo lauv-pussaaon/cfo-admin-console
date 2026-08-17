@@ -10,7 +10,7 @@ import {
   refreshReleaseCounts,
 } from '@/lib/api/ef-catalog-releases'
 import { supabase } from '@/lib/supabase'
-import type { FuelResource, RefSource } from '@/types/emission-resources'
+import { parseFuelResourceMeta, type FuelResource, type RefSource } from '@/types/emission-resources'
 
 const REF_SOURCES = new Set([
   'SELF_COLLECT',
@@ -89,6 +89,12 @@ function resolveRows (
       continue
     }
 
+    const meta = parseFuelResourceMeta(raw.meta)
+    if (meta == null) {
+      errors.push({ row: i + 1, error: 'invalid meta JSON' })
+      continue
+    }
+
     resolved.push({
       id,
       scope_category_id: scopeCategoryId,
@@ -101,6 +107,8 @@ function resolveRows (
       value2_label: str(raw.value2_label),
       value2_unit: str(raw.value2_unit),
       ref_info: str(raw.ref_info),
+      description: str(raw.description),
+      meta,
       ref_co2: num(raw.ref_co2),
       ref_fossil_ch4: num(raw.ref_fossil_ch4),
       ref_ch4: num(raw.ref_ch4),

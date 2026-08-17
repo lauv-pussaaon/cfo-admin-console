@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as XLSX from 'xlsx'
 import { listFuelResourcesForExport } from '@/lib/api/fuel-resources'
 import { getEfCatalogRelease } from '@/lib/api/ef-catalog-releases'
+import { serializeFuelResourceMeta } from '@/types/emission-resources'
 
 export async function GET (request: NextRequest) {
   try {
@@ -56,6 +57,8 @@ export async function GET (request: NextRequest) {
         ref_code: f.ref_code,
         sort_index: f.sort_index,
         multiplier: f.multiplier,
+        description: f.description,
+        meta: serializeFuelResourceMeta(f.meta),
       }))
 
       const workbook = XLSX.utils.book_new()

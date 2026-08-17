@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto'
 import { supabase } from '@/lib/supabase'
-import type { EfCatalogRelease } from '@/types/emission-resources'
+import {
+  serializeFuelResourceMeta,
+  type EfCatalogRelease,
+  type FuelResourceMeta,
+} from '@/types/emission-resources'
 
 export async function listEfCatalogReleases (): Promise<EfCatalogRelease[]> {
   const { data, error } = await supabase
@@ -74,6 +78,8 @@ type HashFuelRow = {
   value1_unit: string | null
   value2_label: string | null
   value2_unit: string | null
+  description: string | null
+  meta: FuelResourceMeta | null
 }
 
 /** Paginate — PostgREST default max is 1000 rows; May catalogs exceed that. */
@@ -83,7 +89,7 @@ async function listFuelsForContentHash (version: string): Promise<HashFuelRow[]>
   while (true) {
     const { data, error } = await supabase
       .from('fuel_resources')
-      .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit')
+      .select('id, ef_value, value1_label, value1_unit, value2_label, value2_unit, description, meta')
       .eq('version', version)
       .is('deleted_at', null)
       .order('id', { ascending: true })
@@ -108,6 +114,8 @@ export async function computeReleaseContentHash (version: string): Promise<strin
         f.value1_unit ?? '',
         f.value2_label ?? '',
         f.value2_unit ?? '',
+        f.description ?? '',
+        serializeFuelResourceMeta(f.meta),
       ].join(':')
     )
     .join('|')

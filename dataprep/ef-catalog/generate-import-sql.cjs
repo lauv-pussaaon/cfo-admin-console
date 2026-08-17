@@ -11,7 +11,7 @@
  *   dataprep/ef-catalog/generated/02a_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/02b_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/02c_fuel_resources_may2569.sql
- *   dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql  (from pnpm tgo-ef:build-import; not overwritten here)
+ *   dataprep/ef-catalog/generated/03a|03b|03c_fuel_resources_tgo_api.sql  (from pnpm tgo-ef:build-import; not overwritten here)
  *   dataprep/ef-catalog/generated/04_fuel_resources_feb2569.sql
  *
  * TGO fuels: run `pnpm tgo-ef:fetch` then `pnpm tgo-ef:build-import` (writes Excel + 03_ SQL).
@@ -221,15 +221,17 @@ function unquote (sqlLit) {
 }
 
 function noteTgoSeedFromBuildImport () {
-  const tgoSql = path.join(OUT, '03_fuel_resources_tgo_api.sql')
-  if (fs.existsSync(tgoSql)) {
+  const parts = ['03a', '03b', '03c'].map((prefix) =>
+    path.join(OUT, `${prefix}_fuel_resources_tgo_api.sql`),
+  )
+  if (parts.every((file) => fs.existsSync(file))) {
     console.log(
-      `Keeping existing 03_fuel_resources_tgo_api.sql (regenerate with: pnpm tgo-ef:build-import)`,
+      `Keeping existing 03a/03b/03c_fuel_resources_tgo_api.sql (regenerate with: pnpm tgo-ef:build-import)`,
     )
     return
   }
   console.warn(
-    `Missing 03_fuel_resources_tgo_api.sql — run: pnpm tgo-ef:fetch && pnpm tgo-ef:build-import`,
+    `Missing 03a/03b/03c_fuel_resources_tgo_api.sql — run: pnpm tgo-ef:fetch && pnpm tgo-ef:build-import`,
   )
 }
 

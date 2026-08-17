@@ -5,6 +5,7 @@ import { Box, Chip, IconButton, Paper, Tooltip, Typography } from '@mui/material
 import { EditOutlined as EditOutlinedIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
+import { serializeFuelResourceMeta } from '@/types/emission-resources'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
@@ -193,6 +194,32 @@ export default function EmissionResourcesTable({
         ) : (
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      width: 240,
+      display: 'flex',
+      renderCell: (params) => <OptionalTextCell value={params.value} />,
+    },
+    {
+      field: 'meta',
+      headerName: 'Meta',
+      width: 160,
+      display: 'flex',
+      renderCell: (params) => {
+        const serialized = serializeFuelResourceMeta(params.row.meta)
+        if (serialized === '{}') {
+          return <Typography variant="body2" color="text.disabled">—</Typography>
+        }
+        return (
+          <Tooltip title={serialized} enterDelay={300}>
+            <Typography variant="body2" noWrap fontFamily="monospace">
+              {serialized}
+            </Typography>
+          </Tooltip>
+        )
+      },
     },
     {
       field: 'actions',

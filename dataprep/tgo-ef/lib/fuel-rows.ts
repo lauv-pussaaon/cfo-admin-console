@@ -10,6 +10,12 @@ import {
   type ScopeCategory,
 } from './review-utils'
 
+export type FuelResourceMeta = {
+  maxLoadTon?: number
+}
+
+const MAX_LOAD_TON_RE = /น้ำหนักบรรทุกสูงสุด\s+([\d.]+)\s*ตัน/
+
 export type FuelResourceImportRow = {
   reqLabel: 'CFO' | 'CFP'
   id: string
@@ -40,12 +46,32 @@ export type FuelResourceImportRow = {
   ref_code: string
   sort_index: number
   multiplier: number
+  description: string | null
+  meta: FuelResourceMeta
   mappingReason: string
 }
 
-function normalizeRefInfo (value: string): string | null {
+function normalizeText (value: string): string | null {
   const trimmed = value.trim()
   return trimmed.length > 0 ? trimmed : null
+}
+
+export function parseMaxLoadTon (description: string | null): number | undefined {
+  if (!description) return undefined
+  const match = description.match(MAX_LOAD_TON_RE)
+  if (!match) return undefined
+  const n = Number(match[1])
+  return Number.isFinite(n) ? n : undefined
+}
+
+export function serializeMeta (meta: FuelResourceMeta): string {
+  const keys = Object.keys(meta).sort()
+  if (keys.length === 0) return '{}'
+  const ordered: Record<string, unknown> = {}
+  for (const key of keys) {
+    ordered[key] = meta[key as keyof FuelResourceMeta]
+  }
+  return JSON.stringify(ordered)
 }
 
 function buildMappedRow (input: {
@@ -64,6 +90,7 @@ function buildMappedRow (input: {
   mappingReason: string
   sortIndex: number
   version: string
+  description: string | null
 }): FuelResourceImportRow {
   return {
     reqLabel: input.reqLabel,
@@ -102,6 +129,8 @@ function buildMappedRow (input: {
     ref_code: input.refCode,
     sort_index: input.sortIndex,
     multiplier: 1,
+    description: input.description,
+    meta: {},
     mappingReason: input.mappingReason,
   }
 }
@@ -116,12 +145,14 @@ export function applyCat4TransportLabels (rows: FuelResourceImportRow[]): FuelRe
       return row
     }
 
+    const maxLoadTon = parseMaxLoadTon(row.description)
     const next: FuelResourceImportRow = {
       ...row,
       value1_label: 'ระยะทาง',
       value1_unit: 'km',
       value2_label: null,
       value2_unit: null,
+      meta: maxLoadTon != null ? { maxLoadTon } : {},
     }
 
     if (!isCat4ZeroLoadingResource(row.resource)) {
@@ -154,7 +185,7 @@ export function buildCfoFuelRows (
         subCategory: null,
         unit: String(row.units),
         efValue: parseNumeric(row.volumn_total),
-        refInfo: normalizeRefInfo(String(row.description)),
+        refInfo: normalizeText(String(row.description)),
         refCo2: parseNumeric(row.volumn_co2),
         refFossilCh4: parseNumeric(row.volumn_fossil_ch4),
         refCh4: parseNumeric(row.volumn_ch4),
@@ -163,6 +194,7 @@ export function buildCfoFuelRows (
         mappingReason: mapping.reason,
         sortIndex,
         version,
+        description: normalizeText(String(row.description ?? '')),
       }),
     )
   }
@@ -195,7 +227,7 @@ export function buildCfpFuelRows (
         subCategory: String(row.category),
         unit,
         efValue: parseNumeric(volumn),
-        refInfo: normalizeRefInfo(String(row.source)),
+        refInfo: normalizeText(String(row.source)),
         refCo2: null,
         refFossilCh4: null,
         refCh4: null,
@@ -204,6 +236,7 @@ export function buildCfpFuelRows (
         mappingReason: mapping.reason,
         sortIndex,
         version,
+        description: normalizeText(String(row.description ?? '')),
       }),
     )
   }
@@ -252,6 +285,8 @@ export const IMPORT_EXCEL_HEADERS = [
   'ref_code',
   'sort_index',
   'multiplier',
+  'description',
+  'meta',
 ] as const
 
 export function toImportExcelRow (row: FuelResourceImportRow): Record<string, string | number | null> {
@@ -284,5 +319,7 @@ export function toImportExcelRow (row: FuelResourceImportRow): Record<string, st
     ref_code: row.ref_code,
     sort_index: row.sort_index,
     multiplier: row.multiplier,
+    description: row.description,
+    meta: serializeMeta(row.meta),
   }
 }

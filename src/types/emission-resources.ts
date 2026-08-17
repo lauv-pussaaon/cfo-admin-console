@@ -21,6 +21,42 @@ export interface ScopeCategory {
   deleted_at: string | null
 }
 
+export type FuelResourceMeta = {
+  maxLoadTon?: number
+}
+
+export function serializeFuelResourceMeta (meta: FuelResourceMeta | null | undefined): string {
+  if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return '{}'
+  const keys = Object.keys(meta).sort()
+  if (keys.length === 0) return '{}'
+  const ordered: Record<string, unknown> = {}
+  for (const key of keys) {
+    ordered[key] = (meta as Record<string, unknown>)[key]
+  }
+  return JSON.stringify(ordered)
+}
+
+export function parseFuelResourceMeta (value: unknown): FuelResourceMeta | null {
+  if (value == null || value === '') return {}
+  let parsed: unknown = value
+  if (typeof value === 'string') {
+    try {
+      parsed = JSON.parse(value)
+    } catch {
+      return null
+    }
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
+  const rec = parsed as Record<string, unknown>
+  const meta: FuelResourceMeta = {}
+  if (rec.maxLoadTon != null && rec.maxLoadTon !== '') {
+    const n = typeof rec.maxLoadTon === 'number' ? rec.maxLoadTon : Number(rec.maxLoadTon)
+    if (!Number.isFinite(n)) return null
+    meta.maxLoadTon = n
+  }
+  return meta
+}
+
 export interface FuelResource {
   id: string
   scope_category_id: string
@@ -33,6 +69,8 @@ export interface FuelResource {
   value2_label: string | null
   value2_unit: string | null
   ref_info: string | null
+  description: string | null
+  meta: FuelResourceMeta
   ref_co2: number | null
   ref_fossil_ch4: number | null
   ref_ch4: number | null
@@ -113,6 +151,8 @@ export interface FuelResourceCSVRow {
   ref_code?: string
   sort_index?: string
   multiplier?: string
+  description?: string
+  meta?: string
 }
 
 export interface ScopeCategoryCSVRow {

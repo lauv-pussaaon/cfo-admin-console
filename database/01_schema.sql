@@ -252,6 +252,8 @@ CREATE TABLE fuel_resources (
   ref_code TEXT,
   sort_index INT,
   multiplier NUMERIC NOT NULL DEFAULT 1,
+  description TEXT,
+  meta JSONB NOT NULL DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   deleted_at TIMESTAMPTZ

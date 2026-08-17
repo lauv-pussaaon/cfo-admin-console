@@ -12,7 +12,9 @@
  *
  * Outputs:
  *   dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
- *   dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
+ *   dataprep/ef-catalog/generated/03a_fuel_resources_tgo_api.sql
+ *   dataprep/ef-catalog/generated/03b_fuel_resources_tgo_api.sql
+ *   dataprep/ef-catalog/generated/03c_fuel_resources_tgo_api.sql
  */
 
 import fs from 'node:fs'
@@ -23,6 +25,7 @@ import {
   assertUniqueRefKeys,
   buildCfoFuelRows,
   buildCfpFuelRows,
+  serializeMeta,
   toImportExcelRow,
   type FuelResourceImportRow,
 } from './lib/fuel-rows'
@@ -36,7 +39,8 @@ const ROOT = process.cwd()
 const RAW_DIR = path.join(ROOT, 'dataprep/tgo-ef/raw')
 const OUT_DIR = path.join(ROOT, 'dataprep/tgo-ef/out')
 const MANIFEST = path.join(ROOT, 'dataprep/ef-catalog/scope_categories.manifest.json')
-const SQL_OUT = path.join(ROOT, 'dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql')
+const SQL_DIR = path.join(ROOT, 'dataprep/ef-catalog/generated')
+const SQL_PART_PREFIXES = ['03a', '03b', '03c'] as const
 
 type EfPayload = {
   resData?: Record<string, string | number>[]
@@ -50,6 +54,10 @@ function sqlStr (value: string | number | null | undefined): string {
 function sqlNum (value: number | null | undefined): string {
   if (value === null || value === undefined) return 'NULL'
   return Number.isFinite(value) ? String(value) : 'NULL'
+}
+
+function sqlJsonb (value: string): string {
+  return `${sqlStr(value)}::jsonb`
 }
 
 function loadJsonResData (filePath: string): Record<string, string | number>[] {
@@ -78,66 +86,60 @@ function resolveVersionLabel (argv: string[]): string {
   )
 }
 
-function writeSeedSql (rows: FuelResourceImportRow[], version: string): void {
-  fs.mkdirSync(path.dirname(SQL_OUT), { recursive: true })
-  const lines = [
-    `-- Generated TGO fuels for admin SoT (version=${version}; from pnpm tgo-ef:build-import)`,
-    `-- Cat4 duo: value1=ระยะทาง/km for all; value2=น้ำหนักที่ขน/ton except resource containing "${CAT4_ZERO_LOADING_MARKER}"`,
-    'BEGIN;',
-    '',
+function insertStatement (row: FuelResourceImportRow): string {
+  const cols = [
+    'id',
+    'scope_category_id',
+    'resource',
+    'sub_category',
+    'unit',
+    'ef_value',
+    'value1_label',
+    'value1_unit',
+    'value2_label',
+    'value2_unit',
+    'ref_info',
+    'ref_co2',
+    'ref_fossil_ch4',
+    'ref_ch4',
+    'ref_n2o',
+    'ref_source',
+    'version',
+    'ref_code',
+    'sort_index',
+    'multiplier',
+    'description',
+    'meta',
+    'created_at',
+    'updated_at',
   ]
-
-  for (const row of rows) {
-    const cols = [
-      'id',
-      'scope_category_id',
-      'resource',
-      'sub_category',
-      'unit',
-      'ef_value',
-      'value1_label',
-      'value1_unit',
-      'value2_label',
-      'value2_unit',
-      'ref_info',
-      'ref_co2',
-      'ref_fossil_ch4',
-      'ref_ch4',
-      'ref_n2o',
-      'ref_source',
-      'version',
-      'ref_code',
-      'sort_index',
-      'multiplier',
-      'created_at',
-      'updated_at',
-    ]
-    const vals = [
-      sqlStr(row.id),
-      sqlStr(row.scope_category_id),
-      sqlStr(row.resource),
-      sqlStr(row.sub_category),
-      sqlStr(row.unit),
-      sqlNum(row.ef_value),
-      sqlStr(row.value1_label),
-      sqlStr(row.value1_unit),
-      sqlStr(row.value2_label),
-      sqlStr(row.value2_unit),
-      sqlStr(row.ref_info),
-      sqlNum(row.ref_co2),
-      sqlNum(row.ref_fossil_ch4),
-      sqlNum(row.ref_ch4),
-      sqlNum(row.ref_n2o),
-      sqlStr(row.ref_source),
-      sqlStr(row.version),
-      sqlStr(row.ref_code),
-      sqlNum(row.sort_index),
-      sqlNum(row.multiplier),
-      'NOW()',
-      'NOW()',
-    ]
-    lines.push(
-      `INSERT INTO fuel_resources (${cols.join(', ')})
+  const vals = [
+    sqlStr(row.id),
+    sqlStr(row.scope_category_id),
+    sqlStr(row.resource),
+    sqlStr(row.sub_category),
+    sqlStr(row.unit),
+    sqlNum(row.ef_value),
+    sqlStr(row.value1_label),
+    sqlStr(row.value1_unit),
+    sqlStr(row.value2_label),
+    sqlStr(row.value2_unit),
+    sqlStr(row.ref_info),
+    sqlNum(row.ref_co2),
+    sqlNum(row.ref_fossil_ch4),
+    sqlNum(row.ref_ch4),
+    sqlNum(row.ref_n2o),
+    sqlStr(row.ref_source),
+    sqlStr(row.version),
+    sqlStr(row.ref_code),
+    sqlNum(row.sort_index),
+    sqlNum(row.multiplier),
+    sqlStr(row.description),
+    sqlJsonb(serializeMeta(row.meta)),
+    'NOW()',
+    'NOW()',
+  ]
+  return `INSERT INTO fuel_resources (${cols.join(', ')})
 VALUES (${vals.join(', ')})
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
@@ -159,15 +161,36 @@ ON CONFLICT (id) DO UPDATE SET
   ref_code = EXCLUDED.ref_code,
   sort_index = EXCLUDED.sort_index,
   multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
   deleted_at = NULL,
-  updated_at = NOW();`,
-    )
-    lines.push('')
-  }
+  updated_at = NOW();`
+}
 
-  lines.push('COMMIT;')
-  fs.writeFileSync(SQL_OUT, lines.join('\n'), 'utf8')
-  console.log(`Wrote ${SQL_OUT} (${rows.length} rows)`)
+function writeSeedSql (rows: FuelResourceImportRow[], version: string): void {
+  fs.mkdirSync(SQL_DIR, { recursive: true })
+  const oldMonolith = path.join(SQL_DIR, '03_fuel_resources_tgo_api.sql')
+  if (fs.existsSync(oldMonolith)) fs.unlinkSync(oldMonolith)
+
+  const partSize = Math.ceil(rows.length / SQL_PART_PREFIXES.length)
+  SQL_PART_PREFIXES.forEach((prefix, index) => {
+    const part = rows.slice(index * partSize, (index + 1) * partSize)
+    if (part.length === 0) return
+    const filename = `${prefix}_fuel_resources_tgo_api.sql`
+    const lines = [
+      `-- Generated TGO fuels for admin SoT (version=${version}; from pnpm tgo-ef:build-import)`,
+      `-- Cat4 duo: value1=ระยะทาง/km for all; value2=น้ำหนักที่ขน/ton except resource containing "${CAT4_ZERO_LOADING_MARKER}"`,
+      `-- Cat4 meta.maxLoadTon parsed from description "น้ำหนักบรรทุกสูงสุด {n} ตัน"`,
+      `-- part ${index + 1} of ${SQL_PART_PREFIXES.length}; run 03a, 03b, then 03c`,
+      'BEGIN;',
+      '',
+      ...part.flatMap((row) => [insertStatement(row), '']),
+      'COMMIT;',
+    ]
+    const outPath = path.join(SQL_DIR, filename)
+    fs.writeFileSync(outPath, lines.join('\n'), 'utf8')
+    console.log(`Wrote ${outPath} (${part.length} rows)`)
+  })
 }
 
 function main () {
@@ -191,9 +214,10 @@ function main () {
   const cat4 = rows.filter((r) => r.scope_category_id === SCOPE_CAT4_UPSTREAM_TRANSPORT_ID)
   const zeroLoading = cat4.filter((r) => r.resource.includes(CAT4_ZERO_LOADING_MARKER))
   const withValue2 = cat4.filter((r) => r.value2_label != null)
+  const withMaxLoad = cat4.filter((r) => r.meta.maxLoadTon != null)
   console.log(
     `Mapped ${rows.length} fuels (version=${version}; CFO ${cfoRows.length} + CFP ${cfpRows.length}); ` +
-      `Cat4 ${cat4.length} (zero-loading ${zeroLoading.length}, with value2 ${withValue2.length})`,
+      `Cat4 ${cat4.length} (zero-loading ${zeroLoading.length}, with value2 ${withValue2.length}, maxLoadTon ${withMaxLoad.length})`,
   )
 
   fs.mkdirSync(OUT_DIR, { recursive: true })

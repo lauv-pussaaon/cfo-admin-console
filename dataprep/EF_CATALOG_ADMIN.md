@@ -20,7 +20,9 @@ Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id
 
 Admin uses a single Supabase instance. All DDL lives in `database/01_schema.sql` (no incremental `migration_*.sql`). Fresh install: `00_drop_all.sql` → `01_schema.sql` → `02_seed_master_data.sql` → `03_seed_ef_catalog_releases.sql` (draft releases + `order_index` 10/20/30/40) → generated EF SQL below → publish in UI.
 
-Cat 4 transport duo labels for TGO are baked by `pnpm tgo-ef:build-import` (not a separate SQL repair). After any fuel SQL load or import, **Publish** (and set default when ready) so clients see the new `content_hash`.
+`fuel_resources` includes `description TEXT` and `meta JSONB NOT NULL DEFAULT '{}'` (TGO text + Cat 4 `{ "maxLoadTon": 16 }`). Existing admin DBs: apply [`database/migrate_add_fuel_resources_description_meta.sql`](../database/migrate_add_fuel_resources_description_meta.sql), then upsert rebuilt TGO SQL (same UUIDs) and **Re-publish**.
+
+Cat 4 transport duo labels and `meta.maxLoadTon` for TGO are baked by `pnpm tgo-ef:build-import` (not a separate SQL repair). After any fuel SQL load or import, **Publish** (and set default when ready) so clients see the new `content_hash`.
 
 ## TGO EF refresh (offline → Import new version)
 
@@ -30,20 +32,22 @@ When TGO publishes updated emission factors, run from `cfo-admin-console` (set `
 pnpm tgo-ef:fetch
 pnpm tgo-ef:build-import -- --version "TGO July 2569"
 # → dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
-#    + dataprep/ef-catalog/generated/03_fuel_resources_tgo_api.sql
+#    + dataprep/ef-catalog/generated/03a|03b|03c_fuel_resources_tgo_api.sql
 ```
 
 Then Admin UI → Emission Resources → **Import new version** → enter the same version label → upload `fuel_resources_tgo_import.xlsx` → Publish → set as default when ready → clients sync.
 
-Cat 4 transport labels are applied in the build script (not a separate SQL step for new imports): all Cat 4 get `value1`; only rows without ` 0% Loading` get `value2`.
+Cat 4 transport labels are applied in the build script (not a separate SQL step for new imports): all Cat 4 get `value1`; only rows without ` 0% Loading` get `value2`. TGO JSON `description` is written to `description` (and still to CFO `ref_info`). Cat 4 descriptions matching `น้ำหนักบรรทุกสูงสุด {n} ตัน` set `meta.maxLoadTon`. Excel `meta` is a JSON string.
+
+To backfill an **existing** TGO version (Excel replace is disabled): apply the schema migrate, run `pnpm tgo-ef:build-import -- --version "<existing label>"`, upsert `03a` then `03b` then `03c_fuel_resources_tgo_api.sql`, then Re-publish.
 
 ## Generate + load seed SQL
 
 From `cfo-admin-console` (May/Feb still may use sibling `ideacarb-client-app` seeds; TGO SQL comes from `pnpm tgo-ef:build-import`):
 
 ```bash
-pnpm tgo-ef:fetch && pnpm tgo-ef:build-import   # refresh 03_ TGO SQL + Excel
-npm run ef-catalog:generate-import              # 01_, 02_, 04_ (keeps existing 03_)
+pnpm tgo-ef:fetch && pnpm tgo-ef:build-import   # refresh 03a/03b/03c TGO SQL + Excel
+npm run ef-catalog:generate-import              # 01_, 02_, 04_ (keeps existing 03a/03b/03c)
 ```
 
 Writes under `dataprep/ef-catalog/generated/`:
@@ -52,10 +56,12 @@ Writes under `dataprep/ef-catalog/generated/`:
 2. `02a_fuel_resources_may2569.sql`
 3. `02b_fuel_resources_may2569.sql`
 4. `02c_fuel_resources_may2569.sql`
-5. `03_fuel_resources_tgo_api.sql` — from `tgo-ef:build-import`
-6. `04_fuel_resources_feb2569.sql`
+5. `03a_fuel_resources_tgo_api.sql` — from `tgo-ef:build-import`
+6. `03b_fuel_resources_tgo_api.sql`
+7. `03c_fuel_resources_tgo_api.sql`
+8. `04_fuel_resources_feb2569.sql`
 
-Apply after `01_schema.sql` + `03_seed_ef_catalog_releases.sql`, in filename order. The May catalog is split into three independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
+Apply after `01_schema.sql` + `03_seed_ef_catalog_releases.sql`, in filename order. May (`02a`–`02c`) and TGO (`03a`–`03c`) are split into independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
 
 Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
 
@@ -101,7 +107,9 @@ Table action column → **Edit EF** modal. Editable fields:
 
 Identity fields (resource name, category, unit, UUID) stay read-only. Saving does **not** change release status or `published_at`. For published versions, click **Re-publish** so client sync sees the new `content_hash`.
 
-`content_hash` includes EF + duo fields (no fuel-link pairs).
+`content_hash` includes EF + duo fields + `description` + stable `meta` JSON (no fuel-link pairs).
+
+Emission Resources table also shows **Description** and **Meta** (read-only; ingest-derived).
 
 API: `PATCH /api/fuel-resources/:id` body whitelist above only.
 
@@ -121,6 +129,7 @@ Import rules:
 - Upsert by `id` when present; missing `id` gets a new UUID
 - File `version` column is ignored; rows use the dialog-selected version
 - Duo-value columns (`value1_*`, `value2_*`) are supported for manual TGO supplements
+- `description` and `meta` (JSON string, default `{}`) round-trip on export/import
 - Insert/upsert clears `deleted_at` on matching IDs
 - `mode: 'replace'` is rejected by the API
 
@@ -134,7 +143,9 @@ API:
 - `GET /api/scope-category-links` — fixed category link rules
 - **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
   - `GET /api/ef-catalog/sync/manifest` — published releases
-  - `GET /api/ef-catalog/sync?version=` — categories + fuels + `content_hash` (no `links` payload)
+  - `GET /api/ef-catalog/sync?version=` — categories + fuels (includes `description` + `meta`) + `content_hash` (no `links` payload)
+
+Current client INSERT ignores unknown fuel keys — no catalog wipe needed. Later client persist: add the same two columns, then if `content_hash` already matches, clear `ef_catalog_sync_state` for that version (do not delete fuels with emissions) so one sync writes the new fields. Empty clients may wipe catalog then sync.
 
 ## Client sync (Phase 1)
 
