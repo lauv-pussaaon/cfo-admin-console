@@ -25,6 +25,10 @@ import { canAccessTrialRequests } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
 import type { OrganizationTrialRequest, OrganizationTrialRequestStatus } from '@/types/database'
 import {
+  ORG_REQUEST_KIND_OPTIONS,
+  type OrgRequestKind,
+} from '@/types/org-request-kind'
+import {
   TRIAL_REQUEST_STATUS_OPTIONS,
   getTrialRequestStatusChipColor,
 } from '@/types/trial-request-status'
@@ -37,6 +41,7 @@ import {
 } from '@/lib/admin-ui-styles'
 
 type StatusFilter = '' | OrganizationTrialRequestStatus
+type KindFilter = '' | OrgRequestKind
 
 export default function AdminTrialRequestsPage () {
   const { user, isLoading: authLoading } = useAuth()
@@ -45,6 +50,7 @@ export default function AdminTrialRequestsPage () {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('')
+  const [kindFilter, setKindFilter] = useState<KindFilter>('')
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
@@ -95,6 +101,9 @@ export default function AdminTrialRequestsPage () {
       if (statusFilter && request.status !== statusFilter) {
         return false
       }
+      if (kindFilter && request.request_kind !== kindFilter) {
+        return false
+      }
       if (!term) return true
       const haystack = [
         request.organization_name,
@@ -102,10 +111,11 @@ export default function AdminTrialRequestsPage () {
         request.contact_last_name,
         request.contact_email,
         request.contact_phone,
+        request.request_kind === 'annual_membership' ? 'สมาชิกรายปี membership' : 'ทดลองใช้งาน trial',
       ].join(' ').toLowerCase()
       return haystack.includes(term)
     })
-  }, [requests, searchTerm, statusFilter])
+  }, [requests, searchTerm, statusFilter, kindFilter])
 
   const handleRowClick = (id: string) => {
     router.push(`/admin-console/trial-requests/${id}`)
@@ -131,7 +141,7 @@ export default function AdminTrialRequestsPage () {
       </Button>
 
       <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
-        คำขอทดลองใช้งานองค์กร
+        คำขอสมัครองค์กร
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
@@ -176,6 +186,21 @@ export default function AdminTrialRequestsPage () {
           >
             <MenuItem value="">ทั้งหมด</MenuItem>
             {TRIAL_REQUEST_STATUS_OPTIONS.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
+          <InputLabel>ประเภทคำขอ</InputLabel>
+          <Select
+            label="ประเภทคำขอ"
+            value={kindFilter}
+            onChange={(e) => setKindFilter(e.target.value as KindFilter)}
+          >
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {ORG_REQUEST_KIND_OPTIONS.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>

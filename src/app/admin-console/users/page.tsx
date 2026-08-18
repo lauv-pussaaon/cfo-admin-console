@@ -237,6 +237,10 @@ export default function AdminConsoleUsersPage() {
     window.open(`${window.location.origin}/register/trial`, '_blank', 'noopener,noreferrer')
   }
 
+  const handleOpenMembershipRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/membership`, '_blank', 'noopener,noreferrer')
+  }
+
   const handleOpenRegistrationUrl = () => {
     window.open(`${window.location.origin}/register/consult`, '_blank', 'noopener,noreferrer')
   }
@@ -402,6 +406,14 @@ export default function AdminConsoleUsersPage() {
             sx={adminPrimaryButtonSx}
           >
             ลิงก์สมัครทดลองใช้งาน
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            onClick={handleOpenMembershipRegistrationUrl}
+            sx={adminPrimaryButtonSx}
+          >
+            ลิงก์สมัครสมาชิกรายปี
           </Button>
           <Button
             variant="outlined"

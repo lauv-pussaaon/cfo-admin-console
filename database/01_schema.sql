@@ -121,6 +121,7 @@ CREATE TABLE organization_trial_requests (
   contact_last_name TEXT NOT NULL,
   contact_email TEXT NOT NULL,
   contact_phone TEXT NOT NULL,
+  request_kind TEXT NOT NULL DEFAULT 'trial' CHECK (request_kind IN ('trial', 'annual_membership')),
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'cancelled')),
   organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
   approved_account_type TEXT,

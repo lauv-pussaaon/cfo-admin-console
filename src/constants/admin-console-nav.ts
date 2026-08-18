@@ -16,8 +16,8 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     path: '/admin-console/organizations',
   },
   {
-    title: 'คำขอทดลองใช้งาน',
-    description: 'ตรวจสอบและอนุมัติคำขอสมัครทดลองใช้งาน',
+    title: 'คำขอสมัครองค์กร',
+    description: 'ตรวจสอบและอนุมัติคำขอทดลองใช้งานและสมาชิกรายปี',
     path: '/admin-console/trial-requests',
   },
   {
@@ -61,7 +61,7 @@ export const CONSULT_AUDIT_NAV_PATHS = [
 
 export const ADMIN_SETTINGS_NAV_ITEM: AdminNavItem = {
   title: 'การตั้งค่าการแจ้งเตือน',
-  description: 'จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน',
+  description: 'จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปี',
   path: '/admin-console/settings/notifications',
 }
 

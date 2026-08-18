@@ -18,6 +18,26 @@ export function getDefaultPackagePeriod (accountType: AccountType): {
   }
 }
 
+function toLocalDateInputValue (date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+export function getDefaultAnnualPackagePeriod (): {
+  package_start: string
+  package_end: string
+} {
+  const start = new Date()
+  const end = new Date(start)
+  end.setFullYear(end.getFullYear() + 1)
+  return {
+    package_start: toLocalDateInputValue(start),
+    package_end: toLocalDateInputValue(end),
+  }
+}
+
 export function formatPackagePeriod (
   packageStart: string | null,
   packageEnd: string | null

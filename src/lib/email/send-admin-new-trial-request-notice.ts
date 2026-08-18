@@ -7,6 +7,11 @@ import {
   resolveBaseUrlForEmail,
   buildAdminConsoleTrialRequestsUrl,
 } from '@/lib/email/resolve-site-origin'
+import {
+  getOrgRequestKindLabel,
+  isAnnualMembershipRequest,
+  type OrgRequestKind,
+} from '@/types/org-request-kind'
 
 const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
 
@@ -35,6 +40,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
   contactEmail: string
   contactPhone: string
   createdAt: string
+  requestKind?: OrgRequestKind
   requestOrigin?: string
   adminEmails: string[]
 }): Promise<{ sent: boolean; skipReason?: string }> {
@@ -74,6 +80,11 @@ export async function sendAdminNewTrialRequestNotice (params: {
   const trialRequestsUrl = buildAdminConsoleTrialRequestsUrl(baseUrl)
   const contactName = `${params.contactFirstName} ${params.contactLastName}`.trim()
   const submittedAt = formatSubmittedAt(params.createdAt)
+  const kindLabel = getOrgRequestKindLabel(params.requestKind)
+  const isMembership = isAnnualMembershipRequest(params.requestKind)
+  const headline = isMembership
+    ? 'มีคำขอสมัครสมาชิกรายปีใหม่'
+    : 'มีคำขอทดลองใช้งานใหม่'
 
   const safe = {
     organizationName: escapeHtml(params.organizationName),
@@ -81,15 +92,20 @@ export async function sendAdminNewTrialRequestNotice (params: {
     contactEmail: escapeHtml(params.contactEmail),
     contactPhone: escapeHtml(params.contactPhone),
     submittedAt: escapeHtml(submittedAt),
+    kindLabel: escapeHtml(kindLabel),
+    headline: escapeHtml(headline),
     trialRequestsHref: escapeHtml(trialRequestsUrl),
   }
 
-  const subject = '[ผู้ดูแล] มีคำขอทดลองใช้งานใหม่'
+  const subject = isMembership
+    ? '[ผู้ดูแล] มีคำขอสมัครสมาชิกรายปีใหม่'
+    : '[ผู้ดูแล] มีคำขอทดลองใช้งานใหม่'
 
   const text = [
-    'มีคำขอทดลองใช้งานองค์กรใหม่',
+    headline,
     '',
     'ข้อมูลคำขอ:',
+    `- ประเภทคำขอ: ${kindLabel}`,
     `- ชื่อองค์กร: ${params.organizationName}`,
     `- ผู้ติดต่อ: ${contactName}`,
     `- อีเมล: ${params.contactEmail}`,
@@ -103,15 +119,16 @@ export async function sendAdminNewTrialRequestNotice (params: {
 <!DOCTYPE html>
 <html>
 <body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #0f172a;">
-  <p><strong>มีคำขอทดลองใช้งานใหม่</strong></p>
+  <p><strong>${safe.headline}</strong></p>
   <ul>
+    <li>ประเภทคำขอ: ${safe.kindLabel}</li>
     <li>ชื่อองค์กร: ${safe.organizationName}</li>
     <li>ผู้ติดต่อ: ${safe.contactName}</li>
     <li>อีเมล: ${safe.contactEmail}</li>
     <li>เบอร์โทร: ${safe.contactPhone}</li>
     <li>วันที่ส่งคำขอ: ${safe.submittedAt}</li>
   </ul>
-  <p><a href="${safe.trialRequestsHref}">ไปหน้าคำขอทดลองใช้งาน</a></p>
+  <p><a href="${safe.trialRequestsHref}">ไปหน้าคำขอสมัครองค์กร</a></p>
   <p style="font-size:12px;color:#64748b;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
 </body>
 </html>`.trim()

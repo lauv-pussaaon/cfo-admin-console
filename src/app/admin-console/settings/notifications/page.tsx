@@ -195,7 +195,7 @@ export default function NotificationSettingsPage () {
             การตั้งค่าการแจ้งเตือน
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งานใหม่
+            จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปีใหม่
           </Typography>
         </Box>
         <Button
@@ -214,12 +214,12 @@ export default function NotificationSettingsPage () {
 
       {enabledCount === 0 && !loading && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งานใหม่
+          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปีใหม่
         </Alert>
       )}
 
       <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
-        คำขอทดลองใช้งาน
+        คำขอสมัครองค์กร
       </Typography>
 
       <NotificationRecipientsTable

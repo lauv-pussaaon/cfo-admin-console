@@ -1,4 +1,5 @@
 import type { AccountType } from './account-types'
+import type { OrgRequestKind } from './org-request-kind'
 
 export interface Organization {
   id: string
@@ -79,6 +80,7 @@ export interface OrganizationTrialRequest {
   contact_last_name: string
   contact_email: string
   contact_phone: string
+  request_kind: OrgRequestKind
   status: OrganizationTrialRequestStatus
   organization_id: string | null
   approved_account_type: string | null

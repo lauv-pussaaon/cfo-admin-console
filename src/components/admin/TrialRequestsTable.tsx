@@ -7,6 +7,10 @@ import { ChevronRight as ChevronRightIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import type { OrganizationTrialRequest } from '@/types/database'
 import {
+  getOrgRequestKindChipColor,
+  getOrgRequestKindLabel,
+} from '@/types/org-request-kind'
+import {
   getTrialRequestStatusChipColor,
   getTrialRequestStatusLabel,
 } from '@/types/trial-request-status'
@@ -43,6 +47,7 @@ export default function TrialRequestsTable ({
     return data.map((request) => ({
       id: request.id,
       organization_name: request.organization_name,
+      request_kind: request.request_kind,
       contact_name: `${request.contact_first_name} ${request.contact_last_name}`,
       contact_email: request.contact_email,
       contact_phone: request.contact_phone,
@@ -59,6 +64,20 @@ export default function TrialRequestsTable ({
       headerName: 'ชื่อองค์กร',
       flex: 1.2,
       minWidth: 180,
+    },
+    {
+      field: 'request_kind',
+      headerName: 'ประเภทคำขอ',
+      width: 150,
+      renderCell: (params) => (
+        <Chip
+          label={getOrgRequestKindLabel(params.value)}
+          color={getOrgRequestKindChipColor(params.value)}
+          size="small"
+          variant="outlined"
+          sx={adminQuietChipSx}
+        />
+      ),
     },
     {
       field: 'contact_name',

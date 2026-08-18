@@ -52,7 +52,12 @@ export class TrialRequestService {
 
   async approveTrialRequest (
     id: string,
-    input: { reviewedBy: string; accountType: AccountType }
+    input: {
+      reviewedBy: string
+      accountType: AccountType
+      packageStart?: string | null
+      packageEnd?: string | null
+    }
   ): Promise<OrganizationTrialRequest> {
     return approveTrialRequestAPI(id, input)
   }

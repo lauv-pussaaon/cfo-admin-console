@@ -4,6 +4,7 @@
 
 import { sendResendEmail } from '@/lib/email/templates/resend-client'
 import { buildTrialRequestConfirmationContent } from '@/lib/email/templates/trial-request-confirmation'
+import type { OrgRequestKind } from '@/types/org-request-kind'
 
 export async function sendTrialRequestConfirmationEmail (params: {
   to: string
@@ -12,6 +13,7 @@ export async function sendTrialRequestConfirmationEmail (params: {
   organizationName: string
   contactEmail: string
   contactPhone: string
+  requestKind?: OrgRequestKind
 }): Promise<{ sent: boolean; skipReason?: string }> {
   const content = buildTrialRequestConfirmationContent({
     contactFirstName: params.contactFirstName,
@@ -19,6 +21,7 @@ export async function sendTrialRequestConfirmationEmail (params: {
     organizationName: params.organizationName,
     contactEmail: params.contactEmail,
     contactPhone: params.contactPhone,
+    requestKind: params.requestKind,
   })
 
   try {

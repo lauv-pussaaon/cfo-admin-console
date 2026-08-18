@@ -1,12 +1,17 @@
 import { supabase } from '../supabase'
 import { createOrganization } from './organizations'
-import { ValidationError, throwIfError } from '@/lib/utils/errors'
+import { ConflictError, ValidationError, throwIfError } from '@/lib/utils/errors'
 import type { AccountType } from '@/types/account-types'
 import type {
   OrganizationTrialRequest,
   OrganizationTrialRequestConsent,
   OrganizationTrialRequestStatus,
 } from '@/types/database'
+import {
+  DEFAULT_ORG_REQUEST_KIND,
+  isAnnualMembershipRequest,
+  type OrgRequestKind,
+} from '@/types/org-request-kind'
 import { canTransitionTrialRequestStatus } from '@/types/trial-request-status'
 
 export interface CreateTrialRequestInput {
@@ -15,6 +20,7 @@ export interface CreateTrialRequestInput {
   contactLastName: string
   contactEmail: string
   contactPhone: string
+  requestKind?: OrgRequestKind
   termsAccepted: boolean
   privacyAcknowledged: boolean
   collectShareDataConsent: boolean
@@ -27,6 +33,8 @@ export interface CreateTrialRequestInput {
 export interface ApproveTrialRequestInput {
   reviewedBy: string
   accountType: AccountType
+  packageStart?: string | null
+  packageEnd?: string | null
 }
 
 export interface UpdateTrialRequestStatusInput {
@@ -48,6 +56,19 @@ export const createTrialRequest = async (
   input: CreateTrialRequestInput
 ): Promise<OrganizationTrialRequest> => {
   const contactEmail = input.contactEmail.trim().toLowerCase()
+  const requestKind = input.requestKind ?? DEFAULT_ORG_REQUEST_KIND
+
+  const existingResult = await supabase
+    .from('organization_trial_requests')
+    .select('id')
+    .eq('contact_email', contactEmail)
+    .in('status', APPROVABLE_STATUSES)
+    .limit(1)
+
+  const existing = throwIfError(existingResult)
+  if (existing.length > 0) {
+    throw new ConflictError('มีคำขอที่รออนุมัติสำหรับอีเมลนี้อยู่แล้ว')
+  }
 
   const requestResult = await supabase
     .from('organization_trial_requests')
@@ -57,6 +78,7 @@ export const createTrialRequest = async (
       contact_last_name: input.contactLastName.trim(),
       contact_email: contactEmail,
       contact_phone: input.contactPhone.trim(),
+      request_kind: requestKind,
       status: 'pending',
     })
     .select()
@@ -142,7 +164,7 @@ export const updateTrialRequestStatus = async (
   const request = await getTrialRequestById(id)
 
   if (!request) {
-    throw new ValidationError('ไม่พบคำขอทดลองใช้งาน')
+    throw new ValidationError('ไม่พบคำขอสมัครองค์กร')
   }
 
   if (!canTransitionTrialRequestStatus(request.status, input.status)) {
@@ -181,11 +203,25 @@ export const approveTrialRequest = async (
   const request = await getTrialRequestById(id)
 
   if (!request) {
-    throw new ValidationError('ไม่พบคำขอทดลองใช้งาน')
+    throw new ValidationError('ไม่พบคำขอสมัครองค์กร')
   }
 
   if (!APPROVABLE_STATUSES.includes(request.status)) {
     throw new ValidationError('คำขอนี้ไม่สามารถอนุมัติได้')
+  }
+
+  const isMembership = isAnnualMembershipRequest(request.request_kind)
+  const accountType: AccountType = isMembership ? 'general customers' : input.accountType
+  const packageStart = input.packageStart?.trim() || null
+  const packageEnd = input.packageEnd?.trim() || null
+
+  if (isMembership) {
+    if (!packageStart || !packageEnd) {
+      throw new ValidationError('กรุณาระบุวันเริ่มและวันสิ้นสุดแพ็กเกจ')
+    }
+    if (packageEnd < packageStart) {
+      throw new ValidationError('วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น')
+    }
   }
 
   const organization = await createOrganization({
@@ -194,7 +230,10 @@ export const approveTrialRequest = async (
     contact_first_name: request.contact_first_name,
     contact_last_name: request.contact_last_name,
     contact_phone: request.contact_phone,
-    account_type: input.accountType,
+    account_type: accountType,
+    ...(isMembership
+      ? { package_start: packageStart, package_end: packageEnd }
+      : {}),
     created_by: input.reviewedBy,
   })
 
@@ -203,7 +242,7 @@ export const approveTrialRequest = async (
     .update({
       status: 'approved',
       organization_id: organization.id,
-      approved_account_type: input.accountType,
+      approved_account_type: accountType,
       reviewed_by: input.reviewedBy,
       reviewed_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

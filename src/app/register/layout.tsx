@@ -8,9 +8,10 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
   const isPolicyPage = pathname?.startsWith('/register/policy')
   const isVerifyPage = pathname?.includes('/register/consult/verify/')
   const isTrialPage = pathname === '/register/trial'
+  const isMembershipPage = pathname === '/register/membership'
   const isConsultPage = pathname === '/register/consult'
 
-  const wideFormPage = isTrialPage || isConsultPage
+  const wideFormPage = isTrialPage || isMembershipPage || isConsultPage
   const wideContainer = isVerifyPage || wideFormPage
 
   return (

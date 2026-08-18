@@ -1,4 +1,6 @@
 export { default as RegisterConsentGate } from './RegisterConsentGate'
+export { default as OrgSignupForm } from './OrgSignupForm'
+export type { OrgSignupCopy } from './OrgSignupForm'
 export { default as RegistrationConsentModal } from './RegistrationConsentModal'
 export { default as ConsentDocumentSection } from './ConsentDocumentSection'
 export { useRegisterConsent } from './RegisterConsentContext'

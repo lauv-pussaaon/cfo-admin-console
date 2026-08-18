@@ -22,6 +22,7 @@ import {
   Select,
   Snackbar,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material'
 import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
@@ -36,6 +37,12 @@ import type {
 } from '@/types/database'
 import type { User } from '@/lib/api/types'
 import { ACCOUNT_TYPE_OPTIONS, type AccountType } from '@/types/account-types'
+import {
+  getOrgRequestKindChipColor,
+  getOrgRequestKindLabel,
+  isAnnualMembershipRequest,
+} from '@/types/org-request-kind'
+import { getDefaultAnnualPackagePeriod } from '@/types/package-periods'
 import {
   getTrialRequestStatusChipColor,
   getTrialRequestStatusLabel,
@@ -94,6 +101,8 @@ export default function TrialRequestDetailPage () {
   const [approveOpen, setApproveOpen] = useState(false)
   const [cancelOpen, setCancelOpen] = useState(false)
   const [accountType, setAccountType] = useState<AccountType>('demo')
+  const [packageStart, setPackageStart] = useState('')
+  const [packageEnd, setPackageEnd] = useState('')
   const [actionError, setActionError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -172,17 +181,35 @@ export default function TrialRequestDetailPage () {
   const handleConfirmApprove = async () => {
     if (!request || !user) return
 
+    const isMembership = isAnnualMembershipRequest(request.request_kind)
+    if (isMembership) {
+      if (!packageStart || !packageEnd) {
+        setActionError('กรุณาระบุวันเริ่มและวันสิ้นสุดแพ็กเกจ')
+        return
+      }
+      if (packageEnd < packageStart) {
+        setActionError('วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น')
+        return
+      }
+    }
+
     setActionLoading(true)
     setActionError(null)
 
     try {
       const updated = await trialRequestService.approveTrialRequest(request.id, {
         reviewedBy: user.id,
-        accountType,
+        accountType: isMembership ? 'general customers' : accountType,
+        packageStart: isMembership ? packageStart : undefined,
+        packageEnd: isMembership ? packageEnd : undefined,
       })
       setRequest(updated)
       setApproveOpen(false)
-      notify('อนุมัติคำขอทดลองใช้งานและสร้างองค์กรเรียบร้อยแล้ว')
+      notify(
+        isMembership
+          ? 'อนุมัติคำขอสมัครสมาชิกรายปีและสร้างองค์กรเรียบร้อยแล้ว'
+          : 'อนุมัติคำขอทดลองใช้งานและสร้างองค์กรเรียบร้อยแล้ว'
+      )
       await load()
     } catch (error) {
       const message = error instanceof Error ? error.message : 'อนุมัติไม่สำเร็จ'
@@ -206,7 +233,7 @@ export default function TrialRequestDetailPage () {
       })
       setRequest(updated)
       setCancelOpen(false)
-      notify('ยกเลิกคำขอทดลองใช้งานแล้ว')
+      notify('ยกเลิกคำขอแล้ว')
       await load()
     } catch (error) {
       const message = error instanceof Error ? error.message : 'ยกเลิกไม่สำเร็จ'
@@ -240,7 +267,7 @@ export default function TrialRequestDetailPage () {
         >
           กลับ
         </Button>
-        <Typography color="text.secondary">ไม่พบคำขอทดลองใช้งาน</Typography>
+        <Typography color="text.secondary">ไม่พบคำขอสมัครองค์กร</Typography>
       </Box>
     )
   }
@@ -272,13 +299,22 @@ export default function TrialRequestDetailPage () {
           <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 1 }]}>
             {request.organization_name}
           </Typography>
-          <Chip
-            label={getTrialRequestStatusLabel(request.status)}
-            color={getTrialRequestStatusChipColor(request.status)}
-            size="small"
-            variant="outlined"
-            sx={adminQuietChipSx}
-          />
+          <Stack direction="row" flexWrap="wrap" gap={1}>
+            <Chip
+              label={getOrgRequestKindLabel(request.request_kind)}
+              color={getOrgRequestKindChipColor(request.request_kind)}
+              size="small"
+              variant="outlined"
+              sx={adminQuietChipSx}
+            />
+            <Chip
+              label={getTrialRequestStatusLabel(request.status)}
+              color={getTrialRequestStatusChipColor(request.status)}
+              size="small"
+              variant="outlined"
+              sx={adminQuietChipSx}
+            />
+          </Stack>
         </Box>
 
         {canTakeAction && (
@@ -297,7 +333,16 @@ export default function TrialRequestDetailPage () {
               variant="contained"
               disabled={actionLoading}
               onClick={() => {
-                setAccountType('demo')
+                if (isAnnualMembershipRequest(request.request_kind)) {
+                  setAccountType('general customers')
+                  const defaults = getDefaultAnnualPackagePeriod()
+                  setPackageStart(defaults.package_start)
+                  setPackageEnd(defaults.package_end)
+                } else {
+                  setAccountType('demo')
+                  setPackageStart('')
+                  setPackageEnd('')
+                }
                 setActionError(null)
                 setApproveOpen(true)
               }}
@@ -338,6 +383,10 @@ export default function TrialRequestDetailPage () {
           <DetailRow
             label="ผู้ติดต่อ"
             value={`${request.contact_first_name} ${request.contact_last_name}`}
+          />
+          <DetailRow
+            label="ประเภทคำขอ"
+            value={getOrgRequestKindLabel(request.request_kind)}
           />
           <DetailRow label="อีเมล" value={request.contact_email} />
           <DetailRow label="เบอร์โทร" value={request.contact_phone} />
@@ -441,7 +490,11 @@ export default function TrialRequestDetailPage () {
       </Paper>
 
       <Dialog open={approveOpen} onClose={() => !actionLoading && setApproveOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>อนุมัติคำขอทดลองใช้งาน</DialogTitle>
+        <DialogTitle>
+          {isAnnualMembershipRequest(request.request_kind)
+            ? 'อนุมัติคำขอสมัครสมาชิกรายปี'
+            : 'อนุมัติคำขอทดลองใช้งาน'}
+        </DialogTitle>
         <DialogContent>
           {actionError && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -461,21 +514,50 @@ export default function TrialRequestDetailPage () {
             <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>เบอร์โทร:</strong> {request.contact_phone}
             </Typography>
-            <FormControl fullWidth>
-              <InputLabel>ประเภทบัญชี</InputLabel>
-              <Select
-                label="ประเภทบัญชี"
-                value={accountType}
-                onChange={(e) => setAccountType(e.target.value as AccountType)}
-                disabled={actionLoading}
-              >
-                {ACCOUNT_TYPE_OPTIONS.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            {isAnnualMembershipRequest(request.request_kind) ? (
+              <>
+                <TextField
+                  label="ประเภทบัญชี"
+                  value="general customers"
+                  fullWidth
+                  InputProps={{ readOnly: true }}
+                />
+                <TextField
+                  label="วันเริ่มแพ็กเกจ"
+                  type="date"
+                  value={packageStart}
+                  onChange={(e) => setPackageStart(e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  disabled={actionLoading}
+                />
+                <TextField
+                  label="วันสิ้นสุดแพ็กเกจ"
+                  type="date"
+                  value={packageEnd}
+                  onChange={(e) => setPackageEnd(e.target.value)}
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  disabled={actionLoading}
+                />
+              </>
+            ) : (
+              <FormControl fullWidth>
+                <InputLabel>ประเภทบัญชี</InputLabel>
+                <Select
+                  label="ประเภทบัญชี"
+                  value={accountType}
+                  onChange={(e) => setAccountType(e.target.value as AccountType)}
+                  disabled={actionLoading}
+                >
+                  {ACCOUNT_TYPE_OPTIONS.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
             <Typography variant="caption" color="text.secondary">
               ระบบจะสร้างองค์กรใหม่และบันทึกข้อมูลผู้ติดต่อลงในตาราง organizations
             </Typography>
@@ -501,7 +583,11 @@ export default function TrialRequestDetailPage () {
         onClose={() => !actionLoading && setCancelOpen(false)}
         onConfirm={handleConfirmCancel}
         title="ยืนยันการยกเลิกคำขอ"
-        message="คุณแน่ใจหรือไม่ที่จะยกเลิกคำขอทดลองใช้งานนี้?"
+        message={
+          isAnnualMembershipRequest(request.request_kind)
+            ? 'คุณแน่ใจหรือไม่ที่จะยกเลิกคำขอสมัครสมาชิกรายปีนี้?'
+            : 'คุณแน่ใจหรือไม่ที่จะยกเลิกคำขอทดลองใช้งานนี้?'
+        }
         description="การยกเลิกไม่สามารถย้อนกลับได้ และจะไม่มีการสร้างองค์กรจากคำขอนี้"
         isDeleting={actionLoading}
         error={actionError}
