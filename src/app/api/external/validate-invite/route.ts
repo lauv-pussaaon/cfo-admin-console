@@ -31,7 +31,7 @@ export async function GET (request: NextRequest) {
     // password_hash is returned for org-app server-to-server invite provisioning only.
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, invite_hashcode, password_hash')
+      .select('id, username, email, name, avatar_url, role, invite_hashcode, password_hash, organization_name')
       .eq('invite_hashcode', hashcode)
       .in('role', ['Consult', 'Audit'])
       .single()
@@ -88,6 +88,7 @@ export async function GET (request: NextRequest) {
       name: data.name,
       avatar_url: data.avatar_url,
       role: data.role,
+      organization_name: data.organization_name ?? null,
       password_hash: data.password_hash,
     }, { headers })
   } catch (error) {

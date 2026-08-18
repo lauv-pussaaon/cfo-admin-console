@@ -30,7 +30,7 @@ export async function POST (request: NextRequest) {
     // Note: We need to filter by role after finding the user, so we query first then filter
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, username, email, name, avatar_url, role, status, invite_hashcode, password_hash')
+      .select('id, username, email, name, avatar_url, role, status, invite_hashcode, password_hash, organization_name')
       .or(`username.eq.${usernameOrEmail},email.eq.${usernameOrEmail}`)
       .limit(1)
 
