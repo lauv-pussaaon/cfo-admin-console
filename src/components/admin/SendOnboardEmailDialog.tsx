@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
+import { useAuth } from '@/contexts/AuthContext'
 
 export type OnboardEmailOrganization = {
   id: string
@@ -39,6 +40,7 @@ export default function SendOnboardEmailDialog ({
   organization,
   onSuccess,
 }: SendOnboardEmailDialogProps) {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -61,7 +63,8 @@ export default function SendOnboardEmailDialog ({
     try {
       const response = await authenticatedAdminFetch(
         `/api/admin-console/organizations/${organization.id}/send-onboard`,
-        { method: 'POST' }
+        { method: 'POST' },
+        { userId: user?.id }
       )
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {

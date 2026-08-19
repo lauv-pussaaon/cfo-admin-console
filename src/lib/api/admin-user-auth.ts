@@ -1,9 +1,11 @@
 /**
  * Server-only: resolve Admin caller from x-admin-user-id header.
+ * Uses anon Supabase for identity (same pattern as support staff auth).
+ * Do not require service role here — missing service key must not look like Unauthorized.
  */
 
 import type { NextRequest } from 'next/server'
-import { getServiceSupabase } from '@/lib/supabase-service'
+import { supabase } from '@/lib/supabase'
 import type { User } from '@/lib/api/types'
 
 export async function getAdminCallerFromRequest (
@@ -11,9 +13,6 @@ export async function getAdminCallerFromRequest (
 ): Promise<User | null> {
   const userId = request.headers.get('x-admin-user-id')?.trim()
   if (!userId) return null
-
-  const supabase = getServiceSupabase()
-  if (!supabase) return null
 
   const { data, error } = await supabase
     .from('users')

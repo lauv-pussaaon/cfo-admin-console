@@ -1,8 +1,11 @@
 export async function authenticatedAdminFetch (
   input: string,
-  init: RequestInit = {}
+  init: RequestInit = {},
+  options?: { userId?: string | null }
 ): Promise<Response> {
-  const userId = typeof window !== 'undefined' ? localStorage.getItem('cfo_user_id') : null
+  const userId =
+    options?.userId?.trim() ||
+    (typeof window !== 'undefined' ? localStorage.getItem('cfo_user_id') : null)
   const headers = new Headers(init.headers)
 
   if (userId) {
