@@ -9,7 +9,7 @@ export function normalizeOrganizationCode (value: string): string {
 export const organizationCodeValueSchema = z
   .string()
   .min(2, 'รหัสบริษัทอย่างน้อย 2 ตัวอักษร')
-  .max(63, 'รหัสบริษัทสูงสุด 63 ตัวอักษร')
+  .max(10, 'รหัสบริษัทสูงสุด 10 ตัวอักษร')
   .regex(
     ORGANIZATION_CODE_PATTERN,
     'ใช้ได้เฉพาะ a–z, 0–9 และ - (ห้ามขึ้นต้นหรือลงท้ายด้วย -)'
