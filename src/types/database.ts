@@ -76,6 +76,7 @@ export type OrganizationTrialRequestStatus =
 export interface OrganizationTrialRequest {
   id: string
   organization_name: string
+  company_code: string | null
   contact_first_name: string
   contact_last_name: string
   contact_email: string

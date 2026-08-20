@@ -11,6 +11,7 @@ export async function sendTrialRequestConfirmationEmail (params: {
   contactFirstName: string
   contactLastName: string
   organizationName: string
+  companyCode?: string | null
   contactEmail: string
   contactPhone: string
   requestKind?: OrgRequestKind
@@ -19,6 +20,7 @@ export async function sendTrialRequestConfirmationEmail (params: {
     contactFirstName: params.contactFirstName,
     contactLastName: params.contactLastName,
     organizationName: params.organizationName,
+    companyCode: params.companyCode,
     contactEmail: params.contactEmail,
     contactPhone: params.contactPhone,
     requestKind: params.requestKind,

@@ -47,6 +47,7 @@ export default function TrialRequestsTable ({
     return data.map((request) => ({
       id: request.id,
       organization_name: request.organization_name,
+      company_code: request.company_code || '—',
       request_kind: request.request_kind,
       contact_name: `${request.contact_first_name} ${request.contact_last_name}`,
       contact_email: request.contact_email,
@@ -64,6 +65,11 @@ export default function TrialRequestsTable ({
       headerName: 'ชื่อองค์กร',
       flex: 1.2,
       minWidth: 180,
+    },
+    {
+      field: 'company_code',
+      headerName: 'รหัสบริษัท',
+      width: 140,
     },
     {
       field: 'request_kind',

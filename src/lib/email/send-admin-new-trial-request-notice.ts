@@ -35,6 +35,7 @@ function formatSubmittedAt (value: string): string {
 
 export async function sendAdminNewTrialRequestNotice (params: {
   organizationName: string
+  companyCode?: string | null
   contactFirstName: string
   contactLastName: string
   contactEmail: string
@@ -86,8 +87,10 @@ export async function sendAdminNewTrialRequestNotice (params: {
     ? 'มีคำขอสมัครสมาชิกรายปีใหม่'
     : 'มีคำขอทดลองใช้งานใหม่'
 
+  const companyCode = params.companyCode?.trim() || ''
   const safe = {
     organizationName: escapeHtml(params.organizationName),
+    companyCode: escapeHtml(companyCode),
     contactName: escapeHtml(contactName),
     contactEmail: escapeHtml(params.contactEmail),
     contactPhone: escapeHtml(params.contactPhone),
@@ -107,6 +110,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
     'ข้อมูลคำขอ:',
     `- ประเภทคำขอ: ${kindLabel}`,
     `- ชื่อองค์กร: ${params.organizationName}`,
+    `- รหัสบริษัท: ${companyCode || '—'}`,
     `- ผู้ติดต่อ: ${contactName}`,
     `- อีเมล: ${params.contactEmail}`,
     `- เบอร์โทร: ${params.contactPhone}`,
@@ -123,6 +127,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
   <ul>
     <li>ประเภทคำขอ: ${safe.kindLabel}</li>
     <li>ชื่อองค์กร: ${safe.organizationName}</li>
+    <li>รหัสบริษัท: ${safe.companyCode || '—'}</li>
     <li>ผู้ติดต่อ: ${safe.contactName}</li>
     <li>อีเมล: ${safe.contactEmail}</li>
     <li>เบอร์โทร: ${safe.contactPhone}</li>

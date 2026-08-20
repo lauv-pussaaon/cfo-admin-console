@@ -388,6 +388,7 @@ export default function TrialRequestDetailPage () {
             label="ประเภทคำขอ"
             value={getOrgRequestKindLabel(request.request_kind)}
           />
+          <DetailRow label="รหัสบริษัท" value={request.company_code || '—'} />
           <DetailRow label="อีเมล" value={request.contact_email} />
           <DetailRow label="เบอร์โทร" value={request.contact_phone} />
           <DetailRow label="วันที่ส่งคำขอ" value={formatDateTime(request.created_at)} />
@@ -504,6 +505,9 @@ export default function TrialRequestDetailPage () {
           <Box sx={{ display: 'grid', gap: 1.5, pt: 1 }}>
             <Typography variant="body2">
               <strong>ชื่อองค์กร:</strong> {request.organization_name}
+            </Typography>
+            <Typography variant="body2">
+              <strong>รหัสบริษัท:</strong> {request.company_code || '—'}
             </Typography>
             <Typography variant="body2">
               <strong>ผู้ติดต่อ:</strong> {request.contact_first_name} {request.contact_last_name}

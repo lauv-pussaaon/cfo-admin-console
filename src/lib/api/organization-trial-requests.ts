@@ -1,6 +1,7 @@
 import { supabase } from '../supabase'
 import { createOrganization } from './organizations'
 import { ConflictError, ValidationError, throwIfError } from '@/lib/utils/errors'
+import { normalizeOrganizationCode } from '@/lib/organization-code'
 import type { AccountType } from '@/types/account-types'
 import type {
   OrganizationTrialRequest,
@@ -16,6 +17,7 @@ import { canTransitionTrialRequestStatus } from '@/types/trial-request-status'
 
 export interface CreateTrialRequestInput {
   organizationName: string
+  companyCode: string
   contactFirstName: string
   contactLastName: string
   contactEmail: string
@@ -56,6 +58,7 @@ export const createTrialRequest = async (
   input: CreateTrialRequestInput
 ): Promise<OrganizationTrialRequest> => {
   const contactEmail = input.contactEmail.trim().toLowerCase()
+  const companyCode = normalizeOrganizationCode(input.companyCode)
   const requestKind = input.requestKind ?? DEFAULT_ORG_REQUEST_KIND
 
   const existingResult = await supabase
@@ -70,10 +73,34 @@ export const createTrialRequest = async (
     throw new ConflictError('มีคำขอที่รออนุมัติสำหรับอีเมลนี้อยู่แล้ว')
   }
 
+  const existingCodeResult = await supabase
+    .from('organization_trial_requests')
+    .select('id')
+    .eq('company_code', companyCode)
+    .in('status', APPROVABLE_STATUSES)
+    .limit(1)
+
+  const existingCode = throwIfError(existingCodeResult)
+  if (existingCode.length > 0) {
+    throw new ConflictError('รหัสบริษัทนี้ถูกใช้ในคำขอที่รออนุมัติอยู่แล้ว')
+  }
+
+  const existingOrgResult = await supabase
+    .from('organizations')
+    .select('id')
+    .eq('code', companyCode)
+    .limit(1)
+
+  const existingOrg = throwIfError(existingOrgResult)
+  if (existingOrg.length > 0) {
+    throw new ConflictError('รหัสบริษัทนี้ถูกใช้แล้ว')
+  }
+
   const requestResult = await supabase
     .from('organization_trial_requests')
     .insert({
       organization_name: input.organizationName.trim(),
+      company_code: companyCode,
       contact_first_name: input.contactFirstName.trim(),
       contact_last_name: input.contactLastName.trim(),
       contact_email: contactEmail,
@@ -226,6 +253,7 @@ export const approveTrialRequest = async (
 
   const organization = await createOrganization({
     name: request.organization_name,
+    code: request.company_code,
     factory_admin_email: request.contact_email,
     contact_first_name: request.contact_first_name,
     contact_last_name: request.contact_last_name,

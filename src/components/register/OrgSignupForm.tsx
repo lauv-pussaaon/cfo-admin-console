@@ -27,9 +27,14 @@ import {
 } from '@mui/icons-material'
 import { useRegisterConsent } from '@/components/register/RegisterConsentContext'
 import { useRegisterBack } from '@/app/register/useRegisterBack'
+import {
+  isValidOrganizationCode,
+  organizationCodeSchema,
+} from '@/lib/organization-code'
 
 const orgSignupSchema = z.object({
   organizationName: z.string().min(1, 'กรุณากรอกชื่อองค์กร'),
+  companyCode: organizationCodeSchema,
   contactFirstName: z.string().min(1, 'กรุณากรอกชื่อผู้ติดต่อ'),
   contactLastName: z.string().min(1, 'กรุณากรอกนามสกุลผู้ติดต่อ'),
   contactEmail: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
@@ -80,6 +85,7 @@ export default function OrgSignupForm ({
     mode: 'onChange',
     defaultValues: {
       organizationName: '',
+      companyCode: '',
       contactFirstName: '',
       contactLastName: '',
       contactEmail: '',
@@ -199,6 +205,30 @@ export default function OrgSignupForm ({
                     ),
                     endAdornment: endCheck(
                       fieldIsValid(values.organizationName, errors.organizationName)
+                    ),
+                  }}
+                />
+
+                <TextField
+                  label="รหัสบริษัท"
+                  {...register('companyCode')}
+                  error={!!errors.companyCode}
+                  helperText={
+                    errors.companyCode?.message ||
+                    'ใช้เป็น subdomain เช่น acme-01 (a–z, 0–9 และ - เท่านั้น)'
+                  }
+                  disabled={isSubmitting}
+                  fullWidth
+                  sx={{ gridColumn: '1 / -1' }}
+                  inputProps={{ autoCapitalize: 'none', autoCorrect: 'off', spellCheck: false }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BusinessIcon color="action" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: endCheck(
+                      isValidOrganizationCode(values.companyCode) && !errors.companyCode
                     ),
                   }}
                 />

@@ -8,6 +8,7 @@ import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 import { registrationConsentFields } from '@/components/register/consent-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
 import { AppError, ConflictError } from '@/lib/utils/errors'
+import { organizationCodeSchema } from '@/lib/organization-code'
 import {
   getOrgRequestKindLabel,
   isAnnualMembershipRequest,
@@ -16,6 +17,7 @@ import {
 
 const orgSignupSchema = z.object({
   organizationName: z.string().min(1, 'กรุณากรอกชื่อองค์กร').max(200),
+  companyCode: organizationCodeSchema,
   contactFirstName: z.string().min(1, 'กรุณากรอกชื่อผู้ติดต่อ').max(120),
   contactLastName: z.string().min(1, 'กรุณากรอกนามสกุลผู้ติดต่อ').max(120),
   contactEmail: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
@@ -39,6 +41,7 @@ export async function handlePublicOrgSignup (
 
     const orgRequest = await createTrialRequest({
       organizationName: payload.organizationName,
+      companyCode: payload.companyCode,
       contactFirstName: payload.contactFirstName,
       contactLastName: payload.contactLastName,
       contactEmail: payload.contactEmail,
@@ -59,6 +62,7 @@ export async function handlePublicOrgSignup (
       const adminEmails = await getTrialRequestNotificationEmails()
       const noticeResult = await sendAdminNewTrialRequestNotice({
         organizationName: orgRequest.organization_name,
+        companyCode: orgRequest.company_code,
         contactFirstName: orgRequest.contact_first_name,
         contactLastName: orgRequest.contact_last_name,
         contactEmail: orgRequest.contact_email,
@@ -84,6 +88,7 @@ export async function handlePublicOrgSignup (
         contactFirstName: orgRequest.contact_first_name,
         contactLastName: orgRequest.contact_last_name,
         organizationName: orgRequest.organization_name,
+        companyCode: orgRequest.company_code,
         contactEmail: orgRequest.contact_email,
         contactPhone: orgRequest.contact_phone,
         requestKind,
@@ -112,7 +117,7 @@ export async function handlePublicOrgSignup (
 
     if (error instanceof ConflictError) {
       return NextResponse.json(
-        { error: 'มีคำขอที่รออนุมัติสำหรับอีเมลนี้อยู่แล้ว' },
+        { error: error.message },
         { status: 409 }
       )
     }

@@ -36,6 +36,7 @@ import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { isAdmin, isDealer } from '@/lib/permissions'
 import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
+import { optionalOrganizationCodeSchema } from '@/lib/organization-code'
 import {
   ACCOUNT_TYPE_OPTIONS,
   ACCOUNT_TYPE_VALUES,
@@ -59,7 +60,7 @@ const organizationSchema = z.object({
   account_type: z.enum(ACCOUNT_TYPE_VALUES),
   package_start: z.string().optional().nullable(),
   package_end: z.string().optional().nullable(),
-  code: z.string().optional().nullable(),
+  code: optionalOrganizationCodeSchema,
   description: z.string().optional().nullable(),
   app_url: z.string().url('กรุณากรอก URL ที่ถูกต้อง').optional().nullable().or(z.literal('')),
   factory_admin_email: z.string().email('กรุณากรอกอีเมลที่ถูกต้อง').optional().nullable().or(z.literal('')),
@@ -529,7 +530,7 @@ export default function AdminOrganizationModal({
                 label="รหัสองค์กร"
                 fullWidth
                 error={!!errors.code}
-                helperText={errors.code?.message || 'ไม่บังคับ'}
+                helperText={errors.code?.message || 'ไม่บังคับ — ใช้เป็น subdomain เช่น acme-01'}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 1,

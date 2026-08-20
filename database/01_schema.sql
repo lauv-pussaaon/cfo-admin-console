@@ -117,6 +117,7 @@ CREATE TABLE user_organizations (
 CREATE TABLE organization_trial_requests (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_name TEXT NOT NULL,
+  company_code TEXT,
   contact_first_name TEXT NOT NULL,
   contact_last_name TEXT NOT NULL,
   contact_email TEXT NOT NULL,
@@ -367,6 +368,7 @@ CREATE INDEX idx_org_trial_requests_status ON organization_trial_requests(status
 CREATE INDEX idx_org_trial_requests_contact_email ON organization_trial_requests(contact_email);
 CREATE INDEX idx_org_trial_requests_created_at ON organization_trial_requests(created_at);
 CREATE UNIQUE INDEX idx_org_trial_requests_active_email ON organization_trial_requests(contact_email) WHERE status IN ('pending', 'processing');
+CREATE UNIQUE INDEX idx_org_trial_requests_active_company_code ON organization_trial_requests(company_code) WHERE status IN ('pending', 'processing') AND company_code IS NOT NULL;
 CREATE INDEX idx_org_trial_request_consents_trial_request_id ON organization_trial_request_consents(trial_request_id);
 
 -- Notification recipients indexes

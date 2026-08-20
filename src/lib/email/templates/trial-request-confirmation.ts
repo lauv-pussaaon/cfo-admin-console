@@ -13,6 +13,7 @@ export function buildTrialRequestConfirmationContent (params: {
   contactFirstName: string
   contactLastName: string
   organizationName: string
+  companyCode?: string | null
   contactEmail: string
   contactPhone: string
   requestKind?: OrgRequestKind
@@ -26,9 +27,11 @@ export function buildTrialRequestConfirmationContent (params: {
   const nextStepLine = isMembership
     ? 'ทีมงานจะติดต่อกลับในเร็ว ๆ นี้ เพื่อแจ้งขั้นตอนการเปิดใช้งานบัญชี'
     : 'ทีมงานจะติดต่อกลับในเร็ว ๆ นี้ เพื่อแจ้งขั้นตอนและคำแนะนำในการเริ่มใช้งาน'
+  const companyCode = params.companyCode?.trim() || ''
   const safe = {
     contactName: escapeHtml(contactName),
     organizationName: escapeHtml(params.organizationName),
+    companyCode: escapeHtml(companyCode),
     contactEmail: escapeHtml(params.contactEmail),
     contactPhone: escapeHtml(params.contactPhone),
     receivedLine: escapeHtml(receivedLine),
@@ -48,6 +51,7 @@ export function buildTrialRequestConfirmationContent (params: {
     'ข้อมูลที่ส่งมา:',
     `- ประเภทคำขอ: ${kindLabel}`,
     `- องค์กร: ${params.organizationName}`,
+    `- รหัสบริษัท: ${companyCode || '—'}`,
     `- ชื่อผู้ติดต่อ: ${contactName}`,
     `- อีเมล: ${params.contactEmail}`,
     `- เบอร์โทร: ${params.contactPhone}`,
@@ -65,6 +69,7 @@ export function buildTrialRequestConfirmationContent (params: {
   <ul>
     <li>ประเภทคำขอ: ${escapeHtml(kindLabel)}</li>
     <li>องค์กร: ${safe.organizationName}</li>
+    <li>รหัสบริษัท: ${safe.companyCode || '—'}</li>
     <li>ชื่อผู้ติดต่อ: ${safe.contactName}</li>
     <li>อีเมล: ${safe.contactEmail}</li>
     <li>เบอร์โทร: ${safe.contactPhone}</li>

@@ -107,6 +107,7 @@ export default function AdminTrialRequestsPage () {
       if (!term) return true
       const haystack = [
         request.organization_name,
+        request.company_code,
         request.contact_first_name,
         request.contact_last_name,
         request.contact_email,
