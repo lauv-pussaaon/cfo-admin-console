@@ -215,7 +215,7 @@ export default function OrgSignupForm ({
                   error={!!errors.companyCode}
                   helperText={
                     errors.companyCode?.message ||
-                    'ใช้เป็น subdomain เช่น acme-01 (a–z, 0–9 และ - เท่านั้น)'
+                    'ใช้เป็น subdomain เช่น abc.ideacarb.com (a–z, 0–9 และ - เท่านั้น)'
                   }
                   disabled={isSubmitting}
                   fullWidth
