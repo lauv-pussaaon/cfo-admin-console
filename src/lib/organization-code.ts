@@ -25,13 +25,18 @@ export const optionalOrganizationCodeSchema = z
   .string()
   .optional()
   .nullable()
-  .transform((value) => normalizeOrganizationCode(value ?? ''))
-  .pipe(
-    z.union([
-      z.literal('').transform(() => null),
-      organizationCodeValueSchema,
-    ])
-  )
+  .superRefine((value, ctx) => {
+    const normalized = normalizeOrganizationCode(value ?? '')
+    if (normalized === '') return
+    const parsed = organizationCodeValueSchema.safeParse(normalized)
+    if (parsed.success) return
+    for (const issue of parsed.error.issues) {
+      ctx.addIssue({
+        code: 'custom',
+        message: issue.message,
+      })
+    }
+  })
 
 export function isValidOrganizationCode (value: string | undefined): boolean {
   return organizationCodeSchema.safeParse(value ?? '').success

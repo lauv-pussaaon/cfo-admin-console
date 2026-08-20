@@ -36,7 +36,10 @@ import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { isAdmin, isDealer } from '@/lib/permissions'
 import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
-import { optionalOrganizationCodeSchema } from '@/lib/organization-code'
+import {
+  normalizeOrganizationCode,
+  optionalOrganizationCodeSchema,
+} from '@/lib/organization-code'
 import {
   ACCOUNT_TYPE_OPTIONS,
   ACCOUNT_TYPE_VALUES,
@@ -256,6 +259,7 @@ export default function AdminOrganizationModal({
   const onFormSubmit = async (data: AdminOrganizationFormData) => {
     setIsSubmitting(true)
     setSubmitError(null)
+    const organizationCode = normalizeOrganizationCode(data.code ?? '') || null
 
     try {
       let organizationId: string
@@ -266,7 +270,7 @@ export default function AdminOrganizationModal({
           initialData.id,
           {
             name: data.name,
-            code: data.code || null,
+            code: organizationCode,
             description: data.description || null,
             app_url: data.app_url || null,
             factory_admin_email: data.factory_admin_email || null,
@@ -295,7 +299,7 @@ export default function AdminOrganizationModal({
         // Create organization
         const created = await organizationService.createOrganization({
           name: data.name,
-          code: data.code || null,
+          code: organizationCode,
           description: data.description || null,
           app_url: data.app_url || null,
           factory_admin_email: data.factory_admin_email || null,
