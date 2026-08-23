@@ -38,6 +38,7 @@ import {
 } from '@mui/icons-material'
 import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
+import FuelResourceDetailPanel from '@/components/admin/emission-resources/FuelResourceDetailPanel'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
@@ -136,6 +137,7 @@ function EmissionResourcesPage () {
   const [releases, setReleases] = useState<EfCatalogRelease[]>([])
   const [releaseLoading, setReleaseLoading] = useState(false)
   const [actionBusy, setActionBusy] = useState(false)
+  const [selectedResource, setSelectedResource] = useState<FuelResourceWithCategory | null>(null)
   const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<FuelResourceWithCategory | null>(null)
   const [needsRepublish, setNeedsRepublish] = useState(false)
@@ -325,6 +327,12 @@ function EmissionResourcesPage () {
     if (!catalogVersion) return
     void fetchResources()
   }, [catalogVersion, fetchResources])
+
+  useEffect(() => {
+    if (!selectedResource) return
+    const next = resources.find((row) => row.id === selectedResource.id)
+    if (next) setSelectedResource(next)
+  }, [resources, selectedResource])
   useEffect(() => {
     void fetchReleaseDrift()
   }, [fetchReleaseDrift])
@@ -733,6 +741,13 @@ function EmissionResourcesPage () {
         loading={loading}
         onPageChange={(nextPage) => replaceQuery({ page: nextPage })}
         onPerPageChange={(v) => replaceQuery({ per_page: v, page: 0 })}
+        onRowClick={setSelectedResource}
+      />
+
+      <FuelResourceDetailPanel
+        open={Boolean(selectedResource)}
+        resource={selectedResource}
+        onClose={() => setSelectedResource(null)}
         onEdit={setEditTarget}
         onDelete={setDeleteTarget}
       />
@@ -762,6 +777,7 @@ function EmissionResourcesPage () {
         onClose={() => setDeleteTarget(null)}
         onDeleted={() => {
           showSnackbar('ลบแล้ว — Re-publish เวอร์ชันนี้เพื่อให้ลูกค้าเห็นการเปลี่ยนแปลง')
+          setSelectedResource(null)
           void fetchResources()
           void fetchReleases()
           void fetchReleaseDrift()

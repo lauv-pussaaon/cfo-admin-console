@@ -87,9 +87,6 @@ export default function FuelResourceDeleteDialog ({
             {resource.version ? ` · ${resource.version}` : ''}
           </Typography>
         )}
-        <Alert severity="warning">
-          ต้อง Re-publish เวอร์ชันนี้แล้วซิงค์แคตตาล็อกฝั่งลูกค้า รายการนี้จึงจะหายจาก picker ของ tenant
-        </Alert>
         {error && <Alert severity="error">{error}</Alert>}
         <TextField
           type="password"

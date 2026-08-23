@@ -1,19 +1,13 @@
 'use client'
 
 import React from 'react'
-import { Box, Chip, IconButton, Paper, Tooltip, Typography } from '@mui/material'
-import {
-  DeleteOutline as DeleteOutlineIcon,
-  EditOutlined as EditOutlinedIcon,
-} from '@mui/icons-material'
+import { Box, Chip, Paper, Tooltip, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
-import { serializeFuelResourceMeta } from '@/types/emission-resources'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
   adminDataGridSx,
-  adminGhostIconButtonSx,
 } from '@/lib/admin-ui-styles'
 
 const SCOPE_COLORS: Record<number, string> = {
@@ -21,19 +15,6 @@ const SCOPE_COLORS: Record<number, string> = {
   2: '#f59e0b',
   3: '#3b82f6',
   4: '#8b5cf6',
-}
-
-function OptionalTextCell ({ value }: { value: string | null | undefined }) {
-  if (!value) {
-    return <Typography variant="body2" color="text.disabled">—</Typography>
-  }
-  return (
-    <Tooltip title={value} enterDelay={300}>
-      <Typography variant="body2" noWrap>
-        {value}
-      </Typography>
-    </Tooltip>
-  )
 }
 
 interface Props {
@@ -44,8 +25,7 @@ interface Props {
   loading: boolean
   onPageChange: (page: number) => void
   onPerPageChange: (perPage: number) => void
-  onEdit: (row: FuelResourceWithCategory) => void
-  onDelete: (row: FuelResourceWithCategory) => void
+  onRowClick: (row: FuelResourceWithCategory) => void
 }
 
 export default function EmissionResourcesTable({
@@ -56,8 +36,7 @@ export default function EmissionResourcesTable({
   loading,
   onPageChange,
   onPerPageChange,
-  onEdit,
-  onDelete,
+  onRowClick,
 }: Props) {
   const columns: GridColDef[] = [
     {
@@ -86,9 +65,8 @@ export default function EmissionResourcesTable({
     {
       field: 'category',
       headerName: 'Category',
-      width: 200,
       flex: 1,
-      minWidth: 150,
+      width: 100,
       display: 'flex',
       renderCell: (params) => {
         const cat = params.row.scope_category
@@ -105,6 +83,7 @@ export default function EmissionResourcesTable({
     {
       field: 'sub_category',
       headerName: 'Sub-category',
+      flex: 1,
       width: 120,
       display: 'flex',
       renderCell: (params) =>
@@ -120,7 +99,7 @@ export default function EmissionResourcesTable({
       field: 'resource',
       headerName: 'Resource',
       width: 220,
-      flex: 1,
+      flex: 3,
       minWidth: 130,
       display: 'flex',
       renderCell: (params) => (
@@ -158,109 +137,6 @@ export default function EmissionResourcesTable({
           <Typography variant="body2" color="text.disabled">—</Typography>
         ),
     },
-    {
-      field: 'value1_label',
-      headerName: 'Value 1 label',
-      width: 120,
-      display: 'flex',
-      renderCell: (params) => <OptionalTextCell value={params.value} />,
-    },
-    {
-      field: 'value1_unit',
-      headerName: 'Value 1 unit',
-      width: 100,
-      display: 'flex',
-      renderCell: (params) => <OptionalTextCell value={params.value} />,
-    },
-    {
-      field: 'value2_label',
-      headerName: 'Value 2 label',
-      width: 120,
-      display: 'flex',
-      renderCell: (params) => <OptionalTextCell value={params.value} />,
-    },
-    {
-      field: 'value2_unit',
-      headerName: 'Value 2 unit',
-      width: 100,
-      display: 'flex',
-      renderCell: (params) => <OptionalTextCell value={params.value} />,
-    },
-    {
-      field: 'ref_info',
-      headerName: 'Ref.',
-      width: 200,
-      display: 'flex',
-      renderCell: (params) =>
-        params.value ? (
-          <Tooltip title={params.value} enterDelay={300}>
-            <Chip label={params.value} size="small" variant="outlined" sx={{ fontSize: '0.65rem', height: 22 }} />
-          </Tooltip>
-        ) : (
-          <Typography variant="body2" color="text.disabled">—</Typography>
-        ),
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      width: 240,
-      display: 'flex',
-      renderCell: (params) => <OptionalTextCell value={params.value} />,
-    },
-    {
-      field: 'meta',
-      headerName: 'Meta',
-      width: 160,
-      display: 'flex',
-      renderCell: (params) => {
-        const serialized = serializeFuelResourceMeta(params.row.meta)
-        if (serialized === '{}') {
-          return <Typography variant="body2" color="text.disabled">—</Typography>
-        }
-        return (
-          <Tooltip title={serialized} enterDelay={300}>
-            <Typography variant="body2" noWrap fontFamily="monospace">
-              {serialized}
-            </Typography>
-          </Tooltip>
-        )
-      },
-    },
-    {
-      field: 'actions',
-      headerName: '',
-      width: 96,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      align: 'center',
-      headerAlign: 'center',
-      display: 'flex',
-      renderCell: (params) => (
-        <Box sx={{ display: 'flex', gap: 0.25, justifyContent: 'center' }}>
-          <Tooltip title="Edit EF">
-            <IconButton
-              size="small"
-              aria-label="Edit EF"
-              onClick={() => onEdit(params.row as FuelResourceWithCategory)}
-              sx={adminGhostIconButtonSx.primary}
-            >
-              <EditOutlinedIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="ลบ">
-            <IconButton
-              size="small"
-              aria-label="ลบ"
-              onClick={() => onDelete(params.row as FuelResourceWithCategory)}
-              sx={adminGhostIconButtonSx.error}
-            >
-              <DeleteOutlineIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      ),
-    },
   ]
 
   return (
@@ -277,11 +153,12 @@ export default function EmissionResourcesTable({
             if (model.page !== page) onPageChange(model.page)
             if (model.pageSize !== perPage) onPerPageChange(model.pageSize)
           }}
+          onRowClick={(params) => onRowClick(params.row as FuelResourceWithCategory)}
           pageSizeOptions={[25, 50, 100]}
           disableRowSelectionOnClick
           disableColumnSorting
           {...adminDataGridProps}
-          sx={adminDataGridSx}
+          sx={[adminDataGridSx, { '& .MuiDataGrid-row': { cursor: 'pointer' } }]}
         />
       </Box>
     </Paper>

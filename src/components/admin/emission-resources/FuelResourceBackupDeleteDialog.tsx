@@ -86,12 +86,9 @@ export default function FuelResourceBackupDeleteDialog ({
           <Typography variant="body2">
             <strong>{backup.source_version}</strong>
             {' · '}
-            {formatDateTime(backup.created_at)}
+            วันที่ Backup: {formatDateTime(backup.created_at)}
           </Typography>
         )}
-        <Alert severity="warning">
-          ลบเฉพาะสำรองนี้ แคตตาล็อกสดไม่เปลี่ยน
-        </Alert>
         {error && <Alert severity="error">{error}</Alert>}
         <TextField
           type="password"

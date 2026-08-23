@@ -192,10 +192,7 @@ function EmissionResourceBackupsPage () {
       <Box sx={{ mb: 3 }}>
         <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
           สำรองแคตตาล็อก EF
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          กู้คืนด้วย UUID เดิม — สำรองยังอยู่หลังกู้คืน ต้อง Re-publish เวอร์ชันสด
-        </Typography>
+        </Typography>        
       </Box>
 
       {error && (
