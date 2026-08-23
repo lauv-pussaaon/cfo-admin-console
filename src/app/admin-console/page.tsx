@@ -11,9 +11,13 @@ import {
   HowToReg as HowToRegIcon,
   Science as ScienceIcon,
   ViewModule as ViewModuleIcon,
+  ManageAccounts as ManageAccountsIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/contexts/AuthContext'
-import { getAdminNavItemByPath, getDashboardNavItemsForRole } from '@/constants/admin-console-nav'
+import {
+  getNavSectionsForRole,
+  type AdminNavSectionId,
+} from '@/constants/admin-console-nav'
 import { adminPageShellSx, adminPageTitleSx } from '@/lib/admin-ui-styles'
 
 const CARD_ICONS: Record<string, React.ReactNode> = {
@@ -24,6 +28,13 @@ const CARD_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/analytics': <AnalyticsIcon sx={{ fontSize: 48 }} />,
   '/admin-console/emission-resources': <ScienceIcon sx={{ fontSize: 48 }} />,
   '/admin-console/emission-templates': <ViewModuleIcon sx={{ fontSize: 48 }} />,
+}
+
+const SECTION_ICONS: Record<AdminNavSectionId, React.ReactNode> = {
+  clients: <BusinessIcon />,
+  support: <SupportAgentIcon />,
+  adminUsers: <ManageAccountsIcon />,
+  fuel: <ScienceIcon />,
 }
 
 function DashboardCard ({
@@ -73,15 +84,10 @@ export default function AdminConsolePage () {
   const { user, isLoading } = useAuth()
   const router = useRouter()
 
-  const cards = useMemo(() => {
-    if (!user) return []
-    return getDashboardNavItemsForRole(user.role)
-      .filter((item) => item.path !== '/admin-console')
-      .map((item) => ({
-        path: item.path,
-        icon: CARD_ICONS[item.path] ?? <BusinessIcon sx={{ fontSize: 48 }} />,
-      }))
-  }, [user])
+  const sections = useMemo(
+    () => (user ? getNavSectionsForRole(user.role) : []),
+    [user]
+  )
 
   if (isLoading) {
     return (
@@ -109,23 +115,32 @@ export default function AdminConsolePage () {
         </Typography>
       </Box>
 
-      <Grid container spacing={3}>
-        {cards.map((card) => {
-          const navItem = getAdminNavItemByPath(card.path)
-          if (!navItem) return null
-
-          return (
-            <Grid item xs={12} sm={6} md={4} key={card.path}>
-              <DashboardCard
-                title={navItem.title}
-                description={navItem.description}
-                icon={card.icon}
-                onClick={() => router.push(card.path)}
-              />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {sections.map((group) => (
+          <Box key={group.section.id}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+              <Box sx={{ color: 'primary.main', display: 'flex' }}>
+                {SECTION_ICONS[group.section.id]}
+              </Box>
+              <Typography variant="h6" fontWeight={700}>
+                {group.section.title}
+              </Typography>
+            </Box>
+            <Grid container spacing={3}>
+              {group.items.map((item) => (
+                <Grid item xs={12} sm={6} md={4} key={item.path}>
+                  <DashboardCard
+                    title={item.title}
+                    description={item.description}
+                    icon={CARD_ICONS[item.path] ?? <BusinessIcon sx={{ fontSize: 48 }} />}
+                    onClick={() => router.push(item.path)}
+                  />
+                </Grid>
+              ))}
             </Grid>
-          )
-        })}
-      </Grid>
+          </Box>
+        ))}
+      </Box>
     </Box>
   )
 }

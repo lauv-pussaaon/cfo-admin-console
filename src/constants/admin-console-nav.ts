@@ -1,8 +1,23 @@
+export type AdminNavSectionId = 'clients' | 'support' | 'adminUsers' | 'fuel'
+
 export interface AdminNavItem {
   title: string
   description: string
   path: string
+  sectionId?: AdminNavSectionId
 }
+
+export interface AdminNavSection {
+  id: AdminNavSectionId
+  title: string
+}
+
+export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
+  { id: 'clients', title: 'ลูกค้า' },
+  { id: 'support', title: 'ช่วยลูกค้า' },
+  { id: 'adminUsers', title: 'ผู้ใช้' },
+  { id: 'fuel', title: 'ค่า EF' },
+]
 
 export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
   {
@@ -14,36 +29,43 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     title: 'ระบบจัดการองค์กรลูกค้า',
     description: 'จัดการองค์กร บัญชี และข้อมูลลูกค้า',
     path: '/admin-console/organizations',
+    sectionId: 'clients',
   },
   {
     title: 'คำขอสมัครการใช้งาน',
     description: 'ตรวจสอบและอนุมัติคำขอทดลองใช้งานและสมาชิกรายปี',
     path: '/admin-console/trial-requests',
+    sectionId: 'clients',
   },
   {
     title: 'ระบบ Support ลูกค้า',
     description: 'ติดตามและให้บริการลูกค้าผ่านแชท',
     path: '/admin-console/support-clients',
-  },
-  {
-    title: 'จัดการบัญชีผู้ใช้ส่วน admin',
-    description: 'จัดการบัญชีผู้ใช้และสิทธิ์การเข้าถึง',
-    path: '/admin-console/users',
+    sectionId: 'support',
   },
   {
     title: 'วิเคราะห์การใช้งานลูกค้า',
     description: 'ดูสถิติและพฤติกรรมการใช้งานของลูกค้า',
     path: '/admin-console/analytics',
+    sectionId: 'support',
+  },
+  {
+    title: 'จัดการบัญชีผู้ใช้ส่วน admin',
+    description: 'จัดการบัญชีผู้ใช้และสิทธิ์การเข้าถึง',
+    path: '/admin-console/users',
+    sectionId: 'adminUsers',
   },
   {
     title: 'จัดการรายการทรัพยากร EF',
     description: 'จัดการแหล่งปล่อย หน่วย และค่า EF ตามเวอร์ชันแคตตาล็อก',
     path: '/admin-console/emission-resources',
+    sectionId: 'fuel',
   },
   {
     title: 'เทมเพลต CFO สำหรับลูกค้า',
     description: 'จัดการเทมเพลตข้อมูลการปล่อยตามอุตสาหกรรม',
     path: '/admin-console/emission-templates',
+    sectionId: 'fuel',
   },
 ]
 
@@ -81,4 +103,17 @@ export function getDashboardNavItemsForRole (role: string | undefined | null): A
     return filterNavByPaths(CONSULT_AUDIT_NAV_PATHS)
   }
   return []
+}
+
+export function getNavSectionsForRole (role: string | undefined | null): {
+  section: AdminNavSection
+  items: AdminNavItem[]
+}[] {
+  const items = getDashboardNavItemsForRole(role).filter((item) => item.path !== '/admin-console')
+  return ADMIN_NAV_SECTIONS
+    .map((section) => ({
+      section,
+      items: items.filter((item) => item.sectionId === section.id),
+    }))
+    .filter((group) => group.items.length > 0)
 }

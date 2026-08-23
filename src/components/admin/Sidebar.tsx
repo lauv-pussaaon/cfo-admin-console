@@ -26,6 +26,7 @@ import {
   ViewModule as ViewModuleIcon,
   SupportAgent as SupportAgentIcon,
   HowToReg as HowToRegIcon,
+  ManageAccounts as ManageAccountsIcon,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -33,7 +34,9 @@ import { isAdmin } from '@/lib/permissions'
 import {
   ADMIN_SETTINGS_NAV_ITEM,
   getDashboardNavItemsForRole,
+  getNavSectionsForRole,
   type AdminNavItem,
+  type AdminNavSectionId,
 } from '@/constants/admin-console-nav'
 import CFOLogo from '../CFOLogo'
 
@@ -49,6 +52,13 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/analytics': <AnalyticsIcon />,
   '/admin-console/emission-resources': <ScienceIcon />,
   '/admin-console/emission-templates': <ViewModuleIcon />,
+}
+
+const SECTION_ICONS: Record<AdminNavSectionId, React.ReactNode> = {
+  clients: <BusinessIcon fontSize="small" />,
+  support: <SupportAgentIcon fontSize="small" />,
+  adminUsers: <ManageAccountsIcon fontSize="small" />,
+  fuel: <ScienceIcon fontSize="small" />,
 }
 
 interface SidebarNavItem extends AdminNavItem {
@@ -68,8 +78,17 @@ export default function Sidebar () {
   const pathname = usePathname()
   const { user } = useAuth()
 
-  const navItems = useMemo(
-    () => withIcons(getDashboardNavItemsForRole(user?.role)),
+  const dashboardItem = useMemo(() => {
+    const home = getDashboardNavItemsForRole(user?.role).find((item) => item.path === '/admin-console')
+    return home ? withIcons([home])[0] : null
+  }, [user?.role])
+
+  const navSections = useMemo(
+    () =>
+      getNavSectionsForRole(user?.role).map((group) => ({
+        ...group,
+        items: withIcons(group.items),
+      })),
     [user?.role]
   )
 
@@ -220,9 +239,49 @@ export default function Sidebar () {
 
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.05)', mx: 2 }} />
 
-      <Box sx={{ flexGrow: 1, py: 2 }}>
-        <List sx={{ px: 2, gap: 1, display: 'flex', flexDirection: 'column' }}>
-          {navItems.map(renderNavItem)}
+      <Box sx={{ flexGrow: 1, py: 2, overflowY: 'auto' }}>
+        <List sx={{ px: 2, display: 'flex', flexDirection: 'column' }}>
+          {dashboardItem && renderNavItem(dashboardItem)}
+          {dashboardItem && navSections.length > 0 && (
+            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.06)', my: 1 }} />
+          )}
+          {navSections.map((group, index) => (
+            <Box key={group.section.id}>
+              {index > 0 && (
+                <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.06)', my: 1 }} />
+              )}
+              <Tooltip title={collapsed ? group.section.title : ''} placement="right">
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    gap: 1,
+                    px: collapsed ? 0 : 1,
+                    py: 0.75,
+                    color: '#64748b',
+                  }}
+                >
+                  {SECTION_ICONS[group.section.id]}
+                  {!collapsed && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontWeight: 700,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        color: 'inherit',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {group.section.title}
+                    </Typography>
+                  )}
+                </Box>
+              </Tooltip>
+              {group.items.map(renderNavItem)}
+            </Box>
+          ))}
         </List>
       </Box>
 
