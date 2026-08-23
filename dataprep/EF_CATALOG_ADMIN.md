@@ -93,10 +93,12 @@ Under the selected **version tab**:
 |---------------|--------|
 | Status | `draft` or `published` for that version |
 | Published | `published_at` when status is `published` |
-| Publish / Re-publish | Set `status=published`, refresh `content_hash` + `published_at` + counts |
+| Publish / Re-publish | Set `status=published`, refresh `content_hash` + `published_at` + counts. Published versions whose live hash ≠ stored `content_hash` show an orange warning: **Require re-publish to apply latest changes** |
 | Export Excel | Download `fuel_resources_<version>.xlsx` (fuels only; use as import template) |
 
-Per-version bulk delete is not offered in the UI (edit individual fuels via **Edit EF** instead).
+Per-version bulk delete is not offered in the UI. Per-row **soft-delete** is: table delete icon → password confirm → `DELETE /api/fuel-resources/[id]` (Admin + `x-admin-user-id` + `{ password }`). Sets `deleted_at`, refreshes tab `fuel_count`, drops `template_activity_group_fuel_resources` for that fuel. Does **not** auto-publish. After **Re-publish** + tenant sync (`deploy.sh update` or Factory Admin **ซิงค์แคตตาล็อก EF**), omitted fuels leave the client picker: sync nulls `annual_emissions.fuel_resource_id` then hard-deletes those `fuel_resources` (emission lines keep copied `resource` / `unit` / `ef_value`). Re-running generated TGO SQL with `deleted_at = NULL` would **undelete** matching IDs.
+
+`GET /api/ef-catalog/releases?version=` returns that release plus `needs_republish` (published + live hash ≠ stored `content_hash`, or stored hash is null). Drafts never show the stale warn. Refetch after delete, EF save, and successful publish.
 
 ### Inline edit (EF + duo values)
 
@@ -135,11 +137,13 @@ Import rules:
 
 API:
 
-- `GET /api/ef-catalog/releases`
+- `GET /api/ef-catalog/releases` — list (no hashing)
+- `GET /api/ef-catalog/releases?version=` — one release + `needs_republish`
 - `POST /api/ef-catalog/releases` body `{ version, action: publish | set_default | refresh_counts }`
 - `GET /api/ef-catalog/export?version=...&artifact=fuel_resources` → Excel (unpublished: `allow_draft=true` for QA)
 - `POST /api/fuel-resources/import` body `{ version, mode: 'create', rows }`
 - `PATCH /api/fuel-resources/:id` — EF + duo fields only
+- `DELETE /api/fuel-resources/:id` — Admin + password; per-row soft-delete (not `DELETE /api/fuel-resources?version=`)
 - `GET /api/scope-category-links` — fixed category link rules
 - **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
   - `GET /api/ef-catalog/sync/manifest` — published releases
@@ -159,7 +163,7 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 
 ## Admin UI surfaces
 
-- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF, Import new version, per-version Publish / Export
+- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF + password-confirmed delete, Import new version, per-version Publish / Export (orange Re-publish when stale)
 - `/admin-console/emission-templates` — industry templates
 
 ## Verification checklist
@@ -176,6 +180,9 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 10. Version tab has Publish / Export only (no Delete version fuels button)
 11. Linking menu / `fuel_resources_linking` APIs absent; `GET /api/scope-category-links` returns three rules (Scope1/2→Cat3, Scope1→Scope4, Cat1→Cat4)
 12. Templates still resolve after category align
+13. Per-row delete + password → row gone from admin table; Re-publish shows orange warn until publish
+14. Re-publish + client sync → deleted fuel leaves tenant picker; existing emission lines keep resource/unit/EF and `fuel_resource_id` is null
+15. Re-running generated TGO SQL with `deleted_at = NULL` undeletes matching IDs
 
 ## Out of scope (later)
 
@@ -183,4 +190,3 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 - Client sync module schedule / provision auto-sync
 - Historical ID remapping on live tenants
 - Live TGO HTTP ingest on admin (client TGO sync remains for now)
-- Single-row fuel delete

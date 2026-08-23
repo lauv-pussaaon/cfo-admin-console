@@ -103,6 +103,21 @@ async function listFuelsForContentHash (version: string): Promise<HashFuelRow[]>
   return all
 }
 
+export async function getReleasePublishDrift (version: string): Promise<{
+  release: EfCatalogRelease | null
+  needs_republish: boolean
+}> {
+  const release = await getEfCatalogRelease(version)
+  if (!release) return { release: null, needs_republish: false }
+  if (release.status !== 'published') return { release, needs_republish: false }
+  const live = await computeReleaseContentHash(version)
+  const stored = release.content_hash
+  return {
+    release,
+    needs_republish: !stored || live !== stored,
+  }
+}
+
 export async function computeReleaseContentHash (version: string): Promise<string> {
   const fuels = await listFuelsForContentHash(version)
   const fuelPart = fuels

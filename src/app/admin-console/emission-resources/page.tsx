@@ -19,6 +19,7 @@ import {
   Snackbar,
   Chip,
   CircularProgress,
+  Tooltip,
 } from '@mui/material'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
@@ -28,12 +29,14 @@ import {
   Search as SearchIcon,
   FileDownload as FileDownloadIcon,
   FileUpload as FileUploadIcon,
+  WarningAmber as WarningAmberIcon,
 } from '@mui/icons-material'
 import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
+import FuelResourceDeleteDialog from '@/components/admin/emission-resources/FuelResourceDeleteDialog'
 import { formatDateTime } from '@/lib/utils/datetime'
 import {
   adminBackButtonSx,
@@ -129,6 +132,8 @@ function EmissionResourcesPage () {
   const [releaseLoading, setReleaseLoading] = useState(false)
   const [actionBusy, setActionBusy] = useState(false)
   const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<FuelResourceWithCategory | null>(null)
+  const [needsRepublish, setNeedsRepublish] = useState(false)
 
   const orderedReleases = useMemo(() => orderReleases(releases), [releases])
   const versionTabs = useMemo(
@@ -289,12 +294,34 @@ function EmissionResourcesPage () {
     }
   }, [])
 
+  const fetchReleaseDrift = useCallback(async (version?: string) => {
+    const v = version ?? catalogVersion
+    if (!v) {
+      setNeedsRepublish(false)
+      return
+    }
+    try {
+      const res = await fetch(`/api/ef-catalog/releases?version=${encodeURIComponent(v)}`)
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setNeedsRepublish(false)
+        return
+      }
+      setNeedsRepublish(Boolean(json.needs_republish))
+    } catch {
+      setNeedsRepublish(false)
+    }
+  }, [catalogVersion])
+
   useEffect(() => { void fetchCategories() }, [fetchCategories])
   useEffect(() => { void fetchReleases() }, [fetchReleases])
   useEffect(() => {
     if (!catalogVersion) return
     void fetchResources()
   }, [catalogVersion, fetchResources])
+  useEffect(() => {
+    void fetchReleaseDrift()
+  }, [fetchReleaseDrift])
 
   useEffect(() => {
     if (versionTabs.length === 0 || !catalogVersion) return
@@ -318,6 +345,7 @@ function EmissionResourcesPage () {
       if (!res.ok) throw new Error(json.error || 'Publish failed')
       showSnackbar(`Published ${catalogVersion}`)
       await fetchReleases()
+      await fetchReleaseDrift(catalogVersion)
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : 'Publish failed', 'error')
     } finally {
@@ -378,6 +406,7 @@ function EmissionResourcesPage () {
     showSnackbar(`Import completed for ${version}`)
     await fetchReleases()
     await fetchResources({ version, page: 0 })
+    await fetchReleaseDrift(version)
   }
 
   const filteredCategories = categories.filter((c) =>
@@ -508,14 +537,38 @@ function EmissionResourcesPage () {
             >
               {release?.is_default ? 'Default' : 'Make Default'}
             </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              disabled={actionBusy || releaseLoading}
-              onClick={handlePublish}
-            >
-              {release?.status === 'published' ? 'Re-publish' : 'Publish'}
-            </Button>
+            {needsRepublish ? (
+              <Tooltip title="Require re-publish to apply latest changes">
+                <span>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    disabled={actionBusy || releaseLoading}
+                    onClick={handlePublish}
+                    startIcon={<WarningAmberIcon />}
+                    sx={{
+                      color: 'warning.dark',
+                      borderColor: 'warning.main',
+                      '&:hover': {
+                        borderColor: 'warning.dark',
+                        backgroundColor: 'action.hover',
+                      },
+                    }}
+                  >
+                    Re-publish
+                  </Button>
+                </span>
+              </Tooltip>
+            ) : (
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={actionBusy || releaseLoading}
+                onClick={handlePublish}
+              >
+                {release?.status === 'published' ? 'Re-publish' : 'Publish'}
+              </Button>
+            )}
             <Button
               size="small"
               variant="contained"
@@ -621,6 +674,7 @@ function EmissionResourcesPage () {
         onPageChange={(nextPage) => replaceQuery({ page: nextPage })}
         onPerPageChange={(v) => replaceQuery({ per_page: v, page: 0 })}
         onEdit={setEditTarget}
+        onDelete={setDeleteTarget}
       />
 
       <CategoriesPanel
@@ -638,6 +692,19 @@ function EmissionResourcesPage () {
         onSaved={() => {
           showSnackbar('Emission factor saved')
           void fetchResources()
+          void fetchReleaseDrift()
+        }}
+      />
+
+      <FuelResourceDeleteDialog
+        open={Boolean(deleteTarget)}
+        resource={deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onDeleted={() => {
+          showSnackbar('ลบแล้ว — Re-publish เวอร์ชันนี้เพื่อให้ลูกค้าเห็นการเปลี่ยนแปลง')
+          void fetchResources()
+          void fetchReleases()
+          void fetchReleaseDrift()
         }}
       />
 

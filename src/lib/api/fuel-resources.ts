@@ -260,14 +260,16 @@ export async function updateFuelResourceEfFields (id: string, input: FuelResourc
 }
 
 export async function softDeleteFuelResource(id: string) {
+  const now = new Date().toISOString()
   const { data, error } = await supabase
     .from('fuel_resources')
-    .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .update({ deleted_at: now, updated_at: now })
     .eq('id', id)
+    .is('deleted_at', null)
     .select()
-    .single()
+    .maybeSingle()
   if (error) throw error
-  return data as FuelResource
+  return (data ?? null) as FuelResource | null
 }
 
 /** Get all fuel resources for a scope category (and optionally sub_category / catalog version). No pagination. */

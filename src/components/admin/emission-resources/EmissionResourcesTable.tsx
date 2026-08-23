@@ -2,7 +2,10 @@
 
 import React from 'react'
 import { Box, Chip, IconButton, Paper, Tooltip, Typography } from '@mui/material'
-import { EditOutlined as EditOutlinedIcon } from '@mui/icons-material'
+import {
+  DeleteOutline as DeleteOutlineIcon,
+  EditOutlined as EditOutlinedIcon,
+} from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import type { FuelResourceWithCategory } from '@/types/emission-resources'
 import { serializeFuelResourceMeta } from '@/types/emission-resources'
@@ -42,6 +45,7 @@ interface Props {
   onPageChange: (page: number) => void
   onPerPageChange: (perPage: number) => void
   onEdit: (row: FuelResourceWithCategory) => void
+  onDelete: (row: FuelResourceWithCategory) => void
 }
 
 export default function EmissionResourcesTable({
@@ -53,6 +57,7 @@ export default function EmissionResourcesTable({
   onPageChange,
   onPerPageChange,
   onEdit,
+  onDelete,
 }: Props) {
   const columns: GridColDef[] = [
     {
@@ -224,7 +229,7 @@ export default function EmissionResourcesTable({
     {
       field: 'actions',
       headerName: '',
-      width: 56,
+      width: 96,
       sortable: false,
       filterable: false,
       disableColumnMenu: true,
@@ -232,16 +237,28 @@ export default function EmissionResourcesTable({
       headerAlign: 'center',
       display: 'flex',
       renderCell: (params) => (
-        <Tooltip title="Edit EF">
-          <IconButton
-            size="small"
-            aria-label="Edit EF"
-            onClick={() => onEdit(params.row as FuelResourceWithCategory)}
-            sx={adminGhostIconButtonSx.primary}
-          >
-            <EditOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ display: 'flex', gap: 0.25, justifyContent: 'center' }}>
+          <Tooltip title="Edit EF">
+            <IconButton
+              size="small"
+              aria-label="Edit EF"
+              onClick={() => onEdit(params.row as FuelResourceWithCategory)}
+              sx={adminGhostIconButtonSx.primary}
+            >
+              <EditOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="ลบ">
+            <IconButton
+              size="small"
+              aria-label="ลบ"
+              onClick={() => onDelete(params.row as FuelResourceWithCategory)}
+              sx={adminGhostIconButtonSx.error}
+            >
+              <DeleteOutlineIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </Box>
       ),
     },
   ]

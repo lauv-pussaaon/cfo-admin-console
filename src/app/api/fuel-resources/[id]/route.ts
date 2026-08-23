@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFuelResource, updateFuelResourceEfFields } from '@/lib/api/fuel-resources'
+import { deleteMappingsByFuelResourceId } from '@/lib/api/activity-group-fuel-resources'
+import { verifyAdminPasswordFromRequest } from '@/lib/api/admin-user-auth'
+import { refreshReleaseCounts } from '@/lib/api/ef-catalog-releases'
+import {
+  getFuelResource,
+  softDeleteFuelResource,
+  updateFuelResourceEfFields,
+} from '@/lib/api/fuel-resources'
 
 const ALLOWED_KEYS = new Set([
   'ef_value',
@@ -85,5 +92,51 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   } catch (error) {
     console.error('PATCH /api/fuel-resources/[id] error:', error)
     return NextResponse.json({ error: 'Failed to update fuel resource' }, { status: 500 })
+  }
+}
+
+export async function DELETE (
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    let password = ''
+    try {
+      const body = await request.json() as { password?: unknown }
+      if (typeof body?.password === 'string') password = body.password
+    } catch {
+      password = ''
+    }
+
+    const auth = await verifyAdminPasswordFromRequest(request, password)
+    if (!auth.ok) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status })
+    }
+
+    const { id } = await params
+    let existing
+    try {
+      existing = await getFuelResource(id)
+    } catch {
+      return NextResponse.json({ error: 'Fuel resource not found' }, { status: 404 })
+    }
+    if (existing.deleted_at) {
+      return NextResponse.json({ error: 'Fuel resource not found' }, { status: 404 })
+    }
+
+    const deleted = await softDeleteFuelResource(id)
+    if (!deleted) {
+      return NextResponse.json({ error: 'Fuel resource not found' }, { status: 404 })
+    }
+
+    await deleteMappingsByFuelResourceId(id)
+    if (deleted.version) {
+      await refreshReleaseCounts(deleted.version)
+    }
+
+    return NextResponse.json({ success: true, id, version: deleted.version })
+  } catch (error) {
+    console.error('DELETE /api/fuel-resources/[id] error:', error)
+    return NextResponse.json({ error: 'Failed to delete fuel resource' }, { status: 500 })
   }
 }

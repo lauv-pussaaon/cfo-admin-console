@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import {
   ensureEfCatalogRelease,
+  getReleasePublishDrift,
   listEfCatalogReleases,
   publishEfCatalogRelease,
   setDefaultEfCatalogRelease,
@@ -8,7 +9,21 @@ import {
 } from '@/lib/api/ef-catalog-releases'
 import { listDistinctFuelVersions } from '@/lib/api/fuel-resources'
 
-export async function GET () {
+export async function GET (request: NextRequest) {
+  const version = request.nextUrl.searchParams.get('version')?.trim()
+  if (version) {
+    try {
+      const { release, needs_republish } = await getReleasePublishDrift(version)
+      if (!release) {
+        return NextResponse.json({ error: 'Release not found' }, { status: 404 })
+      }
+      return NextResponse.json({ ...release, needs_republish })
+    } catch (error) {
+      console.error('GET /api/ef-catalog/releases?version= error:', error)
+      return NextResponse.json({ error: 'Failed to load release' }, { status: 500 })
+    }
+  }
+
   try {
     const [releases, fuelVersions] = await Promise.all([
       listEfCatalogReleases(),
