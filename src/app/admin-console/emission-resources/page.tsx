@@ -742,6 +742,8 @@ function EmissionResourcesPage () {
         onPageChange={(nextPage) => replaceQuery({ page: nextPage })}
         onPerPageChange={(v) => replaceQuery({ per_page: v, page: 0 })}
         onRowClick={setSelectedResource}
+        onEdit={setEditTarget}
+        onDelete={setDeleteTarget}
       />
 
       <FuelResourceDetailPanel
