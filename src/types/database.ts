@@ -107,7 +107,7 @@ export interface OrganizationTrialRequestConsent {
 
 export type NotificationEventType = 'trial_request'
 
-export interface NotificationRecipient {
+export interface NotificationEmail {
   id: string
   event_type: NotificationEventType
   email: string

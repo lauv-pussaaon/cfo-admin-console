@@ -1,34 +1,33 @@
 import { supabase } from '../supabase'
 import { ConflictError, throwIfError, ValidationError } from '@/lib/utils/errors'
-import type { NotificationEventType, NotificationRecipient } from '@/types/database'
+import type { NotificationEmail } from '@/types/database'
 
-export interface CreateNotificationRecipientInput {
-  eventType: NotificationEventType
+const STORED_EVENT_TYPE = 'trial_request'
+
+export interface CreateNotificationEmailInput {
   email: string
   label?: string | null
 }
 
-export interface UpdateNotificationRecipientInput {
+export interface UpdateNotificationEmailInput {
   email?: string
   label?: string | null
   isEnabled?: boolean
 }
 
-export async function listNotificationRecipients (
-  eventType: NotificationEventType = 'trial_request'
-): Promise<NotificationRecipient[]> {
+export async function listNotificationEmails (): Promise<NotificationEmail[]> {
   const result = await supabase
     .from('notification_recipients')
     .select('*')
-    .eq('event_type', eventType)
+    .eq('event_type', STORED_EVENT_TYPE)
     .order('created_at', { ascending: true })
 
   return throwIfError(result) ?? []
 }
 
-export async function createNotificationRecipient (
-  input: CreateNotificationRecipientInput
-): Promise<NotificationRecipient> {
+export async function createNotificationEmail (
+  input: CreateNotificationEmailInput
+): Promise<NotificationEmail> {
   const email = input.email.trim().toLowerCase()
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new ValidationError('กรุณากรอกอีเมลให้ถูกต้อง')
@@ -37,7 +36,7 @@ export async function createNotificationRecipient (
   const result = await supabase
     .from('notification_recipients')
     .insert({
-      event_type: input.eventType,
+      event_type: STORED_EVENT_TYPE,
       email,
       label: input.label?.trim() || null,
       is_enabled: true,
@@ -55,10 +54,10 @@ export async function createNotificationRecipient (
   }
 }
 
-export async function updateNotificationRecipient (
+export async function updateNotificationEmail (
   id: string,
-  input: UpdateNotificationRecipientInput
-): Promise<NotificationRecipient> {
+  input: UpdateNotificationEmailInput
+): Promise<NotificationEmail> {
   const payload: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   }
@@ -96,7 +95,7 @@ export async function updateNotificationRecipient (
   }
 }
 
-export async function deleteNotificationRecipient (id: string): Promise<void> {
+export async function deleteNotificationEmail (id: string): Promise<void> {
   const result = await supabase
     .from('notification_recipients')
     .delete()

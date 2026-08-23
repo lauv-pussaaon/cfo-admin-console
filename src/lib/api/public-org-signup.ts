@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createTrialRequest } from '@/lib/api/organization-trial-requests'
-import { getTrialRequestNotificationEmails } from '@/lib/api/notification-recipients-server'
+import { getEnabledNotificationEmails } from '@/lib/api/notification-recipients-server'
 import { sendAdminNewTrialRequestNotice } from '@/lib/email/send-admin-new-trial-request-notice'
 import { sendTrialRequestConfirmationEmail } from '@/lib/email/send-trial-request-confirmation'
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
@@ -59,7 +59,7 @@ export async function handlePublicOrgSignup (
     const requestOrigin = resolveSiteOriginFromRequest(request)
 
     try {
-      const adminEmails = await getTrialRequestNotificationEmails()
+      const adminEmails = await getEnabledNotificationEmails()
       const noticeResult = await sendAdminNewTrialRequestNotice({
         organizationName: orgRequest.organization_name,
         companyCode: orgRequest.company_code,

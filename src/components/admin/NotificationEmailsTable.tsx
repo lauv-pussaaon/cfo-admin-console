@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
-import type { NotificationRecipient } from '@/types/database'
+import type { NotificationEmail } from '@/types/database'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
@@ -20,11 +20,11 @@ import {
 } from '@/lib/admin-ui-styles'
 
 interface Props {
-  data: NotificationRecipient[]
+  data: NotificationEmail[]
   loading: boolean
   updatingId?: string | null
-  onToggleEnabled: (recipient: NotificationRecipient, enabled: boolean) => void
-  onDelete: (recipient: NotificationRecipient) => void
+  onToggleEnabled: (email: NotificationEmail, enabled: boolean) => void
+  onDelete: (email: NotificationEmail) => void
 }
 
 function formatDate (value: string | null) {
@@ -38,7 +38,7 @@ function formatDate (value: string | null) {
   })
 }
 
-export default function NotificationRecipientsTable ({
+export default function NotificationEmailsTable ({
   data,
   loading,
   updatingId = null,
@@ -46,13 +46,13 @@ export default function NotificationRecipientsTable ({
   onDelete,
 }: Props) {
   const rows: GridRowsProp = useMemo(() => {
-    return data.map((recipient) => ({
-      id: recipient.id,
-      email: recipient.email,
-      label: recipient.label || '—',
-      is_enabled: recipient.is_enabled,
-      created_at: recipient.created_at,
-      recipient,
+    return data.map((row) => ({
+      id: row.id,
+      email: row.email,
+      label: row.label || '—',
+      is_enabled: row.is_enabled,
+      created_at: row.created_at,
+      notificationEmail: row,
     }))
   }, [data])
 
@@ -76,13 +76,13 @@ export default function NotificationRecipientsTable ({
       sortable: false,
       filterable: false,
       renderCell: (params) => {
-        const recipient = params.row.recipient as NotificationRecipient
-        const isUpdating = updatingId === recipient.id
+        const notificationEmail = params.row.notificationEmail as NotificationEmail
+        const isUpdating = updatingId === notificationEmail.id
         return (
           <Switch
             checked={Boolean(params.value)}
             disabled={isUpdating}
-            onChange={(event) => onToggleEnabled(recipient, event.target.checked)}
+            onChange={(event) => onToggleEnabled(notificationEmail, event.target.checked)}
             size="small"
           />
         )
@@ -120,15 +120,15 @@ export default function NotificationRecipientsTable ({
       sortable: false,
       filterable: false,
       renderCell: (params) => {
-        const recipient = params.row.recipient as NotificationRecipient
-        const isUpdating = updatingId === recipient.id
+        const notificationEmail = params.row.notificationEmail as NotificationEmail
+        const isUpdating = updatingId === notificationEmail.id
         return (
           <Tooltip title="ลบ">
             <span>
               <IconButton
                 size="small"
                 disabled={isUpdating}
-                onClick={() => onDelete(recipient)}
+                onClick={() => onDelete(notificationEmail)}
                 sx={adminGhostIconButtonSx.error}
               >
                 <DeleteIcon fontSize="small" />

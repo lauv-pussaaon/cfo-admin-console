@@ -10,7 +10,7 @@ import { AppError } from '@/lib/utils/errors'
 import { sendRegistrationConfirmationEmail } from '@/lib/email/send-registration-confirmation'
 import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-registration-notice'
 import { resolveSiteOriginFromRequest, resolveBaseUrlForEmail } from '@/lib/email/resolve-site-origin'
-import { getAdminNotificationEmails } from '@/lib/api/users-admin'
+import { getEnabledNotificationEmails } from '@/lib/api/notification-recipients-server'
 import { registrationConsentFields } from '@/components/register/consent-schema'
 import { registrationProfileFields } from '@/components/register/registration-profile-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
@@ -143,7 +143,7 @@ export async function POST (request: NextRequest) {
     }
 
     try {
-      const adminEmails = await getAdminNotificationEmails()
+      const adminEmails = await getEnabledNotificationEmails()
       const noticeResult = await sendAdminNewRegistrationNotice({
         name: payload.name.trim(),
         username: payload.username.trim(),

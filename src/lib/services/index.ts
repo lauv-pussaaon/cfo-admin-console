@@ -7,9 +7,9 @@ export { TemplateImageUploadService, templateImageUploadService } from './templa
 export { InvitationService, invitationService } from './invitation.service'
 export { TrialRequestService, trialRequestService } from './trial-request.service'
 export {
-  NotificationRecipientService,
-  notificationRecipientService,
-} from './notification-recipient.service'
+  NotificationEmailService,
+  notificationEmailService,
+} from './notification-email.service'
 export { SupportAttachmentUploadService, supportAttachmentUploadService } from './support-attachment-upload.service'
 
 // Re-export types

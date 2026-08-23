@@ -1,15 +1,17 @@
 /**
- * Server-only notification recipient lookups (uses service role).
- * Do not import getTrialRequestNotificationEmails from client bundles.
+ * Server-only notification email lookups (uses service role).
+ * Do not import getEnabledNotificationEmails from client bundles.
  */
 
 import { getServiceSupabase } from '@/lib/supabase-service'
 
-export async function getTrialRequestNotificationEmails (): Promise<string[]> {
+const STORED_EVENT_TYPE = 'trial_request'
+
+export async function getEnabledNotificationEmails (): Promise<string[]> {
   const supabase = getServiceSupabase()
   if (!supabase) {
     console.warn(
-      '[notification-recipients] ข้ามโหลดผู้รับแจ้งเตือน: ตั้งค่า SUPABASE_SERVICE_ROLE_KEY'
+      '[notification-emails] ข้ามโหลดผู้รับแจ้งเตือน: ตั้งค่า SUPABASE_SERVICE_ROLE_KEY'
     )
     return []
   }
@@ -17,11 +19,11 @@ export async function getTrialRequestNotificationEmails (): Promise<string[]> {
   const { data, error } = await supabase
     .from('notification_recipients')
     .select('email')
-    .eq('event_type', 'trial_request')
+    .eq('event_type', STORED_EVENT_TYPE)
     .eq('is_enabled', true)
 
   if (error) {
-    console.error('[notification-recipients] โหลดผู้รับแจ้งเตือนไม่สำเร็จ:', error.message)
+    console.error('[notification-emails] โหลดผู้รับแจ้งเตือนไม่สำเร็จ:', error.message)
     return []
   }
 

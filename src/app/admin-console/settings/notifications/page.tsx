@@ -17,13 +17,13 @@ import {
   Typography,
 } from '@mui/material'
 import { Add as AddIcon, ArrowBack } from '@mui/icons-material'
-import NotificationRecipientsTable from '@/components/admin/NotificationRecipientsTable'
+import NotificationEmailsTable from '@/components/admin/NotificationEmailsTable'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
-import { notificationRecipientService } from '@/lib/services'
+import { notificationEmailService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
-import type { NotificationRecipient } from '@/types/database'
+import type { NotificationEmail } from '@/types/database'
 import {
   adminBackButtonSx,
   adminPageShellSx,
@@ -34,7 +34,7 @@ import {
 export default function NotificationSettingsPage () {
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
-  const [recipients, setRecipients] = useState<NotificationRecipient[]>([])
+  const [emails, setEmails] = useState<NotificationEmail[]>([])
   const [loading, setLoading] = useState(true)
   const [addOpen, setAddOpen] = useState(false)
   const [newEmail, setNewEmail] = useState('')
@@ -42,7 +42,7 @@ export default function NotificationSettingsPage () {
   const [addError, setAddError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<NotificationRecipient | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<NotificationEmail | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -54,14 +54,14 @@ export default function NotificationSettingsPage () {
     }
   }, [user, authLoading, router])
 
-  const loadRecipients = async () => {
+  const loadEmails = async () => {
     try {
       setLoading(true)
-      const data = await notificationRecipientService.listTrialRequestRecipients()
-      setRecipients(data)
+      const data = await notificationEmailService.listNotificationEmails()
+      setEmails(data)
     } catch (error) {
       if (!isExpectedError(error)) {
-        console.error('Failed to load notification recipients:', error)
+        console.error('Failed to load notification emails:', error)
       }
     } finally {
       setLoading(false)
@@ -70,13 +70,13 @@ export default function NotificationSettingsPage () {
 
   useEffect(() => {
     if (user && isAdmin(user)) {
-      loadRecipients()
+      void loadEmails()
     }
   }, [user])
 
   const enabledCount = useMemo(
-    () => recipients.filter((recipient) => recipient.is_enabled).length,
-    [recipients]
+    () => emails.filter((row) => row.is_enabled).length,
+    [emails]
   )
 
   const notify = (message: string, severity: 'success' | 'error' = 'success') => {
@@ -98,19 +98,18 @@ export default function NotificationSettingsPage () {
     setAddError(null)
   }
 
-  const handleAddRecipient = async () => {
+  const handleAddEmail = async () => {
     setSaving(true)
     setAddError(null)
 
     try {
-      await notificationRecipientService.createRecipient({
-        eventType: 'trial_request',
+      await notificationEmailService.create({
         email: newEmail,
         label: newLabel || null,
       })
       setAddOpen(false)
       notify('เพิ่มอีเมลผู้รับแจ้งเตือนแล้ว')
-      await loadRecipients()
+      await loadEmails()
     } catch (error) {
       const message = error instanceof Error ? error.message : 'เพิ่มอีเมลไม่สำเร็จ'
       setAddError(message)
@@ -121,15 +120,15 @@ export default function NotificationSettingsPage () {
   }
 
   const handleToggleEnabled = async (
-    recipient: NotificationRecipient,
+    notificationEmail: NotificationEmail,
     enabled: boolean
   ) => {
-    setUpdatingId(recipient.id)
+    setUpdatingId(notificationEmail.id)
     try {
-      await notificationRecipientService.setRecipientEnabled(recipient.id, enabled)
-      setRecipients((prev) =>
+      await notificationEmailService.setEnabled(notificationEmail.id, enabled)
+      setEmails((prev) =>
         prev.map((row) =>
-          row.id === recipient.id ? { ...row, is_enabled: enabled } : row
+          row.id === notificationEmail.id ? { ...row, is_enabled: enabled } : row
         )
       )
       notify(enabled ? 'เปิดใช้งานอีเมลแล้ว' : 'ปิดใช้งานอีเมลแล้ว')
@@ -148,10 +147,10 @@ export default function NotificationSettingsPage () {
     setDeleteError(null)
 
     try {
-      await notificationRecipientService.deleteRecipient(deleteTarget.id)
+      await notificationEmailService.delete(deleteTarget.id)
       setDeleteTarget(null)
       notify('ลบอีเมลผู้รับแจ้งเตือนแล้ว')
-      await loadRecipients()
+      await loadEmails()
     } catch (error) {
       const message = error instanceof Error ? error.message : 'ลบไม่สำเร็จ'
       setDeleteError(message)
@@ -195,7 +194,7 @@ export default function NotificationSettingsPage () {
             การตั้งค่าการแจ้งเตือน
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปีใหม่
+            อีเมลที่เปิดใช้งานจะได้รับการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Audit
           </Typography>
         </Box>
         <Button
@@ -210,16 +209,12 @@ export default function NotificationSettingsPage () {
 
       {enabledCount === 0 && !loading && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปีใหม่
+          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Audit
         </Alert>
       )}
 
-      <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
-        คำขอสมัครองค์กร
-      </Typography>
-
-      <NotificationRecipientsTable
-        data={recipients}
+      <NotificationEmailsTable
+        data={emails}
         loading={loading}
         updatingId={updatingId}
         onToggleEnabled={handleToggleEnabled}
@@ -259,7 +254,7 @@ export default function NotificationSettingsPage () {
           </Button>
           <Button
             variant="contained"
-            onClick={handleAddRecipient}
+            onClick={handleAddEmail}
             disabled={saving || !newEmail.trim()}
             sx={{ textTransform: 'none' }}
           >
