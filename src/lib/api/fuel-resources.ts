@@ -359,6 +359,56 @@ export async function listFuelResourcesForExport(version: string): Promise<FuelR
     .map(({ scope_category: _scopeCategory, ...fuel }) => fuel as FuelResource)
 }
 
+export async function listActiveFuelIdsByVersion (version: string): Promise<string[]> {
+  const ids: string[] = []
+  let offset = 0
+  while (true) {
+    const { data, error } = await supabase
+      .from('fuel_resources')
+      .select('id')
+      .eq('version', version)
+      .is('deleted_at', null)
+      .order('id', { ascending: true })
+      .range(offset, offset + FUEL_RESOURCES_FETCH_CHUNK - 1)
+    if (error) throw error
+    const chunk = (data ?? []) as { id: string }[]
+    ids.push(...chunk.map((r) => r.id))
+    if (chunk.length < FUEL_RESOURCES_FETCH_CHUNK) break
+    offset += FUEL_RESOURCES_FETCH_CHUNK
+  }
+  return ids
+}
+
+export async function listFuelVersionsByIds (ids: string[]): Promise<Map<string, string | null>> {
+  const versions = new Map<string, string | null>()
+  for (let i = 0; i < ids.length; i += 200) {
+    const chunk = ids.slice(i, i + 200)
+    const { data, error } = await supabase
+      .from('fuel_resources')
+      .select('id, version')
+      .in('id', chunk)
+    if (error) throw error
+    for (const row of data ?? []) {
+      versions.set(row.id as string, (row.version as string | null) ?? null)
+    }
+  }
+  return versions
+}
+
+export async function softDeleteFuelIds (ids: string[]): Promise<void> {
+  if (ids.length === 0) return
+  const now = new Date().toISOString()
+  for (let i = 0; i < ids.length; i += 200) {
+    const chunk = ids.slice(i, i + 200)
+    const { error } = await supabase
+      .from('fuel_resources')
+      .update({ deleted_at: now, updated_at: now })
+      .in('id', chunk)
+      .is('deleted_at', null)
+    if (error) throw error
+  }
+}
+
 export async function bulkUpsertFuelResources(rows: Partial<FuelResource>[]) {
   const now = new Date().toISOString()
   const records = rows.map((r) => ({

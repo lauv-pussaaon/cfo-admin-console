@@ -19,16 +19,21 @@ import {
   Snackbar,
   Chip,
   CircularProgress,
+  IconButton,
+  Menu,
   Tooltip,
 } from '@mui/material'
 import { useAuth } from '@/contexts/AuthContext'
 import { isAdmin } from '@/lib/permissions'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
   ArrowBack,
   Category as CategoryIcon,
   Search as SearchIcon,
+  Backup as BackupIcon,
   FileDownload as FileDownloadIcon,
   FileUpload as FileUploadIcon,
+  MoreVert as MoreVertIcon,
   WarningAmber as WarningAmberIcon,
 } from '@mui/icons-material'
 import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
@@ -134,6 +139,7 @@ function EmissionResourcesPage () {
   const [editTarget, setEditTarget] = useState<FuelResourceWithCategory | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<FuelResourceWithCategory | null>(null)
   const [needsRepublish, setNeedsRepublish] = useState(false)
+  const [moreMenuAnchor, setMoreMenuAnchor] = useState<null | HTMLElement>(null)
 
   const orderedReleases = useMemo(() => orderReleases(releases), [releases])
   const versionTabs = useMemo(
@@ -400,6 +406,31 @@ function EmissionResourcesPage () {
     }
   }
 
+  const handleBackupVersion = async () => {
+    if (!catalogVersion) return
+    setActionBusy(true)
+    try {
+      const res = await authenticatedAdminFetch(
+        '/api/ef-catalog/backups',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ version: catalogVersion }),
+        },
+        { userId: user?.id }
+      )
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'สำรองไม่สำเร็จ')
+      const count = typeof json.fuel_count === 'number' ? json.fuel_count : ''
+      const params = new URLSearchParams({ created: catalogVersion })
+      if (count !== '') params.set('count', String(count))
+      router.push(`/admin-console/emission-resources/backups?${params}`)
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : 'สำรองไม่สำเร็จ', 'error')
+      setActionBusy(false)
+    }
+  }
+
   const handleImportComplete = async (version: string) => {
     setImportOpen(false)
     replaceQuery({ version, page: 0 })
@@ -461,6 +492,26 @@ function EmissionResourcesPage () {
           >
             Manage Categories
           </Button>
+          <IconButton
+            aria-label="เพิ่มเติม"
+            onClick={(e) => setMoreMenuAnchor(e.currentTarget)}
+            disabled={actionBusy}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={moreMenuAnchor}
+            open={Boolean(moreMenuAnchor)}
+            onClose={() => setMoreMenuAnchor(null)}
+          >
+            <MenuItem
+              component={Link}
+              href="/admin-console/emission-resources/backups"
+              onClick={() => setMoreMenuAnchor(null)}
+            >
+              รายการสำรอง
+            </MenuItem>
+          </Menu>
         </Box>
       </Box>
 
@@ -578,6 +629,15 @@ function EmissionResourcesPage () {
               sx={adminPrimaryButtonSx}
             >
               Export Excel
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<BackupIcon />}
+              disabled={actionBusy || releaseLoading || !catalogVersion}
+              onClick={() => void handleBackupVersion()}
+            >
+              Backup This Version
             </Button>
           </Box>
         </Box>

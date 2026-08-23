@@ -111,6 +111,15 @@ export interface EfCatalogRelease {
   updated_at: string | null
 }
 
+export interface EfCatalogVersionBackup {
+  id: string
+  source_version: string
+  fuel_count: number
+  created_at: string
+  created_by: string | null
+  created_by_name: string | null
+}
+
 export type CreateFuelResourceInput = Omit<
   FuelResource,
   'id' | 'created_at' | 'updated_at' | 'deleted_at' | 'scope_category'

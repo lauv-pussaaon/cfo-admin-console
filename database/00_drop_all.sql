@@ -9,6 +9,8 @@
 DROP TABLE IF EXISTS template_activity_group_fuel_resources CASCADE;
 DROP TABLE IF EXISTS template_activity_groups CASCADE;
 DROP TABLE IF EXISTS emission_templates CASCADE;
+DROP TABLE IF EXISTS ef_catalog_version_backup_fuels CASCADE;
+DROP TABLE IF EXISTS ef_catalog_version_backups CASCADE;
 DROP TABLE IF EXISTS fuel_resources CASCADE;
 DROP TABLE IF EXISTS scope_categories CASCADE;
 DROP TABLE IF EXISTS ef_catalog_releases CASCADE;

@@ -85,7 +85,7 @@ Clients use the same UUIDs locally; users pick dest fuel (+ conversion factor wh
 
 Version tabs on Emission Resources are **dynamic** from `ef_catalog_releases` (a newly imported label appears immediately). Tab labels use the stored version string (e.g. `พฤษภาคม 2569`).
 
-**Page header:** **Import new version** (not tied to the active tab) and Manage Categories.
+**Page header:** **Import new version** (not tied to the active tab), Manage Categories, and a **⋯** menu (**รายการสำรอง**).
 
 Under the selected **version tab**:
 
@@ -95,10 +95,22 @@ Under the selected **version tab**:
 | Published | `published_at` when status is `published` |
 | Publish / Re-publish | Set `status=published`, refresh `content_hash` + `published_at` + counts. Published versions whose live hash ≠ stored `content_hash` show an orange warning: **Require re-publish to apply latest changes** |
 | Export Excel | Download `fuel_resources_<version>.xlsx` (fuels only; use as import template) |
+| สำรองเวอร์ชันนี้ | Snapshot active fuels for this tab (same UUIDs), then open the backup list |
 
 Per-version bulk delete is not offered in the UI. Per-row **soft-delete** is: table delete icon → password confirm → `DELETE /api/fuel-resources/[id]` (Admin + `x-admin-user-id` + `{ password }`). Sets `deleted_at`, refreshes tab `fuel_count`, drops `template_activity_group_fuel_resources` for that fuel. Does **not** auto-publish. After **Re-publish** + tenant sync (`deploy.sh update` or Factory Admin **ซิงค์แคตตาล็อก EF**), omitted fuels leave the client picker: sync nulls `annual_emissions.fuel_resource_id` then hard-deletes those `fuel_resources` (emission lines keep copied `resource` / `unit` / `ef_value`). Re-running generated TGO SQL with `deleted_at = NULL` would **undelete** matching IDs.
 
 `GET /api/ef-catalog/releases?version=` returns that release plus `needs_republish` (published + live hash ≠ stored `content_hash`, or stored hash is null). Drafts never show the stale warn. Refetch after delete, EF save, and successful publish.
+
+### Version backups (same UUIDs)
+
+Version-tab **สำรองเวอร์ชันนี้** copies **active** fuels for that tab into `ef_catalog_version_backups` / `ef_catalog_version_backup_fuels` (PK `(backup_id, id)` so one fuel UUID can appear in many snapshots), then navigates to the backup list. Existing admin DBs: apply [`../database/migrate_add_ef_catalog_version_backups.sql`](../database/migrate_add_ef_catalog_version_backups.sql).
+
+**รายการสำรอง** (`/admin-console/emission-resources/backups`):
+
+- **Restore** — target name defaults to `source_version` (can type a new name). Password confirm. Snapshot replace: soft-delete active fuels on the target version; drop template joins for IDs not in the snapshot; upsert backup fuels with original UUIDs and `deleted_at = null`. If the name differs, those IDs move to the new label. Backup rows stay. Does **not** auto-publish or restore `is_default`. After restore: Re-publish + tenant sync so clients keep using the same IDs.
+- **Delete** — password confirm; removes that snapshot only (live catalog unchanged).
+
+Activity-group templates are **not** in the snapshot.
 
 ### Inline edit (EF + duo values)
 
@@ -144,6 +156,10 @@ API:
 - `POST /api/fuel-resources/import` body `{ version, mode: 'create', rows }`
 - `PATCH /api/fuel-resources/:id` — EF + duo fields only
 - `DELETE /api/fuel-resources/:id` — Admin + password; per-row soft-delete (not `DELETE /api/fuel-resources?version=`)
+- `GET /api/ef-catalog/backups` — Admin; snapshot headers only
+- `POST /api/ef-catalog/backups` body `{ version }` — Admin; snapshot active fuels
+- `POST /api/ef-catalog/backups/:id/restore` body `{ version, password }` — Admin; snapshot replace, backup remains
+- `DELETE /api/ef-catalog/backups/:id` body `{ password }` — Admin; delete snapshot only
 - `GET /api/scope-category-links` — fixed category link rules
 - **Client sync (machine):** Bearer `EF_CATALOG_SYNC_SECRET`
   - `GET /api/ef-catalog/sync/manifest` — published releases
@@ -163,7 +179,8 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 
 ## Admin UI surfaces
 
-- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF + password-confirmed delete, Import new version, per-version Publish / Export (orange Re-publish when stale)
+- `/admin-console/emission-resources` — dynamic version tabs, fuel table with Edit EF + password-confirmed delete, Import new version, per-version Publish / Export / สำรองเวอร์ชันนี้ (orange Re-publish when stale), ⋯ backups list
+- `/admin-console/emission-resources/backups` — version snapshots; restore (replace, same UUIDs) and delete
 - `/admin-console/emission-templates` — industry templates
 
 ## Verification checklist
@@ -183,6 +200,8 @@ Category CSV import is not available. Client TGO API live sync UI was removed; T
 13. Per-row delete + password → row gone from admin table; Re-publish shows orange warn until publish
 14. Re-publish + client sync → deleted fuel leaves tenant picker; existing emission lines keep resource/unit/EF and `fuel_resource_id` is null
 15. Re-running generated TGO SQL with `deleted_at = NULL` undeletes matching IDs
+16. สำรองเวอร์ชันนี้ (after Export Excel) → backups page lists the new snapshot; restore same name after wiping live version → same UUIDs; backup still listed; Re-publish required
+17. Restore with a new name moves those UUIDs to the new label; delete backup does not change live fuels
 
 ## Out of scope (later)
 

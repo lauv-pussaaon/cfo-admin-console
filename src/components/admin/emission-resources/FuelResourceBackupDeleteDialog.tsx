@@ -1,0 +1,129 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
+import { useAuth } from '@/contexts/AuthContext'
+import { formatDateTime } from '@/lib/utils/datetime'
+import type { EfCatalogVersionBackup } from '@/types/emission-resources'
+
+interface Props {
+  open: boolean
+  backup: EfCatalogVersionBackup | null
+  onClose: () => void
+  onDeleted: () => void
+}
+
+export default function FuelResourceBackupDeleteDialog ({
+  open,
+  backup,
+  onClose,
+  onDeleted,
+}: Props) {
+  const { user } = useAuth()
+  const [password, setPassword] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    setPassword('')
+    setError(null)
+    setSubmitting(false)
+  }, [open, backup?.id])
+
+  const handleClose = () => {
+    if (submitting) return
+    onClose()
+  }
+
+  const handleConfirm = async () => {
+    if (!backup || !password.trim()) return
+    setSubmitting(true)
+    setError(null)
+    try {
+      const res = await authenticatedAdminFetch(
+        `/api/ef-catalog/backups/${backup.id}`,
+        {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        },
+        { userId: user?.id }
+      )
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const apiError = typeof json.error === 'string' ? json.error : ''
+        if (apiError === 'Invalid password') throw new Error('รหัสผ่านไม่ถูกต้อง')
+        if (apiError === 'Password is required') throw new Error('กรุณากรอกรหัสผ่าน')
+        if (apiError === 'Unauthorized') throw new Error('ไม่มีสิทธิ์ลบรายการนี้')
+        throw new Error(apiError || 'ลบไม่สำเร็จ')
+      }
+      onDeleted()
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'ลบไม่สำเร็จ')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <DialogTitle>ลบสำรองแคตตาล็อก</DialogTitle>
+      <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {backup && (
+          <Typography variant="body2">
+            <strong>{backup.source_version}</strong>
+            {' · '}
+            {formatDateTime(backup.created_at)}
+          </Typography>
+        )}
+        <Alert severity="warning">
+          ลบเฉพาะสำรองนี้ แคตตาล็อกสดไม่เปลี่ยน
+        </Alert>
+        {error && <Alert severity="error">{error}</Alert>}
+        <TextField
+          type="password"
+          label="รหัสผ่านผู้ดูแลระบบ"
+          size="small"
+          fullWidth
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={submitting}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              void handleConfirm()
+            }
+          }}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} disabled={submitting}>
+          ยกเลิก
+        </Button>
+        <Button
+          color="error"
+          variant="contained"
+          onClick={() => void handleConfirm()}
+          disabled={submitting || !password.trim() || !backup}
+          startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : undefined}
+        >
+          ลบ
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}

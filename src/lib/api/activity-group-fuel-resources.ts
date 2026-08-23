@@ -51,6 +51,17 @@ export async function deleteMappingsByFuelResourceId (fuelResourceId: string): P
   if (error) throw error
 }
 
+export async function deleteMappingsByFuelResourceIds (fuelResourceIds: string[]): Promise<void> {
+  for (let i = 0; i < fuelResourceIds.length; i += 200) {
+    const chunk = fuelResourceIds.slice(i, i + 200)
+    const { error } = await supabase
+      .from('template_activity_group_fuel_resources')
+      .delete()
+      .in('fuel_resource_id', chunk)
+    if (error) throw error
+  }
+}
+
 export async function setMappings(
   activityGroupId: string,
   mappings: { fuel_resource_id: string; note?: string | null }[]
