@@ -208,10 +208,6 @@ export default function NotificationSettingsPage () {
         </Button>
       </Box>
 
-      <Alert severity="info" sx={{ mb: 2 }}>
-        ตั้งค่า `RESEND_API_KEY` และ `RESEND_FROM_EMAIL` (ถ้ามี) ใน environment เพื่อให้ระบบส่งอีเมลได้
-      </Alert>
-
       {enabledCount === 0 && !loading && (
         <Alert severity="warning" sx={{ mb: 2 }}>
           ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งานหรือสมาชิกรายปีใหม่

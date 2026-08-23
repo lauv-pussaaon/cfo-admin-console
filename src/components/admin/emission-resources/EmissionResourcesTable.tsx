@@ -74,7 +74,7 @@ export default function EmissionResourcesTable({
     {
       field: 'category',
       headerName: 'Category',
-      flex: 2,
+      flex: 1,
       width: 100,
       display: 'flex',
       renderCell: (params) => {

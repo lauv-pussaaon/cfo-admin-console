@@ -4,7 +4,15 @@ export const SCOPE_CAT1_PURCHASED_GOODS_ID = 'a1000003-0003-4003-8003-0000000000
 export const SCOPE_CAT3_FUEL_ENERGY_ID = 'a1000003-0003-4003-8003-000000000009'
 export const SCOPE_CAT4_UPSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000a'
 export const SCOPE_CAT5_WASTE_ID = 'a1000003-0003-4003-8003-00000000000b'
+export const SCOPE_CAT9_DOWNSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000f'
 export const SCOPE4_ENERGY_REPORTING_ID = 'a1000004-0004-4004-8004-000000000014'
+
+/** Cat 9 has no TGO fuels; the client picker uses the Cat 4 transport catalog. */
+export function fuelCatalogCategoryId (reportingCategoryId: string): string {
+  return reportingCategoryId === SCOPE_CAT9_DOWNSTREAM_TRANSPORT_ID
+    ? SCOPE_CAT4_UPSTREAM_TRANSPORT_ID
+    : reportingCategoryId
+}
 
 export type ScopeCategoryLinkRule = {
   id: string

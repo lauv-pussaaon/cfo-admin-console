@@ -125,12 +125,6 @@ export default function FuelResourceEditModal ({
               </Box>
             </Box>
 
-            {releaseStatus === 'published' && (
-              <Alert severity="info">
-                Saved changes reach client apps after you click Publish on this version tab.
-              </Alert>
-            )}
-
             {error && <Alert severity="error">{error}</Alert>}
 
             <TextField
