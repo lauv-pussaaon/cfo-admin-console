@@ -21,6 +21,21 @@ export const organizationCodeSchema = z
   .transform(normalizeOrganizationCode)
   .pipe(organizationCodeValueSchema)
 
+const platformOrganizationCodeValueSchema = z
+  .string()
+  .min(2, 'รหัสองค์กรอย่างน้อย 2 ตัวอักษร')
+  .max(63, 'รหัสองค์กรสูงสุด 63 ตัวอักษร')
+  .regex(
+    ORGANIZATION_CODE_PATTERN,
+    'ใช้ได้เฉพาะ a–z, 0–9 และ - (ห้ามขึ้นต้นหรือลงท้ายด้วย -)'
+  )
+
+export const platformOrganizationCodeSchema = z
+  .string()
+  .min(1, 'กรุณากรอกรหัสองค์กร')
+  .transform(normalizeOrganizationCode)
+  .pipe(platformOrganizationCodeValueSchema)
+
 export const optionalOrganizationCodeSchema = z
   .string()
   .optional()
