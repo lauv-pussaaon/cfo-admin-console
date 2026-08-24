@@ -150,6 +150,7 @@ export default function OrganizationDetailDrawer ({
             ภาพรวม
           </Typography>
           <Box sx={{ display: 'grid', gap: 1.5 }}>
+            <CredentialField label="Organization ID" value={organization?.id} />
             <InfoRow
               label="ประเภทบัญชี"
               value={organization?.account_type || DEFAULT_ACCOUNT_TYPE}

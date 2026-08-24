@@ -167,6 +167,9 @@ export default function OrganizationDetailPage () {
         </Typography>
         <Grid container spacing={3}>
           <DetailRow label="รหัสองค์กร" value={org.code || '—'} />
+          <Grid item xs={12} sm={6}>
+            <CredentialField label="Organization ID" value={org.id} />
+          </Grid>
           <DetailRow
             label="สถานะ"
             value={
