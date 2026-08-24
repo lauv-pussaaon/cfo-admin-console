@@ -78,9 +78,6 @@ export default function PlatformSigninPage() {
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
             เข้าสู่ระบบ IdeaCarb
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            กรอกรหัสองค์กร ชื่อผู้ใช้ และรหัสผ่าน
-          </Typography>
         </Box>
 
         <Card sx={{ boxShadow: 3 }}>
@@ -102,7 +99,7 @@ export default function PlatformSigninPage() {
                     error={!!errors.organizationCode}
                     helperText={
                       errors.organizationCode?.message ||
-                      `เช่น delta สำหรับ delta.${apexDomain}`
+                      `จากรหัสขึ้นต้น URL ระบบที่ทำได้รับ เช่น https://abc.${apexDomain} ให้กรอก abc`
                     }
                     inputProps={{ autoCapitalize: 'none', autoCorrect: 'off', spellCheck: false }}
                     InputProps={{
@@ -186,11 +183,6 @@ export default function PlatformSigninPage() {
                     sx={{ minWidth: 120 }}
                   >
                     {busy ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
-                  </Button>
-                </Box>
-                <Box sx={{ mt: 2, textAlign: 'center' }}>
-                  <Button component={Link} href="/login" size="small" sx={{ textTransform: 'none' }}>
-                    เข้าสู่ระบบผู้ดูแลระบบ
                   </Button>
                 </Box>
               </form>
