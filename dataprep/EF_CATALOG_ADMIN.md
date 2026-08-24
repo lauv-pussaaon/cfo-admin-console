@@ -30,24 +30,28 @@ When TGO publishes updated emission factors, run from `cfo-admin-console` (set `
 
 ```bash
 pnpm tgo-ef:fetch
-pnpm tgo-ef:build-import -- --version "TGO July 2569"
+pnpm tgo-ef:build-import -- --version "TGO 1 กรกฎาคม 2569"
 # → dataprep/tgo-ef/out/fuel_resources_tgo_import.xlsx
 #    + dataprep/ef-catalog/generated/03a|03b|03c_fuel_resources_tgo_api.sql
+#    + dataprep/ef-catalog/generated/03d_fuel_resources_tgo_fugitive_overlay.sql
 ```
 
 Then Admin UI → Emission Resources → **Import new version** → enter the same version label → upload `fuel_resources_tgo_import.xlsx` → Publish → set as default when ready → clients sync.
 
 Cat 4 transport labels are applied in the build script (not a separate SQL step for new imports): all Cat 4 get `value1`; only rows without ` 0% Loading` get `value2`. TGO JSON `description` is written to `description` (and still to CFO `ref_info`). Cat 4 descriptions matching `น้ำหนักบรรทุกสูงสุด {n} ตัน` set `meta.maxLoadTon`. Excel `meta` is a JSON string.
 
-To backfill an **existing** TGO version (Excel replace is disabled): apply the schema migrate, run `pnpm tgo-ef:build-import -- --version "<existing label>"`, upsert `03a` then `03b` then `03c_fuel_resources_tgo_api.sql`, then Re-publish.
+Scope 1 Cat 4 fugitive (TGO `EF005` refrigerants) is **replaced** at build time with the 55 May 2569 rows from `02a` (duo + GHG + multiplier; new UUIDs per TGO version). `R-22 (HCFC-22)` stays on Scope 4. Do not edit `tgo-ef/raw`.
+
+To backfill **existing** TGO versions (Excel replace is disabled): apply `03d_fuel_resources_tgo_fugitive_overlay.sql` (upserts overlay on `TGO พฤษภาคม 2569` + `TGO 1 กรกฎาคม 2569`, soft-deletes leftover EF005 Cat 4 rows), optionally upsert rebuilt `03a`/`03b`/`03c`, then **Re-publish both** TGO tabs. Clients pick it up via Sync catalog / `deploy.sh update` (old TGO refrigerant FKs become null).
 
 ## Generate + load seed SQL
 
 From `cfo-admin-console` (May/Feb still may use sibling `ideacarb-client-app` seeds; TGO SQL comes from `pnpm tgo-ef:build-import`):
 
 ```bash
-pnpm tgo-ef:fetch && pnpm tgo-ef:build-import   # refresh 03a/03b/03c TGO SQL + Excel
-npm run ef-catalog:generate-import              # 01_, 02_, 04_ (keeps existing 03a/03b/03c)
+pnpm tgo-ef:fetch && pnpm tgo-ef:build-import -- --version "TGO 1 กรกฎาคม 2569"
+# refresh 03a/03b/03c + 03d TGO SQL + Excel
+npm run ef-catalog:generate-import              # 01_, 02_, 04_ (keeps existing 03a–03d)
 ```
 
 Writes under `dataprep/ef-catalog/generated/`:
@@ -59,11 +63,12 @@ Writes under `dataprep/ef-catalog/generated/`:
 5. `03a_fuel_resources_tgo_api.sql` — from `tgo-ef:build-import`
 6. `03b_fuel_resources_tgo_api.sql`
 7. `03c_fuel_resources_tgo_api.sql`
-8. `04_fuel_resources_feb2569.sql`
+8. `03d_fuel_resources_tgo_fugitive_overlay.sql` — May S1 Cat 4 overlay for both TGO versions
+9. `04_fuel_resources_feb2569.sql`
 
-Apply after `01_schema.sql` + `03_seed_ef_catalog_releases.sql`, in filename order. May (`02a`–`02c`) and TGO (`03a`–`03c`) are split into independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
+Apply after `01_schema.sql` + `03_seed_ef_catalog_releases.sql`, in filename order. May (`02a`–`02c`) and TGO (`03a`–`03d`) are split into independently idempotent transactions so each file fits the Supabase SQL Editor. Then publish from Emission Resources (version tab actions).
 
-Expected rough fuel counts: Feb ~990, May ~1797, TGO ~693.
+Expected rough fuel counts: Feb ~990, May ~1797, TGO July ~738 (includes 55 overlay fugitive rows).
 
 ## Fixed scope-category link rules (read-only API)
 

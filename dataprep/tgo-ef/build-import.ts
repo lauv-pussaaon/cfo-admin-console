@@ -15,6 +15,7 @@
  *   dataprep/ef-catalog/generated/03a_fuel_resources_tgo_api.sql
  *   dataprep/ef-catalog/generated/03b_fuel_resources_tgo_api.sql
  *   dataprep/ef-catalog/generated/03c_fuel_resources_tgo_api.sql
+ *   dataprep/ef-catalog/generated/03d_fuel_resources_tgo_fugitive_overlay.sql
  */
 
 import fs from 'node:fs'
@@ -30,8 +31,15 @@ import {
   type FuelResourceImportRow,
 } from './lib/fuel-rows'
 import {
+  applyMayFugitiveOverlay,
+  buildMayFugitiveOverlayRows,
+  TGO_FUGITIVE_OVERLAY_VERSIONS,
+  TGO_FUGITIVE_SOFT_DELETE_VERSIONS,
+} from './lib/may-fugitive-overlay'
+import {
   CAT4_ZERO_LOADING_MARKER,
   SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
+  SCOPE_S1_CAT4_FUGITIVE_ID,
   parseScopeCategoriesFromManifest,
 } from './lib/review-utils'
 
@@ -103,6 +111,14 @@ function insertStatement (row: FuelResourceImportRow): string {
     'ref_fossil_ch4',
     'ref_ch4',
     'ref_n2o',
+    'ref_sf6',
+    'ref_nf3',
+    'ref_hfcs',
+    'ref_pfcs',
+    'gwp100_hfcs',
+    'gwp100_pfcs',
+    'extraghg_ef',
+    'extraghg_gwp100',
     'ref_source',
     'version',
     'ref_code',
@@ -129,6 +145,14 @@ function insertStatement (row: FuelResourceImportRow): string {
     sqlNum(row.ref_fossil_ch4),
     sqlNum(row.ref_ch4),
     sqlNum(row.ref_n2o),
+    sqlNum(row.ref_sf6),
+    sqlNum(row.ref_nf3),
+    sqlNum(row.ref_hfcs),
+    sqlNum(row.ref_pfcs),
+    sqlNum(row.gwp100_hfcs),
+    sqlNum(row.gwp100_pfcs),
+    sqlNum(row.extraghg_ef),
+    sqlNum(row.extraghg_gwp100),
     sqlStr(row.ref_source),
     sqlStr(row.version),
     sqlStr(row.ref_code),
@@ -156,6 +180,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -181,7 +213,8 @@ function writeSeedSql (rows: FuelResourceImportRow[], version: string): void {
       `-- Generated TGO fuels for admin SoT (version=${version}; from pnpm tgo-ef:build-import)`,
       `-- Cat4 duo: value1=ระยะทาง/km for all; value2=น้ำหนักที่ขน/ton except resource containing "${CAT4_ZERO_LOADING_MARKER}"`,
       `-- Cat4 meta.maxLoadTon parsed from description "น้ำหนักบรรทุกสูงสุด {n} ตัน"`,
-      `-- part ${index + 1} of ${SQL_PART_PREFIXES.length}; run 03a, 03b, then 03c`,
+      `-- Scope 1 Cat 4 fugitive: May 2569 overlay (not TGO EF005); also apply 03d`,
+      `-- part ${index + 1} of ${SQL_PART_PREFIXES.length}; run 03a, 03b, 03c, then 03d`,
       'BEGIN;',
       '',
       ...part.flatMap((row) => [insertStatement(row), '']),
@@ -193,6 +226,44 @@ function writeSeedSql (rows: FuelResourceImportRow[], version: string): void {
   })
 }
 
+function writeFugitiveOverlaySql (): void {
+  fs.mkdirSync(SQL_DIR, { recursive: true })
+  const overlayByVersion = TGO_FUGITIVE_OVERLAY_VERSIONS.map((version) => ({
+    version,
+    rows: buildMayFugitiveOverlayRows(version, undefined, 10000),
+  }))
+  const overlayIds = overlayByVersion.flatMap(({ rows }) => rows.map((row) => row.id))
+  const versionList = TGO_FUGITIVE_SOFT_DELETE_VERSIONS.map((v) => sqlStr(v)).join(', ')
+  const idList = overlayIds.map((id) => `${sqlStr(id)}::uuid`).join(',\n    ')
+
+  const lines = [
+    '-- TGO Scope 1 Cat 4 fugitive overlay from May 2569 (02a).',
+    '-- Upserts 55 rows for TGO พฤษภาคม 2569 and TGO 1 กรกฎาคม 2569 (new UUIDs, not May ids).',
+    '-- Soft-deletes leftover TGO EF005 refrigerants on those versions (and TGO API / TGO May 2569).',
+    '-- Keep R-22 (HCFC-22) on Scope 4. Do not apply to raw tgo-ef JSON.',
+    '-- Run after 03a/03b/03c. Then Re-publish both TGO versions so clients sync.',
+    'BEGIN;',
+    '',
+    ...overlayByVersion.flatMap(({ version, rows }) => [
+      `-- ${version}`,
+      ...rows.flatMap((row) => [insertStatement(row), '']),
+    ]),
+    `UPDATE fuel_resources`,
+    `SET deleted_at = NOW(), updated_at = NOW()`,
+    `WHERE version IN (${versionList})`,
+    `  AND scope_category_id = ${sqlStr(SCOPE_S1_CAT4_FUGITIVE_ID)}`,
+    `  AND deleted_at IS NULL`,
+    `  AND id <> ALL(ARRAY[`,
+    `    ${idList}`,
+    `  ]::uuid[]);`,
+    '',
+    'COMMIT;',
+  ]
+  const outPath = path.join(SQL_DIR, '03d_fuel_resources_tgo_fugitive_overlay.sql')
+  fs.writeFileSync(outPath, lines.join('\n'), 'utf8')
+  console.log(`Wrote ${outPath} (${overlayIds.length} overlay rows + soft-delete)`)
+}
+
 function main () {
   const version = resolveVersionLabel(process.argv.slice(2))
   const categories = parseScopeCategoriesFromManifest(fs.readFileSync(MANIFEST, 'utf8'))
@@ -201,14 +272,12 @@ function main () {
 
   const cfoRows = buildCfoFuelRows(cfoData, categories, version)
   const cfpRows = buildCfpFuelRows(cfpData, categories, version)
-  // Re-number sort_index globally after merge
-  let sortIndex = 0
-  const merged = [...cfoRows, ...cfpRows].map((row) => {
-    sortIndex += 1
-    return { ...row, sort_index: sortIndex }
-  })
+  const merged = [...cfoRows, ...cfpRows]
+  const overlaid = applyMayFugitiveOverlay(merged, version)
+  const droppedS1Cat4 = merged.filter((r) => r.scope_category_id === SCOPE_S1_CAT4_FUGITIVE_ID).length
+  const overlayCount = overlaid.filter((r) => r.scope_category_id === SCOPE_S1_CAT4_FUGITIVE_ID).length
 
-  const rows = applyCat4TransportLabels(merged)
+  const rows = applyCat4TransportLabels(overlaid)
   assertUniqueRefKeys(rows)
 
   const cat4 = rows.filter((r) => r.scope_category_id === SCOPE_CAT4_UPSTREAM_TRANSPORT_ID)
@@ -217,7 +286,8 @@ function main () {
   const withMaxLoad = cat4.filter((r) => r.meta.maxLoadTon != null)
   console.log(
     `Mapped ${rows.length} fuels (version=${version}; CFO ${cfoRows.length} + CFP ${cfpRows.length}); ` +
-      `Cat4 ${cat4.length} (zero-loading ${zeroLoading.length}, with value2 ${withValue2.length}, maxLoadTon ${withMaxLoad.length})`,
+      `dropped ${droppedS1Cat4} TGO S1 Cat4, overlay ${overlayCount}; ` +
+      `Cat4 transport ${cat4.length} (zero-loading ${zeroLoading.length}, with value2 ${withValue2.length}, maxLoadTon ${withMaxLoad.length})`,
   )
 
   fs.mkdirSync(OUT_DIR, { recursive: true })
@@ -230,6 +300,7 @@ function main () {
   console.log(`Wrote ${xlsxPath}`)
 
   writeSeedSql(rows, version)
+  writeFugitiveOverlaySql()
 }
 
 main()

@@ -5,6 +5,9 @@ export const TGO_REF_SOURCE = 'TGO'
 /** Namespace for deterministic fuel_resource UUIDs from TGO API rows. */
 export const TGO_FUEL_RESOURCE_NAMESPACE = 'a1000000-0000-4000-8000-000000000001'
 
+/** Scope 1 Category 4 — Fugitive emissions (May overlay replaces TGO EF005 here). */
+export const SCOPE_S1_CAT4_FUGITIVE_ID = 'a1000001-0001-4001-8001-000000000005'
+
 /** Scope 3 Category 4 — Upstream transportation (duo label rules apply here). */
 export const SCOPE_CAT4_UPSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000a'
 

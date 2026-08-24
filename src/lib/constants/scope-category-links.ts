@@ -6,6 +6,7 @@ export const SCOPE_CAT4_UPSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-0000000
 export const SCOPE_CAT5_WASTE_ID = 'a1000003-0003-4003-8003-00000000000b'
 export const SCOPE_CAT9_DOWNSTREAM_TRANSPORT_ID = 'a1000003-0003-4003-8003-00000000000f'
 export const SCOPE4_ENERGY_REPORTING_ID = 'a1000004-0004-4004-8004-000000000014'
+export const CAT9_TO_CAT9_LINK_RULE_ID = 'cat9_to_cat9'
 
 /** Cat 9 has no TGO fuels; the client picker uses the Cat 4 transport catalog. */
 export function fuelCatalogCategoryId (reportingCategoryId: string): string {
@@ -66,6 +67,14 @@ export const SCOPE_CATEGORY_LINK_RULES: ScopeCategoryLinkRule[] = [
     save_as_scope_category_id: SCOPE_CAT5_WASTE_ID,
     is_linked_cat1: false,
     enableFactor: true,
+  },
+  {
+    id: CAT9_TO_CAT9_LINK_RULE_ID,
+    source_scope_category_ids: [SCOPE_CAT9_DOWNSTREAM_TRANSPORT_ID],
+    dest_scope_category_id: SCOPE_CAT4_UPSTREAM_TRANSPORT_ID,
+    save_as_scope_category_id: SCOPE_CAT9_DOWNSTREAM_TRANSPORT_ID,
+    is_linked_cat1: false,
+    enableFactor: false,
   },
 ]
 

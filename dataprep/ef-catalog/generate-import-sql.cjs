@@ -12,9 +12,10 @@
  *   dataprep/ef-catalog/generated/02b_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/02c_fuel_resources_may2569.sql
  *   dataprep/ef-catalog/generated/03a|03b|03c_fuel_resources_tgo_api.sql  (from pnpm tgo-ef:build-import; not overwritten here)
+ *   dataprep/ef-catalog/generated/03d_fuel_resources_tgo_fugitive_overlay.sql  (from tgo-ef:build-import; not overwritten here)
  *   dataprep/ef-catalog/generated/04_fuel_resources_feb2569.sql
  *
- * TGO fuels: run `pnpm tgo-ef:fetch` then `pnpm tgo-ef:build-import` (writes Excel + 03_ SQL).
+ * TGO fuels: run `pnpm tgo-ef:fetch` then `pnpm tgo-ef:build-import` (writes Excel + 03a–03d SQL).
  * This script no longer reads ideacarb-client-app TGO seeds.
  *
  * Prerequisites: database/01_schema.sql + database/03_seed_ef_catalog_releases.sql
@@ -224,10 +225,16 @@ function noteTgoSeedFromBuildImport () {
   const parts = ['03a', '03b', '03c'].map((prefix) =>
     path.join(OUT, `${prefix}_fuel_resources_tgo_api.sql`),
   )
+  const overlay = path.join(OUT, '03d_fuel_resources_tgo_fugitive_overlay.sql')
   if (parts.every((file) => fs.existsSync(file))) {
     console.log(
-      `Keeping existing 03a/03b/03c_fuel_resources_tgo_api.sql (regenerate with: pnpm tgo-ef:build-import)`,
+      `Keeping existing 03a/03b/03c/03d TGO SQL (regenerate with: pnpm tgo-ef:build-import)`,
     )
+    if (!fs.existsSync(overlay)) {
+      console.warn(
+        `Missing 03d_fuel_resources_tgo_fugitive_overlay.sql — run: pnpm tgo-ef:build-import`,
+      )
+    }
     return
   }
   console.warn(

@@ -1,11 +1,12 @@
 -- Generated TGO fuels for admin SoT (version=TGO 1 กรกฎาคม 2569; from pnpm tgo-ef:build-import)
 -- Cat4 duo: value1=ระยะทาง/km for all; value2=น้ำหนักที่ขน/ton except resource containing " 0% Loading"
 -- Cat4 meta.maxLoadTon parsed from description "น้ำหนักบรรทุกสูงสุด {n} ตัน"
--- part 1 of 3; run 03a, 03b, then 03c
+-- Scope 1 Cat 4 fugitive: May 2569 overlay (not TGO EF005); also apply 03d
+-- part 1 of 3; run 03a, 03b, 03c, then 03d
 BEGIN;
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a0ee57a2-125e-563e-80eb-b94c84a9b957', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (NCV)', NULL, 'SCF', 0.05727759, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.057222, NULL, 0.00000102, 1.02e-7, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-1', 1, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a0ee57a2-125e-563e-80eb-b94c84a9b957', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (NCV)', NULL, 'SCF', 0.05727759, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.057222, NULL, 0.00000102, 1.02e-7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-1', 1, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -21,6 +22,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -31,8 +40,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dad8ac50-759e-5744-8abd-f25a5a86f839', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (NCV)', NULL, 'MJ', 0.0561545, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.0561, NULL, 0.000001, 1e-7, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-2', 2, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dad8ac50-759e-5744-8abd-f25a5a86f839', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (NCV)', NULL, 'MJ', 0.0561545, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.0561, NULL, 0.000001, 1e-7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-2', 2, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -48,6 +57,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -58,8 +75,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f6ebbc11-77c6-53ba-97c9-1ad97c9e324b', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (HHV)', NULL, 'MJ', 0.050151666, NULL, NULL, NULL, NULL, '2021 API Compendium, Table 4.3 &amp; Table 4.6', 0.0501, NULL, 9.48e-7, 9.48e-8, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-3', 3, 1, '2021 API Compendium, Table 4.3 &amp; Table 4.6', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f6ebbc11-77c6-53ba-97c9-1ad97c9e324b', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (HHV)', NULL, 'MJ', 0.050151666, NULL, NULL, NULL, NULL, '2021 API Compendium, Table 4.3 &amp; Table 4.6', 0.0501, NULL, 9.48e-7, 9.48e-8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-3', 3, 1, '2021 API Compendium, Table 4.3 &amp; Table 4.6', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -75,6 +92,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -85,8 +110,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('50f61e85-bb23-50d3-ad42-5091e442310c', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (HHV)', NULL, 'MMBTU', 52.9545, NULL, NULL, NULL, NULL, '2021 API Compendium, Table 4.3 &amp; Table 4.6', 52.9, NULL, 0.001, 0.0001, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-4', 4, 1, '2021 API Compendium, Table 4.3 &amp; Table 4.6', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('50f61e85-bb23-50d3-ad42-5091e442310c', 'a1000001-0001-4001-8001-000000000001', 'Natural Gas (HHV)', NULL, 'MMBTU', 52.9545, NULL, NULL, NULL, NULL, '2021 API Compendium, Table 4.3 &amp; Table 4.6', 52.9, NULL, 0.001, 0.0001, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-4', 4, 1, '2021 API Compendium, Table 4.3 &amp; Table 4.6', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -102,6 +127,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -112,8 +145,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c375fbb3-503a-5b43-be3f-51b05c2a322f', 'a1000001-0001-4001-8001-000000000001', 'LPG', NULL, 'Liter', 1.68117279, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.679722, NULL, 0.00002662, 0.000002662, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-5', 5, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c375fbb3-503a-5b43-be3f-51b05c2a322f', 'a1000001-0001-4001-8001-000000000001', 'LPG', NULL, 'Liter', 1.68117279, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.679722, NULL, 0.00002662, 0.000002662, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-5', 5, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -129,6 +162,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -139,8 +180,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('487880ad-9005-5b05-91bb-c9691c0ff9a9', 'a1000001-0001-4001-8001-000000000001', 'LPG', NULL, 'kg', 3.11328294444444, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.0000492962962962963, 0.00000492962962962963, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-6', 6, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('487880ad-9005-5b05-91bb-c9691c0ff9a9', 'a1000001-0001-4001-8001-000000000001', 'LPG', NULL, 'kg', 3.11328294444444, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.0000492962962962963, 0.00000492962962962963, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-6', 6, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -156,6 +197,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -166,8 +215,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7d8f2c1d-c653-588d-83a6-5a02f1b365db', 'a1000001-0001-4001-8001-000000000001', 'Acetelyne', NULL, 'kg', 3.38461538461538, NULL, NULL, NULL, NULL, '2C2H2+502 &rarr; 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)', 3.38461538461538, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-7', 7, 1, '2C2H2+502 &rarr; 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7d8f2c1d-c653-588d-83a6-5a02f1b365db', 'a1000001-0001-4001-8001-000000000001', 'Acetelyne', NULL, 'kg', 3.38461538461538, NULL, NULL, NULL, NULL, '2C2H2+502 &rarr; 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)', 3.38461538461538, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-7', 7, 1, '2C2H2+502 &rarr; 4CO2+2H2O (MWC2H2 =26, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -183,6 +232,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -193,8 +250,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a043a0bf-219f-51b6-96b3-a5dc51436ccf', 'a1000001-0001-4001-8001-000000000001', 'Ethane', NULL, 'kg', 3.14285714285714, NULL, NULL, NULL, NULL, 'C2H4 + 3O2 --&gt; 2CO2 + 2H2O (MWC2H4 =28, MWCO2 =44)', 3.14285714285714, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-8', 8, 1, 'C2H4 + 3O2 --&gt; 2CO2 + 2H2O (MWC2H4 =28, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a043a0bf-219f-51b6-96b3-a5dc51436ccf', 'a1000001-0001-4001-8001-000000000001', 'Ethane', NULL, 'kg', 3.14285714285714, NULL, NULL, NULL, NULL, 'C2H4 + 3O2 --&gt; 2CO2 + 2H2O (MWC2H4 =28, MWCO2 =44)', 3.14285714285714, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-8', 8, 1, 'C2H4 + 3O2 --&gt; 2CO2 + 2H2O (MWC2H4 =28, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -210,6 +267,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -220,8 +285,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b7c0a21b-893d-56aa-91f1-4fcff1659333', 'a1000001-0001-4001-8001-000000000001', 'Propane', NULL, 'kg', 3, NULL, NULL, NULL, NULL, 'C3H8+5O2&rarr;3CO2+4H2O (MWC3H8 =44, MWCO2 =44)', 3, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-9', 9, 1, 'C3H8+5O2&rarr;3CO2+4H2O (MWC3H8 =44, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b7c0a21b-893d-56aa-91f1-4fcff1659333', 'a1000001-0001-4001-8001-000000000001', 'Propane', NULL, 'kg', 3, NULL, NULL, NULL, NULL, 'C3H8+5O2&rarr;3CO2+4H2O (MWC3H8 =44, MWCO2 =44)', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-9', 9, 1, 'C3H8+5O2&rarr;3CO2+4H2O (MWC3H8 =44, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -237,6 +302,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -247,8 +320,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b1c485e5-dcc4-5df1-8bf1-42549f2d960a', 'a1000001-0001-4001-8001-000000000001', 'Butane', NULL, 'kg', 3.03448275862069, NULL, NULL, NULL, NULL, '2C4H10+ 1302 &rarr; 8CO2+10H2O (MWC4H10 =58, MWCO2 =44)', 3.03448275862069, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-10', 10, 1, '2C4H10+ 1302 &rarr; 8CO2+10H2O (MWC4H10 =58, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b1c485e5-dcc4-5df1-8bf1-42549f2d960a', 'a1000001-0001-4001-8001-000000000001', 'Butane', NULL, 'kg', 3.03448275862069, NULL, NULL, NULL, NULL, '2C4H10+ 1302 &rarr; 8CO2+10H2O (MWC4H10 =58, MWCO2 =44)', 3.03448275862069, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-10', 10, 1, '2C4H10+ 1302 &rarr; 8CO2+10H2O (MWC4H10 =58, MWCO2 =44)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -264,6 +337,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -274,8 +355,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('53c5baf8-6655-5ce5-b0ad-f614fd9bcee9', 'a1000001-0001-4001-8001-000000000001', 'Fuel Oil A', NULL, 'Liter', 3.21977540460363, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.2096984443713, NULL, 0.0001244069164485, 0.0000248813832897, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-11', 11, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('53c5baf8-6655-5ce5-b0ad-f614fd9bcee9', 'a1000001-0001-4001-8001-000000000001', 'Fuel Oil A', NULL, 'Liter', 3.21977540460363, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.2096984443713, NULL, 0.0001244069164485, 0.0000248813832897, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-11', 11, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -291,6 +372,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -301,8 +390,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('4fff6bdd-8300-55ec-8b51-1044a03833b0', 'a1000001-0001-4001-8001-000000000001', 'Fuel Oil C', NULL, 'Liter', 3.24549756405015, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.23534010094254, NULL, 0.0001254007791063, 0.00002508015582126, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-12', 12, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('4fff6bdd-8300-55ec-8b51-1044a03833b0', 'a1000001-0001-4001-8001-000000000001', 'Fuel Oil C', NULL, 'Liter', 3.24549756405015, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.23534010094254, NULL, 0.0001254007791063, 0.00002508015582126, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-12', 12, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -318,6 +407,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -328,8 +425,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b77bc1f8-5a08-5ca0-86f5-28018ca1f2ba', 'a1000001-0001-4001-8001-000000000001', 'Jet Kerosene', NULL, 'Liter', 2.47728579, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.468895, NULL, 0.00010359, 0.000020718, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-13', 13, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b77bc1f8-5a08-5ca0-86f5-28018ca1f2ba', 'a1000001-0001-4001-8001-000000000001', 'Jet Kerosene', NULL, 'Liter', 2.47728579, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.468895, NULL, 0.00010359, 0.000020718, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-13', 13, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -345,6 +442,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -355,8 +460,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('93f612ea-5f5e-5c82-b387-bd6d8a34de32', 'a1000001-0001-4001-8001-000000000001', 'Other Kerosene', NULL, 'Liter', 2.49109779, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.482707, NULL, 0.00010359, 0.000020718, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-14', 14, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('93f612ea-5f5e-5c82-b387-bd6d8a34de32', 'a1000001-0001-4001-8001-000000000001', 'Other Kerosene', NULL, 'Liter', 2.49109779, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.482707, NULL, 0.00010359, 0.000020718, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-14', 14, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -372,6 +477,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -382,8 +495,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6a96f9f4-6414-5c55-9b62-8ff82d3a3a70', 'a1000001-0001-4001-8001-000000000001', 'Diesel', NULL, 'Liter', 2.70757206, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.00010926, 0.000021852, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-15', 15, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6a96f9f4-6414-5c55-9b62-8ff82d3a3a70', 'a1000001-0001-4001-8001-000000000001', 'Diesel', NULL, 'Liter', 2.70757206, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.00010926, 0.000021852, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-15', 15, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -399,6 +512,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -409,8 +530,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('61d61b92-1130-520e-a129-45116fc45b7d', 'a1000001-0001-4001-8001-000000000001', 'Gasoline', NULL, 'Liter', 2.18921364, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.00009444, 0.000018888, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-16', 16, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('61d61b92-1130-520e-a129-45116fc45b7d', 'a1000001-0001-4001-8001-000000000001', 'Gasoline', NULL, 'Liter', 2.18921364, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.00009444, 0.000018888, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-16', 16, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -426,6 +547,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -436,8 +565,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('db81ce81-d4e8-572d-9b1a-ab4529a45e6b', 'a1000001-0001-4001-8001-000000000001', 'Biodiesel', NULL, 'Liter', 1.64961846, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, 0.00006966, 0.000013932, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-17', 17, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('db81ce81-d4e8-572d-9b1a-ab4529a45e6b', 'a1000001-0001-4001-8001-000000000001', 'Biodiesel', NULL, 'Liter', 1.64961846, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, 0.00006966, 0.000013932, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-17', 17, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -453,6 +582,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -463,8 +600,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('49fb9283-37d8-51c1-90be-e7e8b7517ae6', 'a1000001-0001-4001-8001-000000000001', 'Bio-gasollne (Ethanol)', NULL, 'Liter', 1.501920063, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, 0.000063423, 0.0000126846, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-18', 18, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('49fb9283-37d8-51c1-90be-e7e8b7517ae6', 'a1000001-0001-4001-8001-000000000001', 'Bio-gasollne (Ethanol)', NULL, 'Liter', 1.501920063, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, 0.000063423, 0.0000126846, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-18', 18, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -480,6 +617,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -490,8 +635,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('269da535-e952-5f0a-af60-e34f4f648f08', 'a1000001-0001-4001-8001-000000000001', 'Diesel B7 (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.633515308, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.000106488, 0.0000212976, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-19', 19, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('269da535-e952-5f0a-af60-e34f4f648f08', 'a1000001-0001-4001-8001-000000000001', 'Diesel B7 (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.633515308, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.000106488, 0.0000212976, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-19', 19, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -507,6 +652,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -517,8 +670,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('749fea82-640a-54ca-b5c1-107246baba52', 'a1000001-0001-4001-8001-000000000001', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.518436988, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.000106488, 0.0000212976, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-20', 20, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('749fea82-640a-54ca-b5c1-107246baba52', 'a1000001-0001-4001-8001-000000000001', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.518436988, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.000106488, 0.0000212976, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-20', 20, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -534,6 +687,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -544,8 +705,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('71b90a87-ba56-5853-9d25-d15864344bdb', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-21', 21, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('71b90a87-ba56-5853-9d25-d15864344bdb', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-21', 21, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -561,6 +722,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -571,8 +740,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('553235aa-2d60-585d-a0ba-0170649ae4d0', 'a1000001-0001-4001-8001-000000000001', 'Diesel B20 (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.49598134, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (20%)', 2.4877728, NULL, 0.00010134, 0.000020268, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-22', 22, 1, 'คิดที่สัดส่วนไบโอดีเซล (20%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('553235aa-2d60-585d-a0ba-0170649ae4d0', 'a1000001-0001-4001-8001-000000000001', 'Diesel B20 (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.49598134, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (20%)', 2.4877728, NULL, 0.00010134, 0.000020268, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-22', 22, 1, 'คิดที่สัดส่วนไบโอดีเซล (20%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -588,6 +757,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -598,8 +775,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('cdb45120-2d6e-5425-996d-45a98ffd0ba6', 'a1000001-0001-4001-8001-000000000001', 'Diesel B20: Report in Scope 1', NULL, 'Liter', 2.16718614, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.1589776, NULL, 0.00010134, 0.000020268, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-23', 23, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('cdb45120-2d6e-5425-996d-45a98ffd0ba6', 'a1000001-0001-4001-8001-000000000001', 'Diesel B20: Report in Scope 1', NULL, 'Liter', 2.16718614, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.1589776, NULL, 0.00010134, 0.000020268, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-23', 23, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -615,6 +792,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -625,8 +810,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('693807d7-6064-5d4e-b732-282ca3fd8ef0', 'a1000004-0004-4004-8004-000000000014', 'Diesel B20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.3287952, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.3287952, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-24', 24, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('693807d7-6064-5d4e-b732-282ca3fd8ef0', 'a1000004-0004-4004-8004-000000000014', 'Diesel B20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.3287952, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.3287952, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-24', 24, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -642,6 +827,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -652,8 +845,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('8204e152-16b2-560e-a8dd-e060ae4c6eb5', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E10)', NULL, 'Liter', 2.1204842823, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0000913383, 0.00001826766, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-25', 25, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('8204e152-16b2-560e-a8dd-e060ae4c6eb5', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E10)', NULL, 'Liter', 2.1204842823, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0000913383, 0.00001826766, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-25', 25, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -669,6 +862,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -679,8 +880,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('03312a7d-03c2-55d6-bd68-91057e71640f', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 1.9708060023, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0000913383, 0.00001826766, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-26', 26, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('03312a7d-03c2-55d6-bd68-91057e71640f', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 1.9708060023, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0000913383, 0.00001826766, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-26', 26, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -696,6 +897,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -706,8 +915,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6ea4c009-c610-563e-98f6-7eb9e96fc4b6', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-27', 27, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6ea4c009-c610-563e-98f6-7eb9e96fc4b6', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-27', 27, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -723,6 +932,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -733,8 +950,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7389d746-0aaa-5860-9608-218054fc7e76', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E20)', NULL, 'Liter', 2.0517549246, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (20%)', 2.04460776, NULL, 0.0000882366, 0.00001764732, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-28', 28, 1, 'คิดที่สัดส่วนเอทานอล (20%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7389d746-0aaa-5860-9608-218054fc7e76', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E20)', NULL, 'Liter', 2.0517549246, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (20%)', 2.04460776, NULL, 0.0000882366, 0.00001764732, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-28', 28, 1, 'คิดที่สัดส่วนเอทานอล (20%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -750,6 +967,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -760,8 +985,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('028ed101-a815-5f61-a5dd-d9e46481dfa4', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E20: Report in Scope 1', NULL, 'Liter', 1.7523983646, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7452512, NULL, 0.0000882366, 0.00001764732, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-29', 29, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('028ed101-a815-5f61-a5dd-d9e46481dfa4', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E20: Report in Scope 1', NULL, 'Liter', 1.7523983646, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7452512, NULL, 0.0000882366, 0.00001764732, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-29', 29, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -777,6 +1002,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -787,8 +1020,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9085cfff-065e-57af-b075-2a192f8d3e16', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.29935656, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.29935656, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-30', 30, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9085cfff-065e-57af-b075-2a192f8d3e16', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.29935656, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.29935656, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-30', 30, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -804,6 +1037,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -814,8 +1055,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9801ca62-9692-5003-9123-1a697d0058d0', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E85)', NULL, 'Liter', 1.60501409955, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (85%)', 1.59949998, NULL, 0.00006807555, 0.00001361511, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-31', 31, 1, 'คิดที่สัดส่วนเอทานอล (85%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9801ca62-9692-5003-9123-1a697d0058d0', 'a1000001-0001-4001-8001-000000000001', 'Gasohol (E85)', NULL, 'Liter', 1.60501409955, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (85%)', 1.59949998, NULL, 0.00006807555, 0.00001361511, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-31', 31, 1, 'คิดที่สัดส่วนเอทานอล (85%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -831,6 +1072,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -841,8 +1090,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5d371e99-8abf-5022-8e2d-b415db881b80', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.33274871955, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272346, NULL, 0.00006807555, 0.00001361511, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-32', 32, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5d371e99-8abf-5022-8e2d-b415db881b80', 'a1000001-0001-4001-8001-000000000001', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.33274871955, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272346, NULL, 0.00006807555, 0.00001361511, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-32', 32, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -858,6 +1107,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -868,8 +1125,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9ec31e93-884d-5ee6-a053-b041a2622c27', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.27226538, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.27226538, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-33', 33, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9ec31e93-884d-5ee6-a053-b041a2622c27', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.27226538, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.27226538, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-33', 33, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -885,6 +1142,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -895,8 +1160,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c0355b81-fa8e-5c6c-8e00-e7c7ba5f0fdc', 'a1000001-0001-4001-8001-000000000001', 'Lignite', NULL, 'kg', 1.20996225, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.2019, NULL, 0.000119, 0.00001785, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-34', 34, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c0355b81-fa8e-5c6c-8e00-e7c7ba5f0fdc', 'a1000001-0001-4001-8001-000000000001', 'Lignite', NULL, 'kg', 1.20996225, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.2019, NULL, 0.000119, 0.00001785, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-34', 34, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -912,6 +1177,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -922,8 +1195,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('2acabfa9-674d-5aa9-b824-86b6de3e6070', 'a1000001-0001-4001-8001-000000000001', 'Anthracite', NULL, 'kg', 3.1078935, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.08662, NULL, 0.000314, 0.0000471, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-35', 35, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2acabfa9-674d-5aa9-b824-86b6de3e6070', 'a1000001-0001-4001-8001-000000000001', 'Anthracite', NULL, 'kg', 3.1078935, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.08662, NULL, 0.000314, 0.0000471, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-35', 35, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -939,6 +1212,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -949,8 +1230,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('57767ef0-d8e2-50e4-8e81-3e8a86187244', 'a1000001-0001-4001-8001-000000000001', 'Bituminous Coal', NULL, 'kg', 2.512467675, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.494602, NULL, 0.0002637, 0.000039555, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-36', 36, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('57767ef0-d8e2-50e4-8e81-3e8a86187244', 'a1000001-0001-4001-8001-000000000001', 'Bituminous Coal', NULL, 'kg', 2.512467675, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.494602, NULL, 0.0002637, 0.000039555, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-36', 36, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -966,6 +1247,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -976,8 +1265,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('143c6a78-13b5-58a7-b131-aff800d2fee5', 'a1000001-0001-4001-8001-000000000001', 'Coking Coal', NULL, 'kg', 2.632517325, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.613798, NULL, 0.0002763, 0.000041445, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-37', 37, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('143c6a78-13b5-58a7-b131-aff800d2fee5', 'a1000001-0001-4001-8001-000000000001', 'Coking Coal', NULL, 'kg', 2.632517325, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.613798, NULL, 0.0002763, 0.000041445, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-37', 37, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -993,6 +1282,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1003,8 +1300,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('139250fc-17f7-500e-a55f-08208350b65c', 'a1000001-0001-4001-8001-000000000001', 'Fuel wood', NULL, 'kg', 1.821261, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.79088, NULL, 0.0004797, 0.00006396, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-38', 38, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('139250fc-17f7-500e-a55f-08208350b65c', 'a1000001-0001-4001-8001-000000000001', 'Fuel wood', NULL, 'kg', 1.821261, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.79088, NULL, 0.0004797, 0.00006396, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-38', 38, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1020,6 +1317,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1030,8 +1335,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c0caace4-f789-5a17-9ba0-63138a6ff8fe', 'a1000001-0001-4001-8001-000000000001', 'Fuel wood: Report in Scope 1', NULL, 'kg', 0.030381, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0004797, 0.00006396, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-39', 39, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c0caace4-f789-5a17-9ba0-63138a6ff8fe', 'a1000001-0001-4001-8001-000000000001', 'Fuel wood: Report in Scope 1', NULL, 'kg', 0.030381, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0004797, 0.00006396, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-39', 39, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1047,6 +1352,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1057,8 +1370,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('00393939-be0e-52fd-b4bd-6b2bdb78fbde', 'a1000004-0004-4004-8004-000000000014', 'Fuel wood: Report in Biogenic CO2 emissions', NULL, 'kg', 1.79088, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.79088, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-40', 40, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('00393939-be0e-52fd-b4bd-6b2bdb78fbde', 'a1000004-0004-4004-8004-000000000014', 'Fuel wood: Report in Biogenic CO2 emissions', NULL, 'kg', 1.79088, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.79088, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-40', 40, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1074,6 +1387,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1084,8 +1405,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dcbd07ce-5ebf-57f5-829c-a39681180718', 'a1000001-0001-4001-8001-000000000001', 'Saw dust', NULL, 'kg', 1.239232, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.21856, NULL, 0.0003264, 0.00004352, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-41', 41, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dcbd07ce-5ebf-57f5-829c-a39681180718', 'a1000001-0001-4001-8001-000000000001', 'Saw dust', NULL, 'kg', 1.239232, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.21856, NULL, 0.0003264, 0.00004352, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-41', 41, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1101,6 +1422,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1111,8 +1440,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('07ce327c-0bcb-5c65-8226-725f2bb03ad2', 'a1000001-0001-4001-8001-000000000001', 'Saw dust: Report in Scope 1', NULL, 'kg', 0.020672, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0003264, 0.00004352, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-42', 42, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('07ce327c-0bcb-5c65-8226-725f2bb03ad2', 'a1000001-0001-4001-8001-000000000001', 'Saw dust: Report in Scope 1', NULL, 'kg', 0.020672, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0003264, 0.00004352, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-42', 42, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1128,6 +1457,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1138,8 +1475,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('67ddaf86-12f3-5568-a08a-7e6dd9512b92', 'a1000004-0004-4004-8004-000000000014', 'Saw dust: Report in Biogenic CO2 emissions', NULL, 'kg', 1.21856, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.21856, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-43', 43, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('67ddaf86-12f3-5568-a08a-7e6dd9512b92', 'a1000004-0004-4004-8004-000000000014', 'Saw dust: Report in Biogenic CO2 emissions', NULL, 'kg', 1.21856, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.21856, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-43', 43, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1155,6 +1492,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1165,8 +1510,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e4a6a892-580c-5c97-ac83-fd7cd1f6e607', 'a1000001-0001-4001-8001-000000000001', 'Charcoal', NULL, 'kg', 3.289432, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.23456, NULL, 0.0008664, 0.00011552, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-44', 44, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e4a6a892-580c-5c97-ac83-fd7cd1f6e607', 'a1000001-0001-4001-8001-000000000001', 'Charcoal', NULL, 'kg', 3.289432, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.23456, NULL, 0.0008664, 0.00011552, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-44', 44, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1182,6 +1527,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1192,8 +1545,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e713f986-5e70-5a63-b358-e5417178129d', 'a1000001-0001-4001-8001-000000000001', 'Charcoal: Report in Scope 1', NULL, 'kg', 0.1923, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0058, 0.00011552, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-45', 45, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e713f986-5e70-5a63-b358-e5417178129d', 'a1000001-0001-4001-8001-000000000001', 'Charcoal: Report in Scope 1', NULL, 'kg', 0.1923, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0058, 0.00011552, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-45', 45, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1209,6 +1562,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1219,8 +1580,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d1f714ee-8ac9-5bd7-b2ef-98e5b7a66d3f', 'a1000004-0004-4004-8004-000000000014', 'Charcoal: Report in Biogenic CO2 emissions', NULL, 'kg', 3.23456, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 3.23456, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-46', 46, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d1f714ee-8ac9-5bd7-b2ef-98e5b7a66d3f', 'a1000004-0004-4004-8004-000000000014', 'Charcoal: Report in Biogenic CO2 emissions', NULL, 'kg', 3.23456, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 3.23456, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-46', 46, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1236,6 +1597,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1246,8 +1615,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('256cda7d-8e3e-53c7-92cd-4d0dec9b1e62', 'a1000001-0001-4001-8001-000000000001', 'Paddy husk', NULL, 'kg', 1.46736, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.44, NULL, 0.000432, 0.0000576, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-47', 47, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('256cda7d-8e3e-53c7-92cd-4d0dec9b1e62', 'a1000001-0001-4001-8001-000000000001', 'Paddy husk', NULL, 'kg', 1.46736, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.44, NULL, 0.000432, 0.0000576, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-47', 47, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1263,6 +1632,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1273,8 +1650,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e4c001f4-27ee-5c60-95fe-3324f95fb71f', 'a1000001-0001-4001-8001-000000000001', 'Paddy husk: Report in Scope 1', NULL, 'kg', 0.02736, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.000432, 0.0000576, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-48', 48, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e4c001f4-27ee-5c60-95fe-3324f95fb71f', 'a1000001-0001-4001-8001-000000000001', 'Paddy husk: Report in Scope 1', NULL, 'kg', 0.02736, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.000432, 0.0000576, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-48', 48, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1290,6 +1667,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1300,8 +1685,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6c369e1e-8fd6-5276-84a5-d971a56cd663', 'a1000004-0004-4004-8004-000000000014', 'Paddy husk: Report in Biogenic CO2 emissions', NULL, 'kg', 1.44, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.44, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-49', 49, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6c369e1e-8fd6-5276-84a5-d971a56cd663', 'a1000004-0004-4004-8004-000000000014', 'Paddy husk: Report in Biogenic CO2 emissions', NULL, 'kg', 1.44, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.44, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-49', 49, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1317,6 +1702,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1327,8 +1720,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('534f8454-d3f1-504d-8417-6874341ed9b9', 'a1000001-0001-4001-8001-000000000001', 'Baggasse', NULL, 'kg', 0.767307, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.753, NULL, 0.0002259, 0.00003012, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-50', 50, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('534f8454-d3f1-504d-8417-6874341ed9b9', 'a1000001-0001-4001-8001-000000000001', 'Baggasse', NULL, 'kg', 0.767307, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 0.753, NULL, 0.0002259, 0.00003012, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-50', 50, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1344,6 +1737,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1354,8 +1755,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d2a30c86-6c9b-5401-814a-1da7baedcd0e', 'a1000001-0001-4001-8001-000000000001', 'Baggasse: Report in Scope 1', NULL, 'kg', 0.014307, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.0002259, 0.00003012, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-51', 51, 1, NULL, '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d2a30c86-6c9b-5401-814a-1da7baedcd0e', 'a1000001-0001-4001-8001-000000000001', 'Baggasse: Report in Scope 1', NULL, 'kg', 0.014307, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.0002259, 0.00003012, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-51', 51, 1, NULL, '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1371,6 +1772,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1381,8 +1790,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ab8eeeba-e49c-5e1f-963d-e20a10eb8036', 'a1000004-0004-4004-8004-000000000014', 'Baggasse: Report in Biogenic CO2 emissions', NULL, 'kg', 0.753, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.753, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-52', 52, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ab8eeeba-e49c-5e1f-963d-e20a10eb8036', 'a1000004-0004-4004-8004-000000000014', 'Baggasse: Report in Biogenic CO2 emissions', NULL, 'kg', 0.753, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.753, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-52', 52, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1398,6 +1807,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1408,8 +1825,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9069e9ec-2cc9-56bf-b424-d37d7b9b1296', 'a1000001-0001-4001-8001-000000000001', 'Palm kernel shell', NULL, 'kg', 1.888207, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.853, NULL, 0.0005559, 0.00007412, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-53', 53, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9069e9ec-2cc9-56bf-b424-d37d7b9b1296', 'a1000001-0001-4001-8001-000000000001', 'Palm kernel shell', NULL, 'kg', 1.888207, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.853, NULL, 0.0005559, 0.00007412, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-53', 53, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1425,6 +1842,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1435,8 +1860,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('931f82b6-3f77-5398-9cba-a431b03904c8', 'a1000001-0001-4001-8001-000000000001', 'Palm kernel shell: Report in Scope 1', NULL, 'kg', 0.035207, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0005559, 0.00007412, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-54', 54, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('931f82b6-3f77-5398-9cba-a431b03904c8', 'a1000001-0001-4001-8001-000000000001', 'Palm kernel shell: Report in Scope 1', NULL, 'kg', 0.035207, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0005559, 0.00007412, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-54', 54, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1452,6 +1877,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1462,8 +1895,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('847b9ca0-ded5-529e-afb4-f8a011ab49b1', 'a1000004-0004-4004-8004-000000000014', 'Palm kernel shell: Report in Biogenic CO2 emissions', NULL, 'kg', 1.853, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.853, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-55', 55, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('847b9ca0-ded5-529e-afb4-f8a011ab49b1', 'a1000004-0004-4004-8004-000000000014', 'Palm kernel shell: Report in Biogenic CO2 emissions', NULL, 'kg', 1.853, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.853, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-55', 55, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1479,6 +1912,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1489,8 +1930,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('05010271-6667-5021-b53a-e6a8bcff1def', 'a1000001-0001-4001-8001-000000000001', 'Cob', NULL, 'kg', 1.709882, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.678, NULL, 0.0005034, 0.00006712, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-56', 56, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('05010271-6667-5021-b53a-e6a8bcff1def', 'a1000001-0001-4001-8001-000000000001', 'Cob', NULL, 'kg', 1.709882, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.678, NULL, 0.0005034, 0.00006712, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-56', 56, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1506,6 +1947,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1516,8 +1965,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5527a071-2d2b-56df-a454-585daecd7c92', 'a1000001-0001-4001-8001-000000000001', 'Cob: Report in Scope 1', NULL, 'kg', 0.031882, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0005034, 0.00006712, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-57', 57, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5527a071-2d2b-56df-a454-585daecd7c92', 'a1000001-0001-4001-8001-000000000001', 'Cob: Report in Scope 1', NULL, 'kg', 0.031882, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.0005034, 0.00006712, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-57', 57, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1533,6 +1982,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1543,8 +2000,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('83106160-e2d0-50ec-85e3-d70640ab18cf', 'a1000004-0004-4004-8004-000000000014', 'Cob: Report in Biogenic CO2 emissions', NULL, 'kg', 1.678, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.678, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-58', 58, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('83106160-e2d0-50ec-85e3-d70640ab18cf', 'a1000004-0004-4004-8004-000000000014', 'Cob: Report in Biogenic CO2 emissions', NULL, 'kg', 1.678, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.678, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-58', 58, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1560,6 +2017,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1570,8 +2035,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e7a5242b-0ae8-5736-ad02-cc435f74bfba', 'a1000001-0001-4001-8001-000000000001', 'Biogas', NULL, 'm3', 1.143918685, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.142778, NULL, 0.00002093, 0.000002093, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-59', 59, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e7a5242b-0ae8-5736-ad02-cc435f74bfba', 'a1000001-0001-4001-8001-000000000001', 'Biogas', NULL, 'm3', 1.143918685, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.142778, NULL, 0.00002093, 0.000002093, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-59', 59, 1, 'IPCC defaults (2006), volume 2, chapter 2, table 2.3,  p.2.18 - 2.19  และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1587,6 +2052,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1597,8 +2070,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('900ae32d-e687-567d-8f92-3f7fd3c3fcb8', 'a1000001-0001-4001-8001-000000000001', 'Biogas: Report in Scope 1', NULL, 'm3', 0.001140685, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.00002093, 0.000002093, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-60', 60, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('900ae32d-e687-567d-8f92-3f7fd3c3fcb8', 'a1000001-0001-4001-8001-000000000001', 'Biogas: Report in Scope 1', NULL, 'm3', 0.001140685, NULL, NULL, NULL, NULL, 'นับเฉพาะ CH4 และ N2O', NULL, NULL, 0.00002093, 0.000002093, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-60', 60, 1, 'นับเฉพาะ CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1614,6 +2087,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1624,8 +2105,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dc194e19-978d-5be2-a2f6-b90f2bd0de12', 'a1000004-0004-4004-8004-000000000014', 'Biogas: Report in Biogenic CO2 emissions', NULL, 'm3', 1.142778, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.142778, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-61', 61, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dc194e19-978d-5be2-a2f6-b90f2bd0de12', 'a1000004-0004-4004-8004-000000000014', 'Biogas: Report in Biogenic CO2 emissions', NULL, 'm3', 1.142778, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.142778, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF001-61', 61, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1641,6 +2122,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1651,8 +2140,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fdc4f649-ce59-50ce-a45b-51af89ac7c81', 'a1000001-0001-4001-8001-000000000002', 'LPG', NULL, 'kg', 3.20573814814815, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.00246481481481481, 0.0000985925925925926, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-1', 62, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fdc4f649-ce59-50ce-a45b-51af89ac7c81', 'a1000001-0001-4001-8001-000000000002', 'LPG', NULL, 'kg', 3.20573814814815, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.00246481481481481, 0.0000985925925925926, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-1', 62, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1668,6 +2157,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1678,8 +2175,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('11930eaf-9a2c-5c3b-b1d2-738a7845aa58', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Aggriculture', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-2', 63, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('11930eaf-9a2c-5c3b-b1d2-738a7845aa58', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Aggriculture', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-2', 63, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1695,6 +2192,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1705,8 +2210,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5dd7dd7e-2331-5f5b-b4e7-e35611a891a8', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Forestry', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-3', 64, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5dd7dd7e-2331-5f5b-b4e7-e35611a891a8', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Forestry', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-3', 64, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1722,6 +2227,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1732,8 +2245,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('0bd8fd1b-330b-54e3-b598-c2f21a89dfc2', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Industry', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-4', 65, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('0bd8fd1b-330b-54e3-b598-c2f21a89dfc2', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Industry', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-4', 65, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1749,6 +2262,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1759,8 +2280,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5307fda0-1d72-5703-8dea-3b089042f16b', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Household', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-5', 66, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5307fda0-1d72-5703-8dea-3b089042f16b', 'a1000001-0001-4001-8001-000000000002', 'Diesel: Household', NULL, 'Liter', 2.978981184, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-5', 66, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1776,6 +2297,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1786,8 +2315,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('bd1cafc2-f478-5d80-b24e-2411b15fcf08', 'a1000001-0001-4001-8001-000000000002', 'Biodiesel', NULL, 'Liter', 1.643976, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-6', 67, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('bd1cafc2-f478-5d80-b24e-2411b15fcf08', 'a1000001-0001-4001-8001-000000000002', 'Biodiesel', NULL, 'Liter', 1.643976, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-6', 67, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1803,6 +2332,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1813,8 +2350,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('774fc00d-0e04-5c62-8317-ead692741fac', 'a1000001-0001-4001-8001-000000000002', 'Ethanol, Bio-gasoline', NULL, 'Liter', 1.4967828, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-7', 68, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('774fc00d-0e04-5c62-8317-ead692741fac', 'a1000001-0001-4001-8001-000000000002', 'Ethanol, Bio-gasoline', NULL, 'Liter', 1.4967828, NULL, NULL, NULL, NULL, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-7', 68, 1, 'IPCC defaults (2006) และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1830,6 +2367,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1840,8 +2385,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f032d4d6-3c75-5c2f-bf66-d2a02d939f31', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke: Aggriculture', NULL, 'Liter', 2.2687636, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0025184, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-8', 69, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f032d4d6-3c75-5c2f-bf66-d2a02d939f31', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke: Aggriculture', NULL, 'Liter', 2.2687636, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0025184, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-8', 69, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1857,6 +2402,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1867,8 +2420,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('49d7815c-70f8-5ad7-b7b8-1991441ac9d6', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Forestry', NULL, 'Liter', 2.181564, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-9', 70, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('49d7815c-70f8-5ad7-b7b8-1991441ac9d6', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Forestry', NULL, 'Liter', 2.181564, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-9', 70, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1884,6 +2437,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1894,8 +2455,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b6adbc98-15bb-5d55-9632-771ef263fc4a', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Industry', NULL, 'Liter', 2.2423204, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.001574, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-10', 71, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b6adbc98-15bb-5d55-9632-771ef263fc4a', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Industry', NULL, 'Liter', 2.2423204, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.001574, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-10', 71, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1911,6 +2472,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1921,8 +2490,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b9fa64a6-d74a-5226-bab3-da5289e3fb1f', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Household', NULL, 'Liter', 2.3040212, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0037776, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-11', 72, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b9fa64a6-d74a-5226-bab3-da5289e3fb1f', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 4-stroke:  Household', NULL, 'Liter', 2.3040212, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0037776, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-11', 72, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1938,6 +2507,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1948,8 +2525,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c18b5ee5-2b88-57b1-b227-9b4955557ca7', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke: Aggriculture', NULL, 'Liter', 2.30830248, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0044072, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-12', 73, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c18b5ee5-2b88-57b1-b227-9b4955557ca7', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke: Aggriculture', NULL, 'Liter', 2.30830248, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0044072, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-12', 73, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1965,6 +2542,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -1975,8 +2560,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('58f43ac2-68f5-5b0a-9565-240af2501563', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Forestry', NULL, 'Liter', 2.33474568, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0053516, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-13', 74, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('58f43ac2-68f5-5b0a-9565-240af2501563', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Forestry', NULL, 'Liter', 2.33474568, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0053516, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-13', 74, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -1992,6 +2577,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2002,8 +2595,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a0d4812e-746d-5ff6-a4a1-bfce6a9c4c60', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Industry', NULL, 'Liter', 2.29948808, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0040924, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-14', 75, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a0d4812e-746d-5ff6-a4a1-bfce6a9c4c60', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Industry', NULL, 'Liter', 2.29948808, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0040924, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-14', 75, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2019,6 +2612,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2029,8 +2630,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f204f2d8-9a2d-511f-8eaf-610204b03e0a', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Household', NULL, 'Liter', 2.34356008, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0056664, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-15', 76, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f204f2d8-9a2d-511f-8eaf-610204b03e0a', 'a1000001-0001-4001-8001-000000000002', 'Motor Gasoline 2-stroke:  Household', NULL, 'Liter', 2.34356008, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.0056664, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-15', 76, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.3.1 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2046,6 +2647,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2056,8 +2665,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a07927d8-fc01-5edf-a8f6-cbcfea9f6ff6', 'a1000001-0001-4001-8001-000000000002', 'Diesel B7', NULL, 'Liter', 2.905148964, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-16', 77, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a07927d8-fc01-5edf-a8f6-cbcfea9f6ff6', 'a1000001-0001-4001-8001-000000000002', 'Diesel B7', NULL, 'Liter', 2.905148964, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-16', 77, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2073,6 +2682,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2083,8 +2700,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fcaba8bf-5d7d-5a9e-82fb-2abfbcbfdee0', 'a1000001-0001-4001-8001-000000000002', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.790070644, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.000151143, 0.001041612, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-17', 78, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fcaba8bf-5d7d-5a9e-82fb-2abfbcbfdee0', 'a1000001-0001-4001-8001-000000000002', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.790070644, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.000151143, 0.001041612, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-17', 78, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2100,6 +2717,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2110,8 +2735,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a693d1f0-5ddb-50d7-aca9-2304987b6e23', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-18', 79, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a693d1f0-5ddb-50d7-aca9-2304987b6e23', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-18', 79, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2127,6 +2752,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2137,8 +2770,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('da794d15-096d-54e3-8bbf-7e97f20676eb', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10,  4-stroke: Aggriculture', NULL, 'Liter', 2.20028548, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0025184, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-19', 80, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('da794d15-096d-54e3-8bbf-7e97f20676eb', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10,  4-stroke: Aggriculture', NULL, 'Liter', 2.20028548, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0025184, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-19', 80, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2154,6 +2787,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2164,8 +2805,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('8439c996-6cbf-5091-acd7-fb48c2043a0a', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0506072, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0025184, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-20', 81, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('8439c996-6cbf-5091-acd7-fb48c2043a0a', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0506072, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0025184, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-20', 81, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2181,6 +2822,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2191,8 +2840,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('22d47ed8-712f-53a7-a94a-cff7bcfbf512', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-21', 82, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('22d47ed8-712f-53a7-a94a-cff7bcfbf512', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-21', 82, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2208,6 +2857,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2218,8 +2875,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d919b6eb-4d7e-5a96-b5cb-7f539f077ff2', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Forestry', NULL, 'Liter', 2.11308588, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-22', 83, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d919b6eb-4d7e-5a96-b5cb-7f539f077ff2', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Forestry', NULL, 'Liter', 2.11308588, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-22', 83, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2235,6 +2892,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2245,8 +2910,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('21d6dde6-0f00-5cf0-8ea0-ac73fbf3a046', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 1.9634076, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-23', 84, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('21d6dde6-0f00-5cf0-8ea0-ac73fbf3a046', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 1.9634076, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-23', 84, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2262,6 +2927,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2272,8 +2945,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c87d8e28-8606-5b36-8e6c-9e4899be8a2e', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-24', 85, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c87d8e28-8606-5b36-8e6c-9e4899be8a2e', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-24', 85, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2289,6 +2962,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2299,8 +2980,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('1d6d6bad-25a9-5fb9-8675-bd675f5a7e27', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Industry', NULL, 'Liter', 2.17384228, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.001574, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-25', 86, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1d6d6bad-25a9-5fb9-8675-bd675f5a7e27', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Industry', NULL, 'Liter', 2.17384228, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.001574, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-25', 86, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2316,6 +2997,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2326,8 +3015,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('91ad7d9d-ded0-5d85-8aa0-0856ff9c8652', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.024164, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.001574, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-26', 87, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('91ad7d9d-ded0-5d85-8aa0-0856ff9c8652', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.024164, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.001574, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-26', 87, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2343,6 +3032,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2353,8 +3050,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('2f9041ac-36d8-5ed1-8989-f70dd68a1831', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-27', 88, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2f9041ac-36d8-5ed1-8989-f70dd68a1831', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-27', 88, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2370,6 +3067,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2380,8 +3085,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('33e8e068-ea3d-5b2a-9faf-ce5b42c8d461', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Household', NULL, 'Liter', 2.23554308, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0037776, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-28', 89, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('33e8e068-ea3d-5b2a-9faf-ce5b42c8d461', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 4-stroke: Household', NULL, 'Liter', 2.23554308, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0037776, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-28', 89, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2397,6 +3102,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2407,8 +3120,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('85d2cced-7412-50ec-ae72-f0ee6812e37f', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0858648, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0037776, 0.00006296, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-29', 90, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('85d2cced-7412-50ec-ae72-f0ee6812e37f', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0858648, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0037776, 0.00006296, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-29', 90, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2424,6 +3137,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2434,8 +3155,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('0a70765b-13c1-5d78-9b79-d33329f0e4ef', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-30', 91, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('0a70765b-13c1-5d78-9b79-d33329f0e4ef', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-30', 91, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2451,6 +3172,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2461,8 +3190,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a9b6397e-c7ba-5b5d-918b-c693cd98de21', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Aggriculture', NULL, 'Liter', 2.23982436, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0044072, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-31', 92, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a9b6397e-c7ba-5b5d-918b-c693cd98de21', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Aggriculture', NULL, 'Liter', 2.23982436, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0044072, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-31', 92, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2478,6 +3207,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2488,8 +3225,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('69767209-b53d-58b9-bd70-503dfdae4f5c', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.09014608, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0044072, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-32', 93, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('69767209-b53d-58b9-bd70-503dfdae4f5c', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.09014608, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0044072, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-32', 93, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2505,6 +3242,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2515,8 +3260,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b472a93f-feb8-5273-8c02-8e6d7d3e5ade', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-33', 94, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b472a93f-feb8-5273-8c02-8e6d7d3e5ade', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-33', 94, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2532,6 +3277,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2542,8 +3295,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('cef5d0e2-8900-5da5-9f20-46a96ec1485f', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Forestry', NULL, 'Liter', 2.26626756, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0053516, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-34', 95, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('cef5d0e2-8900-5da5-9f20-46a96ec1485f', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Forestry', NULL, 'Liter', 2.26626756, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0053516, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-34', 95, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2559,6 +3312,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2569,8 +3330,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('84453dd4-2c0c-5519-9207-530300fbca4b', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.11658928, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0053516, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-35', 96, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('84453dd4-2c0c-5519-9207-530300fbca4b', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.11658928, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0053516, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-35', 96, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2586,6 +3347,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2596,8 +3365,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fe8ce8e1-e2c0-5da0-9d70-288593a476b4', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-36', 97, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fe8ce8e1-e2c0-5da0-9d70-288593a476b4', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-36', 97, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2613,6 +3382,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2623,8 +3400,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6d32c113-fb9d-5943-aab3-9cfff5261dbe', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Industry', NULL, 'Liter', 2.23100996, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0040924, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-37', 98, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6d32c113-fb9d-5943-aab3-9cfff5261dbe', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Industry', NULL, 'Liter', 2.23100996, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0040924, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-37', 98, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2640,6 +3417,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2650,8 +3435,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('cb9dc83d-c64c-5cc1-acf4-61a93c665dd4', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.08133168, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0040924, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-38', 99, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('cb9dc83d-c64c-5cc1-acf4-61a93c665dd4', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.08133168, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0040924, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-38', 99, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2667,6 +3452,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2677,8 +3470,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('30cc0a62-12f8-5653-bd66-309443ae82ae', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-39', 100, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('30cc0a62-12f8-5653-bd66-309443ae82ae', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-39', 100, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2694,6 +3487,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2704,8 +3505,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5c2ea7d2-860f-5a7e-9a8f-cdc15c5c67a5', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Household', NULL, 'Liter', 2.27508196, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0056664, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-40', 101, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5c2ea7d2-860f-5a7e-9a8f-cdc15c5c67a5', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10, 2-stroke: Household', NULL, 'Liter', 2.27508196, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล  (10%)', 2.11308588, NULL, 0.0056664, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-40', 101, 1, 'คิดที่สัดส่วนเอทานอล  (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2721,6 +3522,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2731,8 +3540,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7c6c0277-7f4a-551a-a5f7-116819930f8d', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.12540368, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0056664, 0.000012592, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-41', 102, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7c6c0277-7f4a-551a-a5f7-116819930f8d', 'a1000001-0001-4001-8001-000000000002', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.12540368, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0056664, 0.000012592, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-41', 102, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2748,6 +3557,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2758,8 +3575,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('2fa94124-b6eb-5588-9586-ee3386e42054', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-42', 103, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2fa94124-b6eb-5588-9586-ee3386e42054', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF002-42', 103, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2775,6 +3592,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2785,8 +3610,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('27914fed-e4a2-552b-89c2-92ccde9ceed4', 'a1000001-0001-4001-8001-000000000003', 'CNG', NULL, 'kg', 2.2539509, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.12619, NULL, 0.0034868, 0.0001137, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-1', 104, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('27914fed-e4a2-552b-89c2-92ccde9ceed4', 'a1000001-0001-4001-8001-000000000003', 'CNG', NULL, 'kg', 2.2539509, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.12619, NULL, 0.0034868, 0.0001137, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-1', 104, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2802,6 +3627,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2812,8 +3645,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('87e7eb11-8296-58d1-91ec-0d3269f9199b', 'a1000001-0001-4001-8001-000000000003', 'LPG', NULL, 'Liter', 1.72734518, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.679722, NULL, 0.00165044, 0.000005324, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-2', 105, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('87e7eb11-8296-58d1-91ec-0d3269f9199b', 'a1000001-0001-4001-8001-000000000003', 'LPG', NULL, 'Liter', 1.72734518, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.679722, NULL, 0.00165044, 0.000005324, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-2', 105, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2829,6 +3662,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2839,8 +3680,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('4432e6cf-47e9-5dd9-a4ee-b0aca7a435a5', 'a1000001-0001-4001-8001-000000000003', 'LPG', NULL, 'kg', 3.19878737037037, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.00305637037037037, 0.00000985925925925926, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-3', 106, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('4432e6cf-47e9-5dd9-a4ee-b0aca7a435a5', 'a1000001-0001-4001-8001-000000000003', 'LPG', NULL, 'kg', 3.19878737037037, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 3.1105962962963, NULL, 0.00305637037037037, 0.00000985925925925926, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-3', 106, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2856,6 +3697,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2866,8 +3715,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c74a1bb1-8140-535c-8b4d-a590b656c6ab', 'a1000001-0001-4001-8001-000000000003', 'Diesel', NULL, 'Liter', 2.740339134, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000142038, 0.000142038, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-4', 107, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c74a1bb1-8140-535c-8b4d-a590b656c6ab', 'a1000001-0001-4001-8001-000000000003', 'Diesel', NULL, 'Liter', 2.740339134, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.698722, NULL, 0.000142038, 0.000142038, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-4', 107, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2883,6 +3732,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2893,8 +3750,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('26a9dae3-af9c-5f99-8b0c-8300b5670ea4', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - uncontrolled', NULL, 'Liter', 2.23734656, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.00103884, 0.000100736, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-5', 108, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('26a9dae3-af9c-5f99-8b0c-8300b5670ea4', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - uncontrolled', NULL, 'Liter', 2.23734656, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.00103884, 0.000100736, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-5', 108, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2910,6 +3767,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2920,8 +3785,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('4f780aaa-ccb9-5f45-93b2-16b9fae2d649', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', 2.2703376, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.000787, 0.00025184, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-6', 109, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('4f780aaa-ccb9-5f45-93b2-16b9fae2d649', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', 2.2703376, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.000787, 0.00025184, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-6', 109, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2937,6 +3802,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2947,8 +3820,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('644cdf14-7065-5114-b305-c09edab58977', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.232464012, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.000119624, 0.000179436, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-7', 110, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('644cdf14-7065-5114-b305-c09edab58977', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.232464012, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 2.181564, NULL, 0.000119624, 0.000179436, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-7', 110, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2964,6 +3837,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -2974,8 +3855,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ab8bbcac-7b85-5ba2-a805-515687446dd2', 'a1000001-0001-4001-8001-000000000003', 'Biodiesel', NULL, 'Liter', 1.670509494, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, 0.000090558, 0.000090558, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-8', 111, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ab8bbcac-7b85-5ba2-a805-515687446dd2', 'a1000001-0001-4001-8001-000000000003', 'Biodiesel', NULL, 'Liter', 1.670509494, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.643976, NULL, 0.000090558, 0.000090558, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-8', 111, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -2991,6 +3872,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3001,8 +3890,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('433eaec9-46df-5044-a9a8-477225806f51', 'a1000001-0001-4001-8001-000000000003', 'Ethanol (Bio-gasoline)', NULL, 'Liter', 1.507437864, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, 0.000380538, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-9', 112, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('433eaec9-46df-5044-a9a8-477225806f51', 'a1000001-0001-4001-8001-000000000003', 'Ethanol (Bio-gasoline)', NULL, 'Liter', 1.507437864, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', 1.4967828, NULL, 0.000380538, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-9', 112, 1, 'IPCC defaults (2006), volume 2, chapter 3, table 3.2.1 &amp; 3.2.2 และ Convert ค่าโดยอาศัยค่าคุณลักษณะเชื้อเพลิง', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3018,6 +3907,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3028,8 +3925,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('87061d2b-c34c-5365-b898-f704fdf96644', 'a1000001-0001-4001-8001-000000000003', 'Diesel (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.6654510592, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.0001384344, 0.0001384344, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-10', 113, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('87061d2b-c34c-5365-b898-f704fdf96644', 'a1000001-0001-4001-8001-000000000003', 'Diesel (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.6654510592, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (7%)', 2.62488978, NULL, 0.0001384344, 0.0001384344, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-10', 113, 1, 'คิดที่สัดส่วนไบโอดีเซล (7%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3045,6 +3942,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3055,8 +3960,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('87b734f6-b08b-5db6-87bb-0195b642d6cc', 'a1000001-0001-4001-8001-000000000003', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.5503727392, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.0001384344, 0.0001384344, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-11', 114, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('87b734f6-b08b-5db6-87bb-0195b642d6cc', 'a1000001-0001-4001-8001-000000000003', 'Diesel B7: Report in Scope 1', NULL, 'Liter', 2.5503727392, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.50981146, NULL, 0.0001384344, 0.0001384344, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-11', 114, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3072,6 +3977,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3082,8 +3995,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('15003b05-7436-5c7c-add2-a1c034c36cd9', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-12', 115, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('15003b05-7436-5c7c-add2-a1c034c36cd9', 'a1000004-0004-4004-8004-000000000014', 'Diesel B7: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.11507832, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.11507832, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-12', 115, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3099,6 +4012,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3109,8 +4030,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d25d8bcb-c63c-5f52-a630-e221d6ba08cd', 'a1000001-0001-4001-8001-000000000003', 'Diesel (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.526373206, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (20%)', 2.4877728, NULL, 0.000131742, 0.000131742, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-13', 116, 1, 'คิดที่สัดส่วนไบโอดีเซล (20%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d25d8bcb-c63c-5f52-a630-e221d6ba08cd', 'a1000001-0001-4001-8001-000000000003', 'Diesel (แบบคิด EF ของ Biofuel ด้วย)', NULL, 'Liter', 2.526373206, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนไบโอดีเซล (20%)', 2.4877728, NULL, 0.000131742, 0.000131742, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-13', 116, 1, 'คิดที่สัดส่วนไบโอดีเซล (20%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3126,6 +4047,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3136,8 +4065,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('3fabe61b-177a-5e45-ab47-86220a8b0ddf', 'a1000001-0001-4001-8001-000000000003', 'Diesel B20: Report in Scope 1', NULL, 'Liter', 2.197578006, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.1589776, NULL, 0.000131742, 0.000131742, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-14', 117, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('3fabe61b-177a-5e45-ab47-86220a8b0ddf', 'a1000001-0001-4001-8001-000000000003', 'Diesel B20: Report in Scope 1', NULL, 'Liter', 2.197578006, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 2.1589776, NULL, 0.000131742, 0.000131742, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-14', 117, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3153,6 +4082,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3163,8 +4100,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('369fb499-d62a-56ec-be8a-4e1e31d292d4', 'a1000004-0004-4004-8004-000000000014', 'Diesel B20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.3287952, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.3287952, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-15', 118, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('369fb499-d62a-56ec-be8a-4e1e31d292d4', 'a1000004-0004-4004-8004-000000000014', 'Diesel B20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.3287952, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.3287952, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-15', 118, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3180,6 +4117,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3190,8 +4135,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('8d00af99-e856-5011-ae34-b027f61d81b2', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.1599613972, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0001457154, 0.0001614924, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-16', 119, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('8d00af99-e856-5011-ae34-b027f61d81b2', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.1599613972, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (10%)', 2.11308588, NULL, 0.0001457154, 0.0001614924, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-16', 119, 1, 'คิดที่สัดส่วนเอทานอล (10%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3207,6 +4152,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3217,8 +4170,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dcf04d2d-6742-5a5b-ac18-a328b4432eba', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0102831172, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0001457154, 0.0001614924, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-17', 120, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dcf04d2d-6742-5a5b-ac18-a328b4432eba', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0102831172, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634076, NULL, 0.0001457154, 0.0001614924, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-17', 120, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3234,6 +4187,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3244,8 +4205,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6d65dfc0-8fac-5343-a3a9-9875e2df7176', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-18', 121, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6d65dfc0-8fac-5343-a3a9-9875e2df7176', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.14967828, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.14967828, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-18', 121, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3261,6 +4222,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3271,8 +4240,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5b4758ec-1668-59b7-99b1-6ed325e4aea6', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.0874587824, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (20%)', 2.04460776, NULL, 0.0001718068, 0.0001435488, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-19', 122, 1, 'คิดที่สัดส่วนเอทานอล (20%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5b4758ec-1668-59b7-99b1-6ed325e4aea6', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 2.0874587824, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (20%)', 2.04460776, NULL, 0.0001718068, 0.0001435488, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-19', 122, 1, 'คิดที่สัดส่วนเอทานอล (20%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3288,6 +4257,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3298,8 +4275,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ac0d2bb5-cd56-5ab4-ad2a-921e79226dfe', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E20: Rreport in Scope 1', NULL, 'Liter', 1.7881022224, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7452512, NULL, 0.0001718068, 0.0001435488, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-20', 123, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ac0d2bb5-cd56-5ab4-ad2a-921e79226dfe', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E20: Rreport in Scope 1', NULL, 'Liter', 1.7881022224, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7452512, NULL, 0.0001718068, 0.0001435488, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-20', 123, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3315,6 +4292,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3325,8 +4310,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dbb07944-538e-5fc5-8ace-6250afdb5931', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.29935656, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.29935656, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-21', 124, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dbb07944-538e-5fc5-8ace-6250afdb5931', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.29935656, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.29935656, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-21', 124, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3342,6 +4327,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3352,8 +4345,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c7369673-2a75-54de-9051-67905dfd9ff9', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 1.6161917862, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (85%)', 1.59949998, NULL, 0.0003414009, 0.0000269154, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-22', 125, 1, 'คิดที่สัดส่วนเอทานอล (85%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c7369673-2a75-54de-9051-67905dfd9ff9', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - low mileage light duty vihicle vintage 1995 or later', NULL, 'Liter', 1.6161917862, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล (85%)', 1.59949998, NULL, 0.0003414009, 0.0000269154, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-22', 125, 1, 'คิดที่สัดส่วนเอทานอล (85%)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3369,6 +4362,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3379,8 +4380,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('3e4e9427-8c17-56c7-b22f-92dbdab4104a', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.3439264062, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272346, NULL, 0.0003414009, 0.0000269154, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-23', 126, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('3e4e9427-8c17-56c7-b22f-92dbdab4104a', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.3439264062, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272346, NULL, 0.0003414009, 0.0000269154, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-23', 126, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3396,6 +4397,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3406,8 +4415,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('de5d7249-42e3-5163-84e1-e5e7dde2d231', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.27226538, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.27226538, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-24', 127, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('de5d7249-42e3-5163-84e1-e5e7dde2d231', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.27226538, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.27226538, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-24', 127, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3423,6 +4432,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3433,8 +4450,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('bb96805e-37fb-54e5-ae02-d3fe15cfc43b', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 10%', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-25', 128, 1, 'คิดที่สัดส่วนเอทานอล 10%', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('bb96805e-37fb-54e5-ae02-d3fe15cfc43b', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 10%', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-25', 128, 1, 'คิดที่สัดส่วนเอทานอล 10%', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3450,6 +4467,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3460,8 +4485,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('48fa72e6-ef1f-5454-8a34-7c8c9fb32f84', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0444, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634, NULL, 0.0007, 0.0002, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-26', 129, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('48fa72e6-ef1f-5454-8a34-7c8c9fb32f84', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E10: Report in Scope 1', NULL, 'Liter', 2.0444, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.9634, NULL, 0.0007, 0.0002, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-26', 129, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3477,6 +4502,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3487,8 +4520,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5ef43b52-65f2-5af2-af78-5649d20535eb', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.1497, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.1497, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-27', 130, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5ef43b52-65f2-5af2-af78-5649d20535eb', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E10: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.1497, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.1497, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-27', 130, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3504,6 +4537,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3514,8 +4555,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('4bdf86fe-37e8-5d0a-94ed-ec193557bcb2', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 20%', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-28', 131, 1, 'คิดที่สัดส่วนเอทานอล 20%', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('4bdf86fe-37e8-5d0a-94ed-ec193557bcb2', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 20%', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-28', 131, 1, 'คิดที่สัดส่วนเอทานอล 20%', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3531,6 +4572,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3541,8 +4590,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f887f87e-695e-565c-a9e6-243b8303d505', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E20: Report in Scope 1', NULL, 'Liter', 1.8184, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7453, NULL, 0.0007, 0.0002, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-29', 132, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f887f87e-695e-565c-a9e6-243b8303d505', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E20: Report in Scope 1', NULL, 'Liter', 1.8184, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 1.7453, NULL, 0.0007, 0.0002, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-29', 132, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3558,6 +4607,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3568,8 +4625,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b9550947-4c62-5266-ab15-4146ea7e309c', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.2994, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.2994, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-30', 133, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b9550947-4c62-5266-ab15-4146ea7e309c', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E20: Report in Biogenic CO2 emissions', NULL, 'Liter', 0.2994, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 0.2994, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-30', 133, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3585,6 +4642,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3595,8 +4660,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6c955783-b2eb-5f7b-9bc3-ff961dc7ba99', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 85%', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-31', 134, 1, 'คิดที่สัดส่วนเอทานอล 85%', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6c955783-b2eb-5f7b-9bc3-ff961dc7ba99', 'a1000001-0001-4001-8001-000000000003', 'Motor Gasoline - oxydation catalyst', NULL, 'Liter', NULL, NULL, NULL, NULL, NULL, 'คิดที่สัดส่วนเอทานอล 85%', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-31', 134, 1, 'คิดที่สัดส่วนเอทานอล 85%', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3612,6 +4677,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3622,8 +4695,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('47c1a819-0e53-5491-9aff-f5629f343585', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.3496, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272, NULL, 0.0004, 0.00001, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-32', 135, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('47c1a819-0e53-5491-9aff-f5629f343585', 'a1000001-0001-4001-8001-000000000003', 'Gasohol E85: Report in Scope 1', NULL, 'Liter', 0.3496, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', 0.3272, NULL, 0.0004, 0.00001, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-32', 135, 1, 'นับเฉพาะ CO2 จาก fossil fuel, CH4 และ N2O', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3639,6 +4712,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3649,8 +4730,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c2dc1cf3-972d-5083-9356-0d2dc3743f9d', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.2723, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.2723, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-33', 136, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c2dc1cf3-972d-5083-9356-0d2dc3743f9d', 'a1000004-0004-4004-8004-000000000014', 'Gasohol E85: Report in Biogenic CO2 emissions', NULL, 'Liter', 1.2723, NULL, NULL, NULL, NULL, 'นับเฉพาะ CO2 จาก biofuel', 1.2723, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF003-33', 136, 1, 'นับเฉพาะ CO2 จาก biofuel', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3666,6 +4747,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3676,8 +4765,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('2abc2b67-d01c-5171-a7a6-59829d8771bd', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; LCIA method IPCC 2013 GWP 100a V1.03 (CFO Scope2)', NULL, 'kWh', 0.4999, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-1', 137, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2abc2b67-d01c-5171-a7a6-59829d8771bd', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; LCIA method IPCC 2013 GWP 100a V1.03 (CFO Scope2)', NULL, 'kWh', 0.4999, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-1', 137, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3693,6 +4782,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3703,8 +4800,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('1c8052de-db01-59d1-b949-55782f02f8c6', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; การได้มาซึ่งเชื้อเพลิงรวมถึงการขนส่งเชื้อเพลิงที่ใช้ในการผลิตไฟฟ้าสำ', NULL, 'kWh', 0.0987, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-2', 138, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1c8052de-db01-59d1-b949-55782f02f8c6', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; การได้มาซึ่งเชื้อเพลิงรวมถึงการขนส่งเชื้อเพลิงที่ใช้ในการผลิตไฟฟ้าสำ', NULL, 'kWh', 0.0987, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-2', 138, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3720,6 +4817,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3730,8 +4835,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('2a746fab-3828-5443-9208-bd9f0be88a35', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; LCIA method IPCC 2013 GWP 100a V1.03 (CFP)', NULL, 'kWh', 0.5986, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-3', 139, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2a746fab-3828-5443-9208-bd9f0be88a35', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2016-2018; LCIA method IPCC 2013 GWP 100a V1.03 (CFP)', NULL, 'kWh', 0.5986, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-3', 139, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2016-2018)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3747,6 +4852,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3757,8 +4870,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a82d2553-4cc8-5f7b-9736-a3293c2eb297', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; LCIA method IPCC 2013 GWP 100a V1.03 (CFO Scope2)', NULL, 'kWh', 0.475, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-4', 140, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a82d2553-4cc8-5f7b-9736-a3293c2eb297', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; LCIA method IPCC 2013 GWP 100a V1.03 (CFO Scope2)', NULL, 'kWh', 0.475, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-4', 140, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3774,6 +4887,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3784,8 +4905,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c1708f17-29af-5719-a2d6-2e6d6ab2552a', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; การได้มาซึ่งเชื้อเพลิงรวมถึงการขนส่ง เชื้อเพลิงที่ใช้ในการผลิตไฟฟ้า สำหรับ SCOPE 3', NULL, 'kWh', 0.0812, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-5', 141, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c1708f17-29af-5719-a2d6-2e6d6ab2552a', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; การได้มาซึ่งเชื้อเพลิงรวมถึงการขนส่ง เชื้อเพลิงที่ใช้ในการผลิตไฟฟ้า สำหรับ SCOPE 3', NULL, 'kWh', 0.0812, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-5', 141, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3801,6 +4922,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3811,8 +4940,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6c8d6e1f-bbb0-57d8-a34e-bd8154bcbad1', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; LCIA method IPCC 2013 GWP 100a V1.03 (CFP)', NULL, 'kWh', 0.5562, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-6', 142, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6c8d6e1f-bbb0-57d8-a34e-bd8154bcbad1', 'a1000002-0002-4002-8002-000000000006', 'ไฟฟ้าแบบ grid mix ปี 2022-2024; LCIA method IPCC 2013 GWP 100a V1.03 (CFP)', NULL, 'kWh', 0.5562, NULL, NULL, NULL, NULL, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF004-6', 142, 1, 'Thai National LCI Database, TIISMTEC-NSTDA, AR5 (with TGO electricity 2022-2024)', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3828,6 +4957,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3838,8 +4975,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e306b330-612c-5608-91e4-c8e94b4dc786', 'a1000004-0004-4004-8004-000000000014', 'R-22 (HCFC-22)', NULL, 'kg', 1760, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-1', 143, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e306b330-612c-5608-91e4-c8e94b4dc786', 'a1000004-0004-4004-8004-000000000014', 'R-22 (HCFC-22)', NULL, 'kg', 1760, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-1', 143, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3855,6 +4992,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3865,8 +5010,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('77b187cc-0b37-59e9-8c58-8d7680aadaab', 'a1000001-0001-4001-8001-000000000005', 'R-32', NULL, 'kg', 677, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-2', 144, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('eb5510ca-2fb9-5700-aa76-ca8f168fde25', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5896, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-88c19c9080cb', 144, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3882,6 +5027,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3892,8 +5045,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fbf32e47-995e-54e8-992f-3d1d333e35ff', 'a1000001-0001-4001-8001-000000000005', 'R-125', NULL, 'kg', 3170, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-3', 145, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('31d8bc67-773c-5908-8ce2-03d2e01ea5d9', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5372, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a9f4d0f59d28', 145, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3909,6 +5062,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3919,8 +5080,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('56c8d02f-f4c2-5bf2-88a3-052dd59d00be', 'a1000001-0001-4001-8001-000000000005', 'R-134', NULL, 'kg', 1120, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-4', 146, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ffbacff8-158d-5951-80fa-af1a8ce5c517', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0532, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d7aecbbee9e5', 146, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3936,6 +5097,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3946,8 +5115,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('097e100f-d6c7-5ba5-ae0b-efa7c621f306', 'a1000001-0001-4001-8001-000000000005', 'R-134a', NULL, 'kg', 1300, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-5', 147, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1ccf9896-28ef-5950-86db-13b8e083c499', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0421, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e9eb0a324c91', 147, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3963,6 +5132,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -3973,8 +5150,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ee87ab73-dfbc-5dfd-b0ff-72cbb4dbae85', 'a1000001-0001-4001-8001-000000000005', 'R-143', NULL, 'kg', 328, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-6', 148, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('59b33725-1939-5c6b-ac4e-baa173e0c644', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0971, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1a20ff9a9925', 148, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -3990,6 +5167,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4000,8 +5185,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7ad3ecb4-2471-53dd-a399-eb183cb4dccd', 'a1000001-0001-4001-8001-000000000005', 'R-143a', NULL, 'kg', 4800, NULL, NULL, NULL, NULL, 'IPCC 2013, AR5', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-7', 149, 1, 'IPCC 2013, AR5', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6f9b07e0-cc49-5e51-9d48-f41583537db2', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.079, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0726dd38f680', 149, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4017,6 +5202,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4027,8 +5220,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('111c5d7f-d8c5-5212-afee-0099c8edc188', 'a1000001-0001-4001-8001-000000000005', 'R-404a', NULL, 'kg', 3942.8, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-125/HFC-143a/HFC-134a)(44.0%/52.0%/4.0%)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-8', 150, 1, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-125/HFC-143a/HFC-134a)(44.0%/52.0%/4.0%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('cac23d97-5035-5a7a-a4cf-f516157b651b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.069, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-80bf33626f1d', 150, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4044,6 +5237,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4054,8 +5255,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6e2f0100-2e25-54e9-b2c3-d5fcb92256d3', 'a1000001-0001-4001-8001-000000000005', 'R-407a', NULL, 'kg', 1923.4, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125/HFC-134a)(20.0%/40.0%/40.0%)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-9', 151, 1, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125/HFC-134a)(20.0%/40.0%/40.0%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('88f200ba-233e-5ae1-9dda-31c546951e58', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0546, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ef4d990dac65', 151, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4071,6 +5272,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4081,8 +5290,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('55354f0c-396e-5833-a1fa-71dab4721b72', 'a1000001-0001-4001-8001-000000000005', 'R-407C', NULL, 'kg', 1624.21, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125/HFC-134a)(23.0%/25.0%/52.0%)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-10', 152, 1, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125/HFC-134a)(23.0%/25.0%/52.0%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('dc77fbaa-deda-5120-8803-b9790d57d1b1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.7509, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ad816b237d83', 152, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4098,6 +5307,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4108,8 +5325,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f03c97de-9c3a-5dae-95a1-3afa62a7189f', 'a1000001-0001-4001-8001-000000000005', 'R-410a', NULL, 'kg', 1923.5, NULL, NULL, NULL, NULL, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125)(50.0%/50.0%)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF005-11', 153, 1, 'IPCC defaults (2006), volume 3, chapter 7, table 7.8,  p.7.44 (HFC-32/HFC-125)(50.0%/50.0%)', '{}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9801b4f2-73dd-5184-9a2a-de9bf1e24c07', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6408, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0761a93256f3', 153, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4125,6 +5342,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4135,8 +5360,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('eb5510ca-2fb9-5700-aa76-ca8f168fde25', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5896, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-88c19c9080cb', 154, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d6481649-5afd-5dff-969b-0385d25616e1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0639, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f4a53f481b19', 154, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4152,6 +5377,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4162,8 +5395,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('31d8bc67-773c-5908-8ce2-03d2e01ea5d9', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5372, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a9f4d0f59d28', 155, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fbbfba52-68c1-5686-8158-bcc6d9e886a1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0539, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a4098729be55', 155, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4179,6 +5412,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4189,8 +5430,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ffbacff8-158d-5951-80fa-af1a8ce5c517', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0532, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d7aecbbee9e5', 156, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('b2481a4d-3f29-5931-83f0-e0213b345f95', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1201, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-63b71b18ba75', 156, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4206,6 +5447,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4216,8 +5465,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('1ccf9896-28ef-5950-86db-13b8e083c499', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0421, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e9eb0a324c91', 157, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('69d2a78f-e448-56cf-86ed-5b78fbe77b25', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0977, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-972e36252fea', 157, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4233,6 +5482,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4243,8 +5500,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('59b33725-1939-5c6b-ac4e-baa173e0c644', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0971, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1a20ff9a9925', 158, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ee20e5dc-5d80-56a5-97ea-67488d13b18f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4725acb5172c', 158, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4260,6 +5517,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4270,8 +5535,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6f9b07e0-cc49-5e51-9d48-f41583537db2', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.079, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0726dd38f680', 159, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('4c040fc9-dbb7-52a1-bb5f-7572fb3d95fb', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0687, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-15c6f5660337', 159, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4287,6 +5552,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4297,8 +5570,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('cac23d97-5035-5a7a-a4cf-f516157b651b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.069, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-80bf33626f1d', 160, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a7cd9e19-c17d-5556-85cd-d1d017a07a87', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4271, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7c1591b4285c', 160, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4314,6 +5587,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4324,8 +5605,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('88f200ba-233e-5ae1-9dda-31c546951e58', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0546, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ef4d990dac65', 161, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('486b872b-3828-5a63-b497-729f00357b21', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0677, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a417d59b98a0', 161, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4341,6 +5622,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4351,8 +5640,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('dc77fbaa-deda-5120-8803-b9790d57d1b1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.7509, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ad816b237d83', 162, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('0e9107a2-6c19-5925-a7da-7d7aad3ab3b3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1246, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7bbce834050a', 162, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4368,6 +5657,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4378,8 +5675,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9801b4f2-73dd-5184-9a2a-de9bf1e24c07', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6408, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0761a93256f3', 163, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('33d75868-11ad-5de9-87ba-1dc59471c617', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0874, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b2dc83000cb5', 163, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4395,6 +5692,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4405,8 +5710,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d6481649-5afd-5dff-969b-0385d25616e1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0639, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f4a53f481b19', 164, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e22b907b-7713-53c7-bdb1-ad0635f6c2c7', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.513, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e238121ae767', 164, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4422,6 +5727,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4432,8 +5745,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fbbfba52-68c1-5686-8158-bcc6d9e886a1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0539, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a4098729be55', 165, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7a8aa62c-1bc9-580a-80c8-624da2c15c88', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0749, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a035d9e6ec15', 165, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4449,6 +5762,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4459,8 +5780,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('b2481a4d-3f29-5931-83f0-e0213b345f95', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1201, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-63b71b18ba75', 166, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9fa2baa5-abbb-554a-b5ad-ef32122cfa84', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1443, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-28fd60ef1073', 166, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4476,6 +5797,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4486,8 +5815,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('69d2a78f-e448-56cf-86ed-5b78fbe77b25', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0977, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-972e36252fea', 167, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7e58580d-201e-5e20-99fe-2fb016f11b30', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.099, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4e6ac6eb79ed', 167, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4503,6 +5832,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4513,8 +5850,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ee20e5dc-5d80-56a5-97ea-67488d13b18f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.084, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4725acb5172c', 168, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d9810e51-56a3-5004-88cf-d99b278d55dd', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.492, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bd89e0dbb6b1', 168, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4530,6 +5867,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4540,8 +5885,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('4c040fc9-dbb7-52a1-bb5f-7572fb3d95fb', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0687, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-15c6f5660337', 169, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล B5 เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('76854881-5a83-5f07-9e02-d0f3382d44a3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0613, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-defa5bcda49a', 169, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4557,6 +5902,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4567,8 +5920,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a7cd9e19-c17d-5556-85cd-d1d017a07a87', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4271, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7c1591b4285c', 170, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('acda31ab-4f48-5e83-8c00-7110d5228b8e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1082, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c92688fab98e', 170, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4584,6 +5937,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4594,8 +5955,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('486b872b-3828-5a63-b497-729f00357b21', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0677, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a417d59b98a0', 171, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('790f8889-e896-5368-967f-8347edc4190e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0768, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fea6fe1c9e73', 171, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4611,6 +5972,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4621,8 +5990,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('0e9107a2-6c19-5925-a7da-7d7aad3ab3b3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1246, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7bbce834050a', 172, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('64cac3bd-0144-5318-8617-ccc188c7c701', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6079, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a2099a49323d', 172, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4638,6 +6007,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4648,8 +6025,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('33d75868-11ad-5de9-87ba-1dc59471c617', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0874, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-b2dc83000cb5', 173, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9f09fbb5-9984-588e-b3cd-a43624bc25c3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0734, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-69ffdb04221a', 173, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4665,6 +6042,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4675,8 +6060,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e22b907b-7713-53c7-bdb1-ad0635f6c2c7', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.513, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e238121ae767', 174, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('013dc41d-9f7d-5e59-b66c-bd65a0c4b1d3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1345, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-017a2c270ae8', 174, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4692,6 +6077,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4702,8 +6095,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7a8aa62c-1bc9-580a-80c8-624da2c15c88', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0749, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a035d9e6ec15', 175, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('62d8f7a7-b015-54c5-9ad6-914ef8d64c41', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0942, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-915c747a7430', 175, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4719,6 +6112,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4729,8 +6130,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9fa2baa5-abbb-554a-b5ad-ef32122cfa84', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1443, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-28fd60ef1073', 176, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('899b19cd-9f16-5db0-ad79-19fd72a82620', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.313, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7526d8143852', 176, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4746,6 +6147,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4756,8 +6165,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7e58580d-201e-5e20-99fe-2fb016f11b30', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.099, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4e6ac6eb79ed', 177, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e8b0a5e3-6a47-5739-a685-2a81a74f6e2a', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.141, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-75e7b8eb1cc7', 177, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4773,6 +6182,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4783,8 +6200,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d9810e51-56a3-5004-88cf-d99b278d55dd', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.492, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bd89e0dbb6b1', 178, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7256b210-45d7-554b-a73e-bf58e06699e5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2697, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e8fad500c1ff', 178, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4800,6 +6217,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4810,8 +6235,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('76854881-5a83-5f07-9e02-d0f3382d44a3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0613, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-defa5bcda49a', 179, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('33d7ed10-c62c-50f2-ac98-cc7d020c1307', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a8ba40aacc0b', 179, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4827,6 +6252,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4837,8 +6270,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('acda31ab-4f48-5e83-8c00-7110d5228b8e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1082, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c92688fab98e', 180, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1d914dbd-a683-57f3-a25e-4bf11b0b0db3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.3748, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bb4cd5e034a3', 180, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4854,6 +6287,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4864,8 +6305,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('790f8889-e896-5368-967f-8347edc4190e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0768, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fea6fe1c9e73', 181, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e4f1f78a-94cf-57bd-a5ec-94d13d1f9ba5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1626, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fd1645519add', 181, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4881,6 +6322,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4891,8 +6340,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('64cac3bd-0144-5318-8617-ccc188c7c701', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6079, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a2099a49323d', 182, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a7dae447-9874-5edb-905c-e68b37c49d59', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.3163, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fe02e96ee9e1', 182, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4908,6 +6357,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4918,8 +6375,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9f09fbb5-9984-588e-b3cd-a43624bc25c3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0734, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-69ffdb04221a', 183, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ddcf9a30-c807-5ee7-87cd-f562bac17388', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2138, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2351b12badec', 183, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4935,6 +6392,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4945,8 +6410,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('013dc41d-9f7d-5e59-b66c-bd65a0c4b1d3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1345, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-017a2c270ae8', 184, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5c119cf6-67c9-5f70-8d70-802d27393884', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8679, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1646346bd57a', 184, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4962,6 +6427,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4972,8 +6445,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('62d8f7a7-b015-54c5-9ad6-914ef8d64c41', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก 6 ล้อ ขนาดใหญ่ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0942, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-915c747a7430', 185, 1, 'น้ำหนักบรรทุกสูงสุด 11 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":11}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('64da7d62-3650-5c14-84cf-65d89486f73b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0443, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-76fba00b5e7f', 185, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -4989,6 +6462,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -4999,8 +6480,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('899b19cd-9f16-5db0-ad79-19fd72a82620', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.313, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7526d8143852', 186, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9c53443b-81dd-5c67-a3b4-7485f1315190', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0802, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8b71a5197f08', 186, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5016,6 +6497,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5026,8 +6515,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e8b0a5e3-6a47-5739-a685-2a81a74f6e2a', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.141, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-75e7b8eb1cc7', 187, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('af18a3c7-cbbb-5f92-898b-c03b289765db', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0568, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0585ccdcbdec', 187, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5043,6 +6532,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5053,8 +6550,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7256b210-45d7-554b-a73e-bf58e06699e5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2697, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e8fad500c1ff', 188, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('815339ce-f814-5717-a757-25c78aa25403', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0651, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-437a85928c19', 188, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5070,6 +6567,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5080,8 +6585,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('33d7ed10-c62c-50f2-ac98-cc7d020c1307', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a8ba40aacc0b', 189, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7d778645-5812-589b-a50f-5292f02589d2', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0532, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-902510e256ec', 189, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5097,6 +6602,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5107,8 +6620,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('1d914dbd-a683-57f3-a25e-4bf11b0b0db3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.3748, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bb4cd5e034a3', 190, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('5c205237-f718-5367-8ead-f02a6cb2a47f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0975, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d9ddeba7352b', 190, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5124,6 +6637,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5134,8 +6655,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e4f1f78a-94cf-57bd-a5ec-94d13d1f9ba5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1626, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fd1645519add', 191, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f679c8a1-a198-56c7-89b9-fb9da192c458', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0687, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-de86eb8c2c76', 191, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5151,6 +6672,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5161,8 +6690,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a7dae447-9874-5edb-905c-e68b37c49d59', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.3163, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fe02e96ee9e1', 192, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('64dc62a2-b613-588f-a1bc-f924c53879de', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.2358, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-635d12a86a0e', 192, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5178,6 +6707,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5188,8 +6725,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ddcf9a30-c807-5ee7-87cd-f562bac17388', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุก ขนาดเล็ก 4 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2138, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2351b12badec', 193, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('caa4af91-8b86-5302-80d1-46ffdcefe2f1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0411, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e47c21334ad6', 193, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5205,6 +6742,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5215,8 +6760,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5c119cf6-67c9-5f70-8d70-802d27393884', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8679, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1646346bd57a', 194, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7e213329-beee-5748-ab12-0baa731f4375', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.076, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-db71f735f3c1', 194, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5232,6 +6777,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5242,8 +6795,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('64da7d62-3650-5c14-84cf-65d89486f73b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0443, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-76fba00b5e7f', 195, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('3693b83a-c0fd-51f7-add1-3be4cebbdfaa', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0528, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bc731d22e4f9', 195, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5259,6 +6812,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5269,8 +6830,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('9c53443b-81dd-5c67-a3b4-7485f1315190', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0802, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8b71a5197f08', 196, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('7c22afda-1041-5f1a-915a-a14036e8dfc5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0515, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4191095937c7', 196, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5286,6 +6847,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5296,8 +6865,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('af18a3c7-cbbb-5f92-898b-c03b289765db', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0568, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0585ccdcbdec', 197, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6601fe25-7d2e-5f5d-bf55-8471bb9b255f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 25% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2059, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-994b6f4bee85', 197, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5313,6 +6882,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5323,8 +6900,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('815339ce-f814-5717-a757-25c78aa25403', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0651, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-437a85928c19', 198, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('d3bec3d2-7b05-598c-b463-90a788562e1b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1029, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-667cf5fe21f8', 198, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5340,6 +6917,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5350,8 +6935,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7d778645-5812-589b-a50f-5292f02589d2', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0532, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-902510e256ec', 199, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('031f7b90-4c06-5fe4-a99a-410d28e68a8d', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0686, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bdf4e2fff297', 199, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5367,6 +6952,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5377,8 +6970,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('5c205237-f718-5367-8ead-f02a6cb2a47f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0975, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d9ddeba7352b', 200, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f930f22d-49cd-5000-92e1-7e034d9e0dd3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0015, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fe18db1aabf3', 200, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5394,6 +6987,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5404,8 +7005,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f679c8a1-a198-56c7-89b9-fb9da192c458', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกกึ่งพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0687, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-de86eb8c2c76', 201, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f70e26e1-705e-5227-8f95-089e1d04ba58', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0507, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a93ac22ff310', 201, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5421,6 +7022,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5431,8 +7040,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('64dc62a2-b613-588f-a1bc-f924c53879de', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.2358, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-635d12a86a0e', 202, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a3fead03-d6f9-5d6e-a715-6de7eb20fc1e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.092, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-09ec79741603', 202, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5448,6 +7057,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5458,8 +7075,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('caa4af91-8b86-5302-80d1-46ffdcefe2f1', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0411, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e47c21334ad6', 203, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ca3651e9-1ea0-5b4b-8254-24dc10137be0', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.065, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8159fe699e2c', 203, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5475,6 +7092,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5485,8 +7110,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7e213329-beee-5748-ab12-0baa731f4375', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.076, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-db71f735f3c1', 204, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fcd3387e-df0a-5c81-9824-a23826b9656e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8399, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f1d30120a136', 204, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5502,6 +7127,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5512,8 +7145,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('3693b83a-c0fd-51f7-add1-3be4cebbdfaa', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0528, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bc731d22e4f9', 205, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('677182d2-f344-58a6-b1c7-f71d4695d021', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0448, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4839a715588a', 205, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5529,6 +7162,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5539,8 +7180,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('7c22afda-1041-5f1a-915a-a14036e8dfc5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0515, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4191095937c7', 206, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('e9441ea5-f095-5b00-aff4-8439f8afdb06', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d2d95c307793', 206, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5556,6 +7197,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5566,8 +7215,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('6601fe25-7d2e-5f5d-bf55-8471bb9b255f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 25% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2059, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-994b6f4bee85', 207, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('02602cfb-3255-58e4-93af-725a924016b7', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0594, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-17bc7c568d92', 207, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5583,6 +7232,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5593,8 +7250,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('d3bec3d2-7b05-598c-b463-90a788562e1b', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1029, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-667cf5fe21f8', 208, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('8444d569-3cbf-58c1-930d-e7d6d74e3fbf', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1435, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-064e71401f87', 208, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5610,6 +7267,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5620,8 +7285,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('031f7b90-4c06-5fe4-a99a-410d28e68a8d', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งปกติและแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0686, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-bdf4e2fff297', 209, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้ CNG เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c606acc8-2f81-55ec-86f7-4e39b0b2b483', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0547, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f838e467a9f3', 209, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5637,6 +7302,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5647,8 +7320,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f930f22d-49cd-5000-92e1-7e034d9e0dd3', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0015, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-fe18db1aabf3', 210, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('87ec280f-1516-5544-a3c6-5b7e35c4d1a5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.101, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5734e4466802', 210, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5664,6 +7337,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5674,8 +7355,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f70e26e1-705e-5227-8f95-089e1d04ba58', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0507, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a93ac22ff310', 211, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('10ac31f0-5ee7-5590-bf31-68e1d3040822', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0705, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a0b06d3f5f27', 211, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5691,6 +7372,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5701,8 +7390,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a3fead03-d6f9-5d6e-a715-6de7eb20fc1e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.092, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-09ec79741603', 212, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('a6d3974d-347b-53b5-a1ea-e7b185f62dd0', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0201, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-9f9654ab0063', 212, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5718,6 +7407,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5728,8 +7425,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('ca3651e9-1ea0-5b4b-8254-24dc10137be0', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 18 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.065, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8159fe699e2c', 213, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('31e8ddff-22f8-565a-bb22-5ab4517f0233', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0459, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ad92b0ea38ae', 213, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5745,6 +7442,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5755,8 +7460,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fcd3387e-df0a-5c81-9824-a23826b9656e', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.8399, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f1d30120a136', 214, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('59feeda8-0ed8-56d1-854c-9c8de25d01b9', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0866, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7af33dd4cd3a', 214, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5772,6 +7477,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5782,8 +7495,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('677182d2-f344-58a6-b1c7-f71d4695d021', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0448, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4839a715588a', 215, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('81db4c69-ba10-5561-939a-161bf74188c5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0596, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-32298c84a28f', 215, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5799,6 +7512,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5809,8 +7530,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('e9441ea5-f095-5b00-aff4-8439f8afdb06', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0839, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d2d95c307793', 216, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('87277825-7591-5a57-bd45-433d4d3f50bd', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.2446, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4fe4a8d789b1', 216, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5826,6 +7547,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5836,8 +7565,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('02602cfb-3255-58e4-93af-725a924016b7', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0594, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-17bc7c568d92', 217, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f855cfd4-38dc-5a6b-b9a3-e7ff254e690f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.054, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-655d9974919b', 217, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5853,6 +7582,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5863,8 +7600,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('8444d569-3cbf-58c1-930d-e7d6d74e3fbf', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.1435, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-064e71401f87', 218, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('68405698-a954-599c-8821-5fcc6360c7fa', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1041, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-76307c807a5d', 218, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5880,6 +7617,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5890,8 +7635,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('c606acc8-2f81-55ec-86f7-4e39b0b2b483', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0547, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-f838e467a9f3', 219, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('fcf321ad-a532-5504-a68e-bbf5a51f13e8', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.071, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-36d760e697e8', 219, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5907,6 +7652,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5917,8 +7670,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('87ec280f-1516-5544-a3c6-5b7e35c4d1a5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.101, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5734e4466802', 220, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1ab25300-a834-5d8a-be83-1d12fc9e6da8', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5744, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a076a59bc3ec', 220, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5934,6 +7687,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5944,8 +7705,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('10ac31f0-5ee7-5590-bf31-68e1d3040822', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 20 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0705, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a0b06d3f5f27', 221, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f03b5c30-4f5e-53e1-9075-4e57f26b9518', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0454, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6ee88b74b252', 221, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5961,6 +7722,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5971,8 +7740,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('a6d3974d-347b-53b5-a1ea-e7b185f62dd0', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.0201, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-9f9654ab0063', 222, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('57a937fc-302f-5416-a73d-74791dee9f12', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0852, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4e2b2b6d3c32', 222, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -5988,6 +7757,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -5998,8 +7775,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('31e8ddff-22f8-565a-bb22-5ab4517f0233', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0459, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-ad92b0ea38ae', 223, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('f3045008-1820-5f29-b182-f36c25459e4d', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0589, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-60a81b12c0f5', 223, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6015,6 +7792,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6025,8 +7810,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('59feeda8-0ed8-56d1-854c-9c8de25d01b9', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0866, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7af33dd4cd3a', 224, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('9a52b06c-8617-5552-b141-bce6e49986b0', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.6776, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-afb89d76be84', 224, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6042,6 +7827,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6052,8 +7845,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('81db4c69-ba10-5561-939a-161bf74188c5', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0596, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-32298c84a28f', 225, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('ca70a861-b729-55c3-b95a-d40c6062229e', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0553, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-8ba89706d6c0', 225, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6069,6 +7862,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6079,8 +7880,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('87277825-7591-5a57-bd45-433d4d3f50bd', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 1.2446, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-4fe4a8d789b1', 226, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6b2b9a65-1c9c-579b-847b-6be6efc12e5b', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1043, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-2939500d9b61', 226, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6096,6 +7897,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6106,8 +7915,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f855cfd4-38dc-5a6b-b9a3-e7ff254e690f', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.054, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-655d9974919b', 227, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('62546a7b-177b-52ba-bc5a-dec06fd40d07', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0724, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e4ff98b8e8de', 227, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6123,6 +7932,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6133,8 +7950,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('68405698-a954-599c-8821-5fcc6360c7fa', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1041, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-76307c807a5d', 228, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('79bf6c11-49b4-5cd5-aa69-81642bf84137', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.2414, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d8fa252e5a52', 228, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6150,6 +7967,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6160,8 +7985,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('fcf321ad-a532-5504-a68e-bbf5a51f13e8', 'a1000003-0003-4003-8003-00000000000a', 'รถกระบะบรรทุกพ่วง 22 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.071, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-36d760e697e8', 229, 1, 'น้ำหนักบรรทุกสูงสุด 32 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":32}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('208626ed-0abe-5d41-ad3c-f49815f57259', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2153, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-690405257950', 229, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6177,6 +8002,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6187,8 +8020,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('1ab25300-a834-5d8a-be83-1d12fc9e6da8', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.5744, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-a076a59bc3ec', 230, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('972bff0d-fcc4-5e8f-aa99-c02997563963', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.3803, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d7821e79906f', 230, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6204,6 +8037,14 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
@@ -6214,8 +8055,8 @@ ON CONFLICT (id) DO UPDATE SET
   deleted_at = NULL,
   updated_at = NOW();
 
-INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
-VALUES ('f03b5c30-4f5e-53e1-9075-4e57f26b9518', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 10 ล้อ วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0454, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6ee88b74b252', 231, 1, 'น้ำหนักบรรทุกสูงสุด 16 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":16}'::jsonb, NOW(), NOW())
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('841b1da0-c0b3-5fc2-81c2-ec20beb82fd4', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2705, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-d28873a79645', 231, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope_category_id = EXCLUDED.scope_category_id,
   resource = EXCLUDED.resource,
@@ -6231,6 +8072,539 @@ ON CONFLICT (id) DO UPDATE SET
   ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
   ref_ch4 = EXCLUDED.ref_ch4,
   ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('30420c2c-ff79-5d46-961d-4db290b385d4', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.3089, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c0f22325c1ea', 232, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('cec2ba2b-8f86-5b03-b517-212a909fca99', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2555, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-e5b70fc5b45e', 233, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('43db88ac-61ec-5e3c-9afa-42ac8a3935ef', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.4693, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-cdc6d30e749e', 234, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('bee3cdb0-9146-50f6-9c8f-cebdbdc5f88d', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ ขนาดเล็ก วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.3274, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-c732205a7a39', 235, 1, 'น้ำหนักบรรทุกสูงสุด 1.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":1.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('6b92ba90-4d45-5274-bc5a-cbc9d850e809', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.3343, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-0148b27427c9', 236, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('141e4a56-7438-57ca-bc91-46e70a455171', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1834, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-149d64cc06ed', 237, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('c466d178-29de-5beb-94b4-14b812c317c7', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.3399, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6972f6f1aaaf', 238, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('0e6aea6c-0456-5614-83e7-ebef01b061bb', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบปกติ 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2404, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-3766e4c13854', 239, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('1f0989ff-67f2-52b7-b7f9-802b3c8d10b0', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบสมบุกสมบัน 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4104, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-abadfef9bd0d', 240, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('715066eb-33a0-597c-a6f7-2c381ce6955d', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบสมบุกสมบัน 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.199, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-30c71ac38827', 241, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('88f67a8c-371a-5f7d-9ccb-c6f59f858ce5', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบสมบุกสมบัน 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.367, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-066649385873', 242, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('169c8221-2a23-5725-adf7-952dbacec012', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 4 ล้อ วิ่งแบบสมบุกสมบัน 75% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.2549, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-5421b1364ab6', 243, 1, 'น้ำหนักบรรทุกสูงสุด 7 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":7}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('8a50574b-21a2-592a-8632-a2a1ea803724', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 0% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'km', 0.4066, 'ระยะทาง', 'km', NULL, NULL, 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-7a75b2b82e4b', 244, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2a30d426-5a20-5108-a275-176928a7d5e7', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 100% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.0653, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-1daf7a1d4ed1', 245, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
+  ref_source = EXCLUDED.ref_source,
+  version = EXCLUDED.version,
+  ref_code = EXCLUDED.ref_code,
+  sort_index = EXCLUDED.sort_index,
+  multiplier = EXCLUDED.multiplier,
+  description = EXCLUDED.description,
+  meta = EXCLUDED.meta,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO fuel_resources (id, scope_category_id, resource, sub_category, unit, ef_value, value1_label, value1_unit, value2_label, value2_unit, ref_info, ref_co2, ref_fossil_ch4, ref_ch4, ref_n2o, ref_sf6, ref_nf3, ref_hfcs, ref_pfcs, gwp100_hfcs, gwp100_pfcs, extraghg_ef, extraghg_gwp100, ref_source, version, ref_code, sort_index, multiplier, description, meta, created_at, updated_at)
+VALUES ('2048ebbd-0453-513d-9233-e1bb4db13b95', 'a1000003-0003-4003-8003-00000000000a', 'รถตู้บรรทุก 6 ล้อ ขนาดเล็ก วิ่งปกติ 50% Loading', 'กลุ่มการขนส่งโดยรถบรรทุก (Truck Transportations)', 'tkm', 0.1197, 'ระยะทาง', 'km', 'น้ำหนักที่ขน', 'ton', 'Thai National LCI Database, TIIS-MTEC-NSTDA (with TGO electricity 2022-2024)', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'TGO', 'TGO 1 กรกฎาคม 2569', 'EF006-6b488e31315f', 246, 1, 'น้ำหนักบรรทุกสูงสุด 8.5 ตัน; ใช้น้ำมันดีเซล เป็นเชื้อเพลิง; LCIA method IPCC 2013 GWP 100a V1.03', '{"maxLoadTon":8.5}'::jsonb, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope_category_id = EXCLUDED.scope_category_id,
+  resource = EXCLUDED.resource,
+  sub_category = EXCLUDED.sub_category,
+  unit = EXCLUDED.unit,
+  ef_value = EXCLUDED.ef_value,
+  value1_label = EXCLUDED.value1_label,
+  value1_unit = EXCLUDED.value1_unit,
+  value2_label = EXCLUDED.value2_label,
+  value2_unit = EXCLUDED.value2_unit,
+  ref_info = EXCLUDED.ref_info,
+  ref_co2 = EXCLUDED.ref_co2,
+  ref_fossil_ch4 = EXCLUDED.ref_fossil_ch4,
+  ref_ch4 = EXCLUDED.ref_ch4,
+  ref_n2o = EXCLUDED.ref_n2o,
+  ref_sf6 = EXCLUDED.ref_sf6,
+  ref_nf3 = EXCLUDED.ref_nf3,
+  ref_hfcs = EXCLUDED.ref_hfcs,
+  ref_pfcs = EXCLUDED.ref_pfcs,
+  gwp100_hfcs = EXCLUDED.gwp100_hfcs,
+  gwp100_pfcs = EXCLUDED.gwp100_pfcs,
+  extraghg_ef = EXCLUDED.extraghg_ef,
+  extraghg_gwp100 = EXCLUDED.extraghg_gwp100,
   ref_source = EXCLUDED.ref_source,
   version = EXCLUDED.version,
   ref_code = EXCLUDED.ref_code,
