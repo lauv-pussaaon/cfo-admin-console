@@ -84,6 +84,9 @@ export default function AdminConsoleUsersPage() {
   const [verificationDocumentCounts, setVerificationDocumentCounts] = useState<
     Record<string, number>
   >({})
+  const [verificationUploadUrls, setVerificationUploadUrls] = useState<
+    Record<string, string>
+  >({})
   const [reviewDocsUser, setReviewDocsUser] = useState<User | null>(null)
 
   const notify = (message: string, severity: 'success' | 'error' = 'success') => {
@@ -108,12 +111,17 @@ export default function AdminConsoleUsersPage() {
         throw new Error(result.error || 'โหลดเอกสารยืนยันไม่สำเร็จ')
       }
       const counts: Record<string, number> = {}
+      const urls: Record<string, string> = {}
       for (const row of result.verifications ?? []) {
         if (row?.user_id) {
           counts[row.user_id as string] = Number(row.document_count) || 0
+          if (typeof row.upload_url === 'string' && row.upload_url) {
+            urls[row.user_id as string] = row.upload_url
+          }
         }
       }
       setVerificationDocumentCounts(counts)
+      setVerificationUploadUrls(urls)
     } catch (error) {
       if (!isExpectedError(error)) {
         console.error('Error loading verification summaries:', error)
@@ -501,9 +509,26 @@ export default function AdminConsoleUsersPage() {
           const row = users.find((u) => u.id === id) || null
           setReviewDocsUser(row)
         }}
+        onCopyVerificationLink={async (id) => {
+          const url = verificationUploadUrls[id]
+          if (!url) {
+            notify('ไม่พบลิงก์อัปโหลดเอกสาร', 'error')
+            return
+          }
+          try {
+            await navigator.clipboard.writeText(url)
+            notify('คัดลอกลิงก์อัปโหลดแล้ว')
+          } catch (error) {
+            notify('คัดลอกลิงก์ไม่สำเร็จ', 'error')
+            if (!isExpectedError(error)) {
+              console.error('Failed to copy verification link:', error)
+            }
+          }
+        }}
         statusUpdatingId={statusUpdatingId}
         showReviewDocuments={Boolean(user && isAdmin(user))}
         verificationDocumentCounts={verificationDocumentCounts}
+        verificationUploadUrls={verificationUploadUrls}
       />
 
       <UserModal

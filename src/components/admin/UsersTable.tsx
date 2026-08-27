@@ -17,6 +17,7 @@ import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
+  ContentCopy as ContentCopyIcon,
 } from '@mui/icons-material'
 import type { User, UserStatus } from '@/lib/api/types'
 import { getRoleColor } from '@/types/roles'
@@ -36,11 +37,13 @@ interface Props {
   onReject?: (id: string) => void
   onStatusToggle?: (id: string, nextStatus: 'active' | 'inactive') => void | Promise<void>
   onReviewDocuments?: (id: string) => void
+  onCopyVerificationLink?: (id: string) => void
   statusUpdatingId?: string | null
   data: User[]
   loading: boolean
   showReviewDocuments?: boolean
   verificationDocumentCounts?: Record<string, number>
+  verificationUploadUrls?: Record<string, string>
 }
 
 function statusChipColor (
@@ -59,11 +62,13 @@ export default function UsersTable({
   onReject,
   onStatusToggle,
   onReviewDocuments,
+  onCopyVerificationLink,
   statusUpdatingId = null,
   data,
   loading,
   showReviewDocuments = false,
   verificationDocumentCounts = {},
+  verificationUploadUrls = {},
 }: Props) {
   const isLockedAdmin = (user: { role: string; username: string }) => {
     return user.role === 'Admin' && user.username === 'admin'
@@ -81,8 +86,9 @@ export default function UsersTable({
       avatar_url: user.avatar_url,
       organizations: user.organizations || [],
       document_count: verificationDocumentCounts[user.id] ?? 0,
+      upload_url: verificationUploadUrls[user.id] ?? '',
     }))
-  }, [data, verificationDocumentCounts])
+  }, [data, verificationDocumentCounts, verificationUploadUrls])
 
   const columns: GridColDef[] = useMemo(() => {
     const cols: GridColDef[] = [
@@ -310,7 +316,7 @@ export default function UsersTable({
       cols.push({
         field: 'document_count',
         headerName: 'Review documents',
-        width: 160,
+        width: 200,
         align: 'center',
         headerAlign: 'center',
         sortable: false,
@@ -326,9 +332,10 @@ export default function UsersTable({
             )
           }
           const count = Number(params.row.document_count) || 0
+          const uploadUrl = (params.row.upload_url as string) || ''
           return (
             <Box
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.25, height: '100%' }}
               onClick={(e) => e.stopPropagation()}
             >
               <Button
@@ -344,6 +351,18 @@ export default function UsersTable({
               >
                 {count} ไฟล์
               </Button>
+              {uploadUrl ? (
+                <Tooltip title="คัดลอกลิงก์อัปโหลดเอกสาร">
+                  <IconButton
+                    size="small"
+                    onClick={() => onCopyVerificationLink?.(params.row.id as string)}
+                    sx={adminGhostIconButtonSx.primary}
+                    aria-label="คัดลอกลิงก์อัปโหลดเอกสาร"
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
             </Box>
           )
         },
@@ -439,6 +458,7 @@ export default function UsersTable({
     onReject,
     onStatusToggle,
     onReviewDocuments,
+    onCopyVerificationLink,
     statusUpdatingId,
     showReviewDocuments,
   ])

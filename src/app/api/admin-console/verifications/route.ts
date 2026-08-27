@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceSupabase } from '@/lib/supabase-service'
 import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
-import { listVerificationSummaries } from '@/lib/api/consult-audit-verification'
+import {
+  buildVerificationUploadUrl,
+  listVerificationSummaries,
+} from '@/lib/api/consult-audit-verification'
+import {
+  resolveBaseUrlForEmail,
+  resolveSiteOriginFromRequest,
+} from '@/lib/email/resolve-site-origin'
 
 export async function GET (request: NextRequest) {
   try {
@@ -18,6 +25,9 @@ export async function GET (request: NextRequest) {
       )
     }
 
+    const requestOrigin = resolveSiteOriginFromRequest(request)
+    const baseUrl = resolveBaseUrlForEmail(requestOrigin) || requestOrigin
+
     const summaries = await listVerificationSummaries(supabase)
     return NextResponse.json({
       verifications: summaries.map((row) => ({
@@ -26,6 +36,9 @@ export async function GET (request: NextRequest) {
         document_count: row.document_count,
         verified_date: row.verified_date,
         expired_date: row.expired_date,
+        ...(row.token && baseUrl
+          ? { upload_url: buildVerificationUploadUrl(baseUrl, row.token) }
+          : {}),
       })),
     })
   } catch (error) {
