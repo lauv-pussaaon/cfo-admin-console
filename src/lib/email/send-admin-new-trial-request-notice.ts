@@ -8,13 +8,12 @@ import {
   buildAdminConsoleTrialRequestsUrl,
 } from '@/lib/email/resolve-site-origin'
 import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
+import { getResendFrom } from '@/lib/email/resend-client'
 import {
   getOrgRequestKindLabel,
   isAnnualMembershipRequest,
   type OrgRequestKind,
 } from '@/types/org-request-kind'
-
-const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
 
 function formatSubmittedAt (value: string): string {
   return new Date(value).toLocaleString('th-TH', {
@@ -61,8 +60,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
     adminEmails = adminEmails.slice(0, MAX_RECIPIENTS)
   }
 
-  const from =
-    process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM
+  const from = getResendFrom()
 
   const baseUrl = resolveBaseUrlForEmail(params.requestOrigin ?? '')
   if (!baseUrl) {

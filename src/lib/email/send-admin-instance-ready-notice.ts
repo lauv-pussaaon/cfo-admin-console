@@ -4,9 +4,8 @@
  */
 
 import { Resend } from 'resend'
+import { getResendFrom } from '@/lib/email/resend-client'
 import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
-
-const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
 
 function buildLoginUrl (appUrl: string): string {
   return `${appUrl.replace(/\/$/, '')}/login`
@@ -44,7 +43,7 @@ export async function sendAdminInstanceReadyNotice (params: {
     adminEmails = adminEmails.slice(0, MAX_RECIPIENTS)
   }
 
-  const from = process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM
+  const from = getResendFrom()
   const loginUrl = buildLoginUrl(params.appUrl)
   const username = params.username?.trim() || ''
   const factoryAdminEmail = params.factoryAdminEmail?.trim() || ''

@@ -24,6 +24,7 @@ import {
   ArrowBack,
   Search as SearchIcon,
   ContentCopy as CopyIcon,
+  OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
 import OrganizationDetailDrawer from '@/components/admin/OrganizationDetailDrawer'
@@ -244,6 +245,14 @@ export default function AdminConsoleOrganizationsPage() {
     setShowSuccessMessage(true)
   }
 
+  const handleOpenTrialRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/trial`, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleOpenMembershipRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/membership`, '_blank', 'noopener,noreferrer')
+  }
+
   const handleCopyHashcode = async () => {
     if (user?.invite_hashcode) {
       try {
@@ -295,7 +304,27 @@ export default function AdminConsoleOrganizationsPage() {
               ? 'จัดการลูกค้า (Admin)'
               : 'จัดการลูกค้า'}
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+          {isAdmin(user) && (
+            <>
+              <Button
+                variant="outlined"
+                startIcon={<OpenInNewIcon />}
+                onClick={handleOpenTrialRegistrationUrl}
+                sx={adminPrimaryButtonSx}
+              >
+                ลิงก์สมัครทดลองใช้งาน
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<OpenInNewIcon />}
+                onClick={handleOpenMembershipRegistrationUrl}
+                sx={adminPrimaryButtonSx}
+              >
+                ลิงก์สมัครสมาชิกรายปี
+              </Button>
+            </>
+          )}
           {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
             <Chip
               label={`Invite Code: ${user.invite_hashcode}`}

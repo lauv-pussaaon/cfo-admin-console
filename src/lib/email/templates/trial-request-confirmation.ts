@@ -48,7 +48,7 @@ export function buildTrialRequestConfirmationContent (params: {
     receivedLine,
     nextStepLine,
     '',
-    'ข้อมูลที่ท่านส่งมา:',
+    'ข้อมูลที่ลงทะเบียน:',
     `- ประเภทบัญชี: ${kindLabel}`,
     `- องค์กร: ${params.organizationName}`,
     `- รหัสบริษัท: ${companyCode || '—'}`,
@@ -65,7 +65,7 @@ export function buildTrialRequestConfirmationContent (params: {
   <p>สวัสดี คุณ ${safe.contactName}</p>
   <p>${safe.receivedLine}</p>
   <p>${safe.nextStepLine}</p>
-  <p><strong>ข้อมูลที่ท่านส่งมา</strong></p>
+  <p><strong>ข้อมูลที่ลงทะเบียน</strong></p>
   <ul>
     <li>ประเภทบัญชี: ${escapeHtml(kindLabel)}</li>
     <li>องค์กร: ${safe.organizationName}</li>

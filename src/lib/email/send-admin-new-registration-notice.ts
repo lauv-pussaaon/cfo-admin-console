@@ -15,13 +15,12 @@ import {
   type RegistrationEmailProfile,
 } from '@/lib/email/registration-profile-lines'
 import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
+import { getResendFrom } from '@/lib/email/resend-client'
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
   Audit: 'ผู้ตรวจสอบ',
 }
-
-const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
 
 export async function sendAdminNewRegistrationNotice (params: {
   name: string
@@ -56,8 +55,7 @@ export async function sendAdminNewRegistrationNotice (params: {
     adminEmails = adminEmails.slice(0, MAX_RECIPIENTS)
   }
 
-  const from =
-    process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM
+  const from = getResendFrom()
 
   const baseUrl = resolveBaseUrlForEmail(params.requestOrigin ?? '')
   if (!baseUrl) {

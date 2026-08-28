@@ -241,14 +241,6 @@ export default function AdminConsoleUsersPage() {
     notify(editingUser ? 'แก้ไขผู้ใช้เรียบร้อยแล้ว' : 'สร้างผู้ใช้เรียบร้อยแล้ว')
   }
 
-  const handleOpenTrialRegistrationUrl = () => {
-    window.open(`${window.location.origin}/register/trial`, '_blank', 'noopener,noreferrer')
-  }
-
-  const handleOpenMembershipRegistrationUrl = () => {
-    window.open(`${window.location.origin}/register/membership`, '_blank', 'noopener,noreferrer')
-  }
-
   const handleOpenRegistrationUrl = () => {
     window.open(`${window.location.origin}/register/consult`, '_blank', 'noopener,noreferrer')
   }
@@ -407,22 +399,6 @@ export default function AdminConsoleUsersPage() {
           จัดการผู้ใช้
         </Typography>
         <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-          <Button
-            variant="outlined"
-            startIcon={<OpenInNewIcon />}
-            onClick={handleOpenTrialRegistrationUrl}
-            sx={adminPrimaryButtonSx}
-          >
-            ลิงก์สมัครทดลองใช้งาน
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<OpenInNewIcon />}
-            onClick={handleOpenMembershipRegistrationUrl}
-            sx={adminPrimaryButtonSx}
-          >
-            ลิงก์สมัครสมาชิกรายปี
-          </Button>
           <Button
             variant="outlined"
             startIcon={<OpenInNewIcon />}

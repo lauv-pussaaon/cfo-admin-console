@@ -1,13 +1,10 @@
 import { Resend } from 'resend'
+import { getResendFrom } from '@/lib/email/resend-client'
 
-export const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
+export { DEFAULT_RESEND_FROM, getResendFrom } from '@/lib/email/resend-client'
 
 export function getResendApiKey (): string | null {
   return process.env.RESEND_API_KEY?.trim() || process.env.RESEND_KEY?.trim() || null
-}
-
-export function getResendFrom (): string {
-  return process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM
 }
 
 export async function sendResendEmail (params: {

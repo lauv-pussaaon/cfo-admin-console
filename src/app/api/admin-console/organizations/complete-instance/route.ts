@@ -54,9 +54,7 @@ export async function POST (request: NextRequest) {
 
     const { data: org, error: fetchError } = await supabase
       .from('organizations')
-      .select(
-        'id, name, code, account_type, app_url, username, factory_admin_email, onboard_email_sent_at, instance_ready_notice_sent_at'
-      )
+      .select('id, name, code, account_type, app_url, username, factory_admin_email')
       .eq('code', code)
       .maybeSingle()
 
@@ -102,6 +100,12 @@ export async function POST (request: NextRequest) {
       accountType: org.account_type,
     })
 
+    const { data: stamps } = await supabase
+      .from('organizations')
+      .select('onboard_email_sent_at, instance_ready_notice_sent_at')
+      .eq('id', org.id)
+      .maybeSingle()
+
     const resolvedAppUrl = appUrl || org.app_url?.trim() || ''
     const resolvedUsername = username || org.username?.trim() || ''
     const resolvedEmail =
@@ -113,7 +117,7 @@ export async function POST (request: NextRequest) {
     let adminNoticeSkipReason: string | undefined
 
     if (notify) {
-      if (org.onboard_email_sent_at) {
+      if (stamps?.onboard_email_sent_at) {
         onboardSkipReason = 'already_sent'
       } else {
         try {
@@ -130,7 +134,7 @@ export async function POST (request: NextRequest) {
         }
       }
 
-      if (org.instance_ready_notice_sent_at) {
+      if (stamps?.instance_ready_notice_sent_at) {
         adminNoticeSkipReason = 'already_sent'
       } else {
         try {
@@ -177,6 +181,8 @@ export async function POST (request: NextRequest) {
     return NextResponse.json({
       id: org.id,
       initialized: true,
+      isInitialized: true,
+      deployed: true,
       requestApproved: approveResult.approved,
       requestId: approveResult.requestId ?? null,
       notify,

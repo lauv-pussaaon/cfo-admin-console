@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 
-export const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
+export const RESEND_FROM_NAME = 'IdeaCarb Support'
+export const DEFAULT_RESEND_FROM = `${RESEND_FROM_NAME} <onboarding@resend.dev>`
 
 export function getResendApiKey (): string | null {
   return (
@@ -11,7 +12,10 @@ export function getResendApiKey (): string | null {
 }
 
 export function getResendFrom (): string {
-  return process.env.RESEND_FROM_EMAIL?.trim() || DEFAULT_RESEND_FROM
+  const raw = process.env.RESEND_FROM_EMAIL?.trim()
+  if (!raw) return DEFAULT_RESEND_FROM
+  if (raw.includes('<')) return raw
+  return `${RESEND_FROM_NAME} <${raw}>`
 }
 
 export async function sendResendEmail (params: {

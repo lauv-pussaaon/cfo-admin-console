@@ -43,7 +43,7 @@ export function buildRegistrationConfirmationContent (params: {
     '',
     `อัปโหลดเอกสารยืนยัน: ${params.verificationUploadUrl}`,
     '',
-    'ข้อมูลที่ส่งมา:',
+    'ข้อมูลที่ลงทะเบียน:',
     `- ชื่อ-นามสกุล: ${params.name}`,
     `- ชื่อผู้ใช้: ${params.username}`,
     `- อีเมล: ${params.email}`,
@@ -67,7 +67,7 @@ export function buildRegistrationConfirmationContent (params: {
     </a>
   </p>
   <p style="font-size:13px;color:#64748b;">หรือเปิดลิงก์: <a href="${safe.verificationUploadUrl}">${safe.verificationUploadUrl}</a></p>
-  <p><strong>ข้อมูลที่ส่งมา</strong></p>
+  <p><strong>ข้อมูลที่ลงทะเบียน</strong></p>
   <ul>
     <li>ชื่อ-นามสกุล: ${safe.name}</li>
     <li>ชื่อผู้ใช้: ${safe.username}</li>
