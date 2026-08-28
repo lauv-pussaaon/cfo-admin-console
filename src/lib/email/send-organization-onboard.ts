@@ -5,12 +5,13 @@
 import { sendResendEmail } from '@/lib/email/templates/resend-client'
 import { SUPPORT_EMAIL } from '@/lib/email/templates/shared'
 import { buildOrganizationOnboardContent } from '@/lib/email/templates/organization-onboard'
+import type { OrgRequestKind } from '@/types/org-request-kind'
 
 export async function sendOrganizationOnboardEmail (params: {
   to: string
   organizationName: string
   organizationCode: string | null
-  accountType: string | null
+  requestKind: OrgRequestKind
   contactFirstName: string | null
   contactLastName: string | null
   contactPhone: string | null
@@ -22,7 +23,7 @@ export async function sendOrganizationOnboardEmail (params: {
   const content = buildOrganizationOnboardContent({
     organizationName: params.organizationName,
     organizationCode: params.organizationCode,
-    accountType: params.accountType,
+    requestKind: params.requestKind,
     contactFirstName: params.contactFirstName,
     contactLastName: params.contactLastName,
     contactPhone: params.contactPhone,

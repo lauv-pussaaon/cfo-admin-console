@@ -1,23 +1,5 @@
 import type { AccountType } from './account-types'
 
-export const PACKAGE_PERIOD_DEFAULTS: Record<AccountType, { start: string; end: string | null }> = {
-  demo: { start: '2026-06-26', end: '2026-07-31' },
-  employee: { start: '2026-06-01', end: null },
-  'general customers': { start: '2026-06-01', end: '2026-07-31' },
-  project: { start: '2026-06-01', end: null },
-}
-
-export function getDefaultPackagePeriod (accountType: AccountType): {
-  package_start: string
-  package_end: string | null
-} {
-  const defaults = PACKAGE_PERIOD_DEFAULTS[accountType]
-  return {
-    package_start: defaults.start,
-    package_end: defaults.end,
-  }
-}
-
 function toLocalDateInputValue (date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -35,6 +17,30 @@ export function getDefaultAnnualPackagePeriod (): {
   return {
     package_start: toLocalDateInputValue(start),
     package_end: toLocalDateInputValue(end),
+  }
+}
+
+export function getDefaultPackagePeriod (accountType: AccountType): {
+  package_start: string
+  package_end: string | null
+} {
+  if (accountType === 'general customers') {
+    return getDefaultAnnualPackagePeriod()
+  }
+
+  const start = new Date()
+  if (accountType === 'demo') {
+    const end = new Date(start)
+    end.setDate(end.getDate() + 30)
+    return {
+      package_start: toLocalDateInputValue(start),
+      package_end: toLocalDateInputValue(end),
+    }
+  }
+
+  return {
+    package_start: toLocalDateInputValue(start),
+    package_end: null,
   }
 }
 

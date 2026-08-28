@@ -92,6 +92,8 @@ CREATE TABLE organizations (
   contact_phone TEXT,
   username TEXT,
   password TEXT,
+  onboard_email_sent_at TIMESTAMPTZ,
+  instance_ready_notice_sent_at TIMESTAMPTZ,
   account_type TEXT NOT NULL DEFAULT 'general customers',
   package_start DATE,
   package_end DATE,

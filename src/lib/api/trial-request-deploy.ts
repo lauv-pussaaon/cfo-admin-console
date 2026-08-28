@@ -1,5 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { isAnnualMembershipRequest } from '@/types/org-request-kind'
+import {
+  isAnnualMembershipRequest,
+  isOrgRequestKind,
+  type OrgRequestKind,
+} from '@/types/org-request-kind'
 
 const ACTIVE_REQUEST_STATUSES = ['pending', 'processing'] as const
 
@@ -113,4 +117,33 @@ export async function approveActiveTrialRequestByCode (
   }
 
   return { approved: true, requestId: request.id }
+}
+
+export async function resolveOnboardRequestKind (
+  supabase: SupabaseClient,
+  params: { organizationId: string; code?: string | null; accountType?: string | null }
+): Promise<OrgRequestKind> {
+  const { data: byOrg, error: byOrgError } = await supabase
+    .from('organization_trial_requests')
+    .select('request_kind')
+    .eq('organization_id', params.organizationId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (byOrgError) {
+    console.error('[trial-request-deploy] load request by org:', byOrgError)
+  } else if (isOrgRequestKind(byOrg?.request_kind)) {
+    return byOrg.request_kind
+  }
+
+  const code = params.code?.trim() || ''
+  if (code) {
+    const active = await findActiveTrialRequestByCode(supabase, code)
+    if (active && isOrgRequestKind(active.request_kind)) {
+      return active.request_kind
+    }
+  }
+
+  return params.accountType === 'general customers' ? 'annual_membership' : 'trial'
 }

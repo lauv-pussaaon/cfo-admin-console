@@ -2,8 +2,9 @@
  * Load organization by id and send onboard email (server only).
  */
 
-import { getServiceSupabase } from '@/lib/supabase-service'
+import { resolveOnboardRequestKind } from '@/lib/api/trial-request-deploy'
 import { sendOrganizationOnboardEmail } from '@/lib/email/send-organization-onboard'
+import { getServiceSupabase } from '@/lib/supabase-service'
 
 export type SendOnboardByOrgIdResult =
   | { sent: true }
@@ -64,12 +65,18 @@ export async function sendOnboardEmailByOrganizationId (
     }
   }
 
+  const requestKind = await resolveOnboardRequestKind(supabase, {
+    organizationId: org.id,
+    code: org.code,
+    accountType: org.account_type,
+  })
+
   try {
     const result = await sendOrganizationOnboardEmail({
       to: factoryAdminEmail,
       organizationName: org.name,
       organizationCode: org.code,
-      accountType: org.account_type,
+      requestKind,
       contactFirstName: org.contact_first_name,
       contactLastName: org.contact_last_name,
       contactPhone: org.contact_phone,
@@ -86,6 +93,19 @@ export async function sendOnboardEmailByOrganizationId (
         status: 502,
         skipReason: result.skipReason,
       }
+    }
+
+    const now = new Date().toISOString()
+    const { error: stampError } = await supabase
+      .from('organizations')
+      .update({
+        onboard_email_sent_at: now,
+        updated_at: now,
+      })
+      .eq('id', org.id)
+
+    if (stampError) {
+      console.error('[email] stamp onboard_email_sent_at:', stampError)
     }
 
     return { sent: true }

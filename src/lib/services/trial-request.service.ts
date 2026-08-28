@@ -1,12 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { supabase } from '../supabase'
-import type { AccountType } from '@/types/account-types'
 import type {
   OrganizationTrialRequest,
   OrganizationTrialRequestConsent,
 } from '@/types/database'
 import {
-  approveTrialRequest as approveTrialRequestAPI,
   createTrialRequest as createTrialRequestAPI,
   getTrialRequestById as getTrialRequestByIdAPI,
   getTrialRequestConsent as getTrialRequestConsentAPI,
@@ -48,18 +46,6 @@ export class TrialRequestService {
     input: UpdateTrialRequestStatusInput
   ): Promise<OrganizationTrialRequest> {
     return updateTrialRequestStatusAPI(id, input)
-  }
-
-  async approveTrialRequest (
-    id: string,
-    input: {
-      reviewedBy: string
-      accountType: AccountType
-      packageStart?: string | null
-      packageEnd?: string | null
-    }
-  ): Promise<OrganizationTrialRequest> {
-    return approveTrialRequestAPI(id, input)
   }
 }
 

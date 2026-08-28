@@ -15,6 +15,8 @@ export interface Organization {
   contact_phone: string | null
   username: string | null
   password: string | null
+  onboard_email_sent_at: string | null
+  instance_ready_notice_sent_at: string | null
   account_type: AccountType
   package_start: string | null
   package_end: string | null

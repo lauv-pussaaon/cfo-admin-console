@@ -1,8 +1,6 @@
 import { supabase } from '../supabase'
-import { createOrganization } from './organizations'
 import { ConflictError, ValidationError, throwIfError } from '@/lib/utils/errors'
 import { normalizeOrganizationCode } from '@/lib/organization-code'
-import type { AccountType } from '@/types/account-types'
 import type {
   OrganizationTrialRequest,
   OrganizationTrialRequestConsent,
@@ -10,7 +8,6 @@ import type {
 } from '@/types/database'
 import {
   DEFAULT_ORG_REQUEST_KIND,
-  isAnnualMembershipRequest,
   type OrgRequestKind,
 } from '@/types/org-request-kind'
 import { canTransitionTrialRequestStatus } from '@/types/trial-request-status'
@@ -30,13 +27,6 @@ export interface CreateTrialRequestInput {
   termsDocumentUrl: string
   privacyDocumentUrl: string
   collectShareDataConsentUrl: string
-}
-
-export interface ApproveTrialRequestInput {
-  reviewedBy: string
-  accountType: AccountType
-  packageStart?: string | null
-  packageEnd?: string | null
 }
 
 export interface UpdateTrialRequestStatusInput {
@@ -215,66 +205,6 @@ export const updateTrialRequestStatus = async (
   const updateResult = await supabase
     .from('organization_trial_requests')
     .update(updatePayload)
-    .eq('id', id)
-    .in('status', APPROVABLE_STATUSES)
-    .select()
-    .single()
-
-  return throwIfError(updateResult)
-}
-
-export const approveTrialRequest = async (
-  id: string,
-  input: ApproveTrialRequestInput
-): Promise<OrganizationTrialRequest> => {
-  const request = await getTrialRequestById(id)
-
-  if (!request) {
-    throw new ValidationError('ไม่พบคำขอสมัครองค์กร')
-  }
-
-  if (!APPROVABLE_STATUSES.includes(request.status)) {
-    throw new ValidationError('คำขอนี้ไม่สามารถอนุมัติได้')
-  }
-
-  const isMembership = isAnnualMembershipRequest(request.request_kind)
-  const accountType: AccountType = isMembership ? 'general customers' : input.accountType
-  const packageStart = input.packageStart?.trim() || null
-  const packageEnd = input.packageEnd?.trim() || null
-
-  if (isMembership) {
-    if (!packageStart || !packageEnd) {
-      throw new ValidationError('กรุณาระบุวันเริ่มและวันสิ้นสุดแพ็กเกจ')
-    }
-    if (packageEnd < packageStart) {
-      throw new ValidationError('วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น')
-    }
-  }
-
-  const organization = await createOrganization({
-    name: request.organization_name,
-    code: request.company_code,
-    factory_admin_email: request.contact_email,
-    contact_first_name: request.contact_first_name,
-    contact_last_name: request.contact_last_name,
-    contact_phone: request.contact_phone,
-    account_type: accountType,
-    ...(isMembership
-      ? { package_start: packageStart, package_end: packageEnd }
-      : {}),
-    created_by: input.reviewedBy,
-  })
-
-  const updateResult = await supabase
-    .from('organization_trial_requests')
-    .update({
-      status: 'approved',
-      organization_id: organization.id,
-      approved_account_type: accountType,
-      reviewed_by: input.reviewedBy,
-      reviewed_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
     .eq('id', id)
     .in('status', APPROVABLE_STATUSES)
     .select()

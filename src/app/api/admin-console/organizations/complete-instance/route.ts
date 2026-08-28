@@ -54,7 +54,9 @@ export async function POST (request: NextRequest) {
 
     const { data: org, error: fetchError } = await supabase
       .from('organizations')
-      .select('id, name, code, account_type, app_url, username, factory_admin_email')
+      .select(
+        'id, name, code, account_type, app_url, username, factory_admin_email, onboard_email_sent_at, instance_ready_notice_sent_at'
+      )
       .eq('code', code)
       .maybeSingle()
 
@@ -111,44 +113,64 @@ export async function POST (request: NextRequest) {
     let adminNoticeSkipReason: string | undefined
 
     if (notify) {
-      try {
-        const onboard = await sendOnboardEmailByOrganizationId(org.id)
-        onboardSent = onboard.sent
-        if (!onboard.sent) {
-          onboardSkipReason = onboard.skipReason || onboard.error
-          console.warn('[complete-instance] onboard email skipped:', onboardSkipReason)
+      if (org.onboard_email_sent_at) {
+        onboardSkipReason = 'already_sent'
+      } else {
+        try {
+          const onboard = await sendOnboardEmailByOrganizationId(org.id)
+          onboardSent = onboard.sent
+          if (!onboard.sent) {
+            onboardSkipReason = onboard.skipReason || onboard.error
+            console.warn('[complete-instance] onboard email skipped:', onboardSkipReason)
+          }
+        } catch (error) {
+          onboardSkipReason =
+            error instanceof Error ? error.message : 'ส่งอีเมลต้อนรับไม่สำเร็จ'
+          console.error('[complete-instance] onboard email failed:', error)
         }
-      } catch (error) {
-        onboardSkipReason =
-          error instanceof Error ? error.message : 'ส่งอีเมลต้อนรับไม่สำเร็จ'
-        console.error('[complete-instance] onboard email failed:', error)
       }
 
-      try {
-        const adminEmails = await getEnabledNotificationEmails()
-        if (adminEmails.length === 0) {
-          adminNoticeSkipReason = 'no_admin_emails'
-        } else if (!resolvedAppUrl) {
-          adminNoticeSkipReason = 'องค์กรยังไม่มี App URL'
-        } else {
-          const notice = await sendAdminInstanceReadyNotice({
-            organizationName: org.name,
-            organizationCode: org.code,
-            accountType: org.account_type,
-            factoryAdminEmail: resolvedEmail,
-            appUrl: resolvedAppUrl,
-            username: resolvedUsername,
-            adminEmails,
-          })
-          adminNoticeSent = notice.sent
-          if (!notice.sent) {
-            adminNoticeSkipReason = notice.skipReason
+      if (org.instance_ready_notice_sent_at) {
+        adminNoticeSkipReason = 'already_sent'
+      } else {
+        try {
+          const adminEmails = await getEnabledNotificationEmails()
+          if (adminEmails.length === 0) {
+            adminNoticeSkipReason = 'no_admin_emails'
+          } else if (!resolvedAppUrl) {
+            adminNoticeSkipReason = 'องค์กรยังไม่มี App URL'
+          } else {
+            const notice = await sendAdminInstanceReadyNotice({
+              organizationName: org.name,
+              organizationCode: org.code,
+              accountType: org.account_type,
+              factoryAdminEmail: resolvedEmail,
+              appUrl: resolvedAppUrl,
+              username: resolvedUsername,
+              adminEmails,
+            })
+            adminNoticeSent = notice.sent
+            if (!notice.sent) {
+              adminNoticeSkipReason = notice.skipReason
+            } else {
+              const stampNow = new Date().toISOString()
+              const { error: stampError } = await supabase
+                .from('organizations')
+                .update({
+                  instance_ready_notice_sent_at: stampNow,
+                  updated_at: stampNow,
+                })
+                .eq('id', org.id)
+              if (stampError) {
+                console.error('[complete-instance] stamp instance_ready_notice_sent_at:', stampError)
+              }
+            }
           }
+        } catch (error) {
+          adminNoticeSkipReason =
+            error instanceof Error ? error.message : 'ส่งอีเมลแจ้ง Admin ไม่สำเร็จ'
+          console.error('[complete-instance] admin notice failed:', error)
         }
-      } catch (error) {
-        adminNoticeSkipReason =
-          error instanceof Error ? error.message : 'ส่งอีเมลแจ้ง Admin ไม่สำเร็จ'
-        console.error('[complete-instance] admin notice failed:', error)
       }
     }
 
