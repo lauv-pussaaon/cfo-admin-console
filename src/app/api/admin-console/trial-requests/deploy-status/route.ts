@@ -30,6 +30,8 @@ export async function POST (request: NextRequest) {
     const companyCode = normalizeOrganizationCode(readOptionalString(raw.companyCode))
     const status = readOptionalString(raw.status)
     const errorText = readOptionalString(raw.error)
+    const logText = readOptionalString(raw.log)
+    const logPath = readOptionalString(raw.logPath)
 
     if (!companyCode || !INSTANCE_CODE_PATTERN.test(companyCode)) {
       return NextResponse.json({ error: 'รหัสบริษัทไม่ถูกต้อง' }, { status: 400 })
@@ -50,6 +52,8 @@ export async function POST (request: NextRequest) {
       companyCode,
       status,
       ...(errorText ? { error: errorText } : {}),
+      ...(logText ? { log: logText } : {}),
+      ...(logPath ? { logPath } : {}),
     })
 
     if (!result.updated) {

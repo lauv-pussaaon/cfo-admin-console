@@ -7,6 +7,35 @@ import {
 
 const ACTIVE_REQUEST_STATUSES = ['open', 'started', 'deploying'] as const
 const DEPLOY_STATUS_MATCH = ['deploying', 'started'] as const
+const DEPLOY_LOG_MAX_CHARS = 32000
+
+type DeployFailureFields = {
+  error?: string
+  log?: string
+  logPath?: string
+}
+
+function trimDeployText (value: string | undefined, max = DEPLOY_LOG_MAX_CHARS): string | null {
+  const text = value?.replace(/\r\n/g, '\n').trim() || ''
+  if (!text) return null
+  return text.length > max ? text.slice(-max) : text
+}
+
+function deployFailureUpdate (params: DeployFailureFields) {
+  return {
+    deploy_error: trimDeployText(params.error, 2000),
+    deploy_log: trimDeployText(params.log),
+    deploy_log_path: trimDeployText(params.logPath, 500),
+  }
+}
+
+function clearDeployFailureUpdate () {
+  return {
+    deploy_error: null,
+    deploy_log: null,
+    deploy_log_path: null,
+  }
+}
 
 export type ActiveTrialRequestRow = {
   id: string
@@ -108,6 +137,7 @@ export async function approveActiveTrialRequestByCode (
       approved_account_type: accountType,
       reviewed_at: now,
       updated_at: now,
+      ...clearDeployFailureUpdate(),
     })
     .eq('id', request.id)
     .in('status', [...ACTIVE_REQUEST_STATUSES])
@@ -126,6 +156,8 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     companyCode: string
     status: 'deployed' | 'deployment_failed'
     error?: string
+    log?: string
+    logPath?: string
   }
 ): Promise<{ updated: boolean; requestId?: string; currentStatus?: string }> {
   const { data, error } = await supabase
@@ -151,18 +183,32 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
       .limit(1)
       .maybeSingle()
     if (existing) {
+      if (params.status === 'deployment_failed') {
+        await supabase
+          .from('organization_trial_requests')
+          .update({
+            updated_at: new Date().toISOString(),
+            ...deployFailureUpdate(params),
+          })
+          .eq('id', existing.id)
+      }
       return { updated: true, requestId: existing.id, currentStatus: existing.status }
     }
     return { updated: false }
   }
 
   const now = new Date().toISOString()
+  const failFields =
+    params.status === 'deployment_failed'
+      ? deployFailureUpdate(params)
+      : clearDeployFailureUpdate()
   const { error: updateError } = await supabase
     .from('organization_trial_requests')
     .update({
       status: params.status,
       updated_at: now,
       ...(params.status === 'deployed' ? { reviewed_at: now } : {}),
+      ...failFields,
     })
     .eq('id', data.id)
     .in('status', [...DEPLOY_STATUS_MATCH])
@@ -203,7 +249,11 @@ export async function markTrialRequestDeploying (
   const now = new Date().toISOString()
   const { error: updateError } = await supabase
     .from('organization_trial_requests')
-    .update({ status: 'deploying', updated_at: now })
+    .update({
+      status: 'deploying',
+      updated_at: now,
+      ...clearDeployFailureUpdate(),
+    })
     .eq('id', data.id)
     .in('status', ['started', 'deployment_failed'])
 
@@ -217,12 +267,16 @@ export async function markTrialRequestDeploying (
 
 export async function markTrialRequestDeploymentFailed (
   supabase: SupabaseClient,
-  params: { id: string; error?: string }
+  params: { id: string; error?: string; log?: string; logPath?: string }
 ): Promise<boolean> {
   const now = new Date().toISOString()
   const { error } = await supabase
     .from('organization_trial_requests')
-    .update({ status: 'deployment_failed', updated_at: now })
+    .update({
+      status: 'deployment_failed',
+      updated_at: now,
+      ...deployFailureUpdate(params),
+    })
     .eq('id', params.id)
     .in('status', ['deploying', 'started'])
 

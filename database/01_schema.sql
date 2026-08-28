@@ -130,6 +130,9 @@ CREATE TABLE organization_trial_requests (
   approved_account_type TEXT,
   reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
   reviewed_at TIMESTAMPTZ,
+  deploy_error TEXT,
+  deploy_log TEXT,
+  deploy_log_path TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

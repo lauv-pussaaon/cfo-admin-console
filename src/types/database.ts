@@ -94,6 +94,9 @@ export interface OrganizationTrialRequest {
   approved_account_type: string | null
   reviewed_by: string | null
   reviewed_at: string | null
+  deploy_error: string | null
+  deploy_log: string | null
+  deploy_log_path: string | null
   created_at: string
   updated_at: string | null
 }

@@ -193,7 +193,13 @@ export default function TrialRequestDetailPage () {
 
     setActionLoading(true)
     setActionError(null)
-    setRequest({ ...request, status: 'deploying' })
+    setRequest({
+      ...request,
+      status: 'deploying',
+      deploy_error: null,
+      deploy_log: null,
+      deploy_log_path: null,
+    })
 
     try {
       const response = await authenticatedAdminFetch(
@@ -342,6 +348,47 @@ export default function TrialRequestDetailPage () {
         <Alert severity="error" sx={{ mb: 2 }}>
           {actionError}
         </Alert>
+      )}
+
+      {request.status === 'deployment_failed' && (request.deploy_error || request.deploy_log) && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          <Typography fontWeight={600} sx={{ mb: 0.5 }}>
+            ติดตั้งไม่สำเร็จ
+          </Typography>
+          {request.deploy_error && (
+            <Typography variant="body2">{request.deploy_error}</Typography>
+          )}
+          {request.deploy_log_path && (
+            <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+              ล็อกบนเซิร์ฟเวอร์: {request.deploy_log_path}
+            </Typography>
+          )}
+        </Alert>
+      )}
+
+      {request.status === 'deployment_failed' && request.deploy_log && (
+        <Paper
+          elevation={0}
+          sx={{ p: 2, mb: 3, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+        >
+          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+            ล็อกการติดตั้ง
+          </Typography>
+          <Box
+            component="pre"
+            sx={{
+              m: 0,
+              maxHeight: 360,
+              overflow: 'auto',
+              fontSize: 12,
+              lineHeight: 1.5,
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+            }}
+          >
+            {request.deploy_log}
+          </Box>
+        </Paper>
       )}
 
       <Paper
