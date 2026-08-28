@@ -189,10 +189,11 @@ export default function TrialRequestDetailPage () {
   }
 
   const handleDeploy = async () => {
-    if (!request || !user) return
+    if (!request || !user || actionLoading || request.status === 'deploying') return
 
     setActionLoading(true)
     setActionError(null)
+    setRequest({ ...request, status: 'deploying' })
 
     try {
       const response = await authenticatedAdminFetch(
@@ -249,7 +250,9 @@ export default function TrialRequestDetailPage () {
   }
 
   const canCancel = isActiveTrialRequestStatus(request.status)
-  const showDeploy = canDeployTrialRequest(request.status) && isAdmin(user)
+  const deployLocked = actionLoading || request.status === 'deploying'
+  const showDeploy =
+    isAdmin(user) && (canDeployTrialRequest(request.status) || request.status === 'deploying')
   const showActions = request.status === 'open' || canCancel || showDeploy
 
   return (
@@ -310,11 +313,11 @@ export default function TrialRequestDetailPage () {
             {showDeploy && (
               <Button
                 variant="contained"
-                disabled={actionLoading}
+                disabled={deployLocked}
                 onClick={handleDeploy}
                 sx={{ textTransform: 'none', borderRadius: 2 }}
               >
-                Deploy
+                {request.status === 'deploying' ? 'กำลังติดตั้ง' : 'Deploy'}
               </Button>
             )}
             {canCancel && (
