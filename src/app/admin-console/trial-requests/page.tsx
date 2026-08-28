@@ -87,9 +87,11 @@ export default function AdminTrialRequestsPage () {
         return counts
       },
       {
-        pending: 0,
-        processing: 0,
-        approved: 0,
+        open: 0,
+        started: 0,
+        deploying: 0,
+        deployed: 0,
+        deployment_failed: 0,
         cancelled: 0,
       }
     )

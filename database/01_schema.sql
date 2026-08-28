@@ -115,7 +115,7 @@ CREATE TABLE user_organizations (
   UNIQUE(user_id, organization_id)
 );
 
--- Organization trial registration requests (pending until admin approval)
+-- Organization trial/membership requests (open until deploy completes)
 CREATE TABLE organization_trial_requests (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   organization_name TEXT NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE organization_trial_requests (
   contact_email TEXT NOT NULL,
   contact_phone TEXT NOT NULL,
   request_kind TEXT NOT NULL DEFAULT 'trial' CHECK (request_kind IN ('trial', 'annual_membership')),
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'cancelled')),
+  status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'started', 'deploying', 'deployed', 'deployment_failed', 'cancelled')),
   organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
   approved_account_type TEXT,
   reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
@@ -415,8 +415,8 @@ CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
 CREATE INDEX idx_org_trial_requests_status ON organization_trial_requests(status);
 CREATE INDEX idx_org_trial_requests_contact_email ON organization_trial_requests(contact_email);
 CREATE INDEX idx_org_trial_requests_created_at ON organization_trial_requests(created_at);
-CREATE UNIQUE INDEX idx_org_trial_requests_active_email ON organization_trial_requests(contact_email) WHERE status IN ('pending', 'processing');
-CREATE UNIQUE INDEX idx_org_trial_requests_active_company_code ON organization_trial_requests(company_code) WHERE status IN ('pending', 'processing') AND company_code IS NOT NULL;
+CREATE UNIQUE INDEX idx_org_trial_requests_active_email ON organization_trial_requests(contact_email) WHERE status IN ('open', 'started', 'deploying');
+CREATE UNIQUE INDEX idx_org_trial_requests_active_company_code ON organization_trial_requests(company_code) WHERE status IN ('open', 'started', 'deploying') AND company_code IS NOT NULL;
 CREATE INDEX idx_org_trial_request_consents_trial_request_id ON organization_trial_request_consents(trial_request_id);
 
 -- Notification recipients indexes

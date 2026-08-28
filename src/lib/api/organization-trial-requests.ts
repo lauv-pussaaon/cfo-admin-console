@@ -30,11 +30,11 @@ export interface CreateTrialRequestInput {
 }
 
 export interface UpdateTrialRequestStatusInput {
-  status: 'processing' | 'cancelled'
+  status: 'started' | 'cancelled'
   reviewedBy: string
 }
 
-const APPROVABLE_STATUSES: OrganizationTrialRequestStatus[] = ['pending', 'processing']
+const PIPELINE_STATUSES: OrganizationTrialRequestStatus[] = ['open', 'started', 'deploying']
 
 const deleteTrialRequest = async (id: string): Promise<void> => {
   const result = await supabase
@@ -55,24 +55,24 @@ export const createTrialRequest = async (
     .from('organization_trial_requests')
     .select('id')
     .eq('contact_email', contactEmail)
-    .in('status', APPROVABLE_STATUSES)
+    .in('status', PIPELINE_STATUSES)
     .limit(1)
 
   const existing = throwIfError(existingResult)
   if (existing.length > 0) {
-    throw new ConflictError('มีคำขอที่รออนุมัติสำหรับอีเมลนี้อยู่แล้ว')
+    throw new ConflictError('มีคำขอที่กำลังดำเนินการสำหรับอีเมลนี้อยู่แล้ว')
   }
 
   const existingCodeResult = await supabase
     .from('organization_trial_requests')
     .select('id')
     .eq('company_code', companyCode)
-    .in('status', APPROVABLE_STATUSES)
+    .in('status', PIPELINE_STATUSES)
     .limit(1)
 
   const existingCode = throwIfError(existingCodeResult)
   if (existingCode.length > 0) {
-    throw new ConflictError('รหัสบริษัทนี้ถูกใช้ในคำขอที่รออนุมัติอยู่แล้ว')
+    throw new ConflictError('รหัสบริษัทนี้ถูกใช้ในคำขอที่กำลังดำเนินการอยู่แล้ว')
   }
 
   const existingOrgResult = await supabase
@@ -96,7 +96,7 @@ export const createTrialRequest = async (
       contact_email: contactEmail,
       contact_phone: input.contactPhone.trim(),
       request_kind: requestKind,
-      status: 'pending',
+      status: 'open',
     })
     .select()
     .single()
@@ -190,7 +190,7 @@ export const updateTrialRequestStatus = async (
 
   const now = new Date().toISOString()
   const updatePayload =
-    input.status === 'processing'
+    input.status === 'started'
       ? {
           status: input.status,
           updated_at: now,
@@ -202,11 +202,12 @@ export const updateTrialRequestStatus = async (
           updated_at: now,
         }
 
+  const allowedFrom = input.status === 'started' ? ['open'] : ['open', 'started']
   const updateResult = await supabase
     .from('organization_trial_requests')
     .update(updatePayload)
     .eq('id', id)
-    .in('status', APPROVABLE_STATUSES)
+    .in('status', allowedFrom)
     .select()
     .single()
 

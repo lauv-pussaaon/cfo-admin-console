@@ -20,7 +20,7 @@ import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 import { trialRequestService, userService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
-import { canAccessTrialRequests } from '@/lib/permissions'
+import { canAccessTrialRequests, isAdmin } from '@/lib/permissions'
 import { isExpectedError } from '@/lib/utils/errors'
 import type {
   OrganizationTrialRequest,
@@ -32,7 +32,9 @@ import {
   getOrgRequestKindLabel,
   isAnnualMembershipRequest,
 } from '@/types/org-request-kind'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
+  canDeployTrialRequest,
   getTrialRequestStatusChipColor,
   getTrialRequestStatusLabel,
   isActiveTrialRequestStatus,
@@ -148,11 +150,11 @@ export default function TrialRequestDetailPage () {
 
     try {
       const updated = await trialRequestService.updateTrialRequestStatus(request.id, {
-        status: 'processing',
+        status: 'started',
         reviewedBy: user.id,
       })
       setRequest(updated)
-      notify('เปลี่ยนสถานะเป็นกำลังดำเนินการแล้ว')
+      notify('เริ่มดำเนินการแล้ว')
     } catch (error) {
       const message = error instanceof Error ? error.message : 'เปลี่ยนสถานะไม่สำเร็จ'
       setActionError(message)
@@ -186,6 +188,38 @@ export default function TrialRequestDetailPage () {
     }
   }
 
+  const handleDeploy = async () => {
+    if (!request || !user) return
+
+    setActionLoading(true)
+    setActionError(null)
+
+    try {
+      const response = await authenticatedAdminFetch(
+        `/api/admin-console/trial-requests/${request.id}/deploy`,
+        { method: 'POST' },
+        { userId: user.id }
+      )
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(
+          (result as { error?: string }).error || 'เริ่มติดตั้งไม่สำเร็จ'
+        )
+      }
+      const next = await trialRequestService.getTrialRequestById(request.id)
+      if (next) setRequest(next)
+      notify('เริ่มติดตั้งอินสแตนซ์แล้ว')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'เริ่มติดตั้งไม่สำเร็จ'
+      setActionError(message)
+      notify(message, 'error')
+      const next = await trialRequestService.getTrialRequestById(request.id)
+      if (next) setRequest(next)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
   if (authLoading || loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 320 }}>
@@ -214,7 +248,9 @@ export default function TrialRequestDetailPage () {
     )
   }
 
-  const canTakeAction = isActiveTrialRequestStatus(request.status)
+  const canCancel = isActiveTrialRequestStatus(request.status)
+  const showDeploy = canDeployTrialRequest(request.status) && isAdmin(user)
+  const showActions = request.status === 'open' || canCancel || showDeploy
 
   return (
     <Box sx={{ py: 3, width: '100%', maxWidth: 960 }}>
@@ -259,9 +295,9 @@ export default function TrialRequestDetailPage () {
           </Stack>
         </Box>
 
-        {canTakeAction && (
+        {showActions && (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-            {request.status === 'pending' && (
+            {request.status === 'open' && (
               <Button
                 variant="outlined"
                 disabled={actionLoading}
@@ -271,18 +307,30 @@ export default function TrialRequestDetailPage () {
                 เริ่มดำเนินการ
               </Button>
             )}
-            <Button
-              variant="outlined"
-              color="error"
-              disabled={actionLoading}
-              onClick={() => {
-                setActionError(null)
-                setCancelOpen(true)
-              }}
-              sx={{ textTransform: 'none', borderRadius: 2 }}
-            >
-              ยกเลิก
-            </Button>
+            {showDeploy && (
+              <Button
+                variant="contained"
+                disabled={actionLoading}
+                onClick={handleDeploy}
+                sx={{ textTransform: 'none', borderRadius: 2 }}
+              >
+                Deploy
+              </Button>
+            )}
+            {canCancel && (
+              <Button
+                variant="outlined"
+                color="error"
+                disabled={actionLoading}
+                onClick={() => {
+                  setActionError(null)
+                  setCancelOpen(true)
+                }}
+                sx={{ textTransform: 'none', borderRadius: 2 }}
+              >
+                ยกเลิก
+              </Button>
+            )}
           </Stack>
         )}
       </Box>

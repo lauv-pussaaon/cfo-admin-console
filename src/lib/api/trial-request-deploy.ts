@@ -5,7 +5,8 @@ import {
   type OrgRequestKind,
 } from '@/types/org-request-kind'
 
-const ACTIVE_REQUEST_STATUSES = ['pending', 'processing'] as const
+const ACTIVE_REQUEST_STATUSES = ['open', 'started', 'deploying'] as const
+const DEPLOY_STATUS_MATCH = ['deploying', 'started'] as const
 
 export type ActiveTrialRequestRow = {
   id: string
@@ -90,9 +91,9 @@ export async function linkActiveTrialRequestToOrganization (
 export async function approveActiveTrialRequestByCode (
   supabase: SupabaseClient,
   params: { code: string; organizationId: string; accountType: string }
-): Promise<{ approved: boolean; requestId?: string }> {
+): Promise<{ deployed: boolean; requestId?: string }> {
   const request = await findActiveTrialRequestByCode(supabase, params.code)
-  if (!request) return { approved: false }
+  if (!request) return { deployed: false }
 
   const accountType = isAnnualMembershipRequest(request.request_kind)
     ? 'general customers'
@@ -102,7 +103,7 @@ export async function approveActiveTrialRequestByCode (
   const { error } = await supabase
     .from('organization_trial_requests')
     .update({
-      status: 'approved',
+      status: 'deployed',
       organization_id: params.organizationId,
       approved_account_type: accountType,
       reviewed_at: now,
@@ -112,11 +113,127 @@ export async function approveActiveTrialRequestByCode (
     .in('status', [...ACTIVE_REQUEST_STATUSES])
 
   if (error) {
-    console.error('[trial-request-deploy] approve request:', error)
-    return { approved: false, requestId: request.id }
+    console.error('[trial-request-deploy] mark request deployed:', error)
+    return { deployed: false, requestId: request.id }
   }
 
-  return { approved: true, requestId: request.id }
+  return { deployed: true, requestId: request.id }
+}
+
+export async function applyTrialRequestDeployStatusByCompanyCode (
+  supabase: SupabaseClient,
+  params: {
+    companyCode: string
+    status: 'deployed' | 'deployment_failed'
+    error?: string
+  }
+): Promise<{ updated: boolean; requestId?: string; currentStatus?: string }> {
+  const { data, error } = await supabase
+    .from('organization_trial_requests')
+    .select(REQUEST_SELECT)
+    .eq('company_code', params.companyCode)
+    .in('status', [...DEPLOY_STATUS_MATCH])
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (error) {
+    console.error('[trial-request-deploy] load request for deploy-status:', error)
+    return { updated: false }
+  }
+  if (!data) {
+    const { data: existing } = await supabase
+      .from('organization_trial_requests')
+      .select(REQUEST_SELECT)
+      .eq('company_code', params.companyCode)
+      .eq('status', params.status)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    if (existing) {
+      return { updated: true, requestId: existing.id, currentStatus: existing.status }
+    }
+    return { updated: false }
+  }
+
+  const now = new Date().toISOString()
+  const { error: updateError } = await supabase
+    .from('organization_trial_requests')
+    .update({
+      status: params.status,
+      updated_at: now,
+      ...(params.status === 'deployed' ? { reviewed_at: now } : {}),
+    })
+    .eq('id', data.id)
+    .in('status', [...DEPLOY_STATUS_MATCH])
+
+  if (updateError) {
+    console.error('[trial-request-deploy] apply deploy-status:', updateError)
+    return { updated: false, requestId: data.id, currentStatus: data.status }
+  }
+
+  if (params.error) {
+    console.warn(
+      `[trial-request-deploy] deploy-status ${params.status} for ${params.companyCode}: ${params.error}`
+    )
+  }
+
+  return { updated: true, requestId: data.id, currentStatus: params.status }
+}
+
+export async function markTrialRequestDeploying (
+  supabase: SupabaseClient,
+  params: { id: string }
+): Promise<{ updated: boolean; requestId?: string; previousStatus?: string }> {
+  const { data, error } = await supabase
+    .from('organization_trial_requests')
+    .select(REQUEST_SELECT)
+    .eq('id', params.id)
+    .maybeSingle()
+
+  if (error || !data) {
+    if (error) console.error('[trial-request-deploy] load request for deploying:', error)
+    return { updated: false }
+  }
+
+  if (data.status !== 'started' && data.status !== 'deployment_failed') {
+    return { updated: false, requestId: data.id, previousStatus: data.status }
+  }
+
+  const now = new Date().toISOString()
+  const { error: updateError } = await supabase
+    .from('organization_trial_requests')
+    .update({ status: 'deploying', updated_at: now })
+    .eq('id', data.id)
+    .in('status', ['started', 'deployment_failed'])
+
+  if (updateError) {
+    console.error('[trial-request-deploy] mark deploying:', updateError)
+    return { updated: false, requestId: data.id, previousStatus: data.status }
+  }
+
+  return { updated: true, requestId: data.id, previousStatus: data.status }
+}
+
+export async function markTrialRequestDeploymentFailed (
+  supabase: SupabaseClient,
+  params: { id: string; error?: string }
+): Promise<boolean> {
+  const now = new Date().toISOString()
+  const { error } = await supabase
+    .from('organization_trial_requests')
+    .update({ status: 'deployment_failed', updated_at: now })
+    .eq('id', params.id)
+    .in('status', ['deploying', 'started'])
+
+  if (error) {
+    console.error('[trial-request-deploy] mark deployment_failed:', error)
+    return false
+  }
+  if (params.error) {
+    console.warn(`[trial-request-deploy] deployment_failed for ${params.id}: ${params.error}`)
+  }
+  return true
 }
 
 export async function resolveOnboardRequestKind (

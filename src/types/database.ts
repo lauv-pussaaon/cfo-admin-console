@@ -73,7 +73,12 @@ export interface UserConsent {
 }
 
 export type OrganizationTrialRequestStatus =
-  'pending' | 'processing' | 'approved' | 'cancelled'
+  | 'open'
+  | 'started'
+  | 'deploying'
+  | 'deployed'
+  | 'deployment_failed'
+  | 'cancelled'
 
 export interface OrganizationTrialRequest {
   id: string
