@@ -14,6 +14,7 @@ import {
   formatRegistrationProfileTextLines,
   type RegistrationEmailProfile,
 } from '@/lib/email/registration-profile-lines'
+import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
@@ -21,14 +22,6 @@ const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
 }
 
 const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
-
-function escapeHtml (s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 export async function sendAdminNewRegistrationNotice (params: {
   name: string
@@ -101,15 +94,12 @@ export async function sendAdminNewRegistrationNotice (params: {
     `- อีเมล: ${params.email}`,
     `- บทบาท: ${roleTh}`,
     ...profileTextLines,
-    '- สถานะ: รอผู้ดูแลอนุมัติ',
+    '- สถานะ: รอการอนุมัติ',
     '',
     `จัดการผู้ใช้: ${adminUsersUrl}`,
   ].join('\n')
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #0f172a;">
+  const bodyHtml = `
   <p><strong>มีผู้ลงทะเบียนใหม่</strong> (รออนุมัติ)</p>
   <p>ผู้สมัครลงทะเบียนผ่านหน้าเปิดบัญชีสาธารณะ</p>
   <ul>
@@ -118,12 +108,11 @@ export async function sendAdminNewRegistrationNotice (params: {
     <li>อีเมล: ${safe.email}</li>
     <li>บทบาท: ${safe.roleTh}</li>
     ${profileHtmlItems}
-    <li>สถานะ: รอผู้ดูแลอนุมัติ</li>
+    <li>สถานะ: รอการอนุมัติ</li>
   </ul>
   <p><a href="${safe.adminUsersHref}">ไปหน้าจัดการผู้ใช้</a></p>
-  <p style="font-size:12px;color:#64748b;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
-</body>
-</html>`.trim()
+  `.trim()
+  const html = emailShellHtml(bodyHtml, { branded: true })
 
   const to = adminEmails[0]
   const bcc =

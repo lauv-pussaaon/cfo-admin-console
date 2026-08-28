@@ -33,7 +33,7 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
   },
   {
     title: 'คำขอสมัครการใช้งาน',
-    description: 'ตรวจสอบและอนุมัติคำขอทดลองใช้งานและสมาชิกรายปี',
+    description: 'ตรวจสอบคำขอทดลองใช้งานและสมาชิกรายปี',
     path: '/admin-console/trial-requests',
     sectionId: 'clients',
   },

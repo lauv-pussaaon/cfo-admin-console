@@ -3,8 +3,13 @@ import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
 import { normalizeOrganizationCode } from '@/lib/organization-code'
 import { getServiceSupabase } from '@/lib/supabase-service'
 import { isBridgeRequestAuthorized } from '@/lib/support-chat/auth'
+import {
+  findActiveTrialRequestByCode,
+  linkActiveTrialRequestToOrganization,
+} from '@/lib/api/trial-request-deploy'
 import { ACCOUNT_TYPE_VALUES, DEFAULT_ACCOUNT_TYPE, type AccountType } from '@/types/account-types'
 import { getDefaultPackagePeriod } from '@/types/package-periods'
+import { isAnnualMembershipRequest } from '@/types/org-request-kind'
 
 const INSTANCE_CODE_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -65,6 +70,15 @@ export async function POST (request: NextRequest) {
       )
     }
 
+    const matchingRequest = await findActiveTrialRequestByCode(supabase, code)
+    const resolvedName = matchingRequest?.organization_name?.trim() || name
+    const resolvedEmail =
+      matchingRequest?.contact_email?.trim() || factoryAdminEmail || ''
+    const resolvedAccountType = matchingRequest
+      && isAnnualMembershipRequest(matchingRequest.request_kind)
+      ? 'general customers'
+      : accountType
+
     const { data: byCode, error: codeError } = await supabase
       .from('organizations')
       .select('id, code')
@@ -77,6 +91,10 @@ export async function POST (request: NextRequest) {
     }
 
     if (byCode?.id) {
+      await linkActiveTrialRequestToOrganization(supabase, {
+        code,
+        organizationId: byCode.id,
+      })
       return NextResponse.json({ id: byCode.id, created: false })
     }
 
@@ -98,21 +116,28 @@ export async function POST (request: NextRequest) {
           { status: 409 }
         )
       }
+      await linkActiveTrialRequestToOrganization(supabase, {
+        code,
+        organizationId: byId.id,
+      })
       return NextResponse.json({ id: byId.id, created: false })
     }
 
-    const period = getDefaultPackagePeriod(accountType)
+    const period = getDefaultPackagePeriod(resolvedAccountType)
     const { data: created, error: insertError } = await supabase
       .from('organizations')
       .insert({
         id,
-        name,
+        name: resolvedName,
         code,
         description: description || null,
         app_url: appUrl || null,
-        factory_admin_email: factoryAdminEmail || null,
+        factory_admin_email: resolvedEmail || null,
         username: username || null,
-        account_type: accountType,
+        contact_first_name: matchingRequest?.contact_first_name || null,
+        contact_last_name: matchingRequest?.contact_last_name || null,
+        contact_phone: matchingRequest?.contact_phone || null,
+        account_type: resolvedAccountType,
         package_start: period.package_start,
         package_end: period.package_end,
         is_initialized: false,
@@ -125,6 +150,10 @@ export async function POST (request: NextRequest) {
       return NextResponse.json({ error: 'สร้างองค์กรไม่สำเร็จ' }, { status: 500 })
     }
 
+    await linkActiveTrialRequestToOrganization(supabase, {
+      code,
+      organizationId: created.id,
+    })
     return NextResponse.json({ id: created.id, created: true })
   } catch (error) {
     console.error('[provision-from-deploy] unexpected error:', error)

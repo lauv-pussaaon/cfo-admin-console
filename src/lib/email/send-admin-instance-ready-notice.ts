@@ -4,16 +4,9 @@
  */
 
 import { Resend } from 'resend'
+import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
 
 const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
-
-function escapeHtml (s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 function buildLoginUrl (appUrl: string): string {
   return `${appUrl.replace(/\/$/, '')}/login`
@@ -83,10 +76,7 @@ export async function sendAdminInstanceReadyNotice (params: {
     'รหัสผ่านไม่อยู่ในอีเมลนี้ — ดู inventory/created-instances.csv',
   ].join('\n')
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #0f172a;">
+  const bodyHtml = `
   <p><strong>อินสแตนซ์องค์กรพร้อมใช้งานแล้ว</strong></p>
   <ul>
     <li>ชื่อองค์กร: ${safe.organizationName}</li>
@@ -98,9 +88,8 @@ export async function sendAdminInstanceReadyNotice (params: {
     <li>อีเมล Factory Admin: ${safe.factoryAdminEmail}</li>
   </ul>
   <p style="font-size:12px;color:#64748b;">รหัสผ่านไม่อยู่ในอีเมลนี้ — ดู inventory/created-instances.csv</p>
-  <p style="font-size:12px;color:#64748b;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
-</body>
-</html>`.trim()
+  `.trim()
+  const html = emailShellHtml(bodyHtml, { branded: true })
 
   const to = adminEmails[0]
   const bcc = adminEmails.length > 1 ? adminEmails.slice(1) : undefined

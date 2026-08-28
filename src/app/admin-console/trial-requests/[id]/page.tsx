@@ -9,20 +9,11 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
   Link as MuiLink,
-  MenuItem,
   Paper,
-  Select,
   Snackbar,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material'
 import { ArrowBack, Launch as LaunchIcon } from '@mui/icons-material'
@@ -36,13 +27,11 @@ import type {
   OrganizationTrialRequestConsent,
 } from '@/types/database'
 import type { User } from '@/lib/api/types'
-import { ACCOUNT_TYPE_OPTIONS, type AccountType } from '@/types/account-types'
 import {
   getOrgRequestKindChipColor,
   getOrgRequestKindLabel,
   isAnnualMembershipRequest,
 } from '@/types/org-request-kind'
-import { getDefaultAnnualPackagePeriod } from '@/types/package-periods'
 import {
   getTrialRequestStatusChipColor,
   getTrialRequestStatusLabel,
@@ -51,7 +40,6 @@ import {
 import {
   adminBackButtonSx,
   adminPageTitleSx,
-  adminPrimaryButtonSx,
   adminQuietChipSx,
 } from '@/lib/admin-ui-styles'
 
@@ -98,11 +86,7 @@ export default function TrialRequestDetailPage () {
   const [reviewer, setReviewer] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)
-  const [approveOpen, setApproveOpen] = useState(false)
   const [cancelOpen, setCancelOpen] = useState(false)
-  const [accountType, setAccountType] = useState<AccountType>('demo')
-  const [packageStart, setPackageStart] = useState('')
-  const [packageEnd, setPackageEnd] = useState('')
   const [actionError, setActionError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -171,48 +155,6 @@ export default function TrialRequestDetailPage () {
       notify('เปลี่ยนสถานะเป็นกำลังดำเนินการแล้ว')
     } catch (error) {
       const message = error instanceof Error ? error.message : 'เปลี่ยนสถานะไม่สำเร็จ'
-      setActionError(message)
-      notify(message, 'error')
-    } finally {
-      setActionLoading(false)
-    }
-  }
-
-  const handleConfirmApprove = async () => {
-    if (!request || !user) return
-
-    const isMembership = isAnnualMembershipRequest(request.request_kind)
-    if (isMembership) {
-      if (!packageStart || !packageEnd) {
-        setActionError('กรุณาระบุวันเริ่มและวันสิ้นสุดแพ็กเกจ')
-        return
-      }
-      if (packageEnd < packageStart) {
-        setActionError('วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น')
-        return
-      }
-    }
-
-    setActionLoading(true)
-    setActionError(null)
-
-    try {
-      const updated = await trialRequestService.approveTrialRequest(request.id, {
-        reviewedBy: user.id,
-        accountType: isMembership ? 'general customers' : accountType,
-        packageStart: isMembership ? packageStart : undefined,
-        packageEnd: isMembership ? packageEnd : undefined,
-      })
-      setRequest(updated)
-      setApproveOpen(false)
-      notify(
-        isMembership
-          ? 'อนุมัติคำขอสมัครสมาชิกรายปีและสร้างองค์กรเรียบร้อยแล้ว'
-          : 'อนุมัติคำขอทดลองใช้งานและสร้างองค์กรเรียบร้อยแล้ว'
-      )
-      await load()
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'อนุมัติไม่สำเร็จ'
       setActionError(message)
       notify(message, 'error')
     } finally {
@@ -329,27 +271,6 @@ export default function TrialRequestDetailPage () {
                 เริ่มดำเนินการ
               </Button>
             )}
-            <Button
-              variant="contained"
-              disabled={actionLoading}
-              onClick={() => {
-                if (isAnnualMembershipRequest(request.request_kind)) {
-                  setAccountType('general customers')
-                  const defaults = getDefaultAnnualPackagePeriod()
-                  setPackageStart(defaults.package_start)
-                  setPackageEnd(defaults.package_end)
-                } else {
-                  setAccountType('demo')
-                  setPackageStart('')
-                  setPackageEnd('')
-                }
-                setActionError(null)
-                setApproveOpen(true)
-              }}
-              sx={adminPrimaryButtonSx}
-            >
-              อนุมัติ
-            </Button>
             <Button
               variant="outlined"
               color="error"
@@ -489,98 +410,6 @@ export default function TrialRequestDetailPage () {
           />
         </Grid>
       </Paper>
-
-      <Dialog open={approveOpen} onClose={() => !actionLoading && setApproveOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {isAnnualMembershipRequest(request.request_kind)
-            ? 'อนุมัติคำขอสมัครสมาชิกรายปี'
-            : 'อนุมัติคำขอทดลองใช้งาน'}
-        </DialogTitle>
-        <DialogContent>
-          {actionError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {actionError}
-            </Alert>
-          )}
-          <Box sx={{ display: 'grid', gap: 1.5, pt: 1 }}>
-            <Typography variant="body2">
-              <strong>ชื่อองค์กร:</strong> {request.organization_name}
-            </Typography>
-            <Typography variant="body2">
-              <strong>รหัสบริษัท:</strong> {request.company_code || '—'}
-            </Typography>
-            <Typography variant="body2">
-              <strong>ผู้ติดต่อ:</strong> {request.contact_first_name} {request.contact_last_name}
-            </Typography>
-            <Typography variant="body2">
-              <strong>อีเมล:</strong> {request.contact_email}
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              <strong>เบอร์โทร:</strong> {request.contact_phone}
-            </Typography>
-            {isAnnualMembershipRequest(request.request_kind) ? (
-              <>
-                <TextField
-                  label="ประเภทบัญชี"
-                  value="general customers"
-                  fullWidth
-                  InputProps={{ readOnly: true }}
-                />
-                <TextField
-                  label="วันเริ่มแพ็กเกจ"
-                  type="date"
-                  value={packageStart}
-                  onChange={(e) => setPackageStart(e.target.value)}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  disabled={actionLoading}
-                />
-                <TextField
-                  label="วันสิ้นสุดแพ็กเกจ"
-                  type="date"
-                  value={packageEnd}
-                  onChange={(e) => setPackageEnd(e.target.value)}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  disabled={actionLoading}
-                />
-              </>
-            ) : (
-              <FormControl fullWidth>
-                <InputLabel>ประเภทบัญชี</InputLabel>
-                <Select
-                  label="ประเภทบัญชี"
-                  value={accountType}
-                  onChange={(e) => setAccountType(e.target.value as AccountType)}
-                  disabled={actionLoading}
-                >
-                  {ACCOUNT_TYPE_OPTIONS.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-            <Typography variant="caption" color="text.secondary">
-              ระบบจะสร้างองค์กรใหม่และบันทึกข้อมูลผู้ติดต่อลงในตาราง organizations
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setApproveOpen(false)} disabled={actionLoading} sx={{ textTransform: 'none' }}>
-            ยกเลิก
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleConfirmApprove}
-            disabled={actionLoading}
-            sx={{ textTransform: 'none' }}
-          >
-            {actionLoading ? 'กำลังอนุมัติ...' : 'ยืนยันอนุมัติ'}
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       <DeleteConfirmationDialog
         open={cancelOpen}

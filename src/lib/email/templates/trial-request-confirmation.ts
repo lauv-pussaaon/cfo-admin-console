@@ -39,8 +39,8 @@ export function buildTrialRequestConfirmationContent (params: {
   }
 
   const subject = isMembership
-    ? 'Ideacarb ได้รับคำขอสมัครสมาชิกรายปีแล้ว'
-    : 'Ideacarb ได้รับคำขอทดลองใช้งาน 30 วันแล้ว'
+    ? 'Ideacarb ได้รับคำขอสมัครสมาชิกรายปีของท่านแล้ว'
+    : 'Ideacarb ได้รับคำขอทดลองใช้งาน 30 วันของท่านแล้ว'
 
   const text = [
     `เรียน คุณ${contactName}`,
@@ -48,8 +48,8 @@ export function buildTrialRequestConfirmationContent (params: {
     receivedLine,
     nextStepLine,
     '',
-    'ข้อมูลที่ส่งมา:',
-    `- ประเภทคำขอ: ${kindLabel}`,
+    'ข้อมูลที่ท่านส่งมา:',
+    `- ประเภทบัญชี: ${kindLabel}`,
     `- องค์กร: ${params.organizationName}`,
     `- รหัสบริษัท: ${companyCode || '—'}`,
     `- ชื่อผู้ติดต่อ: ${contactName}`,
@@ -65,9 +65,9 @@ export function buildTrialRequestConfirmationContent (params: {
   <p>สวัสดี คุณ ${safe.contactName}</p>
   <p>${safe.receivedLine}</p>
   <p>${safe.nextStepLine}</p>
-  <p><strong>ข้อมูลที่ส่งมา</strong></p>
+  <p><strong>ข้อมูลที่ท่านส่งมา</strong></p>
   <ul>
-    <li>ประเภทคำขอ: ${escapeHtml(kindLabel)}</li>
+    <li>ประเภทบัญชี: ${escapeHtml(kindLabel)}</li>
     <li>องค์กร: ${safe.organizationName}</li>
     <li>รหัสบริษัท: ${safe.companyCode || '—'}</li>
     <li>ชื่อผู้ติดต่อ: ${safe.contactName}</li>

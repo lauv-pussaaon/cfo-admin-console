@@ -1,6 +1,10 @@
 export const CONTACT_PAGE_URL = 'https://www.ideacarb.com/th/contact'
-export const SUPPORT_EMAIL = 'support@ideacarb.com'
-export const ADMIN_CONSOLE_PUBLIC_URL = 'https://admin-console.ideacarb.com'
+export const SUPPORT_EMAIL =
+  process.env.SUPPORT_EMAIL?.trim() || 'support@ideacarb.com'
+export const ADMIN_CONSOLE_PUBLIC_URL = (
+  process.env.ADMIN_CONSOLE_PUBLIC_URL?.trim() ||
+  'https://admin-console.ideacarb.com'
+).replace(/\/$/, '')
 export const LINE_OA_QR_URL = `${ADMIN_CONSOLE_PUBLIC_URL}/images/ideacarb-line-oa.png`
 export const BRAND_LOGO_URL = `${ADMIN_CONSOLE_PUBLIC_URL}/ideacarb-logo-square.png`
 export const EMAIL_ACCENT_COLOR = '#0f766e'

@@ -7,6 +7,7 @@ import {
   resolveBaseUrlForEmail,
   buildAdminConsoleTrialRequestsUrl,
 } from '@/lib/email/resolve-site-origin'
+import { emailShellHtml, escapeHtml } from '@/lib/email/templates/shared'
 import {
   getOrgRequestKindLabel,
   isAnnualMembershipRequest,
@@ -14,14 +15,6 @@ import {
 } from '@/types/org-request-kind'
 
 const DEFAULT_RESEND_FROM = 'IdeaCarb CFO <onboarding@resend.dev>'
-
-function escapeHtml (s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 function formatSubmittedAt (value: string): string {
   return new Date(value).toLocaleString('th-TH', {
@@ -119,10 +112,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
     `จัดการคำขอ: ${trialRequestsUrl}`,
   ].join('\n')
 
-  const html = `
-<!DOCTYPE html>
-<html>
-<body style="font-family: system-ui, sans-serif; line-height: 1.5; color: #0f172a;">
+  const bodyHtml = `
   <p><strong>${safe.headline}</strong></p>
   <ul>
     <li>ประเภทคำขอ: ${safe.kindLabel}</li>
@@ -134,9 +124,8 @@ export async function sendAdminNewTrialRequestNotice (params: {
     <li>วันที่ส่งคำขอ: ${safe.submittedAt}</li>
   </ul>
   <p><a href="${safe.trialRequestsHref}">ไปหน้าคำขอสมัครองค์กร</a></p>
-  <p style="font-size:12px;color:#64748b;">อีเมลอัตโนมัติ ไม่ต้องตอบกลับ</p>
-</body>
-</html>`.trim()
+  `.trim()
+  const html = emailShellHtml(bodyHtml, { branded: true })
 
   const to = adminEmails[0]
   const bcc =
