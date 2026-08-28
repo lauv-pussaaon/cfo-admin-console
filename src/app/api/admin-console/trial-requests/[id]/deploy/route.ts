@@ -96,7 +96,7 @@ export async function POST (
         }),
       })
 
-      if (response.status === 202) {
+      if (response.ok) {
         accepted = true
       } else {
         const payload = await response.json().catch(() => ({}))

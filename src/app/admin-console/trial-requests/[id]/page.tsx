@@ -215,7 +215,7 @@ export default function TrialRequestDetailPage () {
       }
       const next = await trialRequestService.getTrialRequestById(request.id)
       if (next) setRequest(next)
-      notify('เริ่มติดตั้งอินสแตนซ์แล้ว')
+      notify('เขียนลง new-instances.csv แล้ว รัน ./deploy.sh new บนโฮสต์')
     } catch (error) {
       const message = error instanceof Error ? error.message : 'เริ่มติดตั้งไม่สำเร็จ'
       setActionError(message)
