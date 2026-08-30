@@ -20,9 +20,9 @@ export interface OrganizationMembership {
 }
 
 const DEMO_LIMITS: PlanLimits = {
-  maxReports: 5,
+  maxReports: 10,
   maxUploadBytes: 0,
-  maxBusinessUnits: 5,
+  maxBusinessUnits: 10,
 }
 
 const PREMIUM_LIMITS: PlanLimits = {
