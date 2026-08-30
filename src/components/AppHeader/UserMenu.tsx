@@ -53,9 +53,10 @@ export default function UserMenu({
           sx={{ 
             width: 40, 
             height: 40, 
-            bgcolor: '#10b981',
-            border: '2px solid #f0fdf4', 
-            '&:hover': { bgcolor: '#059669', transform: 'scale(1.05)', transition: 'all 0.2s ease-in-out' } 
+            bgcolor: 'primary.main',
+            border: '2px solid',
+            borderColor: 'divider',
+            '&:hover': { bgcolor: 'primary.dark' }, 
           }}
         >
           {user?.avatar_url ? null : (

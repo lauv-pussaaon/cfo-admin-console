@@ -14,6 +14,7 @@ import {
   Tooltip,
   Divider,
 } from '@mui/material'
+import { alpha, useTheme } from '@mui/material/styles'
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
@@ -27,9 +28,12 @@ import {
   SupportAgent as SupportAgentIcon,
   HowToReg as HowToRegIcon,
   ManageAccounts as ManageAccountsIcon,
+  Brightness4,
+  Brightness7,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useThemeMode } from '@/components/ThemeProvider'
 import { isAdmin } from '@/lib/permissions'
 import {
   ADMIN_SETTINGS_NAV_ITEM,
@@ -77,6 +81,10 @@ export default function Sidebar () {
   const router = useRouter()
   const pathname = usePathname()
   const { user } = useAuth()
+  const theme = useTheme()
+  const { mode, toggleThemeMode } = useThemeMode()
+  const primaryMain = theme.palette.primary.main
+  const primaryLight = theme.palette.primary.light
 
   const dashboardItem = useMemo(() => {
     const home = getDashboardNavItemsForRole(user?.role).find((item) => item.path === '/admin-console')
@@ -124,16 +132,16 @@ export default function Sidebar () {
               py: collapsed ? 0 : 1,
               borderRadius: 2,
               mb: 0.5,
-              backgroundColor: isActive ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
-              color: isActive ? '#10b981' : '#94a3b8',
+              backgroundColor: isActive ? alpha(primaryMain, 0.15) : 'transparent',
+              color: isActive ? 'primary.main' : '#94a3b8',
               '&:hover': {
-                backgroundColor: isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                color: isActive ? '#34d399' : '#ffffff',
+                backgroundColor: isActive ? alpha(primaryMain, 0.2) : 'rgba(255, 255, 255, 0.05)',
+                color: isActive ? primaryLight : '#ffffff',
                 '& .MuiListItemIcon-root': {
-                  color: isActive ? '#34d399' : '#ffffff',
+                  color: isActive ? primaryLight : '#ffffff',
                 },
                 '& .MuiListItemText-secondary': {
-                  color: isActive ? 'rgba(52, 211, 153, 0.75)' : 'rgba(255, 255, 255, 0.55)',
+                  color: isActive ? alpha(primaryLight, 0.75) : 'rgba(255, 255, 255, 0.55)',
                 },
               },
             }}
@@ -143,7 +151,7 @@ export default function Sidebar () {
                 minWidth: 0,
                 mr: collapsed ? 0 : 2,
                 justifyContent: 'center',
-                color: isActive ? '#10b981' : '#94a3b8',
+                color: isActive ? 'primary.main' : '#94a3b8',
                 transition: 'color 0.2s',
               }}
             >
@@ -162,7 +170,7 @@ export default function Sidebar () {
                   fontSize: '0.6875rem',
                   lineHeight: 1.35,
                   sx: {
-                    color: isActive ? 'rgba(52, 211, 153, 0.65)' : 'rgba(148, 163, 184, 0.85)',
+                    color: isActive ? alpha(primaryLight, 0.65) : 'rgba(148, 163, 184, 0.85)',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
@@ -208,7 +216,7 @@ export default function Sidebar () {
       >
         {!collapsed && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <CFOLogo size={32} color="#10b981" />
+            <CFOLogo size={32} color={primaryMain} />
             <Typography
               variant="h6"
               sx={{
@@ -222,7 +230,7 @@ export default function Sidebar () {
             </Typography>
           </Box>
         )}
-        {collapsed && <CFOLogo size={32} color="#10b981" />}
+        {collapsed && <CFOLogo size={32} color={primaryMain} />}
 
         <IconButton
           onClick={handleToggle}
@@ -285,8 +293,23 @@ export default function Sidebar () {
         </List>
       </Box>
 
-      {isAdmin(user) && (
-        <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+        <Tooltip title={mode === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'} placement="right">
+          <IconButton
+            onClick={toggleThemeMode}
+            aria-label={mode === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}
+            sx={{
+              alignSelf: collapsed ? 'center' : 'flex-end',
+              color: '#94a3b8',
+              '&:hover': { color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.05)' },
+            }}
+          >
+            {mode === 'dark'
+              ? <Brightness7 sx={{ color: '#fbbf24' }} />
+              : <Brightness4 />}
+          </IconButton>
+        </Tooltip>
+        {isAdmin(user) && (
           <List disablePadding>
             <ListItem disablePadding sx={{ display: 'block' }}>
               <Tooltip
@@ -305,11 +328,11 @@ export default function Sidebar () {
                     px: 2.5,
                     py: collapsed ? 0 : 1,
                     borderRadius: 2,
-                    color: settingsActive ? '#10b981' : '#94a3b8',
-                    backgroundColor: settingsActive ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                    color: settingsActive ? 'primary.main' : '#94a3b8',
+                    backgroundColor: settingsActive ? alpha(primaryMain, 0.15) : 'transparent',
                     '&:hover': {
                       backgroundColor: settingsActive
-                        ? 'rgba(16, 185, 129, 0.2)'
+                        ? alpha(primaryMain, 0.2)
                         : 'rgba(255, 255, 255, 0.05)',
                       color: '#ffffff',
                       '& .MuiListItemText-secondary': {
@@ -344,8 +367,8 @@ export default function Sidebar () {
               </Tooltip>
             </ListItem>
           </List>
-        </Box>
-      )}
+        )}
+      </Box>
     </Drawer>
   )
 }

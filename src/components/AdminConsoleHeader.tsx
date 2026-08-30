@@ -20,13 +20,14 @@ export default function AdminConsoleHeader() {
   const pathnames = pathname.split('/').filter((x) => x)
 
   return (
-    <AppBar 
-      position="sticky" 
-      elevation={0} 
-      sx={{ 
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', 
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        bgcolor: 'background.paper',
+        color: 'text.primary',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
         zIndex: 1100,
         top: 0,
       }}

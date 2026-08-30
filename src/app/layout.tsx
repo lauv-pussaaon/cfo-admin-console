@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import { Anuphan } from "next/font/google";
 import "./globals.css";
 import { CustomThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
+
+const anuphan = Anuphan({
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-anuphan",
+});
 
 export const metadata: Metadata = {
   title: "CFO Admin Console",
@@ -14,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={anuphan.variable}>
       <body className="antialiased">
         <CustomThemeProvider>
           <AuthProvider>

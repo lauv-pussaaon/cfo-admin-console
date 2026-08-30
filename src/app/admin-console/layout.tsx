@@ -34,7 +34,7 @@ export default function AdminConsoleLayout({
             flexDirection: 'column',
           }}
         >
-          <Box className="animate-fade-in" sx={{ flexGrow: 1 }}>
+          <Box className="fade-in" sx={{ flexGrow: 1 }}>
             {children}
           </Box>
         </Container>

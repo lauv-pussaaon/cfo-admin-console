@@ -18,7 +18,7 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
     <Box
       sx={{
         minHeight: '100vh',
-        background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
+        bgcolor: 'background.default',
         py: { xs: 4, md: 8 },
       }}
     >

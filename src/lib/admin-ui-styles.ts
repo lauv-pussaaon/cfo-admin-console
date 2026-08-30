@@ -15,7 +15,7 @@ export const adminBackButtonSx = {
 } as const
 
 export const adminPageTitleSx = {
-  fontWeight: 700,
+  fontWeight: 600,
   letterSpacing: '-0.02em',
 } as const
 
@@ -87,7 +87,6 @@ export const adminDataGridSx = {
     fontWeight: 600,
     color: 'text.secondary',
     letterSpacing: '0.02em',
-    textTransform: 'uppercase',
   },
   '& .MuiDataGrid-cell': {
     borderBottom: '1px solid',
