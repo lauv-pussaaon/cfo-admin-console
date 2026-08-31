@@ -192,7 +192,27 @@ ON CONFLICT (id) DO UPDATE SET
   updated_at = NOW();
 
 INSERT INTO scope_categories (id, scope, name_th, name_en, display_order, created_at, updated_at)
-VALUES ('a1000004-0004-4004-8004-000000000014', 4, 'แยกรายงานการใช้พลังงาน', 'Energy Usage Reporting', 20, NOW(), NOW())
+VALUES ('4d14a746-2b97-4b31-8cc5-ca8a30dd2b4e', 3, 'Category 14 แฟรนไชส์', 'Category 14 Franchise', 20, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope = EXCLUDED.scope,
+  name_th = EXCLUDED.name_th,
+  name_en = EXCLUDED.name_en,
+  display_order = EXCLUDED.display_order,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO scope_categories (id, scope, name_th, name_en, display_order, created_at, updated_at)
+VALUES ('4768f17a-ecf3-4a2d-8019-14cab64e162c', 3, 'Category 15 การลงทุน', 'Category 15 Investment', 21, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
+  scope = EXCLUDED.scope,
+  name_th = EXCLUDED.name_th,
+  name_en = EXCLUDED.name_en,
+  display_order = EXCLUDED.display_order,
+  deleted_at = NULL,
+  updated_at = NOW();
+
+INSERT INTO scope_categories (id, scope, name_th, name_en, display_order, created_at, updated_at)
+VALUES ('a1000004-0004-4004-8004-000000000014', 4, 'แยกรายงานการใช้พลังงาน', 'Energy Usage Reporting', 22, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   scope = EXCLUDED.scope,
   name_th = EXCLUDED.name_th,

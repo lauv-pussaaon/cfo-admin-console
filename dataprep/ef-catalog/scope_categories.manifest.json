@@ -139,11 +139,25 @@
       "display_order": 19
     },
     {
+      "id": "4d14a746-2b97-4b31-8cc5-ca8a30dd2b4e",
+      "scope": 3,
+      "name_th": "Category 14 แฟรนไชส์",
+      "name_en": "Category 14 Franchise",
+      "display_order": 20
+    },
+    {
+      "id": "4768f17a-ecf3-4a2d-8019-14cab64e162c",
+      "scope": 3,
+      "name_th": "Category 15 การลงทุน",
+      "name_en": "Category 15 Investment",
+      "display_order": 21
+    },
+    {
       "id": "a1000004-0004-4004-8004-000000000014",
       "scope": 4,
       "name_th": "แยกรายงานการใช้พลังงาน",
       "name_en": "Energy Usage Reporting",
-      "display_order": 20
+      "display_order": 22
     }
   ]
 }
