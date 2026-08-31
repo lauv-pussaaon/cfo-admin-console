@@ -53,7 +53,7 @@ describe('buildOrganizationMembership', () => {
     assert.equal(membership.expired, false)
     assert.deepEqual(membership.limits, {
       maxReports: 10,
-      maxUploadBytes: 0,
+      maxUploadBytes: null,
       maxBusinessUnits: 10,
     })
   })
