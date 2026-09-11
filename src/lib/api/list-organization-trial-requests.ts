@@ -29,7 +29,7 @@ const LIST_SELECT = [
   'updated_at',
 ].join(', ')
 
-const REQUEST_DATE_FROM_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
+const REQUEST_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
 
 type TrialRequestListRow = {
   id: string
@@ -64,11 +64,11 @@ export function parseListPage (value: string | null): number | null {
   return page
 }
 
-export function parseRequestDateFrom (value: string | null): string | null | undefined {
+export function parseRequestDate (value: string | null): string | null | undefined {
   if (value == null) return undefined
   const date = value.trim()
   if (!date) return null
-  const match = REQUEST_DATE_FROM_PATTERN.exec(date)
+  const match = REQUEST_DATE_PATTERN.exec(date)
   if (!match) return null
   const year = Number(match[1])
   const month = Number(match[2])
@@ -88,6 +88,19 @@ export function bangkokDayStartIso (date: string): string {
   return new Date(`${date}T00:00:00+07:00`).toISOString()
 }
 
+function nextCalendarDay (date: string): string {
+  const [year, month, day] = date.split('-').map(Number)
+  const next = new Date(Date.UTC(year, month - 1, day + 1))
+  const yyyy = String(next.getUTCFullYear()).padStart(4, '0')
+  const mm = String(next.getUTCMonth() + 1).padStart(2, '0')
+  const dd = String(next.getUTCDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
+}
+
+export function bangkokDayAfterStartIso (date: string): string {
+  return bangkokDayStartIso(nextCalendarDay(date))
+}
+
 function toListItem (row: TrialRequestListRow): OrganizationTrialRequestListItem {
   return {
     ...row,
@@ -101,6 +114,7 @@ export async function listOrganizationTrialRequests (
   params: {
     page: number
     requestDateFrom?: string
+    requestDateBy?: string
     status?: TrialRequestApiStatus
   }
 ): Promise<{ requests: OrganizationTrialRequestListItem[]; total: number }> {
@@ -114,6 +128,9 @@ export async function listOrganizationTrialRequests (
 
   if (params.requestDateFrom) {
     query = query.gte('created_at', bangkokDayStartIso(params.requestDateFrom))
+  }
+  if (params.requestDateBy) {
+    query = query.lt('created_at', bangkokDayAfterStartIso(params.requestDateBy))
   }
   if (params.status) {
     query = query.in('status', getDbStatusesForApiStatus(params.status))

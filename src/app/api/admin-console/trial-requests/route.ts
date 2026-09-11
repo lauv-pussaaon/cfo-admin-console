@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import {
   listOrganizationTrialRequests,
   parseListPage,
-  parseRequestDateFrom,
+  parseRequestDate,
   TRIAL_REQUEST_LIST_PAGE_SIZE,
 } from '@/lib/api/list-organization-trial-requests'
 import { getServiceSupabase } from '@/lib/supabase-service'
@@ -29,10 +29,16 @@ export async function GET (request: NextRequest) {
       return NextResponse.json({ error: 'หน้าไม่ถูกต้อง' }, { status: 400 })
     }
 
-    const requestDateFrom = parseRequestDateFrom(
+    const requestDateFrom = parseRequestDate(
       request.nextUrl.searchParams.get('requestDateFrom')
     )
-    if (requestDateFrom === null) {
+    const requestDateBy = parseRequestDate(
+      request.nextUrl.searchParams.get('requestDateBy')
+    )
+    if (requestDateFrom === null || requestDateBy === null) {
+      return NextResponse.json({ error: 'วันที่ไม่ถูกต้อง' }, { status: 400 })
+    }
+    if (requestDateFrom && requestDateBy && requestDateFrom > requestDateBy) {
       return NextResponse.json({ error: 'วันที่ไม่ถูกต้อง' }, { status: 400 })
     }
 
@@ -52,6 +58,7 @@ export async function GET (request: NextRequest) {
     const { requests, total } = await listOrganizationTrialRequests(supabase, {
       page,
       ...(requestDateFrom ? { requestDateFrom } : {}),
+      ...(requestDateBy ? { requestDateBy } : {}),
       ...(statusResult.status ? { status: statusResult.status } : {}),
     })
 
@@ -62,6 +69,7 @@ export async function GET (request: NextRequest) {
       total,
       totalPages: total === 0 ? 0 : Math.ceil(total / TRIAL_REQUEST_LIST_PAGE_SIZE),
       ...(requestDateFrom ? { requestDateFrom } : {}),
+      ...(requestDateBy ? { requestDateBy } : {}),
       ...(statusResult.status ? { status: statusResult.status } : {}),
     })
   } catch (error) {
