@@ -21,7 +21,7 @@ const userManagementTestCases = [
     testCaseName: 'Factory Admin: สร้างผู้ใช้ในองค์กรของตัวเอง',
     priority: 'High',
     preconditions: 'ผู้ใช้เป็น Factory Admin และเข้าสู่ระบบแล้ว',
-    testSteps: '1. ไปที่หน้า User Management (/[organizationId]/admin/users)\n2. คลิกปุ่ม "สร้างผู้ใช้ใหม่"\n3. กรอกข้อมูลผู้ใช้\n4. เลือกบทบาท (Consult, User, Internal Audit, หรือ Sub)\n5. คลิกปุ่ม "บันทึก"',
+    testSteps: '1. ไปที่หน้า User Management (/[organizationId]/admin/users)\n2. คลิกปุ่ม "สร้างผู้ใช้ใหม่"\n3. กรอกข้อมูลผู้ใช้\n4. เลือกบทบาท (Consult, User, Internal Audit, หรือ Contractor)\n5. คลิกปุ่ม "บันทึก"',
     expectedResults: 'สร้างผู้ใช้สำเร็จ ผู้ใช้ถูก assign ให้กับองค์กรของ Factory Admin โดยอัตโนมัติ',
     testData: 'Username: user1, Email: user1@test.com, Name: User 1, Password: pass123, Role: User',
     status: 'Not Tested'
@@ -110,7 +110,7 @@ const userManagementTestCases = [
     priority: 'Medium',
     preconditions: 'ผู้ใช้เป็น Factory Admin และเข้าสู่ระบบแล้ว',
     testSteps: '1. ไปที่หน้า User Management (/[organizationId]/admin/users)\n2. สังเกตตารางผู้ใช้',
-    expectedResults: 'ตารางแสดงเฉพาะผู้ใช้ในองค์กรของ Factory Admin ที่มีบทบาท Factory Admin, Consult, User, Internal Audit, หรือ Sub',
+    expectedResults: 'ตารางแสดงเฉพาะผู้ใช้ในองค์กรของ Factory Admin ที่มีบทบาท Factory Admin, Consult, User, Internal Audit, หรือ Contractor',
     testData: 'N/A',
     status: 'Not Tested'
   }

@@ -1,6 +1,34 @@
 import type { ChipProps } from '@mui/material'
 import type { OrganizationTrialRequestStatus } from '@/types/database'
 
+export const TRIAL_REQUEST_API_STATUS_VALUES = ['open', 'in-progress', 'done'] as const
+
+export type TrialRequestApiStatus = typeof TRIAL_REQUEST_API_STATUS_VALUES[number]
+
+const API_STATUS_TO_DB: Record<TrialRequestApiStatus, OrganizationTrialRequestStatus[]> = {
+  open: ['open'],
+  'in-progress': ['started', 'deploying', 'deployment_failed'],
+  done: ['deployed', 'cancelled'],
+}
+
+export function isTrialRequestApiStatus (value: unknown): value is TrialRequestApiStatus {
+  return TRIAL_REQUEST_API_STATUS_VALUES.includes(value as TrialRequestApiStatus)
+}
+
+export function getDbStatusesForApiStatus (
+  status: TrialRequestApiStatus
+): OrganizationTrialRequestStatus[] {
+  return API_STATUS_TO_DB[status]
+}
+
+export function wrapTrialRequestApiStatus (
+  status: OrganizationTrialRequestStatus
+): TrialRequestApiStatus {
+  if (status === 'open') return 'open'
+  if (status === 'deployed' || status === 'cancelled') return 'done'
+  return 'in-progress'
+}
+
 export const TRIAL_REQUEST_STATUS_OPTIONS: {
   value: OrganizationTrialRequestStatus
   label: string
