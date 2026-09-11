@@ -127,7 +127,7 @@ export async function listOrganizations (
   }
 
   return {
-    organizations: ((data ?? []) as OrganizationListRow[]).map(toListItem),
+    organizations: ((data ?? []) as unknown as OrganizationListRow[]).map(toListItem),
     total: count ?? 0,
   }
 }

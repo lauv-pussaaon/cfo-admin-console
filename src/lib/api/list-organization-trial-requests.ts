@@ -143,7 +143,7 @@ export async function listOrganizationTrialRequests (
   }
 
   return {
-    requests: ((data ?? []) as TrialRequestListRow[]).map(toListItem),
+    requests: ((data ?? []) as unknown as TrialRequestListRow[]).map(toListItem),
     total: count ?? 0,
   }
 }
