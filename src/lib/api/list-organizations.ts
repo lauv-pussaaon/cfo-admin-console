@@ -90,9 +90,12 @@ export async function listOrganizations (
   supabase: SupabaseClient,
   params: {
     page: number
-    createdDate?: string
-    packageStart?: string
-    packageEnd?: string
+    createdDateFrom?: string
+    createdDateBy?: string
+    packageStartFrom?: string
+    packageStartBy?: string
+    packageEndFrom?: string
+    packageEndBy?: string
     accountType?: AccountType
   }
 ): Promise<{ organizations: OrganizationListItem[]; total: number }> {
@@ -104,16 +107,23 @@ export async function listOrganizations (
     .select(LIST_SELECT, { count: 'exact' })
     .order('created_at', { ascending: false })
 
-  if (params.createdDate) {
-    query = query
-      .gte('created_at', bangkokDayStartIso(params.createdDate))
-      .lt('created_at', bangkokDayAfterStartIso(params.createdDate))
+  if (params.createdDateFrom) {
+    query = query.gte('created_at', bangkokDayStartIso(params.createdDateFrom))
   }
-  if (params.packageStart) {
-    query = query.eq('package_start', params.packageStart)
+  if (params.createdDateBy) {
+    query = query.lt('created_at', bangkokDayAfterStartIso(params.createdDateBy))
   }
-  if (params.packageEnd) {
-    query = query.eq('package_end', params.packageEnd)
+  if (params.packageStartFrom) {
+    query = query.gte('package_start', params.packageStartFrom)
+  }
+  if (params.packageStartBy) {
+    query = query.lte('package_start', params.packageStartBy)
+  }
+  if (params.packageEndFrom) {
+    query = query.gte('package_end', params.packageEndFrom)
+  }
+  if (params.packageEndBy) {
+    query = query.lte('package_end', params.packageEndBy)
   }
   if (params.accountType) {
     query = query.eq('account_type', params.accountType)

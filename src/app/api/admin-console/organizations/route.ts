@@ -31,10 +31,39 @@ export async function GET (request: NextRequest) {
       return NextResponse.json({ error: 'หน้าไม่ถูกต้อง' }, { status: 400 })
     }
 
-    const createdDate = parseRequestDate(request.nextUrl.searchParams.get('createdDate'))
-    const packageStart = parseRequestDate(request.nextUrl.searchParams.get('packageStart'))
-    const packageEnd = parseRequestDate(request.nextUrl.searchParams.get('packageEnd'))
-    if (createdDate === null || packageStart === null || packageEnd === null) {
+    const createdDateFrom = parseRequestDate(
+      request.nextUrl.searchParams.get('createdDateFrom')
+    )
+    const createdDateBy = parseRequestDate(
+      request.nextUrl.searchParams.get('createdDateBy')
+    )
+    const packageStartFrom = parseRequestDate(
+      request.nextUrl.searchParams.get('packageStartFrom')
+    )
+    const packageStartBy = parseRequestDate(
+      request.nextUrl.searchParams.get('packageStartBy')
+    )
+    const packageEndFrom = parseRequestDate(
+      request.nextUrl.searchParams.get('packageEndFrom')
+    )
+    const packageEndBy = parseRequestDate(
+      request.nextUrl.searchParams.get('packageEndBy')
+    )
+    if (
+      createdDateFrom === null ||
+      createdDateBy === null ||
+      packageStartFrom === null ||
+      packageStartBy === null ||
+      packageEndFrom === null ||
+      packageEndBy === null
+    ) {
+      return NextResponse.json({ error: 'วันที่ไม่ถูกต้อง' }, { status: 400 })
+    }
+    if (
+      (createdDateFrom && createdDateBy && createdDateFrom > createdDateBy) ||
+      (packageStartFrom && packageStartBy && packageStartFrom > packageStartBy) ||
+      (packageEndFrom && packageEndBy && packageEndFrom > packageEndBy)
+    ) {
       return NextResponse.json({ error: 'วันที่ไม่ถูกต้อง' }, { status: 400 })
     }
 
@@ -55,9 +84,12 @@ export async function GET (request: NextRequest) {
 
     const { organizations, total } = await listOrganizations(supabase, {
       page,
-      ...(createdDate ? { createdDate } : {}),
-      ...(packageStart ? { packageStart } : {}),
-      ...(packageEnd ? { packageEnd } : {}),
+      ...(createdDateFrom ? { createdDateFrom } : {}),
+      ...(createdDateBy ? { createdDateBy } : {}),
+      ...(packageStartFrom ? { packageStartFrom } : {}),
+      ...(packageStartBy ? { packageStartBy } : {}),
+      ...(packageEndFrom ? { packageEndFrom } : {}),
+      ...(packageEndBy ? { packageEndBy } : {}),
       ...(accountTypeResult.accountType
         ? { accountType: accountTypeResult.accountType }
         : {}),
@@ -69,9 +101,12 @@ export async function GET (request: NextRequest) {
       pageSize: ORGANIZATION_LIST_PAGE_SIZE,
       total,
       totalPages: total === 0 ? 0 : Math.ceil(total / ORGANIZATION_LIST_PAGE_SIZE),
-      ...(createdDate ? { createdDate } : {}),
-      ...(packageStart ? { packageStart } : {}),
-      ...(packageEnd ? { packageEnd } : {}),
+      ...(createdDateFrom ? { createdDateFrom } : {}),
+      ...(createdDateBy ? { createdDateBy } : {}),
+      ...(packageStartFrom ? { packageStartFrom } : {}),
+      ...(packageStartBy ? { packageStartBy } : {}),
+      ...(packageEndFrom ? { packageEndFrom } : {}),
+      ...(packageEndBy ? { packageEndBy } : {}),
       ...(accountTypeResult.accountType
         ? { accountType: accountTypeResult.accountType }
         : {}),

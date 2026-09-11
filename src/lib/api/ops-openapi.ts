@@ -112,9 +112,12 @@ export const ADMIN_OPS_OPENAPI = {
           pageSize: { type: 'integer', example: 50 },
           total: { type: 'integer' },
           totalPages: { type: 'integer' },
-          createdDate: { type: 'string', format: 'date' },
-          packageStart: { type: 'string', format: 'date' },
-          packageEnd: { type: 'string', format: 'date' },
+          createdDateFrom: { type: 'string', format: 'date' },
+          createdDateBy: { type: 'string', format: 'date' },
+          packageStartFrom: { type: 'string', format: 'date' },
+          packageStartBy: { type: 'string', format: 'date' },
+          packageEndFrom: { type: 'string', format: 'date' },
+          packageEndBy: { type: 'string', format: 'date' },
           accountType: { $ref: '#/components/schemas/AccountType' },
         },
       },
@@ -177,7 +180,7 @@ export const ADMIN_OPS_OPENAPI = {
         tags: ['Organizations'],
         summary: 'List organizations',
         description:
-          'Sorted by created_at DESC. 50 per page. Never returns password. createdDate filter is that Asia/Bangkok calendar day. packageStart and packageEnd are exact DATE matches.',
+          'Sorted by created_at DESC. 50 per page. Never returns password. createdDateFrom/By use Asia/Bangkok calendar days on created_at. packageStartFrom/By and packageEndFrom/By are inclusive DATE ranges. 400 if a pair has from > by.',
         parameters: [
           {
             name: 'page',
@@ -185,18 +188,39 @@ export const ADMIN_OPS_OPENAPI = {
             schema: { type: 'integer', minimum: 1, default: 1 },
           },
           {
-            name: 'createdDate',
+            name: 'createdDateFrom',
             in: 'query',
+            description: 'Inclusive start date (YYYY-MM-DD, Asia/Bangkok)',
             schema: { type: 'string', format: 'date' },
           },
           {
-            name: 'packageStart',
+            name: 'createdDateBy',
             in: 'query',
+            description: 'Inclusive end date (YYYY-MM-DD, Asia/Bangkok)',
             schema: { type: 'string', format: 'date' },
           },
           {
-            name: 'packageEnd',
+            name: 'packageStartFrom',
             in: 'query',
+            description: 'Inclusive start of package_start DATE range',
+            schema: { type: 'string', format: 'date' },
+          },
+          {
+            name: 'packageStartBy',
+            in: 'query',
+            description: 'Inclusive end of package_start DATE range',
+            schema: { type: 'string', format: 'date' },
+          },
+          {
+            name: 'packageEndFrom',
+            in: 'query',
+            description: 'Inclusive start of package_end DATE range',
+            schema: { type: 'string', format: 'date' },
+          },
+          {
+            name: 'packageEndBy',
+            in: 'query',
+            description: 'Inclusive end of package_end DATE range',
             schema: { type: 'string', format: 'date' },
           },
           {
