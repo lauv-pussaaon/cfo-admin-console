@@ -9,7 +9,7 @@ import type { RegistrationEmailProfile } from '@/lib/email/registration-profile-
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
-  Audit: 'ผู้ตรวจสอบ',
+  Audit: 'ผู้ทวนสอบ',
 }
 
 export function buildLoginUrl (baseUrl: string): string {

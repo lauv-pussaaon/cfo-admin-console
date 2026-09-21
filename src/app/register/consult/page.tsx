@@ -234,7 +234,7 @@ function ConsultRegisterForm () {
             <>
               <Box sx={{ mb: 3.5, textAlign: 'center' }}>
                 <Typography variant="h4" component="h1" fontWeight={700} gutterBottom>
-                  ลงทะเบียนที่ปรึกษาหรือผู้ตรวจสอบ
+                  ลงทะเบียนที่ปรึกษาหรือผู้ทวนสอบ
                 </Typography>
                 <Typography color="text.secondary" sx={{ maxWidth: 520, mx: 'auto' }}>
                   กรอกข้อมูลบัญชีและโปรไฟล์ จากนั้นอัปโหลดเอกสารยืนยันตัวตนตามลิงก์ในอีเมล
@@ -277,7 +277,7 @@ function ConsultRegisterForm () {
                     }
                   >
                     <MenuItem value="Consult">ที่ปรึกษา</MenuItem>
-                    <MenuItem value="Audit">ผู้ตรวจสอบ</MenuItem>
+                    <MenuItem value="Audit">ผู้ทวนสอบ</MenuItem>
                   </Select>
                   {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
                 </FormControl>

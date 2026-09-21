@@ -135,7 +135,7 @@ export const collectAndShareDataConsentContent: PolicyContent = {
         {
           type: 'bullets',
           items: [
-            'ผู้ตรวจสอบ (Auditor)',
+            'ผู้ทวนสอบ (Verifier)',
             'หน่วยงานรับรองที่เกี่ยวข้อง',
             'องค์การบริหารจัดการก๊าซเรือนกระจก (องค์การมหาชน)',
             'ผู้ให้บริการระบบ Cloud Infrastructure',

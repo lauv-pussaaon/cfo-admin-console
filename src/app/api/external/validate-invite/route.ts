@@ -65,7 +65,7 @@ export async function GET (request: NextRequest) {
     if (data.role !== 'Consult' && data.role !== 'Audit') {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
-        { error: 'This invite code is not for Consult or Audit users.' },
+        { error: 'This invite code is not for Consult or Verifier users.' },
         { status: 400, headers }
       )
     }

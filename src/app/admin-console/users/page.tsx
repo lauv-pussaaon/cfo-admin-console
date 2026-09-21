@@ -405,7 +405,7 @@ export default function AdminConsoleUsersPage() {
             onClick={handleOpenRegistrationUrl}
             sx={adminPrimaryButtonSx}
           >
-            ลิงก์สมัคร Consult/Audit
+            ลิงก์สมัคร Consult/Verifier
           </Button>
           <Button
             variant="contained"

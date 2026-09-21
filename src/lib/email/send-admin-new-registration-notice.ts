@@ -19,7 +19,7 @@ import { getResendFrom } from '@/lib/email/resend-client'
 
 const ROLE_LABEL_TH: Record<'Consult' | 'Audit', string> = {
   Consult: 'ที่ปรึกษา',
-  Audit: 'ผู้ตรวจสอบ',
+  Audit: 'ผู้ทวนสอบ',
 }
 
 export async function sendAdminNewRegistrationNotice (params: {

@@ -20,7 +20,7 @@ import {
   ContentCopy as ContentCopyIcon,
 } from '@mui/icons-material'
 import type { User, UserStatus } from '@/lib/api/types'
-import { getRoleColor } from '@/types/roles'
+import { getRoleColor, getRoleLabel } from '@/types/roles'
 import { USER_STATUS_LABELS } from '@/lib/user-status'
 import {
   adminDataGridPaperSx,
@@ -152,7 +152,7 @@ export default function UsersTable({
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <Chip
-            label={params.value}
+            label={getRoleLabel(params.value as string, 'th')}
             size="small"
             color={getRoleColor(params.value)}
             variant="outlined"

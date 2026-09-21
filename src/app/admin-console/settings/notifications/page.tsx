@@ -194,7 +194,7 @@ export default function NotificationSettingsPage () {
             การตั้งค่าการแจ้งเตือน
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            อีเมลที่เปิดใช้งานจะได้รับการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Audit
+            อีเมลที่เปิดใช้งานจะได้รับการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Verifier
           </Typography>
         </Box>
         <Button
@@ -209,7 +209,7 @@ export default function NotificationSettingsPage () {
 
       {enabledCount === 0 && !loading && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Audit
+          ไม่มีอีเมลที่เปิดใช้งาน — ระบบจะไม่ส่งการแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Verifier
         </Alert>
       )}
 

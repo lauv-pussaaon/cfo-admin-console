@@ -198,7 +198,7 @@ export const termsAndConditionsContent: PolicyContent = {
         {
           type: 'bullets',
           items: [
-            'ผู้ตรวจสอบ (Auditor)',
+            'ผู้ทวนสอบ (Verifier)',
             'หน่วยงานรับรอง',
             'องค์การบริหารจัดการก๊าซเรือนกระจก (องค์การมหาชน)',
             'ผู้ให้บริการ Cloud Infrastructure',

@@ -83,7 +83,7 @@ export const CONSULT_AUDIT_NAV_PATHS = [
 
 export const ADMIN_SETTINGS_NAV_ITEM: AdminNavItem = {
   title: 'การตั้งค่าการแจ้งเตือน',
-  description: 'จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Audit',
+  description: 'จัดการอีเมลผู้รับแจ้งเตือนเมื่อมีคำขอทดลองใช้งาน สมาชิกรายปี หรือลงทะเบียน Consult/Verifier',
   path: '/admin-console/settings/notifications',
 }
 
