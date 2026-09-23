@@ -28,6 +28,32 @@ function authorize (request: NextRequest): boolean {
   return Boolean(isBridgeRequestAuthorized(request))
 }
 
+async function applyResolvedAccountType (
+  supabase: NonNullable<ReturnType<typeof getServiceSupabase>>,
+  organizationId: string,
+  storedAccountType: string | null,
+  resolvedAccountType: AccountType,
+): Promise<NextResponse | null> {
+  const updates: Record<string, unknown> = {
+    account_type: resolvedAccountType,
+    updated_at: new Date().toISOString(),
+  }
+  if (storedAccountType !== resolvedAccountType) {
+    const period = getDefaultPackagePeriod(resolvedAccountType)
+    updates.package_start = period.package_start
+    updates.package_end = period.package_end
+  }
+  const { error } = await supabase
+    .from('organizations')
+    .update(updates)
+    .eq('id', organizationId)
+  if (error) {
+    console.error('[provision-from-deploy] update account type:', error)
+    return NextResponse.json({ error: 'อัปเดตองค์กรไม่สำเร็จ' }, { status: 500 })
+  }
+  return null
+}
+
 export async function POST (request: NextRequest) {
   try {
     const admin = await getAdminCallerFromRequest(request)
@@ -81,7 +107,7 @@ export async function POST (request: NextRequest) {
 
     const { data: byCode, error: codeError } = await supabase
       .from('organizations')
-      .select('id, code')
+      .select('id, code, account_type')
       .eq('code', code)
       .maybeSingle()
 
@@ -91,6 +117,13 @@ export async function POST (request: NextRequest) {
     }
 
     if (byCode?.id) {
+      const accountError = await applyResolvedAccountType(
+        supabase,
+        byCode.id,
+        byCode.account_type,
+        resolvedAccountType,
+      )
+      if (accountError) return accountError
       await linkActiveTrialRequestToOrganization(supabase, {
         code,
         organizationId: byCode.id,
@@ -100,7 +133,7 @@ export async function POST (request: NextRequest) {
 
     const { data: byId, error: idError } = await supabase
       .from('organizations')
-      .select('id, code')
+      .select('id, code, account_type')
       .eq('id', id)
       .maybeSingle()
 
@@ -116,6 +149,13 @@ export async function POST (request: NextRequest) {
           { status: 409 }
         )
       }
+      const accountError = await applyResolvedAccountType(
+        supabase,
+        byId.id,
+        byId.account_type,
+        resolvedAccountType,
+      )
+      if (accountError) return accountError
       await linkActiveTrialRequestToOrganization(supabase, {
         code,
         organizationId: byId.id,
