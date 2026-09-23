@@ -9,6 +9,29 @@ import { supabase } from '@/lib/supabase'
 import type { User } from '@/lib/api/types'
 import { verifyPassword } from '@/lib/utils/password'
 
+const ORGANIZATION_MANAGER_ROLES = new Set(['Admin', 'Dealer', 'Consult', 'Audit'])
+
+export async function getOrganizationManagerFromRequest (
+  request: NextRequest
+): Promise<User | null> {
+  const userId = request.headers.get('x-admin-user-id')?.trim()
+  if (!userId) return null
+
+  const { data, error } = await supabase
+    .from('users')
+    .select(
+      'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, created_at'
+    )
+    .eq('id', userId)
+    .single()
+
+  if (error || !data) return null
+  if (!ORGANIZATION_MANAGER_ROLES.has(data.role)) return null
+  if (data.status !== 'active') return null
+
+  return data as User
+}
+
 export async function getAdminCallerFromRequest (
   request: NextRequest
 ): Promise<User | null> {

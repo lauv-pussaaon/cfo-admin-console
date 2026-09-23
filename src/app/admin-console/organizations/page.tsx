@@ -193,9 +193,11 @@ export default function AdminConsoleOrganizationsPage() {
     }
   }
 
-  const handleModalSuccess = () => {
+  const handleModalSuccess = (message?: string) => {
     loadOrganizations()
-    setSuccessMessage(editingOrganization ? 'แก้ไของค์กรสำเร็จ' : 'สร้างองค์กรสำเร็จ')
+    setSuccessMessage(
+      message || (editingOrganization ? 'แก้ไของค์กรสำเร็จ' : 'สร้างองค์กรสำเร็จ')
+    )
     setShowSuccessMessage(true)
   }
 

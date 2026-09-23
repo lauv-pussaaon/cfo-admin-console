@@ -1,0 +1,57 @@
+/**
+ * Send organization info updated email (API / server only).
+ */
+
+import { sendResendEmail } from '@/lib/email/templates/resend-client'
+import { SUPPORT_EMAIL } from '@/lib/email/templates/shared'
+import { buildOrganizationInfoUpdatedContent } from '@/lib/email/templates/organization-info-updated'
+
+export async function sendOrganizationInfoUpdatedEmail (params: {
+  to: string
+  organizationName: string
+  organizationCode: string | null
+  accountType: string | null
+  contactFirstName: string | null
+  contactLastName: string | null
+  contactPhone: string | null
+  factoryAdminEmail: string
+  loginUrl: string | null
+  username: string | null
+}): Promise<{ sent: boolean; skipReason?: string }> {
+  const content = buildOrganizationInfoUpdatedContent({
+    organizationName: params.organizationName,
+    organizationCode: params.organizationCode,
+    accountType: params.accountType,
+    contactFirstName: params.contactFirstName,
+    contactLastName: params.contactLastName,
+    contactPhone: params.contactPhone,
+    factoryAdminEmail: params.factoryAdminEmail,
+    loginUrl: params.loginUrl,
+    username: params.username,
+  })
+
+  try {
+    const bcc =
+      params.to.trim().toLowerCase() === SUPPORT_EMAIL.toLowerCase()
+        ? undefined
+        : SUPPORT_EMAIL
+    const result = await sendResendEmail({
+      to: params.to,
+      ...(bcc ? { bcc } : {}),
+      subject: content.subject,
+      text: content.text,
+      html: content.html,
+    })
+    if (!result.sent) {
+      console.warn(`[email] ข้ามส่งอีเมลอัปเดตองค์กร: ${result.skipReason}`)
+      return { sent: false, skipReason: result.skipReason }
+    }
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[email] ส่งอีเมลอัปเดตองค์กรแล้ว id=', result.id)
+    }
+    return { sent: true }
+  } catch (error) {
+    console.error('[email] Resend API error (organization info updated):', error)
+    throw error
+  }
+}

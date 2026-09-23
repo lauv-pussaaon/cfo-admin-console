@@ -30,6 +30,7 @@ import {
   VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material'
 import { organizationService } from '@/lib/services'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Organization } from '@/types/database'
 import type { User } from '@/lib/api/types'
@@ -51,9 +52,33 @@ import { getDefaultPackagePeriod } from '@/types/package-periods'
 interface AdminOrganizationModalProps {
   open: boolean
   onClose: () => void
-  onSuccess?: () => void
+  onSuccess?: (message?: string) => void
   mode?: 'create' | 'edit'
   initialData?: Organization | null
+}
+
+async function notifyOrganizationInfoUpdated (
+  organizationId: string,
+  userId: string | undefined
+): Promise<string> {
+  try {
+    const response = await authenticatedAdminFetch(
+      `/api/admin-console/organizations/${organizationId}/notify-updated`,
+      { method: 'POST' },
+      { userId }
+    )
+    const result = await response.json().catch(() => ({})) as {
+      sent?: boolean
+      skipReason?: string
+    }
+    if (result.sent) return 'แก้ไของค์กรสำเร็จ และส่งอีเมลแจ้งอัปเดตแล้ว'
+    if (result.skipReason === 'no_factory_admin_email') {
+      return 'แก้ไของค์กรสำเร็จ (ไม่ส่งอีเมล: ไม่มีอีเมล Factory Admin)'
+    }
+    return 'แก้ไของค์กรสำเร็จ แต่ส่งอีเมลไม่สำเร็จ'
+  } catch {
+    return 'แก้ไของค์กรสำเร็จ แต่ส่งอีเมลไม่สำเร็จ'
+  }
 }
 
 // Organization schema
@@ -263,6 +288,7 @@ export default function AdminOrganizationModal({
 
     try {
       let organizationId: string
+      let successMessage: string | undefined
 
       if (mode === 'edit' && initialData) {
         // Update organization
@@ -295,6 +321,8 @@ export default function AdminOrganizationModal({
             user?.id || null
           )
         }
+
+        successMessage = await notifyOrganizationInfoUpdated(organizationId, user?.id)
       } else {
         // Create organization
         const created = await organizationService.createOrganization({
@@ -329,7 +357,7 @@ export default function AdminOrganizationModal({
 
       onClose()
       if (onSuccess) {
-        onSuccess()
+        onSuccess(successMessage)
       }
     } catch (error) {
       if (isExpectedError(error)) {
@@ -355,12 +383,26 @@ export default function AdminOrganizationModal({
       PaperProps={{
         sx: {
           borderRadius: 2,
+          maxHeight: '90vh',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
         },
       }}
     >
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onFormSubmit)}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onFormSubmit)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+            flex: '1 1 auto',
+            overflow: 'hidden',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0 }}>
             <Typography variant="h6" fontWeight="bold">
               {mode === 'edit' ? 'แก้ไของค์กร' : 'สร้างองค์กรใหม่'}
             </Typography>
@@ -378,7 +420,7 @@ export default function AdminOrganizationModal({
             </IconButton>
           </Box>
 
-          <DialogContent sx={{ p: 3 }}>
+          <DialogContent sx={{ p: 3, flex: '1 1 auto', minHeight: 0, overflowY: 'auto' }}>
             {submitError && (
               <Box
                 sx={{
@@ -667,7 +709,7 @@ export default function AdminOrganizationModal({
             </Box>
           </DialogContent>
 
-          <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', gap: 1 }}>
+          <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', gap: 1, flexShrink: 0 }}>
             {isAdminUser && mode === 'edit' && initialData?.id && (
               <Button
                 type="button"
@@ -710,7 +752,7 @@ export default function AdminOrganizationModal({
               {isSubmitting ? 'กำลังบันทึก...' : mode === 'edit' ? 'บันทึกการแก้ไข' : 'สร้างองค์กร'}
             </Button>
           </DialogActions>
-        </form>
+        </Box>
       </FormProvider>
     </Dialog>
 
