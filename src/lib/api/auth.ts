@@ -1,13 +1,23 @@
 import { supabase } from '../supabase'
 import type { User, UserStatus } from './types'
 import type { Organization } from '@/types/database'
-import { throwIfError, handleSupabaseError, ValidationError } from '@/lib/utils/errors'
+import { throwIfError, handleSupabaseError, ValidationError, ConflictError } from '@/lib/utils/errors'
 import { verifyPassword } from '@/lib/utils/password'
 
 const USER_SELECT =
-  'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, year_experiences, industries, created_at'
+  'id, username, email, name, avatar_url, role, status, rejection_reason, invite_hashcode, organization_name, phone, year_experiences, industries, consulting_firm_id, is_firm_contact_person, created_at'
 
 const TOGGLEABLE_STATUSES: UserStatus[] = ['active', 'inactive']
+
+function rethrowUsernameConflict (error: unknown): never {
+  if (
+    error instanceof ConflictError &&
+    /users_username_key|username/i.test(error.message)
+  ) {
+    throw new ConflictError('ชื่อผู้ใช้นี้ถูกใช้แล้ว')
+  }
+  throw error
+}
 
 function statusLoginError (status: string): string {
   if (status === 'rejected') {
@@ -65,10 +75,16 @@ export const getUsers = async (): Promise<User[]> => {
       })
     }
 
-    // Attach organizations to users
+    const firmNameById = await loadConsultingFirmNames(
+      users.map((user) => user.consulting_firm_id).filter((id): id is string => Boolean(id))
+    )
+
     return users.map(user => ({
       ...user,
-      organizations: orgMap.get(user.id) || []
+      organizations: orgMap.get(user.id) || [],
+      consulting_firm_name: user.consulting_firm_id
+        ? firmNameById.get(user.consulting_firm_id) ?? null
+        : null,
     }))
   } catch (error) {
     // Re-throw network errors with better context
@@ -134,10 +150,37 @@ export const getUserById = async (userId: string): Promise<User | null> => {
     })
   }
 
+  const firmNameById = data.consulting_firm_id
+    ? await loadConsultingFirmNames([data.consulting_firm_id])
+    : new Map<string, string>()
+
   return {
     ...data,
-    organizations
+    organizations,
+    consulting_firm_name: data.consulting_firm_id
+      ? firmNameById.get(data.consulting_firm_id) ?? null
+      : null,
   }
+}
+
+async function loadConsultingFirmNames (ids: string[]): Promise<Map<string, string>> {
+  const uniqueIds = [...new Set(ids)]
+  const names = new Map<string, string>()
+  if (uniqueIds.length === 0) return names
+
+  const { data, error } = await supabase
+    .from('consulting_firms')
+    .select('id, name')
+    .in('id', uniqueIds)
+
+  if (error) {
+    handleSupabaseError(error)
+  }
+
+  for (const firm of data ?? []) {
+    names.set(firm.id, firm.name)
+  }
+  return names
 }
 
 export const createUser = async (data: {
@@ -152,6 +195,8 @@ export const createUser = async (data: {
   phone?: string | null
   year_experiences?: number | null
   industries?: string[]
+  consulting_firm_id?: string | null
+  is_firm_contact_person?: boolean
 }): Promise<User> => {
   // Validate role - only allow admin console roles
   const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
@@ -190,6 +235,8 @@ export const createUser = async (data: {
     year_experiences:
       typeof data.year_experiences === 'number' ? data.year_experiences : null,
     industries: data.industries ?? [],
+    consulting_firm_id: data.consulting_firm_id || null,
+    is_firm_contact_person: data.is_firm_contact_person === true,
   }
 
   const result = await supabase
@@ -198,7 +245,11 @@ export const createUser = async (data: {
     .select(USER_SELECT)
     .single()
 
-  return throwIfError(result)
+  try {
+    return throwIfError(result)
+  } catch (error) {
+    rethrowUsernameConflict(error)
+  }
 }
 
 export const updateUser = async (
@@ -215,6 +266,8 @@ export const updateUser = async (
     phone?: string | null
     year_experiences?: number | null
     industries?: string[]
+    consulting_firm_id?: string | null
+    is_firm_contact_person?: boolean
   }>
 ): Promise<User> => {
   const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
@@ -245,6 +298,8 @@ export const updateUser = async (
     phone,
     year_experiences,
     industries,
+    consulting_firm_id,
+    is_firm_contact_person,
     status,
     ...rest
   } = updates
@@ -271,6 +326,12 @@ export const updateUser = async (
   if (industries !== undefined) {
     updateData.industries = industries ?? []
   }
+  if (consulting_firm_id !== undefined) {
+    updateData.consulting_firm_id = consulting_firm_id || null
+  }
+  if (is_firm_contact_person !== undefined) {
+    updateData.is_firm_contact_person = is_firm_contact_person
+  }
 
   // If password is provided, hash it
   if (password) {
@@ -285,15 +346,18 @@ export const updateUser = async (
     .select(USER_SELECT)
     .single()
 
-  return throwIfError(result)
+  try {
+    return throwIfError(result)
+  } catch (error) {
+    rethrowUsernameConflict(error)
+  }
 }
 
-export const login = async (usernameOrEmail: string, password: string): Promise<User> => {
-  // Find user by username or email
+export const login = async (username: string, password: string): Promise<User> => {
   const { data: users, error } = await supabase
     .from('users')
     .select('*')
-    .or(`username.eq.${usernameOrEmail},email.eq.${usernameOrEmail}`)
+    .eq('username', username)
     .limit(1)
 
   if (error) {

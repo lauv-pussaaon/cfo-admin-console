@@ -24,6 +24,7 @@ interface UserFormProps {
   isSubmitting: boolean
   availableRoles?: RoleOption[]
   isLocked?: boolean
+  isFirmContactPerson?: boolean
 }
 
 type IndustryOption = {
@@ -35,13 +36,23 @@ function isProfileRole (role: string): boolean {
   return role === 'Consult' || role === 'Audit'
 }
 
-export default function UserForm({ methods, mode, isSubmitting, availableRoles, isLocked = false }: UserFormProps) {
+type FirmOption = { id: string; name: string }
+
+export default function UserForm({
+  methods,
+  mode,
+  isSubmitting,
+  availableRoles,
+  isLocked = false,
+  isFirmContactPerson = false,
+}: UserFormProps) {
   const { formState: { errors }, watch, setValue } = methods
   const formData = watch()
   const roleOptions = availableRoles || ROLE_OPTIONS
   const showProfile = isProfileRole(formData.role || '')
   const [industryOptions, setIndustryOptions] = useState<IndustryOption[]>([])
   const [industriesLoading, setIndustriesLoading] = useState(false)
+  const [firmOptions, setFirmOptions] = useState<FirmOption[]>([])
 
   useEffect(() => {
     if (!showProfile) return
@@ -70,6 +81,31 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
     }
   }, [showProfile])
 
+  useEffect(() => {
+    if (formData.role !== 'Consult') return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { authenticatedAdminFetch } = await import('@/lib/api/admin-fetch')
+        const response = await authenticatedAdminFetch('/api/admin-console/consulting-firms')
+        const result = await response.json()
+        if (!cancelled && response.ok) {
+          setFirmOptions(
+            (result.firms ?? []).map((firm: { id: string; name: string }) => ({
+              id: firm.id,
+              name: firm.name,
+            }))
+          )
+        }
+      } catch {
+        if (!cancelled) setFirmOptions([])
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [formData.role])
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -91,6 +127,31 @@ export default function UserForm({ methods, mode, isSubmitting, availableRoles, 
           </Select>
           {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
         </FormControl>
+
+        {formData.role === 'Consult' && (
+          <FormControl fullWidth>
+            <InputLabel id="admin-user-firm-label">บริษัทที่ปรึกษา</InputLabel>
+            <Select
+              labelId="admin-user-firm-label"
+              label="บริษัทที่ปรึกษา"
+              value={formData.consultingFirmId || ''}
+              onChange={(event) =>
+                setValue('consultingFirmId', event.target.value, { shouldValidate: true })
+              }
+              disabled={isSubmitting || isLocked}
+            >
+              <MenuItem value="">—</MenuItem>
+              {firmOptions.map((firm) => (
+                <MenuItem key={firm.id} value={firm.id}>
+                  {firm.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {isFirmContactPerson && (
+              <FormHelperText>ผู้ติดต่อหลักของบริษัทนี้</FormHelperText>
+            )}
+          </FormControl>
+        )}
 
         <Typography variant="subtitle1" fontWeight={600}>
           ข้อมูลส่วนตัว

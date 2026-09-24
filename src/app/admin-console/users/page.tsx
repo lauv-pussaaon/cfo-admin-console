@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   Box,
@@ -48,6 +48,7 @@ import {
 export default function AdminConsoleUsersPage() {
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (!authLoading && user && !isAdmin(user)) {
@@ -66,6 +67,11 @@ export default function AdminConsoleUsersPage() {
     setSelectedStatus,
     filteredUsers,
   } = useUsersFilter(users)
+
+  useEffect(() => {
+    const query = searchParams.get('q')
+    if (query) setSearchTerm(query)
+  }, [searchParams, setSearchTerm])
   const [modalOpen, setModalOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -405,7 +411,7 @@ export default function AdminConsoleUsersPage() {
             onClick={handleOpenRegistrationUrl}
             sx={adminPrimaryButtonSx}
           >
-            ลิงก์สมัคร Consult/Verifier
+            ลิงก์สมัคร Consult/Firm
           </Button>
           <Button
             variant="contained"

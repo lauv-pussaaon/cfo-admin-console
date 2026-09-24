@@ -18,11 +18,18 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- PART 2: CREATE TABLES
 -- ===========================================
 
+-- Consulting firms (group of Consult users; the firm has no login)
+CREATE TABLE consulting_firms (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Users (system users only)
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   username TEXT UNIQUE NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL,
   password_hash TEXT NOT NULL,
   name TEXT NOT NULL,
   avatar_url TEXT,
@@ -35,6 +42,8 @@ CREATE TABLE users (
   phone TEXT,
   year_experiences INTEGER,
   industries TEXT[] NOT NULL DEFAULT '{}',
+  consulting_firm_id UUID REFERENCES consulting_firms(id) ON DELETE SET NULL,
+  is_firm_contact_person BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -412,6 +421,7 @@ CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_users_invite_hashcode ON users(invite_hashcode);
+CREATE INDEX idx_users_consulting_firm_id ON users(consulting_firm_id);
 CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
 
 -- Organization trial requests indexes

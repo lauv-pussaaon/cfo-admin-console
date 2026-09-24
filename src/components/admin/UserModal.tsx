@@ -32,6 +32,7 @@ const profileDefaults = {
   phone: '',
   yearExperiences: 0,
   industries: [] as string[],
+  consultingFirmId: '',
 }
 
 // Schema for admin console users (system users only)
@@ -54,6 +55,7 @@ const userSchema = z
     phone: z.string(),
     yearExperiences: z.number({ message: 'กรุณากรอกปีประสบการณ์' }),
     industries: z.array(z.string()),
+    consultingFirmId: z.string(),
   })
   .superRefine((data, ctx) => {
     if (!isProfileRole(data.role)) return
@@ -165,6 +167,7 @@ export default function UserModal({
           phone: initialData.phone || '',
           yearExperiences: initialData.year_experiences ?? 0,
           industries: initialData.industries ?? [],
+          consultingFirmId: initialData.consulting_firm_id || '',
         }, {
           keepErrors: false,
         })
@@ -210,6 +213,8 @@ export default function UserModal({
           phone: string | null
           year_experiences: number | null
           industries: string[]
+          consulting_firm_id: string | null
+          is_firm_contact_person: boolean
         } = {
           username: data.username,
           email: data.email,
@@ -217,6 +222,8 @@ export default function UserModal({
           avatar_url: data.avatar_url || null,
           role: data.role as string,
           ...profile,
+          consulting_firm_id: data.role === 'Consult' ? (data.consultingFirmId || null) : null,
+          is_firm_contact_person: data.role === 'Consult' && Boolean(initialData.is_firm_contact_person),
         }
         
         // Only update password if provided
@@ -242,6 +249,8 @@ export default function UserModal({
           role: data.role as string,
           status: 'active',
           ...profile,
+          consulting_firm_id: data.role === 'Consult' ? (data.consultingFirmId || null) : null,
+          is_firm_contact_person: false,
         })
       }
       
@@ -303,6 +312,7 @@ export default function UserModal({
               isSubmitting={isSubmitting} 
               availableRoles={ROLE_OPTIONS}
               isLocked={isLockedAdmin}
+              isFirmContactPerson={Boolean(initialData?.is_firm_contact_person)}
             />
           </Box>
 

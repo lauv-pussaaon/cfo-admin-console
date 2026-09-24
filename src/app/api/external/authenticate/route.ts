@@ -21,17 +21,15 @@ export async function POST (request: NextRequest) {
     if (!usernameOrEmail || !password) {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
-        { error: 'Username/email and password are required' },
+        { error: 'Username and password are required' },
         { status: 400, headers }
       )
     }
 
-    // Find user by username or email (Consult/Audit only)
-    // Note: We need to filter by role after finding the user, so we query first then filter
     const { data: users, error } = await supabase
       .from('users')
       .select('id, username, email, name, avatar_url, role, status, invite_hashcode, password_hash, organization_name')
-      .or(`username.eq.${usernameOrEmail},email.eq.${usernameOrEmail}`)
+      .eq('username', usernameOrEmail)
       .limit(1)
 
     if (error) {
@@ -46,7 +44,7 @@ export async function POST (request: NextRequest) {
     if (!users || users.length === 0) {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
-        { error: 'Invalid username/email or password' },
+        { error: 'Invalid username or password' },
         { status: 401, headers }
       )
     }
@@ -81,7 +79,7 @@ export async function POST (request: NextRequest) {
     if (!isValid) {
       const headers = createCorsHeaders(origin)
       return NextResponse.json(
-        { error: 'Invalid username/email or password' },
+        { error: 'Invalid username or password' },
         { status: 401, headers }
       )
     }

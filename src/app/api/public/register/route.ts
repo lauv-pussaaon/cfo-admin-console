@@ -2,32 +2,65 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createUser, deleteUser } from '@/lib/api/auth'
 import { createUserConsent } from '@/lib/api/user-consents'
-import {
-  buildVerificationUploadUrl,
-  createConsultAuditVerification,
-} from '@/lib/api/consult-audit-verification'
 import { AppError } from '@/lib/utils/errors'
-import { sendRegistrationConfirmationEmail } from '@/lib/email/send-registration-confirmation'
-import { sendAdminNewRegistrationNotice } from '@/lib/email/send-admin-new-registration-notice'
-import { resolveSiteOriginFromRequest, resolveBaseUrlForEmail } from '@/lib/email/resolve-site-origin'
-import { getEnabledNotificationEmails } from '@/lib/api/notification-recipients-server'
 import { registrationConsentFields } from '@/components/register/consent-schema'
-import { registrationProfileFields } from '@/components/register/registration-profile-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
 import { listActiveIndustryOptions } from '@/lib/api/emission-templates'
-import { supabase } from '@/lib/supabase'
+import {
+  createConsultingFirm,
+  deleteConsultingFirm,
+} from '@/lib/api/consulting-firms'
+import { notifyConsultRegistration } from '@/lib/register/notify-consult-registration'
 
-const publicRegistrationSchema = z.object({
+const phonePattern = /^[0-9+\-\s()]{8,20}$/
+
+const sharedRegistrationFields = {
   username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/),
   email: z.string().email(),
   password: z.string().min(6),
   name: z.string().min(1).max(120),
-  role: z.enum(['Consult', 'Audit']),
-  ...registrationProfileFields,
+  phone: z.string().min(1).regex(phonePattern),
+  yearExperiences: z.number().int().min(0).max(80).optional(),
+  industries: z.array(z.string()).optional(),
   ...registrationConsentFields,
-})
+}
+
+const publicRegistrationSchema = z.discriminatedUnion('registrantType', [
+  z.object({
+    registrantType: z.literal('individual'),
+    role: z.enum(['Consult', 'Audit']),
+    organizationName: z.string().min(1).max(200),
+    ...sharedRegistrationFields,
+  }),
+  z.object({
+    registrantType: z.literal('firm'),
+    role: z.literal('Consult'),
+    firmName: z.string().min(1).max(200),
+    ...sharedRegistrationFields,
+  }),
+])
+
+async function rollbackRegistration (userId: string | null, firmId: string | null) {
+  if (userId) {
+    try {
+      await deleteUser(userId)
+    } catch (rollbackErr) {
+      console.error('Failed to rollback user:', rollbackErr)
+    }
+  }
+  if (firmId) {
+    try {
+      await deleteConsultingFirm(firmId)
+    } catch (rollbackErr) {
+      console.error('Failed to rollback consulting firm:', rollbackErr)
+    }
+  }
+}
 
 export async function POST (request: NextRequest) {
+  let createdUserId: string | null = null
+  let createdFirmId: string | null = null
+
   try {
     const body = await request.json()
     const payload = publicRegistrationSchema.parse(body)
@@ -35,15 +68,9 @@ export async function POST (request: NextRequest) {
     const emailNormalized = payload.email.trim().toLowerCase()
     const industryOptions = await listActiveIndustryOptions()
     const allowedCodes = new Set(industryOptions.map((i) => i.industry_code))
-    const industries = [...new Set(payload.industries)].filter((code) =>
+    const industries = [...new Set(payload.industries ?? [])].filter((code) =>
       allowedCodes.has(code)
     )
-    if (industries.length === 0) {
-      return NextResponse.json(
-        { error: 'กรุณาเลือกอุตสาหกรรมที่ถูกต้อง' },
-        { status: 400 }
-      )
-    }
 
     const industryLabelByCode = new Map(
       industryOptions.map((i) => [i.industry_code, i.name_th])
@@ -52,6 +79,15 @@ export async function POST (request: NextRequest) {
       (code) => industryLabelByCode.get(code) || code
     )
 
+    const organizationName = payload.registrantType === 'firm'
+      ? payload.firmName.trim()
+      : payload.organizationName.trim()
+
+    if (payload.registrantType === 'firm') {
+      const firm = await createConsultingFirm(organizationName)
+      createdFirmId = firm.id
+    }
+
     const user = await createUser({
       username: payload.username.trim(),
       email: emailNormalized,
@@ -59,11 +95,15 @@ export async function POST (request: NextRequest) {
       name: payload.name.trim(),
       role: payload.role,
       status: 'requested',
-      organization_name: payload.organizationName.trim(),
+      organization_name: organizationName,
       phone: payload.phone.trim(),
-      year_experiences: payload.yearExperiences,
+      year_experiences:
+        typeof payload.yearExperiences === 'number' ? payload.yearExperiences : null,
       industries,
+      consulting_firm_id: createdFirmId,
+      is_firm_contact_person: payload.registrantType === 'firm',
     })
+    createdUserId = user.id
 
     const policyUrls = getPolicyUrls()
 
@@ -79,88 +119,35 @@ export async function POST (request: NextRequest) {
       })
     } catch (consentErr) {
       console.error('Failed to save user consent, rolling back user:', consentErr)
-      try {
-        await deleteUser(user.id)
-      } catch (rollbackErr) {
-        console.error('Failed to rollback user after consent error:', rollbackErr)
-      }
+      await rollbackRegistration(createdUserId, createdFirmId)
       return NextResponse.json(
         { error: 'ส่งไม่สำเร็จ ลองใหม่ภายหลัง' },
         { status: 500 }
       )
     }
 
-    let verificationToken = ''
     try {
-      const verification = await createConsultAuditVerification(supabase, user.id)
-      verificationToken = verification.token
+      await notifyConsultRegistration(request, {
+        userId: user.id,
+        name: payload.name.trim(),
+        username: payload.username.trim(),
+        email: emailNormalized,
+        role: payload.role,
+        profile: {
+          organizationName,
+          phone: payload.phone.trim(),
+          yearExperiences:
+            typeof payload.yearExperiences === 'number' ? payload.yearExperiences : null,
+          industryLabels,
+        },
+      })
     } catch (verificationErr) {
       console.error('Failed to create verification row, rolling back user:', verificationErr)
-      try {
-        await deleteUser(user.id)
-      } catch (rollbackErr) {
-        console.error('Failed to rollback user after verification error:', rollbackErr)
-      }
+      await rollbackRegistration(createdUserId, createdFirmId)
       return NextResponse.json(
         { error: 'ส่งไม่สำเร็จ ลองใหม่ภายหลัง' },
         { status: 500 }
       )
-    }
-
-    const requestOrigin = resolveSiteOriginFromRequest(request)
-    const baseUrl = resolveBaseUrlForEmail(requestOrigin)
-    const verificationUploadUrl = buildVerificationUploadUrl(
-      baseUrl || requestOrigin,
-      verificationToken
-    )
-
-    const profile = {
-      organizationName: payload.organizationName.trim(),
-      phone: payload.phone.trim(),
-      yearExperiences: payload.yearExperiences,
-      industryLabels,
-    }
-
-    try {
-      const emailResult = await sendRegistrationConfirmationEmail({
-        to: emailNormalized,
-        name: payload.name.trim(),
-        username: payload.username.trim(),
-        email: emailNormalized,
-        role: payload.role,
-        profile,
-        verificationUploadUrl,
-        requestOrigin,
-      })
-      if (!emailResult.sent) {
-        console.warn(
-          '[email] ไม่ได้ส่งอีเมลยืนยัน:',
-          emailResult.skipReason ?? 'unknown'
-        )
-      }
-    } catch (emailErr) {
-      console.error('[email] ส่งอีเมลยืนยันลงทะเบียนไม่สำเร็จ:', emailErr)
-    }
-
-    try {
-      const adminEmails = await getEnabledNotificationEmails()
-      const noticeResult = await sendAdminNewRegistrationNotice({
-        name: payload.name.trim(),
-        username: payload.username.trim(),
-        email: emailNormalized,
-        role: payload.role,
-        profile,
-        requestOrigin,
-        adminEmails,
-      })
-      if (!noticeResult.sent) {
-        console.warn(
-          '[email] ไม่ได้ส่งอีเมลแจ้ง Admin:',
-          noticeResult.skipReason ?? 'unknown'
-        )
-      }
-    } catch (adminEmailErr) {
-      console.error('[email] ส่งอีเมลแจ้ง Admin ไม่สำเร็จ:', adminEmailErr)
     }
 
     return NextResponse.json({
@@ -168,6 +155,10 @@ export async function POST (request: NextRequest) {
       message: 'ส่งคำขอแล้ว กรุณาตรวจอีเมลเพื่ออัปโหลดเอกสารยืนยัน',
     })
   } catch (error) {
+    if (createdUserId || createdFirmId) {
+      await rollbackRegistration(createdUserId, createdFirmId)
+    }
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง' },

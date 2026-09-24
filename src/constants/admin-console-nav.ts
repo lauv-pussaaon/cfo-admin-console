@@ -56,6 +56,12 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     sectionId: 'adminUsers',
   },
   {
+    title: 'บริษัทที่ปรึกษา',
+    description: 'ดูบริษัทที่ปรึกษาและสถานะพนักงาน',
+    path: '/admin-console/consulting-firms',
+    sectionId: 'adminUsers',
+  },
+  {
     title: 'จัดการรายการทรัพยากร EF',
     description: 'จัดการแหล่งปล่อย หน่วย และค่า EF ตามเวอร์ชันแคตตาล็อก',
     path: '/admin-console/emission-resources',
@@ -96,20 +102,37 @@ function filterNavByPaths (paths: readonly string[]): AdminNavItem[] {
   return ADMIN_DASHBOARD_NAV_ITEMS.filter((item) => allowed.has(item.path))
 }
 
-export function getDashboardNavItemsForRole (role: string | undefined | null): AdminNavItem[] {
-  if (role === 'Admin') return ADMIN_DASHBOARD_NAV_ITEMS
-  if (role === 'Support') return filterNavByPaths(SUPPORT_NAV_PATHS)
-  if (role === 'Consult' || role === 'Audit' || role === 'Dealer') {
-    return filterNavByPaths(CONSULT_AUDIT_NAV_PATHS)
-  }
-  return []
+const FIRM_STAFF_NAV_ITEM: AdminNavItem = {
+  title: 'ทีมที่ปรึกษา',
+  description: 'เพิ่มพนักงานและดูสถานะการตรวจสอบ',
+  path: '/admin-console/firm-staff',
+  sectionId: 'adminUsers',
 }
 
-export function getNavSectionsForRole (role: string | undefined | null): {
+export function getDashboardNavItemsForRole (
+  role: string | undefined | null,
+  options?: { isFirmContact?: boolean }
+): AdminNavItem[] {
+  let items: AdminNavItem[] = []
+  if (role === 'Admin') items = ADMIN_DASHBOARD_NAV_ITEMS
+  else if (role === 'Support') items = filterNavByPaths(SUPPORT_NAV_PATHS)
+  else if (role === 'Consult' || role === 'Audit' || role === 'Dealer') {
+    items = filterNavByPaths(CONSULT_AUDIT_NAV_PATHS)
+  }
+  if (options?.isFirmContact && !items.some((item) => item.path === FIRM_STAFF_NAV_ITEM.path)) {
+    items = [...items, FIRM_STAFF_NAV_ITEM]
+  }
+  return items
+}
+
+export function getNavSectionsForRole (
+  role: string | undefined | null,
+  options?: { isFirmContact?: boolean }
+): {
   section: AdminNavSection
   items: AdminNavItem[]
 }[] {
-  const items = getDashboardNavItemsForRole(role).filter((item) => item.path !== '/admin-console')
+  const items = getDashboardNavItemsForRole(role, options).filter((item) => item.path !== '/admin-console')
   return ADMIN_NAV_SECTIONS
     .map((section) => ({
       section,

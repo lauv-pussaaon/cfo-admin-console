@@ -39,7 +39,7 @@ export async function buildRegistrationEmailProfile (
     organizationName,
     phone,
     yearExperiences:
-      typeof user.year_experiences === 'number' ? user.year_experiences : 0,
+      typeof user.year_experiences === 'number' ? user.year_experiences : null,
     industryLabels,
   }
 }

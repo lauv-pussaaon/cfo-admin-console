@@ -9,16 +9,17 @@ export const registrationProfileFields = {
     .min(1, 'กรุณากรอกเบอร์โทร')
     .regex(phonePattern, 'รูปแบบเบอร์โทรไม่ถูกต้อง'),
   yearExperiences: z
-    .number({ message: 'กรุณากรอกปีประสบการณ์' })
+    .number()
     .int('ต้องเป็นจำนวนเต็ม')
     .min(0, 'ต้องไม่ติดลบ')
-    .max(80, 'ค่าสูงสุด 80 ปี'),
-  industries: z.array(z.string().min(1)).min(1, 'กรุณาเลือกอย่างน้อย 1 อุตสาหกรรม'),
+    .max(80, 'ค่าสูงสุด 80 ปี')
+    .optional(),
+  industries: z.array(z.string()),
 }
 
 export type RegistrationProfileFields = {
   organizationName: string
   phone: string
-  yearExperiences: number
+  yearExperiences?: number
   industries: string[]
 }

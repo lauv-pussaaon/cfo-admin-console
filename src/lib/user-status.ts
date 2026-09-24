@@ -7,6 +7,13 @@ export const USER_STATUS_LABELS: Record<UserStatus, string> = {
   inactive: 'ปิดใช้งาน',
 }
 
+export const VERIFICATION_STATUS_LABELS: Record<string, string> = {
+  pending_upload: 'รออัปโหลดเอกสาร',
+  pending_review: 'รอตรวจสอบ',
+  approved: 'อนุมัติเอกสาร',
+  rejected: 'ปฏิเสธเอกสาร',
+}
+
 export const USER_STATUS_FILTER_OPTIONS: {
   value: UserStatus
   label: string

@@ -1,6 +1,6 @@
 export const CONTACT_PAGE_URL = 'https://www.ideacarb.com/th/contact'
 export const SUPPORT_EMAIL =
-  process.env.SUPPORT_EMAIL?.trim() || 'admin@ideacarb.com'
+  process.env.SUPPORT_EMAIL?.trim() || 'jirawat.chn@ideacarb.com'
 export const ADMIN_CONSOLE_PUBLIC_URL = (
   process.env.ADMIN_CONSOLE_PUBLIC_URL?.trim() ||
   'https://admin-console.ideacarb.com'

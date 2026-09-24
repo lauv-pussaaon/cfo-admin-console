@@ -76,7 +76,7 @@ export function buildVerificationApprovedContent (params: {
     <li>บทบาท: ${safe.roleTh}</li>
     ${profileHtmlItems}
   </ul>
-  <p><a href="${safe.loginUrl}">เข้าสู่ระบบ Admin Console</a></p>
+  <p><a href="${safe.loginUrl}">เข้าสู่ระบบ</a></p>
   `.trim()
 
   return {

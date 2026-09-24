@@ -53,6 +53,8 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/trial-requests': <HowToRegIcon />,
   '/admin-console/support-clients': <SupportAgentIcon />,
   '/admin-console/users': <PeopleIcon />,
+  '/admin-console/consulting-firms': <BusinessIcon />,
+  '/admin-console/firm-staff': <PeopleIcon />,
   '/admin-console/analytics': <AnalyticsIcon />,
   '/admin-console/emission-resources': <ScienceIcon />,
   '/admin-console/emission-templates': <ViewModuleIcon />,
@@ -87,17 +89,21 @@ export default function Sidebar () {
   const primaryLight = theme.palette.primary.light
 
   const dashboardItem = useMemo(() => {
-    const home = getDashboardNavItemsForRole(user?.role).find((item) => item.path === '/admin-console')
+    const home = getDashboardNavItemsForRole(user?.role, {
+      isFirmContact: Boolean(user?.is_firm_contact_person),
+    }).find((item) => item.path === '/admin-console')
     return home ? withIcons([home])[0] : null
-  }, [user?.role])
+  }, [user?.role, user?.is_firm_contact_person])
 
   const navSections = useMemo(
     () =>
-      getNavSectionsForRole(user?.role).map((group) => ({
+      getNavSectionsForRole(user?.role, {
+        isFirmContact: Boolean(user?.is_firm_contact_person),
+      }).map((group) => ({
         ...group,
         items: withIcons(group.items),
       })),
-    [user?.role]
+    [user?.role, user?.is_firm_contact_person]
   )
 
   const settingsActive =

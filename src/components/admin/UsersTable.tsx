@@ -80,6 +80,7 @@ export default function UsersTable({
       name: user.name,
       username: user.username,
       email: user.email,
+      consulting_firm_name: user.consulting_firm_name || '',
       role: user.role,
       status: user.status,
       rejection_reason: user.rejection_reason,
@@ -158,6 +159,24 @@ export default function UsersTable({
             variant="outlined"
             sx={adminQuietChipSx}
           />
+        </Box>
+      ),
+    },
+    {
+      field: 'consulting_firm_name',
+      headerName: 'บริษัทที่ปรึกษา',
+      width: 180,
+      flex: 1,
+      minWidth: 140,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', minWidth: 0 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+          >
+            {params.value || '—'}
+          </Typography>
         </Box>
       ),
     },

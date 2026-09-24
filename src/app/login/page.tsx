@@ -30,7 +30,7 @@ import { isExpectedError } from '@/lib/utils/errors'
 
 // Zod validation schema
 const loginSchema = z.object({
-  usernameOrEmail: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้หรืออีเมล'),
+  usernameOrEmail: z.string().min(1, 'กรุณากรอกชื่อผู้ใช้'),
   password: z.string().min(1, 'กรุณากรอกรหัสผ่าน'),
 })
 
@@ -100,7 +100,7 @@ export default function LoginPage() {
             🔐 IdeaCarb Admin Console Login
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            เข้าสู่ระบบด้วยชื่อผู้ใช้หรืออีเมล
+            เข้าสู่ระบบด้วยชื่อผู้ใช้
           </Typography>
         </Box>
 
@@ -117,7 +117,7 @@ export default function LoginPage() {
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                   <TextField
                     {...methods.register('usernameOrEmail')}
-                    label="ชื่อผู้ใช้หรืออีเมล"
+                    label="ชื่อผู้ใช้"
                     required
                     fullWidth
                     error={!!errors.usernameOrEmail}

@@ -25,6 +25,8 @@ const CARD_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/trial-requests': <HowToRegIcon sx={{ fontSize: 48 }} />,
   '/admin-console/support-clients': <SupportAgentIcon sx={{ fontSize: 48 }} />,
   '/admin-console/users': <PeopleIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/consulting-firms': <BusinessIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/firm-staff': <PeopleIcon sx={{ fontSize: 48 }} />,
   '/admin-console/analytics': <AnalyticsIcon sx={{ fontSize: 48 }} />,
   '/admin-console/emission-resources': <ScienceIcon sx={{ fontSize: 48 }} />,
   '/admin-console/emission-templates': <ViewModuleIcon sx={{ fontSize: 48 }} />,
@@ -85,7 +87,11 @@ export default function AdminConsolePage () {
   const router = useRouter()
 
   const sections = useMemo(
-    () => (user ? getNavSectionsForRole(user.role) : []),
+    () => (user
+      ? getNavSectionsForRole(user.role, {
+        isFirmContact: Boolean(user.is_firm_contact_person),
+      })
+      : []),
     [user]
   )
 

@@ -42,6 +42,8 @@ export class UserService {
     phone?: string | null
     year_experiences?: number | null
     industries?: string[]
+    consulting_firm_id?: string | null
+    is_firm_contact_person?: boolean
   }): Promise<User> {
     return createUserAPI(data)
   }
@@ -61,6 +63,8 @@ export class UserService {
       phone?: string | null
       year_experiences?: number | null
       industries?: string[]
+      consulting_firm_id?: string | null
+      is_firm_contact_person?: boolean
     }>
   ): Promise<User> {
     return updateUserAPI(id, updates)

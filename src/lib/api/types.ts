@@ -46,6 +46,9 @@ export interface User {
   phone?: string | null
   year_experiences?: number | null
   industries?: string[]
+  consulting_firm_id?: string | null
+  is_firm_contact_person?: boolean
+  consulting_firm_name?: string | null
   created_at: string
   organizations?: Organization[]
   verification?: ConsultAuditVerification | null

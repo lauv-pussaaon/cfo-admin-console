@@ -235,7 +235,7 @@ export default function ConsultVerifyPage () {
                 อัปโหลดเอกสารยืนยัน
               </Typography>
               <Typography color="text.secondary" sx={{ mb: 3 }}>
-                {state.name} ({state.email}) — กรุณาอัปโหลดเอกสารเพื่อให้ทีมงานตรวจสอบ
+                {state.name} ({state.email})
               </Typography>
 
               {!state.canUpload ? (
@@ -244,8 +244,61 @@ export default function ConsultVerifyPage () {
                 </Alert>
               ) : (
                 <>
+                  <Box>
+                    <Typography variant="subtitle1" color="text.secondary" display="block" sx={{ mb: 1.5 }}>
+                      เอกสารที่ต้องส่งสำหรับลงทะเบียนในนามบุคคล
+                    </Typography>
+                    <Box
+                      component="ul"
+                      sx={{
+                        m: 0,
+                        mb: 1.5,
+                        pl: 2.5,
+                        color: 'text.secondary',
+                        typography: 'body2',
+                        listStyleType: 'decimal',
+                      }}
+                    >
+                      <li>เอกสารการขึ้นทะเบียนที่ปรึกษา</li>
+                      <li>สำเนาบัตรประชาชนผู้ลงทะเบียน</li>
+                      <li>เอกสารประวัติการดำเนินงาน (Resume)</li>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <Typography variant="subtitle1" color="text.secondary" display="block" sx={{ mb: 1.5 }}>
+                      เอกสารที่ต้องส่งสำหรับลงทะเบียนในนามบริษัท
+                    </Typography>
+                    <Box
+                      component="ul"
+                      sx={{
+                        m: 0,
+                        mb: 1.5,
+                        pl: 2.5,
+                        color: 'text.secondary',
+                        typography: 'body2',
+                        listStyleType: 'decimal',
+                      }}
+                    >
+                      <li>เอกสารการขึ้นทะเบียนที่ปรึกษา</li>
+                      <li>เอกสารประวัติการดำเนินงาน (Resume)</li>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      mb: 1.5,
+                      px: 2,
+                      py: 1.5,
+                      borderRadius: 1.5,
+                      bgcolor: 'grey.100',
+                    }}
+                  >
+                    <Typography variant="body2" color="text.secondary">
+                      เอกสารทั้งหมดจะใช้สำหรับการตรวจสอบการลงทะเบียนเท่านั้น หลังจากนั้นจะถูกลบออกจากระบบ
+                      ทาง IdeaCarb ไม่มีนโยบายในการเก็บเอกสารประกอบการลงทะเบียนของท่าน
+                    </Typography>
+                  </Box>
                   <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1.5 }}>
-                    สูงสุด {MAX_VERIFICATION_DOCUMENTS} ไฟล์ — รูปภาพ, PDF, Word, Excel ไฟล์ละไม่เกิน 5MB
+                    รองรับไฟล์ — รูปภาพ, PDF, Word, Excel ไฟล์ละไม่เกิน 5MB.
                     {files.length > 0 ? ` · เลือกแล้ว ${files.length} ไฟล์` : ''}
                   </Typography>
 

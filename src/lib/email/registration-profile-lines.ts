@@ -1,8 +1,12 @@
 export type RegistrationEmailProfile = {
   organizationName: string
   phone: string
-  yearExperiences: number
+  yearExperiences?: number | null
   industryLabels: string[]
+}
+
+function formatYearExperiences (yearExperiences?: number | null): string {
+  return typeof yearExperiences === 'number' ? String(yearExperiences) : '-'
 }
 
 export function formatRegistrationProfileTextLines (
@@ -11,7 +15,7 @@ export function formatRegistrationProfileTextLines (
   return [
     `- องค์กร: ${profile.organizationName}`,
     `- เบอร์โทร: ${profile.phone}`,
-    `- ปีประสบการณ์: ${profile.yearExperiences}`,
+    `- ปีประสบการณ์: ${formatYearExperiences(profile.yearExperiences)}`,
     `- อุตสาหกรรม: ${
       profile.industryLabels.length > 0
         ? profile.industryLabels.join(', ')
@@ -27,7 +31,7 @@ export function formatRegistrationProfileHtmlItems (
   return [
     `<li>องค์กร: ${escapeHtml(profile.organizationName)}</li>`,
     `<li>เบอร์โทร: ${escapeHtml(profile.phone)}</li>`,
-    `<li>ปีประสบการณ์: ${escapeHtml(String(profile.yearExperiences))}</li>`,
+    `<li>ปีประสบการณ์: ${escapeHtml(formatYearExperiences(profile.yearExperiences))}</li>`,
     `<li>อุตสาหกรรม: ${escapeHtml(
       profile.industryLabels.length > 0
         ? profile.industryLabels.join(', ')
