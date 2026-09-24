@@ -18,9 +18,9 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   ContentCopy as ContentCopyIcon,
+  Check as CheckIcon,
 } from '@mui/icons-material'
 import type { User, UserStatus } from '@/lib/api/types'
-import { getRoleColor, getRoleLabel } from '@/types/roles'
 import { USER_STATUS_LABELS } from '@/lib/user-status'
 import {
   adminDataGridPaperSx,
@@ -80,7 +80,7 @@ export default function UsersTable({
       name: user.name,
       username: user.username,
       email: user.email,
-      consulting_firm_name: user.consulting_firm_name || '',
+      is_firm_contact_person: Boolean(user.is_firm_contact_person),
       role: user.role,
       status: user.status,
       rejection_reason: user.rejection_reason,
@@ -145,40 +145,22 @@ export default function UsersTable({
       ),
     },
     {
-      field: 'role',
-      headerName: 'บทบาท',
-      width: 150,
+      field: 'is_firm_contact_person',
+      headerName: 'ในนามนิติบุคคล',
+      width: 200,
+      minWidth: 180,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <Chip
-            label={getRoleLabel(params.value as string, 'th')}
-            size="small"
-            color={getRoleColor(params.value)}
-            variant="outlined"
-            sx={adminQuietChipSx}
-          />
-        </Box>
-      ),
-    },
-    {
-      field: 'consulting_firm_name',
-      headerName: 'บริษัทที่ปรึกษา',
-      width: 180,
-      flex: 1,
-      minWidth: 140,
-      renderCell: (params) => (
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', minWidth: 0 }}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-          >
-            {params.value || '—'}
-          </Typography>
-        </Box>
-      ),
+      sortable: false,
+      renderCell: (params) => {
+        const isFirmContact = params.row.role === 'Consult' && params.row.is_firm_contact_person
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            {isFirmContact
+              && <CheckIcon color="success" fontSize="medium" />}
+          </Box>
+        )
+      },
     },
     {
       field: 'email',
@@ -391,26 +373,20 @@ export default function UsersTable({
     cols.push(
       {
         field: 'organizations',
-        headerName: 'องค์กรที่ดูแล',
+        headerName: 'จำนวนองค์กรที่ดูแล',
         width: 180,
         flex: 1,
         minWidth: 140,
         renderCell: (params) => {
           const orgs = params.row.organizations || []
           if (orgs.length === 0) {
-            return (
-              <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                <Typography variant="body2" color="text.disabled">
-                  —
-                </Typography>
-              </Box>
-            )
+            return null
           }
           return (
             <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
               <Chip
                 label={`${orgs.length} องค์กร`}
-                size="small"
+                size="medium"
                 variant="outlined"
                 sx={{
                   height: 28,

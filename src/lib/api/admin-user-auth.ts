@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 import type { User } from '@/lib/api/types'
 import { verifyPassword } from '@/lib/utils/password'
 
-const ORGANIZATION_MANAGER_ROLES = new Set(['Admin', 'Dealer', 'Consult', 'Audit'])
+const ORGANIZATION_MANAGER_ROLES = new Set(['Admin', 'Consult', 'Audit'])
 
 export async function getOrganizationManagerFromRequest (
   request: NextRequest

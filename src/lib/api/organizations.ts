@@ -31,11 +31,6 @@ export interface OrganizationWithCreator extends OrganizationWithStats {
     email: string
     role: string
   } | null
-  dealer?: {
-    id: string
-    name: string
-    email: string
-  } | null
 }
 
 export const getOrganizationsWithStats = async (): Promise<OrganizationWithStats[]> => {
@@ -114,33 +109,6 @@ export const getOrganizationsForAdmin = async (): Promise<OrganizationWithCreato
     })
   }
 
-  // Get dealers for all organizations
-  const orgIdsForDealers = organizations.map((org: any) => org.id)
-  const dealersMap = new Map<string, User>()
-
-  if (orgIdsForDealers.length > 0) {
-    // Get all user-organizations where user is a dealer
-    const { data: dealerOrgs, error: dealerError } = await supabase
-      .from('user_organizations')
-      .select(`
-        organization_id,
-        user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, status, created_at)
-      `)
-      .in('organization_id', orgIdsForDealers)
-
-    if (!dealerError && dealerOrgs) {
-      dealerOrgs.forEach((dealerOrg: { organization_id: string; user: User | User[] | null }) => {
-        if (dealerOrg.user) {
-          const user = Array.isArray(dealerOrg.user) ? dealerOrg.user[0] : dealerOrg.user
-          if (user && user.role === 'Dealer') {
-            dealersMap.set(dealerOrg.organization_id, user)
-          }
-        }
-      })
-    }
-  }
-
-  // Combine organizations with stats, creator info, and dealer info
   return organizations.map((org: any) => ({
     ...org,
     userCount: userCountMap.get(org.id) || 0,
@@ -150,73 +118,6 @@ export const getOrganizationsForAdmin = async (): Promise<OrganizationWithCreato
       email: org.creator.email,
       role: org.creator.role,
     } : null,
-    dealer: dealersMap.get(org.id) ? {
-      id: dealersMap.get(org.id)!.id,
-      name: dealersMap.get(org.id)!.name,
-      email: dealersMap.get(org.id)!.email,
-    } : null,
-  }))
-}
-
-export const getOrganizationsForDealer = async (userId: string): Promise<OrganizationWithStats[]> => {
-  // Get organizations assigned to this dealer through user_organizations
-  const { data: userOrgs, error: userOrgsError } = await supabase
-    .from('user_organizations')
-    .select(`
-      organization_id,
-      organization:organizations(*)
-    `)
-    .eq('user_id', userId)
-    .order('assigned_at', { ascending: false })
-
-  if (userOrgsError) throw userOrgsError
-  if (!userOrgs || userOrgs.length === 0) {
-    return []
-  }
-
-  // Extract organization IDs
-  const organizationIds = userOrgs
-    .map((uo: { organization: Organization | Organization[] | null }) => {
-      if (!uo.organization) return null
-      return Array.isArray(uo.organization) ? uo.organization[0]?.id : uo.organization.id
-    })
-    .filter((id): id is string => id !== null)
-
-  if (organizationIds.length === 0) {
-    return []
-  }
-
-  // Get user count for each organization
-  const { data: allUserOrgs, error: userError } = await supabase
-    .from('user_organizations')
-    .select('organization_id')
-    .in('organization_id', organizationIds)
-
-  if (userError) throw userError
-
-  // Create map for counting
-  const userCountMap = new Map<string, number>()
-
-  // Count users per organization
-  if (allUserOrgs) {
-    allUserOrgs.forEach((uo: { organization_id: string }) => {
-      const count = userCountMap.get(uo.organization_id) || 0
-      userCountMap.set(uo.organization_id, count + 1)
-    })
-  }
-
-  // Extract organizations and add stats
-  const organizations: Organization[] = userOrgs
-    .map((uo: { organization: Organization | Organization[] | null }) => {
-      if (!uo.organization) return null
-      return Array.isArray(uo.organization) ? uo.organization[0] : uo.organization
-    })
-    .filter((org): org is Organization => org !== null)
-
-  // Combine organizations with stats
-  return organizations.map(org => ({
-    ...org,
-    userCount: userCountMap.get(org.id) || 0,
   }))
 }
 
@@ -314,26 +215,6 @@ export const getOrganizationForAdminById = async (id: string): Promise<Organizat
 
   const userCount = userOrgs?.length ?? 0
 
-  const { data: dealerOrgs, error: dealerError } = await supabase
-    .from('user_organizations')
-    .select(`
-      organization_id,
-      user:users!user_organizations_user_id_fkey(id, username, email, name, avatar_url, role, status, created_at)
-    `)
-    .eq('organization_id', id)
-
-  let dealer: OrganizationWithCreator['dealer'] = null
-  if (!dealerError && dealerOrgs) {
-    for (const row of dealerOrgs) {
-      const u = row.user
-      const user = Array.isArray(u) ? u[0] : u
-      if (user && user.role === 'Dealer') {
-        dealer = { id: user.id, name: user.name, email: user.email }
-        break
-      }
-    }
-  }
-
   const o = org as Record<string, unknown>
   const creatorRaw = o.creator as { id: string; name: string; email: string; role: string } | null | undefined
 
@@ -348,7 +229,6 @@ export const getOrganizationForAdminById = async (id: string): Promise<Organizat
           role: creatorRaw.role,
         }
       : null,
-    dealer,
   }
 }
 
@@ -563,52 +443,6 @@ export const removeUserFromOrganization = async (
 
   if (error) {
     handleSupabaseError(error)
-  }
-}
-
-// Get dealers (users with role 'Dealer')
-export const getDealers = async (): Promise<User[]> => {
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, username, email, name, avatar_url, role, status, created_at')
-    .eq('role', 'Dealer')
-    .order('name', { ascending: true })
-
-  if (error) {
-    handleSupabaseError(error)
-  }
-
-  return data || []
-}
-
-// Get dealer assigned to organization
-export const getDealerByOrganization = async (organizationId: string): Promise<User | null> => {
-  // Get all users assigned to this organization
-  const users = await getUsersByOrganization(organizationId)
-
-  // Find the dealer (should be only one)
-  const dealer = users.find(user => user.role === 'Dealer')
-
-  return dealer || null
-}
-
-// Set dealer for organization (removes old dealer, adds new one)
-export const setDealerForOrganization = async (
-  organizationId: string,
-  dealerId: string | null,
-  assignedBy: string | null
-): Promise<void> => {
-  // Get current dealer
-  const currentDealer = await getDealerByOrganization(organizationId)
-
-  // Remove current dealer if exists
-  if (currentDealer) {
-    await removeUserFromOrganization(organizationId, currentDealer.id)
-  }
-
-  // Add new dealer if provided
-  if (dealerId) {
-    await addUserToOrganization(organizationId, dealerId, assignedBy)
   }
 }
 

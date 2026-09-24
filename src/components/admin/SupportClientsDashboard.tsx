@@ -175,7 +175,7 @@ export default function SupportClientsDashboard () {
 
       <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
-          placeholder="ค้นหาชื่อ รหัส อีเมล Dealer ผู้สร้าง..."
+          placeholder="ค้นหาชื่อ รหัส อีเมล ผู้สร้าง..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"

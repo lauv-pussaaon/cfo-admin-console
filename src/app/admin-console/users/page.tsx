@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -15,6 +15,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Tabs,
+  Tab,
 } from '@mui/material'
 import {
   Add as AddIcon,
@@ -33,7 +35,7 @@ import { isAdmin } from '@/lib/permissions'
 import type { User, UserStatus } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useUsersFilter } from '@/hooks/useUsersFilter'
-import { ROLE_OPTIONS } from '@/types/roles'
+import { ROLE_OPTIONS, type UserRole } from '@/types/roles'
 import { USER_STATUS_FILTER_OPTIONS } from '@/lib/user-status'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
@@ -61,12 +63,26 @@ export default function AdminConsoleUsersPage() {
   const {
     searchTerm,
     setSearchTerm,
-    selectedRole,
-    setSelectedRole,
     selectedStatus,
     setSelectedStatus,
     filteredUsers,
   } = useUsersFilter(users)
+  const [activeRole, setActiveRole] = useState<UserRole>('Consult')
+
+  const roleCounts = useMemo(() => {
+    const counts = Object.fromEntries(
+      ROLE_OPTIONS.map((option) => [option.value, 0])
+    ) as Record<UserRole, number>
+    for (const row of filteredUsers) {
+      if (row.role in counts) counts[row.role] += 1
+    }
+    return counts
+  }, [filteredUsers])
+
+  const tabUsers = useMemo(
+    () => filteredUsers.filter((row) => row.role === activeRole),
+    [filteredUsers, activeRole]
+  )
 
   useEffect(() => {
     const query = searchParams.get('q')
@@ -444,23 +460,6 @@ export default function AdminConsoleUsersPage() {
           }}
         />
         <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
-          <InputLabel>กรองตามบทบาท</InputLabel>
-          <Select
-            value={selectedRole}
-            label="กรองตามบทบาท"
-            onChange={(e) => setSelectedRole(e.target.value as '' | typeof ROLE_OPTIONS[number]['value'])}
-          >
-            <MenuItem value="">
-              <em>ทั้งหมด</em>
-            </MenuItem>
-            {ROLE_OPTIONS.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
           <InputLabel>กรองตามสถานะ</InputLabel>
           <Select
             value={selectedStatus}
@@ -479,8 +478,24 @@ export default function AdminConsoleUsersPage() {
         </FormControl>
       </Box>
 
+      <Tabs
+        value={activeRole}
+        onChange={(_, value: UserRole) => setActiveRole(value)}
+        variant="scrollable"
+        allowScrollButtonsMobile
+        sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
+      >
+        {ROLE_OPTIONS.map((option) => (
+          <Tab
+            key={option.value}
+            value={option.value}
+            label={`${option.label} (${roleCounts[option.value]})`}
+          />
+        ))}
+      </Tabs>
+
       <UsersTable
-        data={filteredUsers}
+        data={tabUsers}
         loading={loading}
         onEdit={handleEdit}
         onDelete={handleDelete}

@@ -297,10 +297,6 @@ export default function ConsultVerifyPage () {
                       ทาง IdeaCarb ไม่มีนโยบายในการเก็บเอกสารประกอบการลงทะเบียนของท่าน
                     </Typography>
                   </Box>
-                  <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1.5 }}>
-                    รองรับไฟล์ — รูปภาพ, PDF, Word, Excel ไฟล์ละไม่เกิน 5MB.
-                    {files.length > 0 ? ` · เลือกแล้ว ${files.length} ไฟล์` : ''}
-                  </Typography>
 
                   {files.length > 0 && (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
@@ -375,6 +371,12 @@ export default function ConsultVerifyPage () {
                     </Box>
                   )}
 
+
+         
+                  <Typography variant="body2" color="text.secondary" display="block" sx={{ mt: 8 }}>
+                    รองรับไฟล์ — รูปภาพ, PDF, Word, Excel ไฟล์ละไม่เกิน 5MB.
+                    {files.length > 0 ? ` เลือกแล้ว ${files.length} ไฟล์` : ''}
+                  </Typography>
                   <Button
                     component="label"
                     variant="outlined"
@@ -383,7 +385,7 @@ export default function ConsultVerifyPage () {
                       isSubmitting ? <CircularProgress size={16} /> : <UploadFileIcon />
                     }
                     disabled={isSubmitting || files.length >= MAX_VERIFICATION_DOCUMENTS}
-                    sx={{ textTransform: 'none', mb: 2, py: 1.1 }}
+                    sx={{ textTransform: 'none', mb: 2, py: 1.1, fontSize: 24 }}
                   >
                     เลือกไฟล์
                     <input
@@ -412,7 +414,7 @@ export default function ConsultVerifyPage () {
                     startIcon={
                       isSubmitting ? <CircularProgress size={16} color="inherit" /> : null
                     }
-                    sx={{ py: 1.3, fontWeight: 600 }}
+                    sx={{ py: 1.3, fontWeight: 600, fontSize: 24 }}
                   >
                     {isSubmitting ? 'กำลังอัปโหลด...' : 'ส่งเอกสารเพื่อตรวจสอบ'}
                   </Button>

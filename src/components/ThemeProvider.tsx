@@ -410,19 +410,21 @@ interface Props {
   children: ReactNode
 }
 
+function readStoredThemeMode (): ThemeMode {
+  const savedMode = localStorage.getItem('theme_mode') as ThemeMode | null
+  if (savedMode === 'dark' || savedMode === 'light') {
+    return savedMode
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 export function CustomThemeProvider ({ children }: Props) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
-    if (typeof window === 'undefined') {
-      return 'light'
-    }
+  const [mode, setMode] = useState<ThemeMode>('light')
 
-    const savedMode = localStorage.getItem('theme_mode') as ThemeMode | null
-    if (savedMode === 'dark' || savedMode === 'light') {
-      return savedMode
-    }
-
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  })
+  useEffect(() => {
+    setMode(readStoredThemeMode())
+  }, [])
 
   useEffect(() => {
     const isDark = mode === 'dark'

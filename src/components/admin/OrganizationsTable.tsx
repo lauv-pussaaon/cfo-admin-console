@@ -26,7 +26,7 @@ import {
   adminQuietChipSx,
 } from '@/lib/admin-ui-styles'
 
-export type OrganizationsTableVariant = 'admin' | 'dealer' | 'support'
+export type OrganizationsTableVariant = 'admin' | 'assigned' | 'support'
 
 export interface SupportInboxMeta {
   has_unread_from_client: boolean
@@ -72,7 +72,7 @@ function ellipsisCell (params: GridRenderCellParams) {
 export default function OrganizationsTable ({
   data,
   loading,
-  variant = 'dealer',
+  variant = 'assigned',
   onEdit,
   onDelete,
   onExport,
@@ -281,7 +281,7 @@ export default function OrganizationsTable ({
       },
     ]
 
-    if (variant === 'dealer') {
+    if (variant === 'assigned') {
       base.push({
         field: 'description',
         headerName: 'คำอธิบาย',
@@ -352,7 +352,7 @@ export default function OrganizationsTable ({
     )
 
     const actionWidth =
-      (variant === 'dealer' ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) : 0) +
+      (variant === 'assigned' ? (onExport ? 50 : 0) + (onInvite ? 50 : 0) : 0) +
       (onSendOnboard ? 50 : 0) +
       (onViewDetail ? 50 : 0) +
       (onEdit ? 50 : 0) +
@@ -374,7 +374,7 @@ export default function OrganizationsTable ({
             sx={{ display: 'flex', justifyContent: 'center', gap: 1, height: '100%' }}
             onClick={(event) => event.stopPropagation()}
           >
-            {variant === 'dealer' && onExport && (
+            {variant === 'assigned' && onExport && (
               <IconButton
                 size="small"
                 onClick={() => onExport(params.row.id)}
@@ -384,7 +384,7 @@ export default function OrganizationsTable ({
                 <FileDownloadIcon fontSize="small" />
               </IconButton>
             )}
-            {variant === 'dealer' && onInvite && params.row.is_initialized && (
+            {variant === 'assigned' && onInvite && params.row.is_initialized && (
               <IconButton
                 size="small"
                 onClick={() => onInvite(params.row.id)}

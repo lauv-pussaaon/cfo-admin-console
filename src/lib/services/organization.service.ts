@@ -16,13 +16,9 @@ import {
   addUserToOrganization as addUserToOrganizationAPI,
   removeUserFromOrganization as removeUserFromOrganizationAPI,
   getOrganizationsWithStats as getOrganizationsWithStatsAPI,
-  getOrganizationsForDealer as getOrganizationsForDealerAPI,
   getOrganizationsForConsultAudit as getOrganizationsForConsultAuditAPI,
   getOrganizationsForAdmin as getOrganizationsForAdminAPI,
   getOrganizationForAdminById as getOrganizationForAdminByIdAPI,
-  getDealers as getDealersAPI,
-  getDealerByOrganization as getDealerByOrganizationAPI,
-  setDealerForOrganization as setDealerForOrganizationAPI,
   type OrganizationWithCreator,
 } from '../api/organizations'
 import type { User } from '../api'
@@ -73,11 +69,6 @@ export class OrganizationService {
     return createOrganizationAPI(data)
   }
 
-  // Get organizations for dealer (filtered by assignment)
-  async getOrganizationsForDealer (userId: string): Promise<OrganizationWithStats[]> {
-    return getOrganizationsForDealerAPI(userId)
-  }
-
   // Get organizations for Consult/Audit (filtered by assignment)
   async getOrganizationsForConsultAudit (userId: string): Promise<OrganizationWithStats[]> {
     return getOrganizationsForConsultAuditAPI(userId)
@@ -93,9 +84,8 @@ export class OrganizationService {
   }
 
   // Export organization details for operations team
-  async exportOrganizationDetails (organizationId: string, dealerInfo?: User): Promise<{
+  async exportOrganizationDetails (organizationId: string): Promise<{
     organization: OrganizationWithStats
-    dealerInfo?: User
     exportData: {
       name: string
       code: string | null
@@ -103,8 +93,6 @@ export class OrganizationService {
       status: string
       created_at: string
       app_url: string | null
-      dealer_name?: string
-      dealer_email?: string
     }
   }> {
     const organization = await this.getOrganizationById(organizationId)
@@ -123,7 +111,6 @@ export class OrganizationService {
 
     return {
       organization: orgWithStats,
-      dealerInfo,
       exportData: {
         name: organization.name,
         code: organization.code,
@@ -131,8 +118,6 @@ export class OrganizationService {
         status,
         created_at: organization.created_at,
         app_url: organization.app_url,
-        dealer_name: dealerInfo?.name,
-        dealer_email: dealerInfo?.email,
       },
     }
   }
@@ -195,24 +180,6 @@ export class OrganizationService {
     return removeUserFromOrganizationAPI(organizationId, userId)
   }
 
-  // Get all dealers
-  async getDealers (): Promise<User[]> {
-    return getDealersAPI()
-  }
-
-  // Get dealer assigned to organization
-  async getDealerByOrganization (organizationId: string): Promise<User | null> {
-    return getDealerByOrganizationAPI(organizationId)
-  }
-
-  // Set dealer for organization
-  async setDealerForOrganization (
-    organizationId: string,
-    dealerId: string | null,
-    assignedBy: string | null
-  ): Promise<void> {
-    return setDealerForOrganizationAPI(organizationId, dealerId, assignedBy)
-  }
 }
 
 // Export singleton instance

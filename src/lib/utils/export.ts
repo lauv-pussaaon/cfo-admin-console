@@ -1,5 +1,4 @@
 import type { OrganizationWithStats } from '@/types/database'
-import type { User } from '@/lib/api/types'
 import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
 
 export interface ExportData {
@@ -11,16 +10,13 @@ export interface ExportData {
   account_type: string
   package_start: string
   package_end: string
-  dealer_name?: string
-  dealer_email?: string
 }
 
 /**
  * Convert organization data to CSV format
  */
 export function exportOrganizationToCSV(
-  org: OrganizationWithStats,
-  dealerInfo?: User
+  org: OrganizationWithStats
 ): string {
   const status = org.is_initialized ? 'Deployed' : 'Pending Deployment'
   const exportData: ExportData = {
@@ -32,8 +28,6 @@ export function exportOrganizationToCSV(
     account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
     package_start: org.package_start ?? '',
     package_end: org.package_end ?? '',
-    dealer_name: dealerInfo?.name || '',
-    dealer_email: dealerInfo?.email || '',
   }
 
   // CSV header
@@ -46,8 +40,6 @@ export function exportOrganizationToCSV(
     'Account Type',
     'Package Start',
     'Package End',
-    'Dealer Name',
-    'Dealer Email',
   ]
 
   // CSV row
@@ -60,8 +52,6 @@ export function exportOrganizationToCSV(
     exportData.account_type,
     exportData.package_start,
     exportData.package_end,
-    exportData.dealer_name,
-    exportData.dealer_email,
   ]
 
   // Escape CSV values (handle commas, quotes, newlines)
@@ -80,8 +70,7 @@ export function exportOrganizationToCSV(
  * Convert organization data to JSON format
  */
 export function exportOrganizationToJSON(
-  org: OrganizationWithStats,
-  dealerInfo?: User
+  org: OrganizationWithStats
 ): string {
   const status = org.is_initialized ? 'Deployed' : 'Pending Deployment'
   const exportData: ExportData = {
@@ -93,8 +82,6 @@ export function exportOrganizationToJSON(
     account_type: org.account_type || DEFAULT_ACCOUNT_TYPE,
     package_start: org.package_start ?? '',
     package_end: org.package_end ?? '',
-    dealer_name: dealerInfo?.name || undefined,
-    dealer_email: dealerInfo?.email || undefined,
   }
 
   return JSON.stringify(exportData, null, 2)
@@ -123,10 +110,9 @@ export function downloadFile(
  * Export organization as CSV file
  */
 export function exportOrganizationAsCSV(
-  org: OrganizationWithStats,
-  dealerInfo?: User
+  org: OrganizationWithStats
 ): void {
-  const csv = exportOrganizationToCSV(org, dealerInfo)
+  const csv = exportOrganizationToCSV(org)
   const filename = `organization-${org.code || org.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`
   downloadFile(csv, filename, 'text/csv;charset=utf-8;')
 }
@@ -135,10 +121,9 @@ export function exportOrganizationAsCSV(
  * Export organization as JSON file
  */
 export function exportOrganizationAsJSON(
-  org: OrganizationWithStats,
-  dealerInfo?: User
+  org: OrganizationWithStats
 ): void {
-  const json = exportOrganizationToJSON(org, dealerInfo)
+  const json = exportOrganizationToJSON(org)
   const filename = `organization-${org.code || org.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`
   downloadFile(json, filename, 'application/json')
 }

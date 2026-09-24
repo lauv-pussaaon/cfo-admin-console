@@ -236,21 +236,6 @@ export default function OrganizationDetailPage () {
             }
           />
           <DetailRow
-            label="Dealer"
-            value={
-              org.dealer ? (
-                <>
-                  {org.dealer.name}
-                  <Typography component="span" variant="body2" color="text.secondary" display="block">
-                    {org.dealer.email}
-                  </Typography>
-                </>
-              ) : (
-                'ไม่มี Dealer'
-              )
-            }
-          />
-          <DetailRow
             label="วันที่สร้าง"
             value={new Date(org.created_at).toLocaleString('th-TH', {
               year: 'numeric',

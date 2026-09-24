@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={anuphan.variable}>
+    <html lang="en" className={anuphan.variable} suppressHydrationWarning>
       <body className="antialiased">
         <CustomThemeProvider>
           <AuthProvider>

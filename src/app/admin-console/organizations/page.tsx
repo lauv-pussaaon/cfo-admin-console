@@ -38,7 +38,7 @@ import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useOrganizationsFilter, type AccountTypeFilter } from '@/hooks/useOrganizationsFilter'
-import { isDealer, isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
+import { isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
 import {
@@ -102,9 +102,6 @@ export default function AdminConsoleOrganizationsPage() {
       
       if (isAdmin(user) || isSupport(user)) {
         data = await organizationService.getOrganizationsForAdmin()
-      } else if (isDealer(user)) {
-        // Dealer sees only assigned organizations
-        data = await organizationService.getOrganizationsForDealer(user.id)
       } else if (isConsult(user) || isAudit(user)) {
         // Consult/Audit see only assigned organizations
         data = await organizationService.getOrganizationsForConsultAudit(user.id)
@@ -210,8 +207,7 @@ export default function AdminConsoleOrganizationsPage() {
         return
       }
       
-      // Export with dealer info if dealer is viewing
-      exportOrganizationAsCSV(org, isDealer(user) && user ? user : undefined)
+      exportOrganizationAsCSV(org)
       setSuccessMessage('ส่งออกข้อมูลสำเร็จ')
       setShowSuccessMessage(true)
     } catch (error) {
@@ -300,7 +296,7 @@ export default function AdminConsoleOrganizationsPage() {
         }}
       >
         <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
-          {isDealer(user) || isConsult(user) || isAudit(user)
+          {isConsult(user) || isAudit(user)
             ? 'องค์กรที่ดูแล'
             : isAdmin(user)
               ? 'จัดการลูกค้า (Admin)'
@@ -398,7 +394,7 @@ export default function AdminConsoleOrganizationsPage() {
       </Typography>
 
       <OrganizationsTable
-        variant={isAdmin(user) || isSupport(user) ? 'admin' : 'dealer'}
+        variant={isAdmin(user) || isSupport(user) ? 'admin' : 'assigned'}
         data={filteredOrganizations}
         loading={loading}
         onEdit={canManageOrganizations(user) ? handleEdit : undefined}

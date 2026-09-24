@@ -199,7 +199,7 @@ export const createUser = async (data: {
   is_firm_contact_person?: boolean
 }): Promise<User> => {
   // Validate role - only allow admin console roles
-  const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
+  const allowedRoles = ['Admin', 'Consult', 'Audit', 'Support']
   const role = data.role || 'Consult'
 
   if (!allowedRoles.includes(role)) {
@@ -270,7 +270,7 @@ export const updateUser = async (
     is_firm_contact_person?: boolean
   }>
 ): Promise<User> => {
-  const allowedRoles = ['Admin', 'Dealer', 'Consult', 'Audit', 'Support']
+  const allowedRoles = ['Admin', 'Consult', 'Audit', 'Support']
   if (updates.role !== undefined && !allowedRoles.includes(updates.role)) {
     throw new ValidationError(`Invalid role. Allowed roles: ${allowedRoles.join(', ')}`)
   }

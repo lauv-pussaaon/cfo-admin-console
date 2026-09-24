@@ -5,7 +5,6 @@
  */
 export type UserRole =
   | 'Admin'
-  | 'Dealer'
   | 'Consult'
   | 'Audit'
   | 'Support'
@@ -28,7 +27,6 @@ export interface RoleOption {
  */
 export const ROLE_OPTIONS: RoleOption[] = [
   { value: 'Admin', label: 'ผู้ดูแลระบบ' },
-  { value: 'Dealer', label: 'ตัวแทนจำหน่าย' },
   { value: 'Consult', label: 'ที่ปรึกษา' },
   { value: 'Audit', label: 'ผู้ทวนสอบ' },
   { value: 'Support', label: 'ฝ่ายสนับสนุน' },
@@ -39,7 +37,6 @@ export const ROLE_OPTIONS: RoleOption[] = [
  */
 export const ROLE_LABELS: Record<AllUserRole, string> = {
   Admin: 'ผู้ดูแลระบบ',
-  Dealer: 'ตัวแทนจำหน่าย',
   Consult: 'ที่ปรึกษา',
   Audit: 'ผู้ทวนสอบ',
   Support: 'ฝ่ายสนับสนุน',
@@ -60,7 +57,6 @@ export function getRoleColor (
   role: string
 ): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' {
   if (role === 'Admin' || role === 'project_owner') return 'error'
-  if (role === 'Dealer') return 'warning'
   if (role === 'Consult' || role === 'consultant') return 'info'
   if (role === 'Audit' || role === 'Internal Audit') return 'secondary'
   if (role === 'Support') return 'success'
@@ -81,7 +77,7 @@ export type AdminType = 'system'
 
 /**
  * Get role options available for admin console
- * Admin can manage all roles: Admin, Dealer, Consult, Audit
+ * Admin can manage all roles: Admin, Consult, Audit, Support
  */
 export function getRoleOptionsForAdmin (adminType: AdminType = 'system'): RoleOption[] {
   return ROLE_OPTIONS

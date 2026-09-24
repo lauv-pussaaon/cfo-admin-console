@@ -33,9 +33,8 @@ import { organizationService } from '@/lib/services'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Organization } from '@/types/database'
-import type { User } from '@/lib/api/types'
 import { isExpectedError } from '@/lib/utils/errors'
-import { isAdmin, isDealer } from '@/lib/permissions'
+import { isAdmin } from '@/lib/permissions'
 import SendOnboardEmailDialog from '@/components/admin/SendOnboardEmailDialog'
 import {
   normalizeOrganizationCode,
@@ -98,7 +97,6 @@ const organizationSchema = z.object({
   username: z.string().optional().nullable(),
   password: z.string().optional().nullable(),
   is_initialized: z.boolean().optional(),
-  dealer_id: z.string().optional().nullable(),
 }).refine(
   (data) => {
     if (!data.package_start || !data.package_end) return true
@@ -124,16 +122,12 @@ export default function AdminOrganizationModal({
   const { user } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [dealers, setDealers] = useState<User[]>([])
-  const [loadingDealers, setLoadingDealers] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const [currentDealerId, setCurrentDealerId] = useState<string | null>(null)
   const [onboardDialogOpen, setOnboardDialogOpen] = useState(false)
   const [onboardSuccess, setOnboardSuccess] = useState<string | null>(null)
   const skipAccountTypeReset = useRef(false)
   
   const isAdminUser = isAdmin(user)
-  const isDealerUser = isDealer(user)
 
   const methods = useForm<AdminOrganizationFormData>({
     resolver: zodResolver(organizationSchema),
@@ -153,7 +147,6 @@ export default function AdminOrganizationModal({
       username: '',
       password: '',
       is_initialized: false,
-      dealer_id: null,
     }
   })
 
@@ -176,64 +169,6 @@ export default function AdminOrganizationModal({
     setValue('package_end', defaults.package_end ?? '')
   }, [accountType, open, setValue])
 
-  // Load dealers when modal opens (only for admins)
-  useEffect(() => {
-    if (open) {
-      if (isAdminUser) {
-        loadDealers()
-        if (mode === 'edit' && initialData?.id) {
-          loadCurrentDealer(initialData.id)
-        } else {
-          setCurrentDealerId(null)
-        }
-      } else {
-        // For non-admins, set dealer_id to current user if dealer
-        if (isDealerUser && mode === 'create') {
-          setCurrentDealerId(user?.id || null)
-          setValue('dealer_id', user?.id || null)
-        } else {
-          setCurrentDealerId(null)
-        }
-      }
-    }
-  }, [open, mode, initialData, isAdminUser, isDealerUser, user?.id, setValue])
-
-  const loadDealers = async () => {
-    try {
-      setLoadingDealers(true)
-      const dealerList = await organizationService.getDealers()
-      setDealers(dealerList)
-    } catch (error) {
-      console.error('Error loading dealers:', error)
-    } finally {
-      setLoadingDealers(false)
-    }
-  }
-
-  const loadCurrentDealer = async (organizationId: string) => {
-    if (!organizationId) {
-      setCurrentDealerId(null)
-      setValue('dealer_id', null)
-      return
-    }
-
-    try {
-      const dealer = await organizationService.getDealerByOrganization(organizationId)
-      setCurrentDealerId(dealer?.id || null)
-      setValue('dealer_id', dealer?.id || null)
-    } catch (error) {
-      // Log error with better details
-      console.error('Error loading current dealer:', {
-        error,
-        message: error instanceof Error ? error.message : String(error),
-        organizationId,
-      })
-      // Set to null on error - organization might not have a dealer assigned
-      setCurrentDealerId(null)
-      setValue('dealer_id', null)
-    }
-  }
-
   useEffect(() => {
     if (open) {
       setOnboardSuccess(null)
@@ -254,7 +189,6 @@ export default function AdminOrganizationModal({
           username: initialData.username || '',
           password: initialData.password || '',
           is_initialized: initialData.is_initialized || false,
-          dealer_id: currentDealerId,
         })
       } else {
         const defaults = getDefaultPackagePeriod(DEFAULT_ACCOUNT_TYPE)
@@ -273,13 +207,12 @@ export default function AdminOrganizationModal({
           username: '',
           password: '',
           is_initialized: false,
-          dealer_id: null,
         })
       }
       setSubmitError(null)
       setShowPassword(false)
     }
-  }, [open, reset, mode, initialData, currentDealerId])
+  }, [open, reset, mode, initialData])
 
   const onFormSubmit = async (data: AdminOrganizationFormData) => {
     setIsSubmitting(true)
@@ -287,7 +220,6 @@ export default function AdminOrganizationModal({
     const organizationCode = normalizeOrganizationCode(data.code ?? '') || null
 
     try {
-      let organizationId: string
       let successMessage: string | undefined
 
       if (mode === 'edit' && initialData) {
@@ -311,21 +243,11 @@ export default function AdminOrganizationModal({
             package_end: data.package_end || null,
           }
         )
-        organizationId = updated.id
 
-        // Update dealer assignment if changed
-        if (data.dealer_id !== currentDealerId) {
-          await organizationService.setDealerForOrganization(
-            organizationId,
-            data.dealer_id || null,
-            user?.id || null
-          )
-        }
-
-        successMessage = await notifyOrganizationInfoUpdated(organizationId, user?.id)
+        successMessage = await notifyOrganizationInfoUpdated(updated.id, user?.id)
       } else {
         // Create organization
-        const created = await organizationService.createOrganization({
+        await organizationService.createOrganization({
           name: data.name,
           code: organizationCode,
           description: data.description || null,
@@ -340,19 +262,7 @@ export default function AdminOrganizationModal({
           package_start: data.package_start || null,
           package_end: data.package_end || null,
           created_by: user?.id || null,
-          assignedUserId: isDealerUser ? user?.id || null : null, // Auto-assign dealer
         })
-        organizationId = created.id
-
-        // Assign dealer if provided (for admins) or auto-assign for dealers
-        const dealerToAssign = isAdminUser ? data.dealer_id : (isDealerUser ? user?.id || null : null)
-        if (dealerToAssign) {
-          await organizationService.setDealerForOrganization(
-            organizationId,
-            dealerToAssign,
-            user?.id || null
-          )
-        }
       }
 
       onClose()
@@ -656,34 +566,6 @@ export default function AdminOrganizationModal({
                   },
                 }}
               />
-
-              {/* Dealer Assignment: Only for admins */}
-              {isAdminUser && (
-                <FormControl fullWidth>
-                  <InputLabel>Dealer</InputLabel>
-                  <Select
-                    {...methods.register('dealer_id')}
-                    value={watch('dealer_id') || ''}
-                    onChange={(e) => setValue('dealer_id', e.target.value || null)}
-                    label="Dealer"
-                    disabled={isSubmitting || loadingDealers}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 1,
-                      },
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>ไม่มี Dealer</em>
-                    </MenuItem>
-                    {dealers.map((dealer) => (
-                      <MenuItem key={dealer.id} value={dealer.id}>
-                        {dealer.name} ({dealer.email})
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
 
               {/* Mark as Deployed: Only for admins in edit mode */}
               {isAdminUser && mode === 'edit' && (

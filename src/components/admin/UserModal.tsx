@@ -47,7 +47,7 @@ const userSchema = z
       z.literal(''),
       z.null()
     ]).optional(),
-    role: z.enum(['Admin', 'Dealer', 'Consult', 'Audit', 'Support'] as const).refine(
+    role: z.enum(['Admin', 'Consult', 'Audit', 'Support'] as const).refine(
       (val) => val !== undefined,
       { message: 'กรุณาเลือกบทบาท' }
     ),

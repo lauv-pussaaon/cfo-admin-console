@@ -33,7 +33,7 @@ CREATE TABLE users (
   password_hash TEXT NOT NULL,
   name TEXT NOT NULL,
   avatar_url TEXT,
-  role TEXT NOT NULL CHECK (role IN ('Admin', 'Dealer', 'Consult', 'Audit', 'Support')),
+  role TEXT NOT NULL CHECK (role IN ('Admin', 'Consult', 'Audit', 'Support')),
   status TEXT NOT NULL DEFAULT 'requested'
     CHECK (status IN ('requested', 'active', 'rejected', 'inactive')),
   rejection_reason TEXT,
@@ -114,7 +114,7 @@ CREATE TABLE organizations (
   )
 );
 
--- User Organizations (links dealers/consult/audit to organizations)
+-- User Organizations (links consult/audit to organizations)
 CREATE TABLE user_organizations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

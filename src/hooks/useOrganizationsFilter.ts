@@ -56,10 +56,6 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
         if (enriched.creator.email?.toLowerCase().includes(query)) return true
         if (enriched.creator.name?.toLowerCase().includes(query)) return true
       }
-      if (enriched.dealer) {
-        if (enriched.dealer.email?.toLowerCase().includes(query)) return true
-        if (enriched.dealer.name?.toLowerCase().includes(query)) return true
-      }
       return false
     })
   }, [organizations, searchTerm, statusFilter, accountTypeFilter, createdFrom, createdTo])

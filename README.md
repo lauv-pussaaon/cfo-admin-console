@@ -1,12 +1,12 @@
 # CFO Admin Console
 
-Admin console application for managing system users (Admin, Dealer, Consult, Audit) and client organizations.
+Admin console application for managing system users (Admin, Consult, Audit, Support) and client organizations.
 
 ## Features
 
-- **User Management**: Create, edit, and delete system users with roles (Admin, Dealer, Consult, Audit)
+- **User Management**: Create, edit, and delete system users with roles (Admin, Consult, Audit, Support)
 - **Organization Management**: Create, edit, and delete client organizations
-- **Organization Assignment**: Assign dealers, consultants, and auditors to organizations
+- **Organization Assignment**: Assign consultants and verifiers to organizations
 - **Organization App Links**: Generate and manage links to organization app instances
 - **Initialization Tracking**: Track which organizations have been initialized with their app instances
 
@@ -74,13 +74,12 @@ Single admin Supabase instance — baseline schema only (no incremental `migrati
 ## User Roles
 
 - **Admin**: Full system access, can manage all users and organizations
-- **Dealer**: Can create, edit, and delete their assigned client organizations
 - **Consult**: Can view assigned organizations and access organization app links
 - **Audit**: Can view assigned organizations and access organization app links
 
 ## Organization Management
 
-When a dealer creates a new organization:
+When an admin creates a new organization:
 1. Organization is created with `is_initialized: false`
 2. Operations team is notified to provision a new organization app instance
 3. Operations team updates the organization with:
@@ -109,7 +108,7 @@ pnpm lint
 
 The admin console uses Supabase with the following main tables:
 - `organizations` - Client organizations with app URLs and initialization status
-- `users` - System users (Admin, Dealer, Consult, Audit)
+- `users` - System users (Admin, Consult, Audit, Support)
 - `user_organizations` - Links users to organizations
 
 ## Project Structure

@@ -11,15 +11,6 @@ export function isAdmin (user: User | null): boolean {
 }
 
 /**
- * Check if user is a dealer
- * @param user - User object or null
- * @returns true if user role is 'Dealer'
- */
-export function isDealer (user: User | null): boolean {
-  return user?.role === 'Dealer'
-}
-
-/**
  * Check if user is a consultant
  * @param user - User object or null
  * @returns true if user role is 'Consult'
@@ -54,20 +45,20 @@ export function canAccessTrialRequests (user: User | null): boolean {
 
 /**
  * Check if user can manage organizations
- * Admin, Dealer, Consult, and Audit can manage organizations
+ * Admin, Consult, and Audit can manage organizations
  * @param user - User object or null
  * @returns true if user can manage organizations
  */
 export function canManageOrganizations (user: User | null): boolean {
   if (!user) return false
   if (user.role === 'Support') return false
-  return user.role === 'Admin' || user.role === 'Audit' || user.role === 'Consult' || user.role === 'Dealer'
+  return user.role === 'Admin' || user.role === 'Audit' || user.role === 'Consult'
 }
 
 /**
  * Check if user can manage a specific organization
  * Admin can manage all organizations
- * Dealer, Consult, and Audit can only manage organizations they are assigned to
+ * Consult and Audit can only manage organizations they are assigned to
  * @param user - User object or null
  * @param organizationId - Organization ID to check
  * @returns Promise<boolean> true if user can manage the organization
@@ -83,8 +74,7 @@ export async function canManageOrganization (
 
   if (user.role === 'Support') return false
 
-  // Dealer, Consult, and Audit can only manage assigned organizations
-  if (user.role === 'Dealer' || user.role === 'Consult' || user.role === 'Audit') {
+  if (user.role === 'Consult' || user.role === 'Audit') {
     try {
       const userOrgs = await organizationService.getUserOrganizations(user.id)
       return userOrgs.some(uo => uo.organization_id === organizationId)
@@ -99,13 +89,13 @@ export async function canManageOrganization (
 
 /**
  * Check if organizations should be filtered by user assignment
- * Dealers, Consult, and Audit should only see organizations they're assigned to
+ * Consult and Audit should only see organizations they're assigned to
  * Admins see all organizations
  * @param user - User object or null
  * @returns true if organizations should be filtered by assignment
  */
 export function shouldFilterOrganizationsByAssignment (user: User | null): boolean {
   if (!user) return false
-  return user.role === 'Dealer' || user.role === 'Consult' || user.role === 'Audit'
+  return user.role === 'Consult' || user.role === 'Audit'
 }
 

@@ -116,7 +116,7 @@ export function getDashboardNavItemsForRole (
   let items: AdminNavItem[] = []
   if (role === 'Admin') items = ADMIN_DASHBOARD_NAV_ITEMS
   else if (role === 'Support') items = filterNavByPaths(SUPPORT_NAV_PATHS)
-  else if (role === 'Consult' || role === 'Audit' || role === 'Dealer') {
+  else if (role === 'Consult' || role === 'Audit') {
     items = filterNavByPaths(CONSULT_AUDIT_NAV_PATHS)
   }
   if (options?.isFirmContact && !items.some((item) => item.path === FIRM_STAFF_NAV_ITEM.path)) {
