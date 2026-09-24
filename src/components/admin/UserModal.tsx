@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Dialog, DialogContent, DialogActions, Box, Typography, IconButton, Button, CircularProgress } from '@mui/material'
-import { Close as CloseIcon } from '@mui/icons-material'
+import { Box, Typography, Button, CircularProgress } from '@mui/material'
+import SlideInPanel from '@/components/admin/SlideInPanel'
 import { userService } from '@/lib/services'
 import { isExpectedError } from '@/lib/utils/errors'
 import type { User } from '@/lib/api/types'
@@ -279,44 +279,13 @@ export default function UserModal({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth sx={{ '& .MuiDialog-paper': { maxHeight: '90vh' } }}>
-      <FormProvider {...methods}>
-        <DialogContent sx={{ p: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 3, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0 }}>
-            <Typography variant="h5" fontWeight="bold">
-              {mode === 'edit' ? 'แก้ไขผู้ใช้' : 'สร้างผู้ใช้ใหม่'}
-            </Typography>
-            <IconButton onClick={handleClose} size="small" disabled={isSubmitting}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-
-          {isLockedAdmin && (
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'warning.light' }}>
-              <Typography color="warning.dark" variant="body2" fontWeight="medium">
-                ไม่สามารถแก้ไขหรือลบผู้ใช้ admin ได้ (บัญชีนี้ถูกล็อคเพื่อความปลอดภัย)
-              </Typography>
-            </Box>
-          )}
-
-          {submitError && (
-            <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-              <Typography color="error" variant="body2">{submitError}</Typography>
-            </Box>
-          )}
-
-          <Box sx={{ flex: 1, overflow: 'auto', p: 3 }}>
-            <UserForm 
-              methods={methods} 
-              mode={mode} 
-              isSubmitting={isSubmitting} 
-              availableRoles={ROLE_OPTIONS}
-              isLocked={isLockedAdmin}
-              isFirmContactPerson={Boolean(initialData?.is_firm_contact_person)}
-            />
-          </Box>
-
-          <DialogActions sx={{ p: 3, borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, gap: 2 }}>
+    <FormProvider {...methods}>
+      <SlideInPanel
+        open={open}
+        onClose={handleClose}
+        title={mode === 'edit' ? 'แก้ไขผู้ใช้' : 'สร้างผู้ใช้ใหม่'}
+        footer={(
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button onClick={handleClose} disabled={isSubmitting} color="inherit" variant="outlined">
               ยกเลิก
             </Button>
@@ -329,9 +298,32 @@ export default function UserModal({
             >
               {isSubmitting ? (mode === 'edit' ? 'กำลังบันทึก...' : 'กำลังสร้าง...') : (mode === 'edit' ? 'บันทึกการแก้ไข' : 'สร้างผู้ใช้')}
             </Button>
-          </DialogActions>
-        </DialogContent>
-      </FormProvider>
-    </Dialog>
+          </Box>
+        )}
+      >
+        {isLockedAdmin && (
+          <Box sx={{ mb: 2, p: 2, bgcolor: 'warning.light' }}>
+            <Typography color="warning.dark" variant="body2" fontWeight="medium">
+              ไม่สามารถแก้ไขหรือลบผู้ใช้ admin ได้ (บัญชีนี้ถูกล็อคเพื่อความปลอดภัย)
+            </Typography>
+          </Box>
+        )}
+
+        {submitError && (
+          <Box sx={{ mb: 2 }}>
+            <Typography color="error" variant="body2">{submitError}</Typography>
+          </Box>
+        )}
+
+        <UserForm
+          methods={methods}
+          mode={mode}
+          isSubmitting={isSubmitting}
+          availableRoles={ROLE_OPTIONS}
+          isLocked={isLockedAdmin}
+          isFirmContactPerson={Boolean(initialData?.is_firm_contact_person)}
+        />
+      </SlideInPanel>
+    </FormProvider>
   )
 }

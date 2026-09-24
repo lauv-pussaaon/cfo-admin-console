@@ -28,7 +28,7 @@ export default function SlideInPanel ({
       onClose={onClose}
       sx={{
         '& .MuiDrawer-paper': {
-          width: { xs: '100%', sm: 440 },
+          width: { xs: '80%', sm: '60%', md: '40%' },
           maxWidth: '100%',
           height: '100%',
           display: 'flex',
