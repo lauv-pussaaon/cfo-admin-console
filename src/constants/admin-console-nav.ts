@@ -50,7 +50,7 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     sectionId: 'support',
   },
   {
-    title: 'จัดการบัญชีผู้ใช้ส่วน admin',
+    title: 'จัดการบัญชีผู้ใช้ Admin/ที่ปรึกษา',
     description: 'จัดการบัญชีผู้ใช้และสิทธิ์การเข้าถึง',
     path: '/admin-console/users',
     sectionId: 'adminUsers',

@@ -473,18 +473,27 @@ export default function AdminConsoleOrganizationsPage() {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 1.5, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: 1.5,
+          mb: 3,
+          flexWrap: 'wrap',
+        }}
+      >
         <TextField
           placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
-          sx={adminSearchFieldSx}
+          sx={[adminSearchFieldSx, { width: { xs: '100%', sm: 'auto' } }]}
           InputProps={{
             startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />,
           }}
         />
-        <FormControl size="small" sx={[{ minWidth: 180 }, adminFilterControlSx]}>
+        <FormControl size="small" sx={[{ minWidth: 180, flexShrink: 0 }, adminFilterControlSx]}>
           <InputLabel id="org-account-type-filter">ประเภทบัญชี</InputLabel>
           <Select
             labelId="org-account-type-filter"

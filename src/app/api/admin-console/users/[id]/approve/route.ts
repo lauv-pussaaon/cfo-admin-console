@@ -66,7 +66,7 @@ export async function POST (
       )
     }
 
-    if (user.role === 'Consult' || user.role === 'Audit') {
+    if (user.role === 'Audit') {
       const verification = await getVerificationByUserId(supabase, id)
       if (!verification || verification.status !== 'pending_review') {
         return NextResponse.json(
@@ -84,8 +84,15 @@ export async function POST (
           { status: 400 }
         )
       }
+    }
 
-      if (user.role === 'Consult') {
+    if (user.role === 'Consult') {
+      const verification = await getVerificationByUserId(supabase, id)
+      if (verification) {
+        const documents = await listDocumentsForVerification(
+          supabase,
+          verification.id
+        )
         const deletedAt = new Date().toISOString()
         for (const document of documents) {
           if (document.deleted_at) continue
