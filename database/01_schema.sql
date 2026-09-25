@@ -422,6 +422,7 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_users_invite_hashcode ON users(invite_hashcode);
 CREATE INDEX idx_users_consulting_firm_id ON users(consulting_firm_id);
+CREATE UNIQUE INDEX idx_consulting_firms_name_key ON consulting_firms (lower(btrim(name)));
 CREATE INDEX idx_user_consents_user_id ON user_consents(user_id);
 
 -- Organization trial requests indexes

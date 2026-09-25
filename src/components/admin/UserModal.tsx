@@ -322,6 +322,7 @@ export default function UserModal({
           availableRoles={ROLE_OPTIONS}
           isLocked={isLockedAdmin}
           isFirmContactPerson={Boolean(initialData?.is_firm_contact_person)}
+          registeredAt={initialData?.created_at}
         />
       </SlideInPanel>
     </FormProvider>

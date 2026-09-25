@@ -22,6 +22,7 @@ import {
 } from '@mui/icons-material'
 import type { User, UserStatus } from '@/lib/api/types'
 import { USER_STATUS_LABELS } from '@/lib/user-status'
+import { formatDateTime } from '@/lib/utils/datetime'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
@@ -86,6 +87,7 @@ export default function UsersTable({
       rejection_reason: user.rejection_reason,
       avatar_url: user.avatar_url,
       organizations: user.organizations || [],
+      created_at: user.created_at,
       document_count: verificationDocumentCounts[user.id] ?? 0,
       upload_url: verificationUploadUrls[user.id] ?? '',
     }))
@@ -402,6 +404,13 @@ export default function UsersTable({
         },
       },
       {
+        field: 'created_at',
+        headerName: 'วันที่ลงทะเบียน',
+        width: 190,
+        minWidth: 170,
+        valueFormatter: (value) => (value ? formatDateTime(value as string) : '—'),
+      },
+      {
         field: 'actions',
         headerName: 'การดำเนินการ',
         width: 120,
@@ -420,6 +429,7 @@ export default function UsersTable({
                 alignItems: 'center',
                 height: '100%',
               }}
+              onClick={(event) => event.stopPropagation()}
             >
               <IconButton
                 size="small"
@@ -465,6 +475,7 @@ export default function UsersTable({
         columns={columns}
         loading={loading}
         disableRowSelectionOnClick
+        onRowClick={(params) => onEdit(String(params.id))}
         {...adminDataGridProps}
         pageSizeOptions={[10, 25, 50, 100]}
         initialState={{

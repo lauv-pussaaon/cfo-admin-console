@@ -7,8 +7,9 @@ import { registrationConsentFields } from '@/components/register/consent-schema'
 import { getPolicyUrls } from '@/components/register/policy-documents'
 import { listActiveIndustryOptions } from '@/lib/api/emission-templates'
 import {
-  createConsultingFirm,
   deleteConsultingFirm,
+  findOrCreateConsultingFirm,
+  firmHasContact,
 } from '@/lib/api/consulting-firms'
 import { notifyConsultRegistration } from '@/lib/register/notify-consult-registration'
 
@@ -79,13 +80,18 @@ export async function POST (request: NextRequest) {
       (code) => industryLabelByCode.get(code) || code
     )
 
-    const organizationName = payload.registrantType === 'firm'
+    let organizationName = payload.registrantType === 'firm'
       ? payload.firmName.trim()
       : payload.organizationName.trim()
+    let consultingFirmId: string | null = null
+    let isFirmContact = false
 
     if (payload.registrantType === 'firm') {
-      const firm = await createConsultingFirm(organizationName)
-      createdFirmId = firm.id
+      const { firm, created } = await findOrCreateConsultingFirm(payload.firmName)
+      if (created) createdFirmId = firm.id
+      consultingFirmId = firm.id
+      organizationName = firm.name
+      isFirmContact = !(await firmHasContact(firm.id))
     }
 
     const user = await createUser({
@@ -100,8 +106,8 @@ export async function POST (request: NextRequest) {
       year_experiences:
         typeof payload.yearExperiences === 'number' ? payload.yearExperiences : null,
       industries,
-      consulting_firm_id: createdFirmId,
-      is_firm_contact_person: payload.registrantType === 'firm',
+      consulting_firm_id: consultingFirmId,
+      is_firm_contact_person: isFirmContact,
     })
     createdUserId = user.id
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
-import { createConsultingFirm, listConsultingFirmsWithStaff } from '@/lib/api/consulting-firms'
+import { findOrCreateConsultingFirm, listConsultingFirmsWithStaff } from '@/lib/api/consulting-firms'
 import { AppError } from '@/lib/utils/errors'
 
 const createSchema = z.object({
@@ -31,7 +31,7 @@ export async function POST (request: NextRequest) {
     }
 
     const payload = createSchema.parse(await request.json())
-    const firm = await createConsultingFirm(payload.name)
+    const { firm } = await findOrCreateConsultingFirm(payload.name)
     return NextResponse.json({ firm })
   } catch (error) {
     if (error instanceof z.ZodError) {

@@ -17,6 +17,7 @@ import {
 import { UseFormReturn } from 'react-hook-form'
 import { ROLE_OPTIONS, type UserRole, type RoleOption } from '@/types/roles'
 import type { UserFormData } from './UserModal'
+import { formatDateTime } from '@/lib/utils/datetime'
 
 interface UserFormProps {
   methods: UseFormReturn<UserFormData>
@@ -25,6 +26,7 @@ interface UserFormProps {
   availableRoles?: RoleOption[]
   isLocked?: boolean
   isFirmContactPerson?: boolean
+  registeredAt?: string | null
 }
 
 type IndustryOption = {
@@ -45,6 +47,7 @@ export default function UserForm({
   availableRoles,
   isLocked = false,
   isFirmContactPerson = false,
+  registeredAt = null,
 }: UserFormProps) {
   const { formState: { errors }, watch, setValue } = methods
   const formData = watch()
@@ -156,6 +159,16 @@ export default function UserForm({
         <Typography variant="subtitle1" fontWeight={600}>
           ข้อมูลส่วนตัว
         </Typography>
+
+        {mode === 'edit' && registeredAt && (
+          <TextField
+            fullWidth
+            label="วันที่ลงทะเบียน"
+            value={formatDateTime(registeredAt)}
+            disabled
+            InputProps={{ readOnly: true }}
+          />
+        )}
 
         <TextField
           fullWidth

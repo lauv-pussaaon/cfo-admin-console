@@ -33,6 +33,72 @@ type StaffUserRow = {
   consulting_firm_id: string
 }
 
+type FirmNameRow = { id: string; name: string; created_at: string }
+
+export function firmNameKey (name: string): string {
+  return name.trim().toLowerCase()
+}
+
+function isUniqueViolation (error: unknown): boolean {
+  return Boolean(
+    error &&
+    typeof error === 'object' &&
+    'code' in error &&
+    (error as { code?: string }).code === '23505'
+  )
+}
+
+async function findFirmByNameKey (key: string): Promise<{ id: string; name: string } | null> {
+  const { data, error } = await supabase
+    .from('consulting_firms')
+    .select('id, name, created_at')
+
+  if (error) handleSupabaseError(error)
+
+  const matches = ((data ?? []) as FirmNameRow[])
+    .filter((row) => firmNameKey(row.name) === key)
+    .sort((a, b) => a.created_at.localeCompare(b.created_at))
+
+  const oldest = matches[0]
+  if (!oldest) return null
+  return { id: oldest.id, name: oldest.name }
+}
+
+export async function findOrCreateConsultingFirm (name: string): Promise<{
+  firm: { id: string; name: string }
+  created: boolean
+}> {
+  const trimmed = name.trim()
+  const key = trimmed.toLowerCase()
+  const existing = await findFirmByNameKey(key)
+  if (existing) return { firm: existing, created: false }
+
+  const result = await supabase
+    .from('consulting_firms')
+    .insert({ name: trimmed })
+    .select('id, name')
+    .single()
+
+  if (result.error && isUniqueViolation(result.error)) {
+    const raced = await findFirmByNameKey(key)
+    if (raced) return { firm: raced, created: false }
+  }
+
+  return { firm: throwIfError(result), created: true }
+}
+
+export async function firmHasContact (firmId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('consulting_firm_id', firmId)
+    .eq('is_firm_contact_person', true)
+    .limit(1)
+
+  if (error) handleSupabaseError(error)
+  return (data ?? []).length > 0
+}
+
 export async function createConsultingFirm (name: string): Promise<{ id: string; name: string }> {
   const result = await supabase
     .from('consulting_firms')
@@ -107,9 +173,15 @@ export async function unassignConsultFromFirm (firmId: string, userId: string): 
 }
 
 export async function renameConsultingFirm (id: string, name: string): Promise<{ id: string; name: string }> {
+  const trimmed = name.trim()
+  const existing = await findFirmByNameKey(trimmed.toLowerCase())
+  if (existing && existing.id !== id) {
+    throw new ConflictError('ชื่อบริษัทนี้มีอยู่แล้ว')
+  }
+
   const result = await supabase
     .from('consulting_firms')
-    .update({ name: name.trim() })
+    .update({ name: trimmed })
     .eq('id', id)
     .select('id, name')
     .single()
