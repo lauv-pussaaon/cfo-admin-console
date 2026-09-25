@@ -502,32 +502,11 @@ export default function AdminConsoleOrganizationsPage() {
         </FormControl>
       </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 2,
-          mb: 1.5,
-          flexWrap: 'wrap',
-        }}
-      >
-        <Typography variant="body2" color="text.secondary">
-          {filteredOrganizations.length === organizations.length
-            ? `พบ ${organizations.length} รายการ`
-            : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
-        </Typography>
-        {isConsult(user) && (
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreate}
-            sx={adminPrimaryButtonSx}
-          >
-            สร้างองค์กรใหม่
-          </Button>
-        )}
-      </Box>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+        {filteredOrganizations.length === organizations.length
+          ? `พบ ${organizations.length} รายการ`
+          : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
+      </Typography>
 
       <OrganizationsTable
         variant={isAdmin(user) || isSupport(user) ? 'admin' : 'assigned'}
