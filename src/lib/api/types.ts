@@ -16,6 +16,7 @@ export interface VerificationDocument {
   file_url: string
   file_name: string
   uploaded_date: string
+  deleted_at?: string | null
 }
 
 export interface ConsultAuditVerification {

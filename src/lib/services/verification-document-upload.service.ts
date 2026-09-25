@@ -163,3 +163,32 @@ export async function uploadVerificationDocument (
     filePath,
   }
 }
+
+export function verificationStoragePath (fileUrl: string): string | null {
+  const match = fileUrl.match(/\/storage\/v1\/object\/public\/verification\/(.+)$/)
+  if (!match?.[1]) return null
+  return decodeURIComponent(match[1].split('?')[0])
+}
+
+export async function removeVerificationFile (
+  fileUrl: string
+): Promise<{ ok: boolean; error?: string }> {
+  const filePath = verificationStoragePath(fileUrl)
+  if (!filePath) {
+    return { ok: false, error: 'ไม่พบเส้นทางไฟล์เอกสารยืนยัน' }
+  }
+
+  const service = getServiceSupabase()
+  if (!service) {
+    return { ok: false, error: 'ตั้งค่า SUPABASE_SERVICE_ROLE_KEY ไม่ครบ' }
+  }
+
+  const { error } = await service.storage.from(BUCKET).remove([filePath])
+  if (!error) return { ok: true }
+
+  const status = 'statusCode' in error ? String(error.statusCode) : ''
+  if (status === '404' || /not found|does not exist/i.test(error.message)) {
+    return { ok: true }
+  }
+  return { ok: false, error: error.message }
+}

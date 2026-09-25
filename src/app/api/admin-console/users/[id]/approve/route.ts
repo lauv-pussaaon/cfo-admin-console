@@ -6,9 +6,11 @@ import {
   addYearsToDate,
   getVerificationByUserId,
   listDocumentsForVerification,
+  markVerificationDocumentDeleted,
   todayUtcDate,
   updateVerificationStatus,
 } from '@/lib/api/consult-audit-verification'
+import { removeVerificationFile } from '@/lib/services/verification-document-upload.service'
 import { sendRegistrationApprovedEmail } from '@/lib/email/send-registration-approved'
 import { resolveSiteOriginFromRequest } from '@/lib/email/resolve-site-origin'
 
@@ -81,6 +83,22 @@ export async function POST (
           { error: 'ต้องมีเอกสารยืนยันอย่างน้อย 1 ไฟล์ก่อนอนุมัติ' },
           { status: 400 }
         )
+      }
+
+      if (user.role === 'Consult') {
+        const deletedAt = new Date().toISOString()
+        for (const document of documents) {
+          if (document.deleted_at) continue
+          const removed = await removeVerificationFile(document.file_url)
+          if (!removed.ok) {
+            console.error('[approve] verification file delete failed:', removed.error)
+            return NextResponse.json(
+              { error: 'ลบไฟล์เอกสารยืนยันไม่สำเร็จ' },
+              { status: 500 }
+            )
+          }
+          await markVerificationDocumentDeleted(supabase, document.id, deletedAt)
+        }
       }
     }
 

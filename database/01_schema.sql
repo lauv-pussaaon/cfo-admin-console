@@ -68,7 +68,8 @@ CREATE TABLE verification_documents (
     REFERENCES consult_audit_verification(id) ON DELETE CASCADE,
   file_url TEXT NOT NULL,
   file_name TEXT NOT NULL,
-  uploaded_date TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  uploaded_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
 );
 
 -- User consents (PDPA registration consent audit trail)

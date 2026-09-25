@@ -14,7 +14,7 @@ const VERIFICATION_SELECT =
   'id, user_id, token, status, verified_date, expired_date, rejection_reason, created_at, updated_at'
 
 const DOCUMENT_SELECT =
-  'id, consult_audit_verification_id, file_url, file_name, uploaded_date'
+  'id, consult_audit_verification_id, file_url, file_name, uploaded_date, deleted_at'
 
 export function generateVerificationToken (): string {
   return crypto.randomUUID().replace(/-/g, '')
@@ -140,6 +140,20 @@ export async function insertVerificationDocuments (
     .select(DOCUMENT_SELECT)
 
   return throwIfError(result) ?? []
+}
+
+export async function markVerificationDocumentDeleted (
+  supabase: SupabaseClient,
+  documentId: string,
+  deletedAt: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('verification_documents')
+    .update({ deleted_at: deletedAt })
+    .eq('id', documentId)
+    .is('deleted_at', null)
+
+  if (error) handleSupabaseError(error)
 }
 
 export async function updateVerificationStatus (

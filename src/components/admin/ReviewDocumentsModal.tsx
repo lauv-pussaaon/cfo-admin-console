@@ -156,16 +156,26 @@ export default function ReviewDocumentsModal ({
                     อัปโหลดเมื่อ {formatUploadedDate(doc.uploaded_date)}
                   </Typography>
                 </Box>
-                <MuiLink
-                  href={doc.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                  variant="body2"
-                  sx={{ flexShrink: 0 }}
-                >
-                  เปิด / ดาวน์โหลด
-                </MuiLink>
+                {doc.deleted_at ? (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ flexShrink: 0 }}
+                  >
+                    ลบแล้ว
+                  </Typography>
+                ) : (
+                  <MuiLink
+                    href={doc.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                    variant="body2"
+                    sx={{ flexShrink: 0 }}
+                  >
+                    เปิด / ดาวน์โหลด
+                  </MuiLink>
+                )}
               </Box>
             ))}
           </Box>
