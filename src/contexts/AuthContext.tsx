@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (usernameOrEmail: string, password: string) => Promise<void>
   logout: () => void
   updateUser: (updates: Partial<{ name: string; avatar_url: string | null }>) => Promise<void>
+  applySessionUser: (updates: Partial<User>) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -68,6 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('cfo_user_id')
   }
 
+  const applySessionUser = (updates: Partial<User>) => {
+    setUser((current) => (current ? { ...current, ...updates } : current))
+  }
+
   const updateUser = async (updates: Partial<{ name: string; avatar_url: string | null }>) => {
     if (!user) return
 
@@ -81,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, isLoading, login, logout, updateUser, applySessionUser }}>
       {children}
     </AuthContext.Provider>
   )

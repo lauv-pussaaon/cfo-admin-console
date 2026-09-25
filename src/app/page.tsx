@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, CircularProgress } from '@mui/material'
 import { useAuth } from '@/contexts/AuthContext'
+import { isConsult } from '@/lib/permissions'
 
 export default function Home() {
   const { user, isLoading: authLoading } = useAuth()
@@ -15,10 +16,9 @@ export default function Home() {
     if (!user) {
       router.push('/login')
       return
-    } else {
-      router.push('/admin-console')
     }
-    
+
+    router.push(isConsult(user) ? '/admin-console/organizations' : '/admin-console')
   }, [user, authLoading, router])
 
   return (

@@ -26,8 +26,8 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     path: '/admin-console',
   },
   {
-    title: 'ระบบจัดการองค์กรลูกค้า',
-    description: 'จัดการองค์กร บัญชี และข้อมูลลูกค้า',
+    title: 'จัดการข้อมูลลูกค้า',
+    description: 'จัดการข้อมูลบัญชีองค์กรลูกค้า',
     path: '/admin-console/organizations',
     sectionId: 'clients',
   },

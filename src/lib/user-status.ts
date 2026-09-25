@@ -9,8 +9,8 @@ export const USER_STATUS_LABELS: Record<UserStatus, string> = {
 
 export const VERIFICATION_STATUS_LABELS: Record<string, string> = {
   pending_upload: 'รออัปโหลดเอกสาร',
-  pending_review: 'รอตรวจสอบ',
-  approved: 'อนุมัติเอกสาร',
+  pending_review: 'รอการอนุมัติ',
+  approved: 'อนุมัติแล้ว',
   rejected: 'ปฏิเสธเอกสาร',
 }
 

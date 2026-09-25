@@ -13,6 +13,7 @@ import {
   Typography,
   Tooltip,
   Divider,
+  Switch,
 } from '@mui/material'
 import { alpha, useTheme } from '@mui/material/styles'
 import {
@@ -28,8 +29,6 @@ import {
   SupportAgent as SupportAgentIcon,
   HowToReg as HowToRegIcon,
   ManageAccounts as ManageAccountsIcon,
-  Brightness4,
-  Brightness7,
 } from '@mui/icons-material'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -79,7 +78,7 @@ function withIcons (items: AdminNavItem[]): SidebarNavItem[] {
 }
 
 export default function Sidebar () {
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const { user } = useAuth()
@@ -300,21 +299,6 @@ export default function Sidebar () {
       </Box>
 
       <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        <Tooltip title={mode === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'} placement="right">
-          <IconButton
-            onClick={toggleThemeMode}
-            aria-label={mode === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}
-            sx={{
-              alignSelf: collapsed ? 'center' : 'flex-end',
-              color: '#94a3b8',
-              '&:hover': { color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.05)' },
-            }}
-          >
-            {mode === 'dark'
-              ? <Brightness7 sx={{ color: '#fbbf24' }} />
-              : <Brightness4 />}
-          </IconButton>
-        </Tooltip>
         {isAdmin(user) && (
           <List disablePadding>
             <ListItem disablePadding sx={{ display: 'block' }}>
@@ -374,6 +358,56 @@ export default function Sidebar () {
             </ListItem>
           </List>
         )}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 0.5,
+            px: collapsed ? 0 : 1,
+            py: 0.5,
+          }}
+        >
+          {!collapsed && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: mode === 'light' ? '#ffffff' : '#64748b',
+              }}
+            >
+              LIGHT
+            </Typography>
+          )}
+          <Switch
+            size="small"
+            checked={mode === 'dark'}
+            onChange={toggleThemeMode}
+            inputProps={{ 'aria-label': mode === 'dark' ? 'DARK' : 'LIGHT' }}
+            sx={{
+              '& .MuiSwitch-switchBase': { color: '#e2e8f0' },
+              '& .MuiSwitch-switchBase.Mui-checked': { color: '#94a3b8' },
+              '& .MuiSwitch-track': { backgroundColor: '#64748b', opacity: 1 },
+              '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                backgroundColor: '#334155',
+                opacity: 1,
+              },
+            }}
+          />
+          {!collapsed && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: mode === 'dark' ? '#ffffff' : '#64748b',
+              }}
+            >
+              DARK
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Drawer>
   )

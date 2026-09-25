@@ -116,10 +116,9 @@ export default function AdminConsolePage () {
         <Typography variant="h4" component="h1" sx={adminPageTitleSx} gutterBottom>
           แดชบอร์ด
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          เลือกเมนูด้านล่างเพื่อจัดการระบบและข้อมูลลูกค้า
-        </Typography>
       </Box>
+
+      
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {sections.map((group) => (

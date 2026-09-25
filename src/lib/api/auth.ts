@@ -10,11 +10,13 @@ const USER_SELECT =
 const TOGGLEABLE_STATUSES: UserStatus[] = ['active', 'inactive']
 
 function rethrowUsernameConflict (error: unknown): never {
-  if (
-    error instanceof ConflictError &&
-    /users_username_key|username/i.test(error.message)
-  ) {
-    throw new ConflictError('ชื่อผู้ใช้นี้ถูกใช้แล้ว')
+  if (error instanceof ConflictError) {
+    if (/users_invite_hashcode_key|invite_hashcode/i.test(error.message)) {
+      throw new ConflictError('รหัสเชิญนี้ถูกใช้แล้ว')
+    }
+    if (/users_username_key|username/i.test(error.message)) {
+      throw new ConflictError('ชื่อผู้ใช้นี้ถูกใช้แล้ว')
+    }
   }
   throw error
 }
@@ -215,10 +217,11 @@ export const createUser = async (data: {
   const { hashPassword } = await import('@/lib/utils/password')
   const password_hash = await hashPassword(data.password)
 
-  // Generate invite hashcode for Consult and Audit users
-  const invite_hashcode = (role === 'Consult' || role === 'Audit')
-    ? crypto.randomUUID()
-    : null
+  const invite_hashcode = role === 'Consult'
+    ? `ic-consult-${data.username.trim()}`
+    : role === 'Audit'
+      ? crypto.randomUUID()
+      : null
 
   const insertData = {
     username: data.username,

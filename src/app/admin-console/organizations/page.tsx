@@ -18,6 +18,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Paper,
+  Avatar,
+  alpha,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material'
 import {
   Add as AddIcon,
@@ -41,9 +48,13 @@ import { useOrganizationsFilter, type AccountTypeFilter } from '@/hooks/useOrgan
 import { isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
+import { ROLE_LABELS } from '@/types/roles'
+import { formatDateTime } from '@/lib/utils/datetime'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
   adminBackButtonSx,
   adminFilterControlSx,
+  adminGhostIconButtonSx,
   adminPageShellSx,
   adminPageTitleSx,
   adminPrimaryButtonSx,
@@ -51,7 +62,7 @@ import {
 } from '@/lib/admin-ui-styles'
 
 export default function AdminConsoleOrganizationsPage() {
-  const { user, isLoading: authLoading } = useAuth()
+  const { user, isLoading: authLoading, applySessionUser } = useAuth()
   const router = useRouter()
   const [organizations, setOrganizations] = useState<(OrganizationWithStats | OrganizationWithCreator)[]>([])
   const [loading, setLoading] = useState(true)
@@ -75,6 +86,10 @@ export default function AdminConsoleOrganizationsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
+  const [inviteCodeModalOpen, setInviteCodeModalOpen] = useState(false)
+  const [inviteDraft, setInviteDraft] = useState('')
+  const [inviteSaving, setInviteSaving] = useState(false)
+  const [inviteError, setInviteError] = useState<string | null>(null)
   const [detailOrganization, setDetailOrganization] = useState<(OrganizationWithStats | OrganizationWithCreator) | null>(null)
   const [onboardDialogOpen, setOnboardDialogOpen] = useState(false)
   const [onboardOrganization, setOnboardOrganization] = useState<(OrganizationWithStats | OrganizationWithCreator) | null>(null)
@@ -251,6 +266,50 @@ export default function AdminConsoleOrganizationsPage() {
     window.open(`${window.location.origin}/register/membership`, '_blank', 'noopener,noreferrer')
   }
 
+  const openInviteCodeModal = () => {
+    setInviteDraft(user?.invite_hashcode || '')
+    setInviteError(null)
+    setInviteCodeModalOpen(true)
+  }
+
+  const saveInviteCode = async () => {
+    const inviteCode = inviteDraft.trim()
+    if (!/^[a-zA-Z0-9_-]{3,64}$/.test(inviteCode)) {
+      setInviteError('รหัสเชิญใช้ได้เฉพาะ a–z, 0–9, _ และ - ความยาว 3–64 ตัว')
+      return
+    }
+    try {
+      setInviteSaving(true)
+      setInviteError(null)
+      const response = await authenticatedAdminFetch('/api/admin-console/me/invite-code', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inviteCode }),
+      })
+      const result = await response.json() as { inviteCode?: string; error?: string }
+      if (!response.ok) {
+        throw new Error(result.error || 'บันทึกรหัสเชิญไม่สำเร็จ')
+      }
+      applySessionUser({ invite_hashcode: result.inviteCode || inviteCode })
+      setInviteCodeModalOpen(false)
+      setSuccessMessage('บันทึกรหัสเชิญแล้ว')
+      setShowSuccessMessage(true)
+    } catch (error) {
+      setInviteError(error instanceof Error ? error.message : 'บันทึกรหัสเชิญไม่สำเร็จ')
+    } finally {
+      setInviteSaving(false)
+    }
+  }
+
+  const handleShareProfile = () => {
+    if (!user?.invite_hashcode) return
+    window.open(
+      `/consult/${encodeURIComponent(user.invite_hashcode)}`,
+      '_blank',
+      'noopener,noreferrer'
+    )
+  }
+
   const handleCopyHashcode = async () => {
     if (user?.invite_hashcode) {
       try {
@@ -285,6 +344,62 @@ export default function AdminConsoleOrganizationsPage() {
           กลับ
         </Button>
       </Link>
+      {user && isConsult(user) && (
+        <Paper
+          elevation={0}
+          sx={(theme) => ({
+            mb: 3,
+            p: 2.5,
+            border: '1px solid',
+            borderColor: alpha(theme.palette.primary.main, 0.45),
+            borderRadius: 2,
+            bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.16 : 0.08),
+          })}
+        >
+          <Box sx={{ display: 'flex', gap: 2.5, alignItems: 'flex-start' }}>
+            <Avatar
+              src={user.avatar_url || undefined}
+              alt={user.name}
+              sx={{ width: 72, height: 72, bgcolor: 'primary.main', fontSize: '1.75rem' }}
+            >
+              {user.name?.charAt(0)?.toUpperCase() || 'C'}
+            </Avatar>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                  gap: 2,
+                }}
+              >
+                <ProfileField label="ชื่อ-นามสกุล" value={user.name} />
+                <ProfileField label="อีเมล" value={user.email} />
+                <ProfileField label="บทบาท" value={ROLE_LABELS.Consult} />
+                <ProfileField
+                  label="วันที่ลงทะเบียน"
+                  value={user.created_at ? formatDateTime(user.created_at) : '—'}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2, flexWrap: 'wrap' }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                  รหัสเชิญ
+                </Typography>
+                <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
+                  {user.invite_hashcode || '—'}
+                </Typography>
+                {user.invite_hashcode && (
+                  <Button size="small" onClick={handleShareProfile} sx={{ textTransform: 'none' }}>
+                    แชร์โปรไฟล์
+                  </Button>
+                )}
+                <Button size="small" onClick={openInviteCodeModal} sx={{ textTransform: 'none' }}>
+                  แก้ไขรหัสเชิญ
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Paper>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -323,7 +438,7 @@ export default function AdminConsoleOrganizationsPage() {
               </Button>
             </>
           )}
-          {(isConsult(user) || isAudit(user)) && user?.invite_hashcode && (
+          {isAudit(user) && user?.invite_hashcode && (
             <Chip
               label={`Invite Code: ${user.invite_hashcode}`}
               onDelete={handleCopyHashcode}
@@ -345,7 +460,7 @@ export default function AdminConsoleOrganizationsPage() {
               }}
             />
           )}
-          {canManageOrganizations(user) && (
+          {canManageOrganizations(user) && !isConsult(user) && (
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -387,11 +502,32 @@ export default function AdminConsoleOrganizationsPage() {
         </FormControl>
       </Box>
 
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-        {filteredOrganizations.length === organizations.length
-          ? `พบ ${organizations.length} รายการ`
-          : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          mb: 1.5,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          {filteredOrganizations.length === organizations.length
+            ? `พบ ${organizations.length} รายการ`
+            : `แสดง ${filteredOrganizations.length} จาก ${organizations.length} รายการ`}
+        </Typography>
+        {isConsult(user) && (
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleCreate}
+            sx={adminPrimaryButtonSx}
+          >
+            สร้างองค์กรใหม่
+          </Button>
+        )}
+      </Box>
 
       <OrganizationsTable
         variant={isAdmin(user) || isSupport(user) ? 'admin' : 'assigned'}
@@ -441,6 +577,48 @@ export default function AdminConsoleOrganizationsPage() {
         />
       )}
 
+      <Dialog
+        open={inviteCodeModalOpen}
+        onClose={() => !inviteSaving && setInviteCodeModalOpen(false)}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle>แก้ไขรหัสเชิญ</DialogTitle>
+        <DialogContent>
+          {inviteError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {inviteError}
+            </Alert>
+          )}
+          <TextField
+            autoFocus
+            label="รหัสเชิญ"
+            value={inviteDraft}
+            onChange={(event) => setInviteDraft(event.target.value)}
+            fullWidth
+            sx={{ mt: 1 }}
+            helperText="a–z, 0–9, _ และ - ความยาว 3–64 ตัว"
+          />
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={() => setInviteCodeModalOpen(false)}
+            disabled={inviteSaving}
+            sx={{ textTransform: 'none' }}
+          >
+            ยกเลิก
+          </Button>
+          <Button
+            variant="contained"
+            onClick={saveInviteCode}
+            disabled={inviteSaving || !inviteDraft.trim()}
+            sx={adminPrimaryButtonSx}
+          >
+            {inviteSaving ? 'กำลังบันทึก...' : 'บันทึก'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onClose={() => {
@@ -476,6 +654,19 @@ export default function AdminConsoleOrganizationsPage() {
           {successMessage}
         </Alert>
       </Snackbar>
+    </Box>
+  )
+}
+
+function ProfileField ({ label, value }: { label: string; value: string }) {
+  return (
+    <Box>
+      <Typography variant="body2" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+        {value || '—'}
+      </Typography>
     </Box>
   )
 }

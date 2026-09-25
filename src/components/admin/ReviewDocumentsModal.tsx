@@ -15,6 +15,7 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import type { VerificationDocument } from '@/lib/api/types'
+import { VERIFICATION_STATUS_LABELS } from '@/lib/user-status'
 
 interface Props {
   open: boolean
@@ -100,8 +101,9 @@ export default function ReviewDocumentsModal ({
           </Typography>
           {userName && (
             <Typography variant="body2" color="text.secondary">
-              {userName}
-              {verificationStatus ? ` · ${verificationStatus}` : ''}
+              {verificationStatus
+                ? `สถานะ: ${VERIFICATION_STATUS_LABELS[verificationStatus] || verificationStatus}`
+                : ''}
             </Typography>
           )}
         </Box>
