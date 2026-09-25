@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { Suspense, useState, useEffect, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -47,7 +47,7 @@ import {
   adminSearchFieldSx,
 } from '@/lib/admin-ui-styles'
 
-export default function AdminConsoleUsersPage() {
+function AdminConsoleUsersPage() {
   const { user, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -579,5 +579,19 @@ export default function AdminConsoleUsersPage() {
         </Alert>
       </Snackbar>
     </Box>
+  )
+}
+
+export default function AdminConsoleUsersPageEntry () {
+  return (
+    <Suspense
+      fallback={
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+          <CircularProgress />
+        </Box>
+      }
+    >
+      <AdminConsoleUsersPage />
+    </Suspense>
   )
 }
