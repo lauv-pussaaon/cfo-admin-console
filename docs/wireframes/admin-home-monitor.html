@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แดชบอร์ด · แบบร่าง IdeaCarb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #333;
+      --link: #1a73c7;
+      --line: #bbb;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      min-width: 1100px;
+      color: var(--ink);
+      font-family: "Itim", "Tahoma", sans-serif;
+      font-size: 16px;
+      line-height: 1.35;
+      background: #fff;
+    }
+
+    button, a { font-family: inherit; }
+
+    .main { padding: 28px 36px 48px; }
+
+    .top {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .period { display: flex; }
+
+    .period button {
+      margin: 0;
+      padding: 6px 14px;
+      color: var(--ink);
+      font-size: 18px;
+      background: #fff;
+      border: 2px solid var(--ink);
+      cursor: pointer;
+    }
+
+    .period button + button { margin-left: -2px; }
+
+    .period button[aria-pressed="true"] { background: #e6e6e6; }
+
+    .section { margin-top: 18px; }
+
+    .section + .section { margin-top: 28px; }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      font-size: 26px;
+      font-weight: 400;
+    }
+
+    h2 svg { display: block; }
+
+    .pair {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .sketch {
+      border: 2px solid var(--ink);
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    .stat-card {
+      margin-top: 28px;
+      padding: 14px 12px 16px;
+      min-height: 168px;
+    }
+
+    .stat-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .stats b {
+      display: block;
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .stats span {
+      display: block;
+      margin-top: 4px;
+      font-size: 15px;
+    }
+
+    .stats.four { grid-template-columns: repeat(4, 1fr); }
+
+    .stats.four b { font-size: 32px; }
+
+    .stats.four span { font-size: 14px; }
+
+    #ids-table td:nth-child(5) { white-space: nowrap; font-size: 14px; }
+
+    .table-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .view-all {
+      color: var(--link);
+      font-size: 16px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .view-all:hover { color: #1e3a8a; }
+
+    .table-card {
+      width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th {
+      padding: 8px 8px 6px;
+      font-size: 15px;
+      font-weight: 400;
+      text-align: left;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    td {
+      padding: 8px;
+      font-size: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody tr { height: 40px; }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tr.pad td { border-bottom: 1px solid var(--line); }
+
+    td.empty {
+      height: 120px;
+      color: rgba(42, 40, 36, 0.7);
+      text-align: center;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+      min-height: 36px;
+      padding: 4px 10px 8px;
+    }
+
+    .pager button {
+      min-width: 26px;
+      height: 26px;
+      padding: 0;
+      color: var(--ink);
+      font-size: 16px;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .pager button[aria-current="page"] {
+      border-color: var(--ink);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <main class="main">
+      <header class="top">
+        <div class="period" role="group" aria-label="ช่วงเวลา">
+          <button type="button" data-period="today" aria-pressed="false">วันนี้</button>
+          <button type="button" data-period="week" aria-pressed="true">7 วันล่าสุด</button>
+          <button type="button" data-period="month" aria-pressed="false">30 วันล่าสุด</button>
+        </div>
+      </header>
+
+      <section class="section" aria-labelledby="new-clients-title">
+        <h2 id="new-clients-title">
+          <svg viewBox="0 0 48 32" width="48" height="32" aria-hidden="true">
+            <circle cx="14" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M4 28c1.5-7 5-10 10-10s8.5 3 10 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M34 10h12M40 4v12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+          ลูกค้าใหม่
+        </h2>
+
+        <div class="pair">
+          <article class="sketch stat-card">
+            <h3>เปิดใบเสนอราคา</h3>
+            <div class="stats" aria-live="polite">
+              <div><b id="quotes-total">0</b><span>ทั้งหมด</span></div>
+              <div><b id="quotes-active">0</b><span>กำลัง<br>ดำเนินการ</span></div>
+              <div><b id="quotes-done">0</b><span>เสร็จแล้ว</span></div>
+            </div>
+          </article>
+          <div class="table-col">
+            <a class="view-all" href="/admin-console/quotations" title="/admin-console/quotations">ดูทั้งหมด</a>
+            <div class="sketch table-card">
+              <table id="quotes-table">
+                <colgroup>
+                  <col style="width:34%">
+                  <col style="width:18%">
+                  <col style="width:18%">
+                  <col style="width:30%">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>บริษัท</th>
+                    <th>วันที่ขอ</th>
+                    <th>วันที่ตอบ</th>
+                    <th>สถานะการติดต่อ</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <nav class="pager" id="quotes-pager" aria-label="หน้าใบเสนอราคา"></nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="pair">
+          <article class="sketch stat-card">
+            <h3>เปิด ID ใหม่</h3>
+            <div class="stats" aria-live="polite">
+              <div><b id="ids-total">0</b><span>ทั้งหมด</span></div>
+              <div><b id="ids-active">0</b><span>กำลัง<br>ดำเนินการ</span></div>
+              <div><b id="ids-opened">0</b><span>เปิดแล้ว</span></div>
+            </div>
+          </article>
+          <div class="table-col">
+            <a class="view-all" href="/admin-console/trial-requests" title="/admin-console/trial-requests">ดูทั้งหมด</a>
+            <div class="sketch table-card">
+              <table id="ids-table">
+                <colgroup>
+                  <col style="width:20%">
+                  <col style="width:12%">
+                  <col style="width:12%">
+                  <col style="width:14%">
+                  <col style="width:26%">
+                  <col style="width:16%">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>บริษัท</th>
+                    <th>วันที่ขอ</th>
+                    <th>วันที่เปิด</th>
+                    <th>ประเภท</th>
+                    <th>ระยะเวลา</th>
+                    <th>สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <nav class="pager" id="ids-pager" aria-label="หน้าเปิด ID"></nav>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="support-title">
+        <h2 id="support-title">
+          <svg viewBox="0 0 52 34" width="52" height="34" aria-hidden="true">
+            <rect x="2" y="3" width="28" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M9 21 l-3 8 9-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <rect x="20" y="11" width="28" height="16" rx="3" fill="#fff" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M40 27 l3 6 -9-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+          ลูกค้าติดต่อ / แจ้งปัญหา
+        </h2>
+
+        <div class="pair">
+          <article class="sketch stat-card">
+            <h3>Tickets</h3>
+            <div class="stats four" aria-live="polite">
+              <div><b id="tickets-total">0</b><span>ทั้งหมด</span></div>
+              <div><b id="tickets-open">0</b><span>ยังไม่ปิด</span></div>
+              <div><b id="tickets-closed">0</b><span>ปิดเคส</span></div>
+              <div><b id="tickets-delay">0</b><span>Delay</span></div>
+            </div>
+          </article>
+          <div class="table-col">
+            <a class="view-all" href="https://support.ideacarb.com/app/board" title="support.ideacarb.com/app/board">ดูทั้งหมด</a>
+            <div class="sketch table-card">
+              <table id="tickets-table">
+                <colgroup>
+                  <col style="width:20%">
+                  <col style="width:26%">
+                  <col style="width:13%">
+                  <col style="width:22%">
+                  <col style="width:12%">
+                  <col style="width:7%">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>เลขที่</th>
+                    <th>หัวข้อ</th>
+                    <th>วันที่เปิด</th>
+                    <th>สถานะ</th>
+                    <th>วันที่ปิด</th>
+                    <th>ลิงก์</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <nav class="pager" id="tickets-pager" aria-label="หน้าตั๋ว"></nav>
+            </div>
+          </div>
+        </div>
+
+        <div class="pair">
+          <article class="sketch stat-card">
+            <h3>Line OA chat</h3>
+            <div class="stats" aria-live="polite">
+              <div><b id="line-customers">0</b><span>ลูกค้า<br>ในรายชื่อ</span></div>
+              <div><b id="line-followers">0</b><span>ผู้ติดตาม<br>LINE</span></div>
+              <div><b id="line-chats">0</b><span>บทสนทนา<br>ในช่วงนี้</span></div>
+            </div>
+          </article>
+          <div class="table-col">
+            <a class="view-all" href="/admin-console/line-oa" title="/admin-console/line-oa">ดูทั้งหมด</a>
+            <div class="sketch table-card">
+              <table id="line-table">
+                <colgroup>
+                  <col style="width:18%">
+                  <col style="width:16%">
+                  <col style="width:12%">
+                  <col style="width:14%">
+                  <col style="width:33%">
+                  <col style="width:7%">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>ชื่อลูกค้า</th>
+                    <th>LINE</th>
+                    <th>วันที่เริ่ม</th>
+                    <th>สถานะ</th>
+                    <th>ข้อความล่าสุด</th>
+                    <th>ลิงก์</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <nav class="pager" id="line-pager" aria-label="หน้าแชท Line"></nav>
+            </div>
+          </div>
+        </div>
+      </section>
+  </main>
+
+  <script>
+    const TODAY = '2026-09-30'
+    const PERIODS = {
+      today: { start: TODAY, end: TODAY },
+      week: { start: '2026-09-24', end: TODAY },
+      month: { start: '2026-09-01', end: TODAY },
+    }
+    const PAGE_SIZE = 4
+    const MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+
+    const quotes = [
+      { company: 'บริษัท ไทยฟู้ดมิลล์ จำกัด', requested: '2026-09-30', replied: null, status: 'รอติดต่อ' },
+      { company: 'หจก. สวนมะพร้าวประจวบ', requested: '2026-09-30', replied: '2026-09-30', status: 'เสร็จแล้ว' },
+      { company: 'บริษัท พีระอุตสาหกรรม จำกัด', requested: '2026-09-29', replied: '2026-09-29', status: 'ส่งใบราคาแล้ว' },
+      { company: 'โรงงานเซรามิกบ้านบึง', requested: '2026-09-28', replied: null, status: 'นัดสาย' },
+      { company: 'บริษัท เอเชียแพ็คเกจจิ้ง จำกัด', requested: '2026-09-27', replied: '2026-09-28', status: 'เสร็จแล้ว' },
+      { company: 'บริษัท นอร์ทเท็กซ์ไทล์ จำกัด', requested: '2026-09-26', replied: null, status: 'รอติดต่อ' },
+      { company: 'บริษัท สยามโคตติ้ง จำกัด', requested: '2026-09-25', replied: '2026-09-26', status: 'ส่งใบราคาแล้ว' },
+      { company: 'บริษัท แลนด์มาร์คคอนกรีต จำกัด', requested: '2026-09-24', replied: '2026-09-25', status: 'เสร็จแล้ว' },
+      { company: 'ห้างหุ้นส่วนจำกัด น้ำตาลทุ่งตะวัน', requested: '2026-09-18', replied: '2026-09-20', status: 'ส่งใบราคาแล้ว' },
+      { company: 'บริษัท กรีนแลบ เคมิคอล จำกัด', requested: '2026-09-15', replied: '2026-09-16', status: 'เสร็จแล้ว' },
+      { company: 'บริษัท บางปะกงพลาสติก จำกัด', requested: '2026-09-12', replied: null, status: 'นัดสาย' },
+      { company: 'บริษัท ราชบุรีซีเมนต์บล็อก จำกัด', requested: '2026-09-08', replied: '2026-09-10', status: 'เสร็จแล้ว' },
+      { company: 'บริษัท โกลด์ไรซ์ มิลล์ จำกัด', requested: '2026-09-05', replied: '2026-09-06', status: 'ส่งใบราคาแล้ว' },
+      { company: 'บริษัท อีสเทิร์นสตีลเวิร์ค จำกัด', requested: '2026-09-03', replied: null, status: 'รอติดต่อ' },
+      { company: 'บริษัท ลำพูนการ์เมนท์ จำกัด', requested: '2026-09-01', replied: '2026-09-02', status: 'เสร็จแล้ว' },
+    ]
+
+    const ids = [
+      { company: 'บริษัท ไทยฟู้ดมิลล์ จำกัด', requested: '2026-09-30', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'เปิด' },
+      { company: 'บริษัท พีระอุตสาหกรรม จำกัด', requested: '2026-09-29', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'กำลังติดตั้ง' },
+      { company: 'หจก. แม่น้ำบางปะกงฟู้ด', requested: '2026-09-27', opened: '2026-09-29', kind: 'สมาชิกรายปี', duration: '1 ปี', status: 'พร้อมใช้งาน' },
+      { company: 'โรงงานเซรามิกบ้านบึง', requested: '2026-09-28', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'เริ่มแล้ว' },
+      { company: 'บริษัท นอร์ทเท็กซ์ไทล์ จำกัด', requested: '2026-09-26', opened: null, kind: 'สมาชิกรายปี', duration: '1 ปี', status: 'ติดตั้งไม่สำเร็จ' },
+      { company: 'บริษัท สยามโคตติ้ง จำกัด', requested: '2026-09-26', opened: '2026-09-28', kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'พร้อมใช้งาน' },
+      { company: 'บริษัท แลนด์มาร์คคอนกรีต จำกัด', requested: '2026-09-24', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'ยกเลิก' },
+      { company: 'ห้างหุ้นส่วนจำกัด น้ำตาลทุ่งตะวัน', requested: '2026-09-20', opened: '2026-09-22', kind: 'สมาชิกรายปี', duration: '1 ปี', status: 'พร้อมใช้งาน' },
+      { company: 'บริษัท เชียงรายโคลด์สโตเรจ จำกัด', requested: '2026-09-16', opened: '2026-09-18', kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'พร้อมใช้งาน' },
+      { company: 'บริษัท บางปะกงพลาสติก จำกัด', requested: '2026-09-14', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'เริ่มแล้ว' },
+      { company: 'บริษัท กรีนแลบ เคมิคอล จำกัด', requested: '2026-09-11', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'ติดตั้งไม่สำเร็จ' },
+      { company: 'บริษัท โกลด์ไรซ์ มิลล์ จำกัด', requested: '2026-09-06', opened: '2026-09-09', kind: 'สมาชิกรายปี', duration: '1 ปี', status: 'พร้อมใช้งาน' },
+      { company: 'บริษัท อีสเทิร์นสตีลเวิร์ค จำกัด', requested: '2026-09-04', opened: null, kind: 'ทดลองใช้งาน', duration: '30 วัน', status: 'เปิด' },
+      { company: 'บริษัท ลำพูนการ์เมนท์ จำกัด', requested: '2026-09-02', opened: null, kind: 'สมาชิกรายปี', duration: '1 ปี', status: 'ยกเลิก' },
+    ]
+
+    const tickets = [
+      { number: 'IC-2569-000142', subject: 'ส่งรายงาน Word ไม่ได้', opened: '2026-09-30', status: 'ใหม่', closed: null },
+      { number: 'IC-2569-000141', subject: 'ลืมรหัสผ่านผู้ดูแลโรงงาน', opened: '2026-09-30', status: 'กำลังดูแล', closed: null },
+      { number: 'IC-2569-000138', subject: 'ซิงค์แคตตาล็อก EF ค้าง', opened: '2026-09-29', status: 'รอข้อมูลจากผู้แจ้ง', closed: null, delayed: true },
+      { number: 'IC-2569-000135', subject: 'เชิญผู้ทวนสอบไม่สำเร็จ', opened: '2026-09-28', status: 'แก้ไขแล้ว', closed: '2026-09-29' },
+      { number: 'IC-2569-000132', subject: 'อัปโหลดหลักฐานไม่ได้', opened: '2026-09-27', status: 'ปิดเคส', closed: '2026-09-28' },
+      { number: 'IC-2569-000129', subject: 'หน่วยธุรกิจย่อยไม่แสดง', opened: '2026-09-25', status: 'กำลังดูแล', closed: null, delayed: true },
+      { number: 'IC-2569-000126', subject: 'ส่งออก Versheet ตัวเลขว่าง', opened: '2026-09-24', status: 'ปิดเคส', closed: '2026-09-26' },
+      { number: 'IC-2569-000118', subject: 'รายงานตัวอย่างปีไม่ตรง', opened: '2026-09-18', status: 'ปิดเคส', closed: '2026-09-19' },
+      { number: 'IC-2569-000112', subject: 'เพิ่มผู้ใช้ทีมทำข้อมูลไม่ได้', opened: '2026-09-14', status: 'แก้ไขแล้ว', closed: '2026-09-15' },
+      { number: 'IC-2569-000104', subject: 'ค่า EF รุ่น TGO ไม่ขึ้น', opened: '2026-09-09', status: 'ปิดเคส', closed: '2026-09-12' },
+      { number: 'IC-2569-000098', subject: 'ภาษาไทยใน Excel เพี้ยน', opened: '2026-09-06', status: 'ใหม่', closed: null },
+      { number: 'IC-2569-000091', subject: 'ลิงก์ขอบเขต Scope 3 หาย', opened: '2026-09-02', status: 'รอข้อมูลจากผู้แจ้ง', closed: null },
+    ]
+
+    const chats = [
+      { name: 'คุณนภา ศรีสุข', line: 'napa.srisuk', started: '2026-09-30', status: 'ยังไม่อ่าน', last: 'สอบถามแพ็กเกจรายปีของโรงงาน' },
+      { name: 'คุณวิชัย ทองดี', line: 'wichai.factory', started: '2026-09-30', status: 'กำลังคุย', last: 'ขอต่อเดโมอีก 30 วัน' },
+      { name: 'คุณมาลี พงษ์ไทย', line: 'mali.pack', started: '2026-09-28', status: 'รอลูกค้า', last: 'ส่งใบราคาแล้ว รอยืนยัน' },
+      { name: 'คุณอนุชา แก้วมณี', line: 'anucha.km', started: '2026-09-27', status: 'จบแล้ว', last: 'เปิดไอดีทดลองให้แล้ว' },
+      { name: 'คุณปริยา ตั้งตรง', line: 'priya.textile', started: '2026-09-26', status: 'กำลังคุย', last: 'ถามขั้นตอนเชิญผู้ทวนสอบ' },
+      { name: 'คุณสมชาย บุญมี', line: 'somchai.rice', started: '2026-09-24', status: 'จบแล้ว', last: 'ขอบคุณครับ ใช้งานได้แล้ว' },
+      { name: 'คุณอรทัย เจริญผล', line: 'orathai.ceramic', started: '2026-09-17', status: 'รอลูกค้า', last: 'ขอตัวอย่างรายงาน CFO' },
+      { name: 'คุณเกียรติ ชัยวัฒน์', line: 'kiat.steel', started: '2026-09-11', status: 'จบแล้ว', last: 'ปิดเรื่องใบแจ้งหนี้แล้ว' },
+      { name: 'คุณสุดา แสงเดือน', line: 'suda.garment', started: '2026-09-07', status: 'ยังไม่อ่าน', last: 'ขอคู่มือเริ่มต้นภาษาไทย' },
+      { name: 'คุณประเสริฐ มั่นคง', line: 'prasert.cement', started: '2026-09-03', status: 'กำลังคุย', last: 'รหัสบริษัทซ้ำกับคำขอเดิม' },
+    ]
+
+    const lineDirectory = {
+      today: { customers: 4, followers: 2 },
+      week: { customers: 18, followers: 9 },
+      month: { customers: 36, followers: 15 },
+    }
+
+    const IN_PROGRESS_ID = new Set(['เริ่มแล้ว', 'กำลังติดตั้ง', 'ติดตั้งไม่สำเร็จ'])
+    const OPEN_TICKET = new Set(['ใหม่', 'กำลังดูแล', 'รอข้อมูลจากผู้แจ้ง'])
+    const CLOSED_TICKET = new Set(['แก้ไขแล้ว', 'ปิดเคส'])
+
+    const state = {
+      period: 'week',
+      page: { quotes: 1, ids: 1, tickets: 1, line: 1 },
+    }
+
+    function formatDay (iso) {
+      if (!iso) return '—'
+      const parts = iso.split('-')
+      const day = Number(parts[2])
+      const month = MONTHS[Number(parts[1]) - 1]
+      return day + ' ' + month
+    }
+
+    function formatStamp (iso) {
+      const parts = iso.split('-').map(Number)
+      const year = String((parts[0] + 543) % 100).padStart(2, '0')
+      return parts[2] + ' ' + MONTHS[parts[1] - 1] + ' ' + year
+    }
+
+    function addDays (iso, days) {
+      const date = new Date(iso + 'T00:00:00Z')
+      date.setUTCDate(date.getUTCDate() + days)
+      return date.toISOString().slice(0, 10)
+    }
+
+    function periodSpan (row) {
+      const days = row.kind === 'สมาชิกรายปี' ? 364 : 29
+      return formatStamp(row.requested) + ' - ' + formatStamp(addDays(row.requested, days))
+    }
+
+    function inPeriod (iso, period) {
+      const range = PERIODS[period]
+      return iso >= range.start && iso <= range.end
+    }
+
+    function sortBy (rows, key, nameKey) {
+      return rows.slice().sort((a, b) => {
+        const byDate = b[key].localeCompare(a[key])
+        if (byDate !== 0) return byDate
+        return String(a[nameKey]).localeCompare(String(b[nameKey]), 'th')
+      })
+    }
+
+    function setText (id, value) {
+      document.getElementById(id).textContent = String(value)
+    }
+
+    function fillRows (tableId, rows, page, cells) {
+      const tbody = document.querySelector('#' + tableId + ' tbody')
+      tbody.replaceChildren()
+      const start = (page - 1) * PAGE_SIZE
+      const slice = rows.slice(start, start + PAGE_SIZE)
+      if (slice.length === 0) {
+        const tr = document.createElement('tr')
+        const td = document.createElement('td')
+        td.colSpan = cells(rows[0] || {}).length || 4
+        td.className = 'empty'
+        td.textContent = 'ไม่มีรายการในช่วงนี้'
+        tr.append(td)
+        tbody.append(tr)
+        return
+      }
+      slice.forEach((row) => {
+        const tr = document.createElement('tr')
+        tr.dataset.row = '1'
+        cells(row).forEach((value) => {
+          const td = document.createElement('td')
+          td.textContent = value
+          tr.append(td)
+        })
+        tbody.append(tr)
+      })
+      const columnCount = cells(slice[0]).length
+      for (let i = slice.length; i < PAGE_SIZE; i += 1) {
+        const tr = document.createElement('tr')
+        tr.className = 'pad'
+        for (let c = 0; c < columnCount; c += 1) {
+          tr.append(document.createElement('td'))
+        }
+        tbody.append(tr)
+      }
+    }
+
+    function fillPager (pagerId, rowCount, page, onPick) {
+      const nav = document.getElementById(pagerId)
+      nav.replaceChildren()
+      if (rowCount === 0) return
+      const pageCount = Math.ceil(rowCount / PAGE_SIZE)
+      for (let i = 1; i <= pageCount; i += 1) {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.textContent = String(i)
+        button.setAttribute('aria-label', 'หน้า ' + i)
+        if (i === page) button.setAttribute('aria-current', 'page')
+        button.addEventListener('click', () => onPick(i))
+        nav.append(button)
+      }
+    }
+
+    function render () {
+      const period = state.period
+      document.querySelectorAll('.period button').forEach((button) => {
+        button.setAttribute('aria-pressed', button.dataset.period === period ? 'true' : 'false')
+      })
+
+      const quoteRows = sortBy(quotes.filter((row) => inPeriod(row.requested, period)), 'requested', 'company')
+      const activeQuotes = quoteRows.filter((row) => row.status !== 'เสร็จแล้ว').length
+      const doneQuotes = quoteRows.filter((row) => row.status === 'เสร็จแล้ว').length
+      setText('quotes-total', quoteRows.length)
+      setText('quotes-active', activeQuotes)
+      setText('quotes-done', doneQuotes)
+      fillRows('quotes-table', quoteRows, state.page.quotes, (row) => [
+        row.company,
+        formatDay(row.requested),
+        formatDay(row.replied),
+        row.status,
+      ])
+      fillPager('quotes-pager', quoteRows.length, state.page.quotes, (page) => {
+        state.page.quotes = page
+        render()
+      })
+
+      const idRows = sortBy(ids.filter((row) => inPeriod(row.requested, period)), 'requested', 'company')
+      const idProgress = idRows.filter((row) => IN_PROGRESS_ID.has(row.status)).length
+      const idOpened = idRows.filter((row) => row.status === 'พร้อมใช้งาน').length
+      setText('ids-total', idRows.length)
+      setText('ids-active', idProgress)
+      setText('ids-opened', idOpened)
+      fillRows('ids-table', idRows, state.page.ids, (row) => [
+        row.company,
+        formatDay(row.requested),
+        row.status === 'พร้อมใช้งาน' ? formatDay(row.opened) : '—',
+        row.kind,
+        periodSpan(row),
+        row.status,
+      ])
+      fillPager('ids-pager', idRows.length, state.page.ids, (page) => {
+        state.page.ids = page
+        render()
+      })
+
+      const ticketRows = sortBy(tickets.filter((row) => inPeriod(row.opened, period)), 'opened', 'number')
+      const ticketOpen = ticketRows.filter((row) => OPEN_TICKET.has(row.status)).length
+      const ticketClosed = ticketRows.filter((row) => CLOSED_TICKET.has(row.status)).length
+      setText('tickets-total', ticketRows.length)
+      setText('tickets-open', ticketOpen)
+      setText('tickets-closed', ticketClosed)
+      setText('tickets-delay', ticketRows.filter((row) => row.delayed).length)
+      fillRows('tickets-table', ticketRows, state.page.tickets, (row) => [
+        row.number,
+        row.subject,
+        formatDay(row.opened),
+        row.status,
+        CLOSED_TICKET.has(row.status) ? formatDay(row.closed) : '—',
+        'ดู',
+      ])
+      fillPager('tickets-pager', ticketRows.length, state.page.tickets, (page) => {
+        state.page.tickets = page
+        render()
+      })
+
+      const chatRows = sortBy(chats.filter((row) => inPeriod(row.started, period)), 'started', 'name')
+      const directory = lineDirectory[period]
+      setText('line-customers', directory.customers)
+      setText('line-followers', directory.followers)
+      setText('line-chats', chatRows.length)
+      fillRows('line-table', chatRows, state.page.line, (row) => [
+        row.name,
+        row.line,
+        formatDay(row.started),
+        row.status,
+        row.last,
+        'ดู',
+      ])
+      fillPager('line-pager', chatRows.length, state.page.line, (page) => {
+        state.page.line = page
+        render()
+      })
+    }
+
+    document.querySelectorAll('.period button').forEach((button) => {
+      button.addEventListener('click', () => {
+        state.period = button.dataset.period
+        state.page.quotes = 1
+        state.page.ids = 1
+        state.page.tickets = 1
+        state.page.line = 1
+        render()
+      })
+    })
+
+    document.querySelectorAll('.view-all').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault()
+      })
+    })
+
+    render()
+  </script>
+</body>
+</html>

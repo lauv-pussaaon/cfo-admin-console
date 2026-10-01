@@ -29,6 +29,24 @@ export function wrapTrialRequestApiStatus (
   return 'in-progress'
 }
 
+export const ID_REQUEST_DEPLOY_STATUS_VALUES = [
+  'not-started',
+  'deploying',
+  'deployment_failed',
+  'deployed',
+] as const
+
+export type IdRequestDeployStatus = typeof ID_REQUEST_DEPLOY_STATUS_VALUES[number]
+
+export function deployStatusForRequest (
+  status: OrganizationTrialRequestStatus
+): IdRequestDeployStatus {
+  if (status === 'deploying' || status === 'deployment_failed' || status === 'deployed') {
+    return status
+  }
+  return 'not-started'
+}
+
 export const TRIAL_REQUEST_STATUS_OPTIONS: {
   value: OrganizationTrialRequestStatus
   label: string

@@ -73,7 +73,7 @@ export async function GET (request: NextRequest) {
       ...(statusResult.status ? { status: statusResult.status } : {}),
     })
   } catch (error) {
-    console.error('[trial-requests] unexpected error:', error)
+    console.error('[id-requests] unexpected error:', error)
     return NextResponse.json(
       { error: 'โหลดคำขอสมัครองค์กรไม่สำเร็จ' },
       { status: 500 }

@@ -39,6 +39,9 @@ export async function POST (request: NextRequest) {
     if (status !== 'deployed' && status !== 'deployment_failed') {
       return NextResponse.json({ error: 'สถานะไม่ถูกต้อง' }, { status: 400 })
     }
+    if (status === 'deployment_failed' && !errorText) {
+      return NextResponse.json({ error: 'ต้องระบุข้อผิดพลาดเมื่อติดตั้งไม่สำเร็จ' }, { status: 400 })
+    }
 
     const supabase = getServiceSupabase()
     if (!supabase) {
@@ -51,9 +54,13 @@ export async function POST (request: NextRequest) {
     const result = await applyTrialRequestDeployStatusByCompanyCode(supabase, {
       companyCode,
       status,
-      ...(errorText ? { error: errorText } : {}),
-      ...(logText ? { log: logText } : {}),
-      ...(logPath ? { logPath } : {}),
+      ...(status === 'deployment_failed'
+        ? {
+            error: errorText,
+            ...(logText ? { log: logText } : {}),
+            ...(logPath ? { logPath } : {}),
+          }
+        : {}),
     })
 
     if (!result.updated) {
@@ -69,7 +76,7 @@ export async function POST (request: NextRequest) {
       status: result.currentStatus ?? status,
     })
   } catch (error) {
-    console.error('[trial-requests/deploy-status] unexpected error:', error)
+    console.error('[id-requests/deploy-status] unexpected error:', error)
     return NextResponse.json(
       { error: 'เกิดข้อผิดพลาดในการอัปเดตสถานะติดตั้ง' },
       { status: 500 }

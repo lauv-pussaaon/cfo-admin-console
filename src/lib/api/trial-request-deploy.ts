@@ -6,7 +6,8 @@ import {
 } from '@/types/org-request-kind'
 
 const ACTIVE_REQUEST_STATUSES = ['open', 'started', 'deploying'] as const
-const DEPLOY_STATUS_MATCH = ['deploying', 'started'] as const
+const DEPLOYING_MATCH = ['deploying', 'started'] as const
+const DEPLOYED_MATCH = ['deploying', 'started', 'deployment_failed'] as const
 const DEPLOY_LOG_MAX_CHARS = 32000
 
 type DeployFailureFields = {
@@ -160,11 +161,12 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     logPath?: string
   }
 ): Promise<{ updated: boolean; requestId?: string; currentStatus?: string }> {
+  const matchStatuses = params.status === 'deployed' ? DEPLOYED_MATCH : DEPLOYING_MATCH
   const { data, error } = await supabase
     .from('organization_trial_requests')
     .select(REQUEST_SELECT)
     .eq('company_code', params.companyCode)
-    .in('status', [...DEPLOY_STATUS_MATCH])
+    .in('status', [...matchStatuses])
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
@@ -183,15 +185,15 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
       .limit(1)
       .maybeSingle()
     if (existing) {
-      if (params.status === 'deployment_failed') {
-        await supabase
-          .from('organization_trial_requests')
-          .update({
-            updated_at: new Date().toISOString(),
-            ...deployFailureUpdate(params),
-          })
-          .eq('id', existing.id)
-      }
+      await supabase
+        .from('organization_trial_requests')
+        .update({
+          updated_at: new Date().toISOString(),
+          ...(params.status === 'deployment_failed'
+            ? deployFailureUpdate(params)
+            : clearDeployFailureUpdate()),
+        })
+        .eq('id', existing.id)
       return { updated: true, requestId: existing.id, currentStatus: existing.status }
     }
     return { updated: false }
@@ -211,7 +213,7 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
       ...failFields,
     })
     .eq('id', data.id)
-    .in('status', [...DEPLOY_STATUS_MATCH])
+    .in('status', [...matchStatuses])
 
   if (updateError) {
     console.error('[trial-request-deploy] apply deploy-status:', updateError)

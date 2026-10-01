@@ -8,7 +8,7 @@ export const ADMIN_OPS_OPENAPI = {
   },
   servers: [{ url: 'https://admin-console.ideacarb.com', description: 'Production' }],
   tags: [
-    { name: 'Trial requests', description: 'Trial and annual membership account requests' },
+    { name: 'ID requests', description: 'Trial and annual membership account requests' },
     { name: 'Organizations', description: 'Provisioned organizations' },
   ],
   components: {
@@ -35,6 +35,12 @@ export const ADMIN_OPS_OPENAPI = {
         type: 'string',
         enum: ['open', 'started', 'deploying', 'deployed', 'deployment_failed', 'cancelled'],
       },
+      DeployStatus: {
+        type: 'string',
+        enum: ['not-started', 'deploying', 'deployment_failed', 'deployed'],
+        description:
+          'open, started, cancelled → not-started. deploying, deployment_failed, and deployed match requestStatus.',
+      },
       TrialRequestItem: {
         type: 'object',
         properties: {
@@ -48,11 +54,16 @@ export const ADMIN_OPS_OPENAPI = {
           request_kind: { type: 'string', enum: ['trial', 'annual_membership'] },
           status: { $ref: '#/components/schemas/TrialRequestApiStatus' },
           requestStatus: { $ref: '#/components/schemas/TrialRequestDbStatus' },
+          deploy_status: { $ref: '#/components/schemas/DeployStatus' },
           organization_id: { type: 'string', format: 'uuid', nullable: true },
           approved_account_type: { type: 'string', nullable: true },
           reviewed_by: { type: 'string', format: 'uuid', nullable: true },
           reviewed_at: { type: 'string', format: 'date-time', nullable: true },
-          deploy_error: { type: 'string', nullable: true },
+          deploy_error: {
+            type: 'string',
+            nullable: true,
+            description: 'Set only when deploy_status is deployment_failed',
+          },
           deploy_log_path: { type: 'string', nullable: true },
           created_at: { type: 'string', format: 'date-time' },
           updated_at: { type: 'string', format: 'date-time', nullable: true },
@@ -125,12 +136,12 @@ export const ADMIN_OPS_OPENAPI = {
   },
   security: [{ bearerAuth: [] }],
   paths: {
-    '/api/admin-console/trial-requests': {
+    '/api/admin-console/id-requests': {
       get: {
-        tags: ['Trial requests'],
-        summary: 'List trial and annual membership requests',
+        tags: ['ID requests'],
+        summary: 'List trial and annual membership ID requests',
         description:
-          'Both request kinds. Sorted by created_at DESC. 50 per page. Date filters use Asia/Bangkok calendar days. deploy_log is omitted.',
+          'Both request kinds. Sorted by created_at DESC. 50 per page. Date filters use Asia/Bangkok calendar days. deploy_status is derived from the DB status. deploy_error is null unless deploy_status is deployment_failed. deploy_log is omitted.',
         parameters: [
           {
             name: 'page',

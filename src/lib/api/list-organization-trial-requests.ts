@@ -2,8 +2,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { OrganizationTrialRequestStatus } from '@/types/database'
 import type { OrgRequestKind } from '@/types/org-request-kind'
 import {
+  deployStatusForRequest,
   getDbStatusesForApiStatus,
   wrapTrialRequestApiStatus,
+  type IdRequestDeployStatus,
   type TrialRequestApiStatus,
 } from '@/types/trial-request-status'
 
@@ -51,9 +53,11 @@ type TrialRequestListRow = {
   updated_at: string | null
 }
 
-export type OrganizationTrialRequestListItem = Omit<TrialRequestListRow, 'status'> & {
+export type OrganizationTrialRequestListItem = Omit<TrialRequestListRow, 'status' | 'deploy_error'> & {
   status: TrialRequestApiStatus
   requestStatus: OrganizationTrialRequestStatus
+  deploy_status: IdRequestDeployStatus
+  deploy_error: string | null
 }
 
 export function parseListPage (value: string | null): number | null {
@@ -102,10 +106,13 @@ export function bangkokDayAfterStartIso (date: string): string {
 }
 
 function toListItem (row: TrialRequestListRow): OrganizationTrialRequestListItem {
+  const deployStatus = deployStatusForRequest(row.status)
   return {
     ...row,
     status: wrapTrialRequestApiStatus(row.status),
     requestStatus: row.status,
+    deploy_status: deployStatus,
+    deploy_error: deployStatus === 'deployment_failed' ? row.deploy_error : null,
   }
 }
 
