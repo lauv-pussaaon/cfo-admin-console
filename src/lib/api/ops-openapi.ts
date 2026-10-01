@@ -9,6 +9,7 @@ export const ADMIN_OPS_OPENAPI = {
   servers: [{ url: 'https://admin-console.ideacarb.com', description: 'Production' }],
   tags: [
     { name: 'ID requests', description: 'Trial and annual membership account requests' },
+    { name: 'Consults', description: 'Consult registration, review, and approval' },
     { name: 'Organizations', description: 'Provisioned organizations' },
   ],
   components: {
@@ -84,6 +85,60 @@ export const ADMIN_OPS_OPENAPI = {
           requestDateFrom: { type: 'string', format: 'date' },
           requestDateBy: { type: 'string', format: 'date' },
           status: { $ref: '#/components/schemas/TrialRequestApiStatus' },
+        },
+      },
+      ConsultStage: {
+        type: 'string',
+        enum: ['register', 'review', 'approved', 'rejected', 'inactive'],
+        description:
+          'register: user requested and verification missing or pending_upload. review: user requested and verification pending_review. approved: user active, or verification approved. rejected: user or verification rejected. inactive: user inactive. Checked in that order.',
+      },
+      ConsultUserStatus: {
+        type: 'string',
+        enum: ['requested', 'active', 'rejected', 'inactive'],
+      },
+      ConsultVerificationStatus: {
+        type: 'string',
+        enum: ['pending_upload', 'pending_review', 'approved', 'rejected'],
+      },
+      ConsultItem: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          name: { type: 'string' },
+          username: { type: 'string' },
+          email: { type: 'string' },
+          phone: { type: 'string', nullable: true },
+          organization_name: { type: 'string', nullable: true },
+          consulting_firm_name: { type: 'string', nullable: true },
+          is_firm_contact_person: { type: 'boolean' },
+          created_at: { type: 'string', format: 'date-time' },
+          status: { $ref: '#/components/schemas/ConsultStage' },
+          user_status: { $ref: '#/components/schemas/ConsultUserStatus' },
+          verification_status: {
+            allOf: [{ $ref: '#/components/schemas/ConsultVerificationStatus' }],
+            nullable: true,
+          },
+          rejection_reason: { type: 'string', nullable: true },
+          verified_date: { type: 'string', format: 'date', nullable: true },
+          document_count: { type: 'integer' },
+        },
+      },
+      ConsultList: {
+        type: 'object',
+        required: ['consults', 'page', 'pageSize', 'total', 'totalPages'],
+        properties: {
+          consults: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/ConsultItem' },
+          },
+          page: { type: 'integer' },
+          pageSize: { type: 'integer', example: 50 },
+          total: { type: 'integer' },
+          totalPages: { type: 'integer' },
+          registeredDateFrom: { type: 'string', format: 'date' },
+          registeredDateBy: { type: 'string', format: 'date' },
+          status: { $ref: '#/components/schemas/ConsultStage' },
         },
       },
       AccountType: {
@@ -170,6 +225,56 @@ export const ADMIN_OPS_OPENAPI = {
           '200': {
             description: 'Paginated requests. Echoes requestDateFrom, requestDateBy, status when set.',
             content: { 'application/json': { schema: { $ref: '#/components/schemas/TrialRequestList' } } },
+          },
+          '400': {
+            description: 'Invalid page, date, or status',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } },
+          },
+          '401': {
+            description: 'Missing or wrong token',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } },
+          },
+          '500': {
+            description: 'Server or missing service-role key',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } },
+          },
+        },
+      },
+    },
+    '/api/admin-console/consults': {
+      get: {
+        tags: ['Consults'],
+        summary: 'List Consult users',
+        description:
+          'Consult role only. Sorted by created_at DESC. 50 per page. Date filters use Asia/Bangkok calendar days. status is the stage derived from user_status and verification_status. No password, invite code, or verification token.',
+        parameters: [
+          {
+            name: 'page',
+            in: 'query',
+            schema: { type: 'integer', minimum: 1, default: 1 },
+          },
+          {
+            name: 'registeredDateFrom',
+            in: 'query',
+            description: 'Inclusive start date (YYYY-MM-DD, Asia/Bangkok)',
+            schema: { type: 'string', format: 'date' },
+          },
+          {
+            name: 'registeredDateBy',
+            in: 'query',
+            description: 'Inclusive end date (YYYY-MM-DD, Asia/Bangkok). 400 if from > by.',
+            schema: { type: 'string', format: 'date' },
+          },
+          {
+            name: 'status',
+            in: 'query',
+            schema: { $ref: '#/components/schemas/ConsultStage' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Paginated consults. Echoes registeredDateFrom, registeredDateBy, status when set.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/ConsultList' } } },
           },
           '400': {
             description: 'Invalid page, date, or status',
