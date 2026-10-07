@@ -3,7 +3,7 @@
 -- Run order: 00_drop_all.sql -> 01_schema.sql -> 02_seed_master_data.sql
 --   -> 03_seed_ef_catalog_releases.sql -> dataprep/ef-catalog/generated/*
 --   -> 04_seed_emission_templates_and_activity_groups.sql
---   -> 05_seed_organizations_ideaday.sql / 06_seed_notification_recipients.sql
+--   -> 06_seed_notification_recipients.sql
 -- Existing DBs (template tables only): migrate_reset_emission_templates.sql
 --   then 04_seed_emission_templates_and_activity_groups.sql
 

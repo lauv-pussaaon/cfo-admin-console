@@ -1,5 +1,7 @@
 -- =============================================================================
 -- restore_organizations_ideaday.sql
+-- Retired. Do not run. ideaday- organizations are removed by
+-- one_time_delete_ideaday_organizations.sql.
 -- Generated from dataprep/all-organizations.csv on 2026-07-20 07:12:29 UTC
 -- Purpose: restore 126 organizations where name starts with ideaday
 -- Preserves original UUIDs and field values from the admin export.

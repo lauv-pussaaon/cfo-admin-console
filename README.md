@@ -66,7 +66,6 @@ Single admin Supabase instance — baseline schema only (no incremental `migrati
 4. Load EF catalog master data from `dataprep/ef-catalog/generated/` (see [dataprep/EF_CATALOG_ADMIN.md](dataprep/EF_CATALOG_ADMIN.md)), then optionally:
    ```bash
    database/04_seed_emission_templates_and_activity_groups.sql
-   database/05_seed_organizations_ideaday.sql
    database/06_seed_notification_recipients.sql
    ```
 5. Publish catalog versions from Emission Resources UI when ready for client sync.
