@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, type ReactNode } from 'react'
-import { Box, CircularProgress, Paper, Typography, useTheme } from '@mui/material'
+import { Box, Chip, CircularProgress, Paper, Typography, useTheme } from '@mui/material'
 import {
   Bar,
   BarChart,
@@ -47,15 +47,15 @@ export default function OrganizationSummaryCharts ({
   const slices = summary.byType.filter((row) => row.count > 0)
 
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' },
-        gap: 2,
-        mb: 3,
-      }}
-    >
-      <SummaryCard title="จำนวนตามประเภทบัญชี" loading={loading}>
+    <Box sx={{ mb: 3 }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' },
+          gap: 2,
+        }}
+      >
+        <SummaryCard title="จำนวนตามประเภทบัญชี" loading={loading}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 220 }}>
           <Box sx={{ position: 'relative', width: 168, height: 168, flexShrink: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -92,7 +92,7 @@ export default function OrganizationSummaryCharts ({
             </Box>
           </Box>
           <Box component="ul" sx={{ listStyle: 'none', m: 0, mt: 1, p: 0, width: '100%' }}>
-            {summary.byType.map((row) => (
+            {summary.byType.filter((row) => row.accountType !== 'demo').map((row) => (
               <Box
                 component="li"
                 key={row.accountType}
@@ -115,22 +115,30 @@ export default function OrganizationSummaryCharts ({
             ))}
           </Box>
         </Box>
-      </SummaryCard>
+        </SummaryCard>
 
-      <MonthBarCard
-        title="เริ่มแพ็กเกจ"
-        subtitle="6 เดือนที่ผ่านมาถึงเดือนนี้"
-        series={summary.packageStarts}
-        color={theme.palette.primary.main}
-        loading={loading}
-      />
-      <MonthBarCard
-        title="สิ้นสุดแพ็กเกจ"
-        subtitle="เดือนนี้ถึง 6 เดือนข้างหน้า"
-        caption="ไม่รวมองค์กรที่ไม่มีวันหมดอายุ"
-        series={summary.packageEnds}
-        color={theme.palette.warning.main}
-        loading={loading}
+        <MonthBarCard
+          title="เริ่มแพ็กเกจ"
+          subtitle="6 เดือนที่ผ่านมาถึงเดือนนี้"
+          series={summary.packageStarts}
+          color={theme.palette.primary.main}
+          loading={loading}
+        />
+        <MonthBarCard
+          title="สิ้นสุดแพ็กเกจ"
+          subtitle="เดือนนี้ถึง 6 เดือนข้างหน้า"
+          caption="ไม่รวมองค์กรที่ไม่มีวันหมดอายุ"
+          series={summary.packageEnds}
+          color={theme.palette.warning.main}
+          loading={loading}
+        />
+      </Box>
+      <Chip
+        label="ข้อมูลใน Chart ไม่รวม id demo ชั่วคราวสำหรับงาน events"
+        size="small"
+        variant="outlined"
+        color="info"
+        sx={{ mt: 1.5 }}
       />
     </Box>
   )

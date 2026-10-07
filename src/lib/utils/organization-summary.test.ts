@@ -38,13 +38,13 @@ describe('buildOrganizationSummary', () => {
       { account_type: 'annual_member' },
     ], october2026)
 
-    assert.equal(summary.total, 8)
+    assert.equal(summary.total, 6)
     assert.deepEqual(
       summary.byType.map((row) => [row.accountType, row.count]),
       [
         ['annual_member', 3],
         ['trial', 1],
-        ['demo', 2],
+        ['demo', 0],
         ['employee', 1],
         ['project', 1],
       ],
@@ -56,6 +56,7 @@ describe('buildOrganizationSummary', () => {
       { package_start: '2026-03-31' },
       { package_start: '2026-04-01' },
       { package_start: '2026-10-31' },
+      { account_type: 'demo', package_start: '2026-10-15' },
       { package_start: '2026-11-01' },
       { package_start: null },
       { package_start: 'not-a-date' },

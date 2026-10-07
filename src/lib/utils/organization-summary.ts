@@ -54,8 +54,11 @@ export function buildOrganizationSummary (
   const startCounts = new Map(startKeys.map((key) => [key, 0]))
   const endCounts = new Map(endKeys.map((key) => [key, 0]))
   const typeCounts = new Map(ACCOUNT_TYPE_OPTIONS.map((option) => [option.value, 0]))
+  let total = 0
 
   for (const organization of organizations) {
+    if (organization.account_type === 'demo') continue
+    total += 1
     const accountType = normalizeAccountType(organization.account_type)
     typeCounts.set(accountType, (typeCounts.get(accountType) || 0) + 1)
 
@@ -71,7 +74,7 @@ export function buildOrganizationSummary (
   }
 
   return {
-    total: organizations.length,
+    total,
     byType: ACCOUNT_TYPE_OPTIONS.map((option) => ({
       accountType: option.value,
       label: option.label,
