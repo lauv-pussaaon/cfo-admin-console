@@ -20,7 +20,7 @@ Emission Resources UI keeps filters in the URL: `version`, `scope`, `category_id
 
 Admin uses a single Supabase instance. All DDL lives in `database/01_schema.sql` (no incremental `migration_*.sql`). Fresh install: `00_drop_all.sql` → `01_schema.sql` → `02_seed_master_data.sql` → `03_seed_ef_catalog_releases.sql` (draft releases + `order_index` 10/20/30/40) → generated EF SQL below → publish in UI.
 
-`fuel_resources` includes `description TEXT` and `meta JSONB NOT NULL DEFAULT '{}'` (TGO text + Cat 4 `{ "maxLoadTon": 16 }`). Existing admin DBs: apply [`database/migrate_add_fuel_resources_description_meta.sql`](../database/migrate_add_fuel_resources_description_meta.sql), then upsert rebuilt TGO SQL (same UUIDs) and **Re-publish**.
+`fuel_resources` includes `description TEXT` and `meta JSONB NOT NULL DEFAULT '{}'` (TGO text + Cat 4 `{ "maxLoadTon": 16 }`) in `database/01_schema.sql`. After a TGO rebuild, upsert the generated SQL (same UUIDs) and **Re-publish**.
 
 Cat 4 transport duo labels and `meta.maxLoadTon` for TGO are baked by `pnpm tgo-ef:build-import` (not a separate SQL repair). After any fuel SQL load or import, **Publish** (and set default when ready) so clients see the new `content_hash`.
 
@@ -108,7 +108,7 @@ Per-version bulk delete is not offered in the UI. Per-row **soft-delete** is: ta
 
 ### Version backups (same UUIDs)
 
-Version-tab **สำรองเวอร์ชันนี้** copies **active** fuels for that tab into `ef_catalog_version_backups` / `ef_catalog_version_backup_fuels` (PK `(backup_id, id)` so one fuel UUID can appear in many snapshots), then navigates to the backup list. Existing admin DBs: apply [`../database/migrate_add_ef_catalog_version_backups.sql`](../database/migrate_add_ef_catalog_version_backups.sql).
+Version-tab **สำรองเวอร์ชันนี้** copies **active** fuels for that tab into `ef_catalog_version_backups` / `ef_catalog_version_backup_fuels` (PK `(backup_id, id)` so one fuel UUID can appear in many snapshots), then navigates to the backup list. Snapshot tables are in `database/01_schema.sql`.
 
 **รายการสำรอง** (`/admin-console/emission-resources/backups`):
 

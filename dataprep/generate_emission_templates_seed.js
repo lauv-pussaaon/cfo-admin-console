@@ -127,9 +127,8 @@ function main() {
 -- Reseed emission templates + activity groups from scratch (idempotent upserts).
 --
 -- Run after:
---   New DB: 01_schema.sql + 02_seed_master_data.sql + 03_seed_ef_catalog_releases.sql
---           + dataprep/ef-catalog/generated/01_scope_categories.sql (+ fuel SQL as needed)
---   Existing DB: migrate_reset_emission_templates.sql (DROP/CREATE tables), then this file
+--   01_schema.sql + 02_seed_master_data.sql + 03_seed_ef_catalog_releases.sql
+--   + dataprep/ef-catalog/generated/01_scope_categories.sql (+ fuel SQL as needed)
 --
 -- Source: dataprep/Emission Templates 13 Industries.xlsx
 -- Activity groups mocked onto version: ${TEMPLATE_SEED_VERSION}

@@ -4,8 +4,6 @@
 --   -> 03_seed_ef_catalog_releases.sql -> dataprep/ef-catalog/generated/*
 --   -> 04_seed_emission_templates_and_activity_groups.sql
 --   -> 06_seed_notification_recipients.sql
--- Existing DBs (template tables only): migrate_reset_emission_templates.sql
---   then 04_seed_emission_templates_and_activity_groups.sql
 
 -- ===========================================
 -- PART 1: CREATE EXTENSIONS

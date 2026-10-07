@@ -24,8 +24,11 @@ DROP TABLE IF EXISTS organization_trial_requests CASCADE;
 DROP TABLE IF EXISTS notification_recipients CASCADE;
 DROP TABLE IF EXISTS user_organizations CASCADE;
 DROP TABLE IF EXISTS user_consents CASCADE;
+DROP TABLE IF EXISTS verification_documents CASCADE;
+DROP TABLE IF EXISTS consult_audit_verification CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS consulting_firms CASCADE;
 
 -- ===========================================
 -- PART 2: DROP EXTENSIONS (optional)
