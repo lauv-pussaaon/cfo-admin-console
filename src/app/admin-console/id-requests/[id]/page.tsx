@@ -215,7 +215,7 @@ export default function TrialRequestDetailPage () {
       }
       const next = await trialRequestService.getTrialRequestById(request.id)
       if (next) setRequest(next)
-      notify('เขียนลง new-instances.csv แล้ว รัน ./deploy.sh new บนโฮสต์')
+      notify('เริ่มติดตั้งบนโฮสต์แล้ว')
     } catch (error) {
       const message = error instanceof Error ? error.message : 'เริ่มติดตั้งไม่สำเร็จ'
       setActionError(message)
@@ -244,7 +244,7 @@ export default function TrialRequestDetailPage () {
       <Box sx={{ py: 3 }}>
         <Button
           component={Link}
-          href="/admin-console/trial-requests"
+          href="/admin-console/id-requests"
           startIcon={<ArrowBack />}
           sx={adminBackButtonSx}
         >
@@ -265,7 +265,7 @@ export default function TrialRequestDetailPage () {
     <Box sx={{ py: 3, width: '100%', maxWidth: 960 }}>
       <Button
         component={Link}
-        href="/admin-console/trial-requests"
+        href="/admin-console/id-requests"
         startIcon={<ArrowBack />}
         sx={adminBackButtonSx}
       >

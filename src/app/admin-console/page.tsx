@@ -22,7 +22,7 @@ import { adminPageShellSx, adminPageTitleSx } from '@/lib/admin-ui-styles'
 
 const CARD_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/organizations': <BusinessIcon sx={{ fontSize: 48 }} />,
-  '/admin-console/trial-requests': <HowToRegIcon sx={{ fontSize: 48 }} />,
+  '/admin-console/id-requests': <HowToRegIcon sx={{ fontSize: 48 }} />,
   '/admin-console/support-clients': <SupportAgentIcon sx={{ fontSize: 48 }} />,
   '/admin-console/users': <PeopleIcon sx={{ fontSize: 48 }} />,
   '/admin-console/consulting-firms': <BusinessIcon sx={{ fontSize: 48 }} />,

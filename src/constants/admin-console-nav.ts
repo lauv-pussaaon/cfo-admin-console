@@ -32,9 +32,9 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     sectionId: 'clients',
   },
   {
-    title: 'คำขอสมัครการใช้งาน',
-    description: 'ตรวจสอบคำขอทดลองใช้งานและสมาชิกรายปี',
-    path: '/admin-console/trial-requests',
+    title: 'ID Request',
+    description: 'ตรวจสอบคำขอ trial และ annual member',
+    path: '/admin-console/id-requests',
     sectionId: 'clients',
   },
   {
@@ -78,7 +78,7 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
 export const SUPPORT_NAV_PATHS = [
   '/admin-console',
   '/admin-console/organizations',
-  '/admin-console/trial-requests',
+  '/admin-console/id-requests',
   '/admin-console/support-clients',
 ] as const
 

@@ -121,7 +121,7 @@ export default function AdminTrialRequestsPage () {
   }, [requests, searchTerm, statusFilter, kindFilter])
 
   const handleRowClick = (id: string) => {
-    router.push(`/admin-console/trial-requests/${id}`)
+    router.push(`/admin-console/id-requests/${id}`)
   }
 
   if (authLoading || !user || !canAccessTrialRequests(user)) {
@@ -144,7 +144,7 @@ export default function AdminTrialRequestsPage () {
       </Button>
 
       <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
-        คำขอสมัครองค์กร
+        ID Request
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>

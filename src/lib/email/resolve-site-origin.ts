@@ -56,9 +56,9 @@ export function buildAdminConsoleUsersUrl (baseUrl: string): string {
   return `${trimmed}/admin-console/users`
 }
 
-/** Absolute URL to Admin Console trial requests page (for emails). */
+/** Absolute URL to Admin Console ID Request page (for emails). */
 export function buildAdminConsoleTrialRequestsUrl (baseUrl: string): string {
   const trimmed = baseUrl.trim().replace(/\/+$/, '')
-  if (!trimmed) return '/admin-console/trial-requests'
-  return `${trimmed}/admin-console/trial-requests`
+  if (!trimmed) return '/admin-console/id-requests'
+  return `${trimmed}/admin-console/id-requests`
 }

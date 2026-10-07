@@ -6,7 +6,18 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   // Ensure API routes are not affected by redirects
   async redirects () {
-    return [];
+    return [
+      {
+        source: '/admin-console/trial-requests',
+        destination: '/admin-console/id-requests',
+        permanent: false,
+      },
+      {
+        source: '/admin-console/trial-requests/:id',
+        destination: '/admin-console/id-requests/:id',
+        permanent: false,
+      },
+    ];
   },
 };
 

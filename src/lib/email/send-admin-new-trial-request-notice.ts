@@ -121,7 +121,7 @@ export async function sendAdminNewTrialRequestNotice (params: {
     <li>เบอร์โทร: ${safe.contactPhone}</li>
     <li>วันที่ส่งคำขอ: ${safe.submittedAt}</li>
   </ul>
-  <p><a href="${safe.trialRequestsHref}">ไปหน้าคำขอสมัครองค์กร</a></p>
+  <p><a href="${safe.trialRequestsHref}">ไปหน้า ID Request</a></p>
   `.trim()
   const html = emailShellHtml(bodyHtml, { branded: true })
 

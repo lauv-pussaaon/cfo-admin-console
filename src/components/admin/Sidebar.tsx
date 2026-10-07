@@ -49,7 +49,7 @@ const COLLAPSED_DRAWER_WIDTH = 88
 const NAV_ICONS: Record<string, React.ReactNode> = {
   '/admin-console': <DashboardIcon />,
   '/admin-console/organizations': <BusinessIcon />,
-  '/admin-console/trial-requests': <HowToRegIcon />,
+  '/admin-console/id-requests': <HowToRegIcon />,
   '/admin-console/support-clients': <SupportAgentIcon />,
   '/admin-console/users': <PeopleIcon />,
   '/admin-console/consulting-firms': <BusinessIcon />,
