@@ -34,6 +34,7 @@ import {
   OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material'
 import OrganizationsTable from '@/components/admin/OrganizationsTable'
+import OrganizationSummaryCharts from '@/components/admin/OrganizationSummaryCharts'
 import OrganizationDetailDrawer from '@/components/admin/OrganizationDetailDrawer'
 import AdminOrganizationModal from '@/components/admin/AdminOrganizationModal'
 import InviteClientAdminModal from '@/components/admin/InviteClientAdminModal'
@@ -412,10 +413,8 @@ export default function AdminConsoleOrganizationsPage() {
       >
         <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
           {isConsult(user) || isAudit(user)
-            ? 'องค์กรที่ดูแล'
-            : isAdmin(user)
-              ? 'จัดการลูกค้า (Admin)'
-              : 'จัดการลูกค้า'}
+            ? 'องค์กรที่คุณดูแลอยู่'            
+              : 'จัดการองค์กรลูกค้า IdeaCarb'}
         </Typography>
         <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
           {isAdmin(user) && (
@@ -473,6 +472,8 @@ export default function AdminConsoleOrganizationsPage() {
         </Box>
       </Box>
 
+      <OrganizationSummaryCharts organizations={organizations} loading={loading} />
+
       <Box
         sx={{
           display: 'flex',
@@ -484,7 +485,7 @@ export default function AdminConsoleOrganizationsPage() {
         }}
       >
         <TextField
-          placeholder="ค้นหาชื่อองค์กรหรือรหัส..."
+          placeholder="ค้นหาจากชื่อองค์กรหรือรหัสลูกค้า"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           size="small"
