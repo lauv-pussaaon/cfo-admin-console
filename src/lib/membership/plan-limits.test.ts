@@ -14,6 +14,7 @@ describe('toClientPlan', () => {
     assert.equal(toClientPlan('demo'), 'demo')
     assert.equal(toClientPlan('annual_member'), 'premium')
     assert.equal(toClientPlan('employee'), 'premium')
+    assert.equal(toClientPlan('internal'), 'premium')
     assert.equal(toClientPlan('project'), 'premium')
   })
 })

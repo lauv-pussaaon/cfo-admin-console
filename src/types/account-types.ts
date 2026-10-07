@@ -2,6 +2,7 @@ export const ACCOUNT_TYPE_VALUES = [
   'annual_member',
   'trial',
   'demo',
+  'internal',
   'employee',
   'project',
 ] as const
@@ -19,6 +20,7 @@ export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
   { value: 'annual_member', label: 'annual_member' },
   { value: 'trial', label: 'trial' },
   { value: 'demo', label: 'demo' },
+  { value: 'internal', label: 'internal' },
   { value: 'employee', label: 'employee' },
   { value: 'project', label: 'project' },
 ]

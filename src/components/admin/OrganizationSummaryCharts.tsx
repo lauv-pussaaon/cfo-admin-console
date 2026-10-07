@@ -25,6 +25,7 @@ const TYPE_COLOR: Record<AccountType, 'primary' | 'success' | 'info' | 'secondar
   annual_member: 'primary',
   trial: 'success',
   demo: 'info',
+  internal: 'info',
   employee: 'secondary',
   project: 'warning',
 }
@@ -92,7 +93,7 @@ export default function OrganizationSummaryCharts ({
             </Box>
           </Box>
           <Box component="ul" sx={{ listStyle: 'none', m: 0, mt: 1, p: 0, width: '100%' }}>
-            {summary.byType.filter((row) => row.accountType !== 'demo').map((row) => (
+            {summary.byType.filter((row) => row.accountType !== 'demo' && row.accountType !== 'internal').map((row) => (
               <Box
                 component="li"
                 key={row.accountType}
@@ -134,7 +135,7 @@ export default function OrganizationSummaryCharts ({
         />
       </Box>
       <Chip
-        label="ข้อมูลใน Chart ไม่รวม id demo ชั่วคราวสำหรับงาน events"
+        label="ข้อมูลใน Chart ไม่รวม id demo ชั่วคราวสำหรับงาน events และ id internal"
         size="small"
         variant="outlined"
         color="info"

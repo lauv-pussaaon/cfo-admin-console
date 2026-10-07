@@ -29,7 +29,7 @@ WHERE account_type = 'demo'
 
 ALTER TABLE organizations
   ADD CONSTRAINT organizations_account_type_check
-  CHECK (account_type IN ('annual_member', 'trial', 'demo', 'employee', 'project'));
+  CHECK (account_type IN ('annual_member', 'trial', 'demo', 'internal', 'employee', 'project'));
 
 UPDATE organization_trial_requests
 SET approved_account_type = 'annual_member'

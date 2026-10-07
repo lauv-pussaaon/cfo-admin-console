@@ -111,7 +111,7 @@ CREATE TABLE organizations (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT organizations_account_type_check CHECK (
-    account_type IN ('annual_member', 'trial', 'demo', 'employee', 'project')
+    account_type IN ('annual_member', 'trial', 'demo', 'internal', 'employee', 'project')
   )
 );
 

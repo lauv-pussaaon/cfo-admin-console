@@ -33,6 +33,7 @@ describe('buildOrganizationSummary', () => {
       { account_type: 'trial' },
       { account_type: null },
       { account_type: '' },
+      { account_type: 'internal' },
       { account_type: 'employee' },
       { account_type: 'project' },
       { account_type: 'annual_member' },
@@ -45,6 +46,7 @@ describe('buildOrganizationSummary', () => {
         ['annual_member', 3],
         ['trial', 1],
         ['demo', 0],
+        ['internal', 0],
         ['employee', 1],
         ['project', 1],
       ],
@@ -57,6 +59,7 @@ describe('buildOrganizationSummary', () => {
       { package_start: '2026-04-01' },
       { package_start: '2026-10-31' },
       { account_type: 'demo', package_start: '2026-10-15' },
+      { account_type: 'internal', package_start: '2026-10-15' },
       { package_start: '2026-11-01' },
       { package_start: null },
       { package_start: 'not-a-date' },
@@ -104,7 +107,7 @@ describe('buildOrganizationSummary', () => {
   it('keeps zero months and zero types when the list is empty', () => {
     const summary = buildOrganizationSummary([], october2026)
     assert.equal(summary.total, 0)
-    assert.equal(summary.byType.length, 5)
+    assert.equal(summary.byType.length, 6)
     assert.ok(summary.byType.every((row) => row.count === 0))
     assert.equal(summary.packageStarts.length, 7)
     assert.equal(summary.packageEnds.length, 7)

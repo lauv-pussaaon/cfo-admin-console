@@ -143,7 +143,7 @@ export const ADMIN_OPS_OPENAPI = {
       },
       AccountType: {
         type: 'string',
-        enum: ['annual_member', 'trial', 'demo', 'employee', 'project'],
+        enum: ['annual_member', 'trial', 'demo', 'internal', 'employee', 'project'],
       },
       OrganizationItem: {
         type: 'object',
@@ -342,7 +342,7 @@ export const ADMIN_OPS_OPENAPI = {
           {
             name: 'accountType',
             in: 'query',
-            description: 'annual_member, trial, demo, employee, or project',
+            description: 'annual_member, trial, demo, internal, employee, or project',
             schema: { $ref: '#/components/schemas/AccountType' },
           },
         ],

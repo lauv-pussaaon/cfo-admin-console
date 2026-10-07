@@ -57,7 +57,7 @@ export function buildOrganizationSummary (
   let total = 0
 
   for (const organization of organizations) {
-    if (organization.account_type === 'demo') continue
+    if (organization.account_type === 'demo' || organization.account_type === 'internal') continue
     total += 1
     const accountType = normalizeAccountType(organization.account_type)
     typeCounts.set(accountType, (typeCounts.get(accountType) || 0) + 1)
