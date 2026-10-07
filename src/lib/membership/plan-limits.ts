@@ -40,7 +40,7 @@ export function toDateOnly (value: string | null | undefined): string | null {
 }
 
 export function toClientPlan (accountType: string): ClientPlan {
-  return accountType === 'demo' ? 'demo' : 'premium'
+  return accountType === 'demo' || accountType === 'trial' ? 'demo' : 'premium'
 }
 
 export function getPlanLimits (plan: ClientPlan): PlanLimits {

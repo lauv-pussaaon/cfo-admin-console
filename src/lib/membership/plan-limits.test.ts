@@ -9,9 +9,10 @@ import {
 } from './plan-limits'
 
 describe('toClientPlan', () => {
-  it('maps demo only to demo', () => {
+  it('maps trial and demo to the capped plan', () => {
+    assert.equal(toClientPlan('trial'), 'demo')
     assert.equal(toClientPlan('demo'), 'demo')
-    assert.equal(toClientPlan('general customers'), 'premium')
+    assert.equal(toClientPlan('annual_member'), 'premium')
     assert.equal(toClientPlan('employee'), 'premium')
     assert.equal(toClientPlan('project'), 'premium')
   })

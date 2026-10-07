@@ -104,14 +104,14 @@ CREATE TABLE organizations (
   password TEXT,
   onboard_email_sent_at TIMESTAMPTZ,
   instance_ready_notice_sent_at TIMESTAMPTZ,
-  account_type TEXT NOT NULL DEFAULT 'general customers',
+  account_type TEXT NOT NULL DEFAULT 'annual_member',
   package_start DATE,
   package_end DATE,
   created_by UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT organizations_account_type_check CHECK (
-    account_type IN ('general customers', 'demo', 'employee', 'project')
+    account_type IN ('annual_member', 'trial', 'demo', 'employee', 'project')
   )
 );
 

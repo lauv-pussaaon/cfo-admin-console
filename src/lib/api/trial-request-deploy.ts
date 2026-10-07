@@ -126,7 +126,7 @@ export async function approveActiveTrialRequestByCode (
   if (!request) return { deployed: false }
 
   const accountType = isAnnualMembershipRequest(request.request_kind)
-    ? 'general customers'
+    ? 'annual_member'
     : params.accountType
   const now = new Date().toISOString()
 
@@ -318,5 +318,5 @@ export async function resolveOnboardRequestKind (
     }
   }
 
-  return params.accountType === 'general customers' ? 'annual_membership' : 'trial'
+  return params.accountType === 'annual_member' ? 'annual_membership' : 'trial'
 }

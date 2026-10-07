@@ -143,7 +143,7 @@ export const ADMIN_OPS_OPENAPI = {
       },
       AccountType: {
         type: 'string',
-        enum: ['general customers', 'demo', 'employee', 'project'],
+        enum: ['annual_member', 'trial', 'demo', 'employee', 'project'],
       },
       OrganizationItem: {
         type: 'object',
@@ -342,7 +342,7 @@ export const ADMIN_OPS_OPENAPI = {
           {
             name: 'accountType',
             in: 'query',
-            description: 'Encode the space in general customers as %20',
+            description: 'annual_member, trial, demo, employee, or project',
             schema: { $ref: '#/components/schemas/AccountType' },
           },
         ],

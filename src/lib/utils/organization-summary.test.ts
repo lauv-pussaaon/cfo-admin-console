@@ -26,22 +26,24 @@ describe('month labels', () => {
 })
 
 describe('buildOrganizationSummary', () => {
-  it('counts account types and treats a missing type as general customers', () => {
+  it('counts account types and treats a missing type as annual_member', () => {
     const summary = buildOrganizationSummary([
       { account_type: 'demo' },
       { account_type: 'demo' },
+      { account_type: 'trial' },
       { account_type: null },
       { account_type: '' },
       { account_type: 'employee' },
       { account_type: 'project' },
-      { account_type: 'general customers' },
+      { account_type: 'annual_member' },
     ], october2026)
 
-    assert.equal(summary.total, 7)
+    assert.equal(summary.total, 8)
     assert.deepEqual(
       summary.byType.map((row) => [row.accountType, row.count]),
       [
-        ['general customers', 3],
+        ['annual_member', 3],
+        ['trial', 1],
         ['demo', 2],
         ['employee', 1],
         ['project', 1],
@@ -101,7 +103,7 @@ describe('buildOrganizationSummary', () => {
   it('keeps zero months and zero types when the list is empty', () => {
     const summary = buildOrganizationSummary([], october2026)
     assert.equal(summary.total, 0)
-    assert.equal(summary.byType.length, 4)
+    assert.equal(summary.byType.length, 5)
     assert.ok(summary.byType.every((row) => row.count === 0))
     assert.equal(summary.packageStarts.length, 7)
     assert.equal(summary.packageEnds.length, 7)

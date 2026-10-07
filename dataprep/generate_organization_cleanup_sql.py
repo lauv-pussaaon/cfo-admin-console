@@ -32,7 +32,7 @@ CODE_RENAMES = {
 ACCOUNT_TYPE_MAP = {
     "employee": "employee",
     "demo": "demo",
-    "client": "general customers",
+    "client": "annual_member",
     "siden": "employee",
     "project": "project",
 }

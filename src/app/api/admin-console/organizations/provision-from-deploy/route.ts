@@ -102,7 +102,7 @@ export async function POST (request: NextRequest) {
       matchingRequest?.contact_email?.trim() || factoryAdminEmail || ''
     const resolvedAccountType = matchingRequest
       && isAnnualMembershipRequest(matchingRequest.request_kind)
-      ? 'general customers'
+      ? 'annual_member'
       : accountType
 
     const { data: byCode, error: codeError } = await supabase

@@ -1,5 +1,6 @@
 export const ACCOUNT_TYPE_VALUES = [
-  'general customers',
+  'annual_member',
+  'trial',
   'demo',
   'employee',
   'project',
@@ -7,7 +8,7 @@ export const ACCOUNT_TYPE_VALUES = [
 
 export type AccountType = typeof ACCOUNT_TYPE_VALUES[number]
 
-export const DEFAULT_ACCOUNT_TYPE: AccountType = 'general customers'
+export const DEFAULT_ACCOUNT_TYPE: AccountType = 'annual_member'
 
 export interface AccountTypeOption {
   value: AccountType
@@ -15,7 +16,8 @@ export interface AccountTypeOption {
 }
 
 export const ACCOUNT_TYPE_OPTIONS: AccountTypeOption[] = [
-  { value: 'general customers', label: 'general customers' },
+  { value: 'annual_member', label: 'annual_member' },
+  { value: 'trial', label: 'trial' },
   { value: 'demo', label: 'demo' },
   { value: 'employee', label: 'employee' },
   { value: 'project', label: 'project' },

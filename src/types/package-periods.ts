@@ -24,12 +24,12 @@ export function getDefaultPackagePeriod (accountType: AccountType): {
   package_start: string
   package_end: string | null
 } {
-  if (accountType === 'general customers') {
+  if (accountType === 'annual_member') {
     return getDefaultAnnualPackagePeriod()
   }
 
   const start = new Date()
-  if (accountType === 'demo') {
+  if (accountType === 'trial' || accountType === 'demo') {
     const end = new Date(start)
     end.setDate(end.getDate() + 30)
     return {

@@ -21,8 +21,9 @@ import {
   type OrganizationSummarySource,
 } from '@/lib/utils/organization-summary'
 
-const TYPE_COLOR: Record<AccountType, 'primary' | 'info' | 'secondary' | 'warning'> = {
-  'general customers': 'primary',
+const TYPE_COLOR: Record<AccountType, 'primary' | 'success' | 'info' | 'secondary' | 'warning'> = {
+  annual_member: 'primary',
+  trial: 'success',
   demo: 'info',
   employee: 'secondary',
   project: 'warning',
