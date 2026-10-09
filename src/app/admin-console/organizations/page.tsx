@@ -45,7 +45,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import { isExpectedError } from '@/lib/utils/errors'
-import { useOrganizationsFilter, type AccountTypeFilter } from '@/hooks/useOrganizationsFilter'
+import { useOrganizationsFilter, type AccountTypeFilter, type PackageDayWindow } from '@/hooks/useOrganizationsFilter'
 import { isAdmin, isConsult, isAudit, canManageOrganizations, isSupport } from '@/lib/permissions'
 import { exportOrganizationAsCSV } from '@/lib/utils/export'
 import { ACCOUNT_TYPE_OPTIONS } from '@/types/account-types'
@@ -62,6 +62,13 @@ import {
   adminSearchFieldSx,
 } from '@/lib/admin-ui-styles'
 
+const PACKAGE_DAY_OPTIONS: PackageDayWindow[] = [7, 14, 30]
+
+function packageWindowValue (value: string): PackageDayWindow | null {
+  if (value === '7' || value === '14' || value === '30') return Number(value) as PackageDayWindow
+  return null
+}
+
 export default function AdminConsoleOrganizationsPage() {
   const { user, isLoading: authLoading, applySessionUser } = useAuth()
   const router = useRouter()
@@ -73,6 +80,10 @@ export default function AdminConsoleOrganizationsPage() {
     setSearchTerm,
     accountTypeFilter,
     setAccountTypeFilter,
+    packageStartWithin,
+    setPackageStartWithin,
+    packageEndWithin,
+    setPackageEndWithin,
     filteredOrganizations,
   } = useOrganizationsFilter(organizations)
   const [modalOpen, setModalOpen] = useState(false)
@@ -507,6 +518,34 @@ export default function AdminConsoleOrganizationsPage() {
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={[{ minWidth: 180, flexShrink: 0 }, adminFilterControlSx]}>
+          <InputLabel id="org-package-start-filter">เริ่มแพ็กเกจย้อนหลัง</InputLabel>
+          <Select
+            labelId="org-package-start-filter"
+            label="เริ่มแพ็กเกจย้อนหลัง"
+            value={packageStartWithin == null ? '' : String(packageStartWithin)}
+            onChange={(e) => setPackageStartWithin(packageWindowValue(e.target.value))}
+          >
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {PACKAGE_DAY_OPTIONS.map((days) => (
+              <MenuItem key={days} value={String(days)}>{days} วัน</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={[{ minWidth: 180, flexShrink: 0 }, adminFilterControlSx]}>
+          <InputLabel id="org-package-end-filter">สิ้นสุดแพ็กเกจภายใน</InputLabel>
+          <Select
+            labelId="org-package-end-filter"
+            label="สิ้นสุดแพ็กเกจภายใน"
+            value={packageEndWithin == null ? '' : String(packageEndWithin)}
+            onChange={(e) => setPackageEndWithin(packageWindowValue(e.target.value))}
+          >
+            <MenuItem value="">ทั้งหมด</MenuItem>
+            {PACKAGE_DAY_OPTIONS.map((days) => (
+              <MenuItem key={days} value={String(days)}>{days} วัน</MenuItem>
             ))}
           </Select>
         </FormControl>

@@ -3,6 +3,13 @@ import type { OrganizationWithStats } from '@/types/database'
 import type { OrganizationWithCreator } from '@/lib/api/organizations'
 import type { AccountType } from '@/types/account-types'
 import { DEFAULT_ACCOUNT_TYPE } from '@/types/account-types'
+import {
+  bangkokDate,
+  packageDateInWindow,
+  type PackageDayWindow,
+} from '@/lib/utils/package-date-window'
+
+export type { PackageDayWindow }
 
 export type OrganizationFilterRow = OrganizationWithStats | OrganizationWithCreator
 
@@ -16,6 +23,8 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
   const [accountTypeFilter, setAccountTypeFilter] = useState<AccountTypeFilter>('all')
   const [createdFrom, setCreatedFrom] = useState('')
   const [createdTo, setCreatedTo] = useState('')
+  const [packageStartWithin, setPackageStartWithin] = useState<PackageDayWindow | null>(null)
+  const [packageEndWithin, setPackageEndWithin] = useState<PackageDayWindow | null>(null)
 
   const filteredOrganizations = useMemo(() => {
     let list = organizations.slice()
@@ -41,6 +50,14 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
       list = list.filter((o) => new Date(o.created_at) <= to)
     }
 
+    const today = bangkokDate()
+    if (packageStartWithin) {
+      list = list.filter((o) => packageDateInWindow(o.package_start, packageStartWithin, 'past', today))
+    }
+    if (packageEndWithin) {
+      list = list.filter((o) => packageDateInWindow(o.package_end, packageEndWithin, 'future', today))
+    }
+
     if (!searchTerm.trim()) return list
 
     const query = searchTerm.toLowerCase().trim()
@@ -58,7 +75,7 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
       }
       return false
     })
-  }, [organizations, searchTerm, statusFilter, accountTypeFilter, createdFrom, createdTo])
+  }, [organizations, searchTerm, statusFilter, accountTypeFilter, createdFrom, createdTo, packageStartWithin, packageEndWithin])
 
   return {
     searchTerm,
@@ -71,6 +88,10 @@ export function useOrganizationsFilter(organizations: OrganizationFilterRow[]) {
     setCreatedFrom,
     createdTo,
     setCreatedTo,
+    packageStartWithin,
+    setPackageStartWithin,
+    packageEndWithin,
+    setPackageEndWithin,
     filteredOrganizations,
   }
 }

@@ -19,15 +19,17 @@ export interface OrganizationMembership {
   limits: PlanLimits
 }
 
+const GIB = 1024 ** 3
+
 const DEMO_LIMITS: PlanLimits = {
   maxReports: 10,
-  maxUploadBytes: null,
+  maxUploadBytes: 1 * GIB,
   maxBusinessUnits: 10,
 }
 
 const PREMIUM_LIMITS: PlanLimits = {
   maxReports: null,
-  maxUploadBytes: null,
+  maxUploadBytes: 3 * GIB,
   maxBusinessUnits: null,
 }
 

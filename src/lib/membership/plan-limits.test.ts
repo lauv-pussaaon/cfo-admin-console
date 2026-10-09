@@ -55,12 +55,12 @@ describe('buildOrganizationMembership', () => {
     assert.equal(membership.expired, false)
     assert.deepEqual(membership.limits, {
       maxReports: 10,
-      maxUploadBytes: null,
+      maxUploadBytes: 1024 ** 3,
       maxBusinessUnits: 10,
     })
   })
 
-  it('treats other account types as unlimited premium', () => {
+  it('treats other account types as premium with a 3 GB evidence cap', () => {
     const membership = buildOrganizationMembership({
       organizationId: 'org-1',
       accountType: 'employee',
@@ -73,7 +73,7 @@ describe('buildOrganizationMembership', () => {
     assert.equal(membership.expired, false)
     assert.deepEqual(membership.limits, {
       maxReports: null,
-      maxUploadBytes: null,
+      maxUploadBytes: 3 * 1024 ** 3,
       maxBusinessUnits: null,
     })
   })
