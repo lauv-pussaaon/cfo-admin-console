@@ -12,7 +12,8 @@
     "export:external-templates": "node scripts/export-external-templates.mjs",
     "ef-catalog:generate-import": "node dataprep/ef-catalog/generate-import-sql.cjs",
     "tgo-ef:fetch": "npx --yes tsx dataprep/tgo-ef/fetch.ts",
-    "tgo-ef:build-import": "npx --yes tsx dataprep/tgo-ef/build-import.ts"
+    "tgo-ef:build-import": "npx --yes tsx dataprep/tgo-ef/build-import.ts",
+    "seed:platform-update-banner": "npx --yes tsx scripts/seed-platform-update-banner.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
