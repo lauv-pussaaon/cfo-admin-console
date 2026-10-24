@@ -6,6 +6,7 @@
 -- PART 1: DROP TABLES IN DEPENDENCY ORDER
 -- ===========================================
 
+DROP TABLE IF EXISTS platform_updates CASCADE;
 DROP TABLE IF EXISTS template_activity_group_fuel_resources CASCADE;
 DROP TABLE IF EXISTS template_activity_groups CASCADE;
 DROP TABLE IF EXISTS emission_templates CASCADE;

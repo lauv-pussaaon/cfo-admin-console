@@ -27,6 +27,7 @@ import {
   Science as ScienceIcon,
   ViewModule as ViewModuleIcon,
   SupportAgent as SupportAgentIcon,
+  Campaign as CampaignIcon,
   HowToReg as HowToRegIcon,
   ManageAccounts as ManageAccountsIcon,
 } from '@mui/icons-material'
@@ -51,6 +52,7 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   '/admin-console/organizations': <BusinessIcon />,
   '/admin-console/id-requests': <HowToRegIcon />,
   '/admin-console/support-clients': <SupportAgentIcon />,
+  '/admin-console/platform-updates': <CampaignIcon />,
   '/admin-console/users': <PeopleIcon />,
   '/admin-console/consulting-firms': <BusinessIcon />,
   '/admin-console/firm-staff': <PeopleIcon />,

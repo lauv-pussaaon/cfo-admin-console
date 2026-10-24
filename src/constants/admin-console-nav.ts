@@ -44,6 +44,12 @@ export const ADMIN_DASHBOARD_NAV_ITEMS: AdminNavItem[] = [
     sectionId: 'support',
   },
   {
+    title: 'ประกาศอัปเดต',
+    description: 'ประกาศมีอะไรใหม่ให้ลูกค้าเห็นในแอป',
+    path: '/admin-console/platform-updates',
+    sectionId: 'support',
+  },
+  {
     title: 'วิเคราะห์การใช้งานลูกค้า',
     description: 'ดูสถิติและพฤติกรรมการใช้งานของลูกค้า',
     path: '/admin-console/analytics',

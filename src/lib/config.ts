@@ -50,6 +50,8 @@ export const storageBuckets = {
   emissionTemplateImages: 'cfo-emission-template-images',
   /** Consult/Audit verification proof docs */
   verification: 'verification',
+  /** Public image or video banners for platform update announcements */
+  platformUpdates: 'platform-updates',
 } as const
 
 

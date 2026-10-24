@@ -402,6 +402,23 @@ CREATE TABLE app_usage_tracking (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Platform update announcements shown in every organization app.
+-- Existing Supabase projects: run this CREATE TABLE (and its index below) by hand.
+CREATE TABLE platform_updates (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  status TEXT NOT NULL DEFAULT 'inactive' CHECK (status IN ('active', 'inactive')),
+  published_on DATE,
+  banner_kind TEXT CHECK (banner_kind IS NULL OR banner_kind IN ('image', 'video')),
+  banner_path TEXT,
+  title_th TEXT NOT NULL DEFAULT '',
+  title_en TEXT NOT NULL DEFAULT '',
+  body_th JSONB NOT NULL DEFAULT '{"type":"doc","content":[]}'::jsonb,
+  body_en JSONB NOT NULL DEFAULT '{"type":"doc","content":[]}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_by UUID REFERENCES users(id) ON DELETE SET NULL
+);
+
 -- ===========================================
 -- PART 3: CREATE INDEXES
 -- ===========================================
@@ -499,6 +516,10 @@ CREATE INDEX idx_template_activity_groups_version
 -- Template activity group fuel mappings indexes
 CREATE INDEX idx_tagfr_activity_group ON template_activity_group_fuel_resources(template_activity_group_id);
 CREATE INDEX idx_tagfr_fuel_resource ON template_activity_group_fuel_resources(fuel_resource_id);
+
+-- Platform updates indexes
+CREATE INDEX idx_platform_updates_published
+  ON platform_updates (published_on DESC NULLS LAST, created_at DESC);
 
 -- App usage tracking indexes
 CREATE INDEX idx_app_usage_tracking_domain ON app_usage_tracking(domain);
