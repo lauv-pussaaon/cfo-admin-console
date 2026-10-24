@@ -69,7 +69,7 @@ Single admin Supabase instance — baseline schema only (no incremental `migrati
    database/06_seed_notification_recipients.sql
    database/07_seed_platform_updates.sql
    ```
-   Then upload the 2.0.0 banner into the public `platform-updates` bucket (create the bucket the same way as `cfo-user-avatar` first):
+   Then upload the 2.0.0 banner. The script creates the public `platform-updates` bucket when it is missing:
    ```bash
    pnpm seed:platform-update-banner
    ```

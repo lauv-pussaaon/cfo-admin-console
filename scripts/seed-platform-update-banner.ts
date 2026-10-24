@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { createClient } from '@supabase/supabase-js'
+import { ensurePlatformUpdatesBucket } from '../src/lib/platform-updates/ensure-bucket'
 
 const UPDATE_ID = 'c2e02000-0006-4000-8000-000000002000'
 const OBJECT_PATH = `${UPDATE_ID}/banner.png`
@@ -46,6 +47,11 @@ async function main () {
   const client = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   })
+  const bucketError = await ensurePlatformUpdatesBucket(client)
+  if (bucketError) {
+    console.error(bucketError)
+    process.exit(1)
+  }
   const { error } = await client.storage.from(BUCKET).upload(OBJECT_PATH, bytes, {
     contentType: 'image/png',
     upsert: true,

@@ -14,6 +14,7 @@ import {
   type BannerKind,
 } from './banner'
 import { isPlatformUpdateComplete, isPlatformUpdateLive } from './live'
+import { ensurePlatformUpdatesBucket } from './ensure-bucket'
 import type { PlatformUpdateLive, PlatformUpdateRecord, PlatformUpdateStatus } from './types'
 
 export type { PlatformUpdateLive, PlatformUpdateRecord, PlatformUpdateStatus }
@@ -207,13 +208,15 @@ export async function uploadPlatformBanner (
 
   const bytes = Buffer.from(await file.arrayBuffer())
   const client = storageClient()
+  const bucketError = await ensurePlatformUpdatesBucket(client)
+  if (bucketError) return { ok: false, error: `อัปโหลดแบนเนอร์ไม่สำเร็จ: ${bucketError}` }
   if (current.bannerPath && current.bannerPath !== path) {
     await client.storage.from(PLATFORM_UPDATES_BUCKET).remove([current.bannerPath])
   }
   const { error: uploadError } = await client.storage
     .from(PLATFORM_UPDATES_BUCKET)
     .upload(path, bytes, { contentType: mime, upsert: true, cacheControl: '3600' })
-  if (uploadError) return { ok: false, error: 'อัปโหลดแบนเนอร์ไม่สำเร็จ' }
+  if (uploadError) return { ok: false, error: `อัปโหลดแบนเนอร์ไม่สำเร็จ: ${uploadError.message}` }
 
   const { data, error } = await supabase
     .from('platform_updates')
