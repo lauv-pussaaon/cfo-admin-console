@@ -19,6 +19,7 @@ import {
 import { Close as CloseIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material'
 import { userService } from '@/lib/services'
 import { avatarUploadService } from '@/lib/services/avatar-upload.service'
+import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import { isExpectedError } from '@/lib/utils/errors'
 import { useAuth } from '@/contexts/AuthContext'
 import type { User } from '@/lib/api/types'
@@ -38,6 +39,9 @@ const profileSchema = z.object({
     z.literal(''),
     z.null()
   ]).optional(),
+  current_password: z.string().optional(),
+  new_password: z.string().optional(),
+  confirm_password: z.string().optional(),
 })
 
 export type ProfileFormData = z.infer<typeof profileSchema>
@@ -62,6 +66,9 @@ export default function EditProfileModal({
     defaultValues: {
       name: '',
       avatar_url: '',
+      current_password: '',
+      new_password: '',
+      confirm_password: '',
     }
   })
 
@@ -74,6 +81,9 @@ export default function EditProfileModal({
       reset({
         name: user.name || '',
         avatar_url: user.avatar_url || '',
+        current_password: '',
+        new_password: '',
+        confirm_password: '',
       })
       setAvatarPreview(user.avatar_url || null)
       setSubmitError(null)
@@ -136,6 +146,41 @@ export default function EditProfileModal({
     setSubmitError(null)
 
     try {
+      const currentPassword = data.current_password ?? ''
+      const newPassword = data.new_password ?? ''
+      const confirmPassword = data.confirm_password ?? ''
+      const changingPassword = Boolean(
+        currentPassword.trim() || newPassword.trim() || confirmPassword.trim()
+      )
+      if (changingPassword) {
+        if (!currentPassword || !newPassword || !confirmPassword) {
+          setSubmitError('กรอกครบทั้งรหัสผ่านปัจจุบัน รหัสผ่านใหม่ และยืนยันรหัสผ่าน')
+          return
+        }
+        if (newPassword.length < 6) {
+          setSubmitError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')
+          return
+        }
+        if (newPassword !== confirmPassword) {
+          setSubmitError('รหัสผ่านใหม่ไม่ตรงกัน')
+          return
+        }
+        if (newPassword === currentPassword) {
+          setSubmitError('รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านปัจจุบัน')
+          return
+        }
+        const passwordRes = await authenticatedAdminFetch('/api/admin-console/me/password', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+        })
+        const passwordJson = await passwordRes.json().catch(() => ({}))
+        if (!passwordRes.ok) {
+          setSubmitError(passwordJson.error || 'เปลี่ยนรหัสผ่านไม่สำเร็จ')
+          return
+        }
+      }
+
       // Update user via service
       await userService.updateUser(user.id, {
         name: data.name,
@@ -262,6 +307,44 @@ export default function EditProfileModal({
               required
               disabled={isSubmitting || uploadingAvatar}
               sx={{ mb: 3 }}
+            />
+
+            <Typography variant="subtitle2" fontWeight={600}>
+              เปลี่ยนรหัสผ่าน
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
+              เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน
+            </Typography>
+            <TextField
+              fullWidth
+              label="รหัสผ่านปัจจุบัน"
+              type="password"
+              autoComplete="current-password"
+              value={formData.current_password || ''}
+              onChange={(e) => setValue('current_password', e.target.value)}
+              disabled={isSubmitting || uploadingAvatar}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="รหัสผ่านใหม่"
+              type="password"
+              autoComplete="new-password"
+              value={formData.new_password || ''}
+              onChange={(e) => setValue('new_password', e.target.value)}
+              helperText="รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"
+              disabled={isSubmitting || uploadingAvatar}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              label="ยืนยันรหัสผ่านใหม่"
+              type="password"
+              autoComplete="new-password"
+              value={formData.confirm_password || ''}
+              onChange={(e) => setValue('confirm_password', e.target.value)}
+              disabled={isSubmitting || uploadingAvatar}
+              sx={{ mb: 1 }}
             />
 
             {/* Hidden avatar_url field for form validation */}

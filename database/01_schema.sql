@@ -243,6 +243,13 @@ CREATE TABLE scope_categories (
   )
 );
 
+-- One ISO destination per TGO category. Null means no destination.
+CREATE TABLE tgo_iso_category_map (
+  tgo_scope_category_id UUID PRIMARY KEY REFERENCES scope_categories(id) ON DELETE CASCADE,
+  iso_scope_category_id UUID REFERENCES scope_categories(id) ON DELETE SET NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Fuel resources (versioned EF catalog rows)
 CREATE TABLE fuel_resources (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

@@ -197,14 +197,14 @@ export default function UserForm({
 
         <TextField
           fullWidth
-          label={mode === 'edit' ? 'รหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)' : 'รหัสผ่าน *'}
+          label={isLocked ? 'รหัสผ่านใหม่ *' : (mode === 'edit' ? 'รหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)' : 'รหัสผ่าน *')}
           type="password"
           value={formData.password || ''}
           onChange={(e) => setValue('password', e.target.value, { shouldValidate: true })}
           error={!!errors.password}
-          helperText={errors.password?.message || (mode === 'edit' ? 'เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน' : 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')}
-          required={mode === 'create'}
-          disabled={isSubmitting || isLocked}
+          helperText={errors.password?.message || (isLocked || mode === 'create' ? 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' : 'เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน')}
+          required={mode === 'create' || isLocked}
+          disabled={isSubmitting}
         />
 
         <TextField

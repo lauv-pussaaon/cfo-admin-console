@@ -30,6 +30,7 @@ import { isAdmin } from '@/lib/permissions'
 import { authenticatedAdminFetch } from '@/lib/api/admin-fetch'
 import {
   ArrowBack,
+  AccountTree as AccountTreeIcon,
   Category as CategoryIcon,
   Search as SearchIcon,
   Backup as BackupIcon,
@@ -42,6 +43,7 @@ import type { CatalogFamily, EfCatalogRelease, FuelResourceWithCategory, ScopeCa
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
 import FuelResourceDetailPanel from '@/components/admin/emission-resources/FuelResourceDetailPanel'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
+import CategoryMapPanel from '@/components/admin/emission-resources/CategoryMapPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
 import FuelResourceDeleteDialog from '@/components/admin/emission-resources/FuelResourceDeleteDialog'
@@ -164,6 +166,7 @@ function EmissionResourcesPage () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [categoriesPanelOpen, setCategoriesPanelOpen] = useState(false)
+  const [categoryMapOpen, setCategoryMapOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [releases, setReleases] = useState<EfCatalogRelease[]>([])
   const [takenVersions, setTakenVersions] = useState<string[]>([])
@@ -576,6 +579,14 @@ function EmissionResourcesPage () {
           >
             Manage Categories
           </Button>
+          <Button
+            variant="outlined"
+            startIcon={<AccountTreeIcon />}
+            onClick={() => setCategoryMapOpen(true)}
+            sx={{ textTransform: 'none', borderRadius: 2 }}
+          >
+            Category map
+          </Button>
           <IconButton
             aria-label="เพิ่มเติม"
             onClick={(e) => setMoreMenuAnchor(e.currentTarget)}
@@ -863,6 +874,11 @@ function EmissionResourcesPage () {
         family={family}
         initialScope={scopeTab}
         onCategoriesChanged={fetchCategories}
+      />
+
+      <CategoryMapPanel
+        open={categoryMapOpen}
+        onClose={() => setCategoryMapOpen(false)}
       />
 
       <FuelResourceEditModal

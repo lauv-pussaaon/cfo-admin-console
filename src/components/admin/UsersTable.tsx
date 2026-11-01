@@ -434,9 +434,8 @@ export default function UsersTable({
               <IconButton
                 size="small"
                 onClick={() => onEdit(params.row.id)}
-                disabled={isLocked}
                 sx={adminGhostIconButtonSx.primary}
-                title={isLocked ? 'ไม่สามารถแก้ไขผู้ใช้ admin ได้' : 'แก้ไข'}
+                title={isLocked ? 'เปลี่ยนรหัสผ่าน' : 'แก้ไข'}
               >
                 <EditIcon fontSize="small" />
               </IconButton>

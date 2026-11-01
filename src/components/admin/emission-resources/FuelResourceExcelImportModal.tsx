@@ -62,8 +62,13 @@ export default function FuelResourceExcelImportModal ({
   const [dragging, setDragging] = useState(false)
   const [parseError, setParseError] = useState<string | null>(null)
   const [parsedRows, setParsedRows] = useState<ParsedRow[]>([])
+  const [categoryMap, setCategoryMap] = useState<Array<Record<string, unknown>> | null>(null)
   const [importing, setImporting] = useState(false)
-  const [importResult, setImportResult] = useState<{ imported: number; version: string } | null>(null)
+  const [importResult, setImportResult] = useState<{
+    imported: number
+    version: string
+    categoryMapCount?: number
+  } | null>(null)
   const [importError, setImportError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -82,6 +87,7 @@ export default function FuelResourceExcelImportModal ({
     setFile(null)
     setParseError(null)
     setParsedRows([])
+    setCategoryMap(null)
     setImporting(false)
     setImportResult(null)
     setImportError(null)
@@ -95,6 +101,7 @@ export default function FuelResourceExcelImportModal ({
   const processFile = useCallback(async (f: File) => {
     setFile(f)
     setParseError(null)
+    setCategoryMap(null)
     try {
       const buffer = await f.arrayBuffer()
       const workbook = XLSX.read(buffer, { type: 'array' })
@@ -105,6 +112,12 @@ export default function FuelResourceExcelImportModal ({
       }
       const sheet = workbook.Sheets[sheetName]
       const rawRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: null })
+      const mapSheet = family === 'iso' ? workbook.Sheets.tgo_to_iso_map : undefined
+      setCategoryMap(
+        mapSheet
+          ? XLSX.utils.sheet_to_json<Record<string, unknown>>(mapSheet, { defval: null })
+          : null
+      )
       if (rawRows.length === 0) {
         setParseError('Excel sheet is empty')
         return
@@ -141,7 +154,7 @@ export default function FuelResourceExcelImportModal ({
     } catch (err) {
       setParseError(`Failed to parse Excel: ${err instanceof Error ? err.message : 'Unknown error'}`)
     }
-  }, [categoryById, categoryByName])
+  }, [categoryById, categoryByName, family])
 
   const handleFileSelect = (f: File) => {
     if (!f.name.toLowerCase().endsWith('.xlsx')) {
@@ -173,6 +186,7 @@ export default function FuelResourceExcelImportModal ({
           family,
           mode: 'create',
           rows: validRows,
+          ...(categoryMap ? { category_map: categoryMap } : {}),
         }),
       })
       const json = await res.json()
@@ -182,7 +196,11 @@ export default function FuelResourceExcelImportModal ({
           : ''
         throw new Error((json.error || 'Import failed') + detail)
       }
-      setImportResult({ imported: json.imported, version: json.version })
+      setImportResult({
+        imported: json.imported,
+        version: json.version,
+        categoryMapCount: typeof json.category_map_count === 'number' ? json.category_map_count : undefined,
+      })
       setStep(3)
     } catch (err) {
       setImportError(err instanceof Error ? err.message : 'Import failed')
@@ -332,6 +350,11 @@ export default function FuelResourceExcelImportModal ({
             <Typography color="text.secondary">
               {importResult.imported} fuel resources imported into {importResult.version}
             </Typography>
+            {importResult.categoryMapCount != null && (
+              <Typography color="text.secondary">
+                {importResult.categoryMapCount} category pairs saved
+              </Typography>
+            )}
           </Box>
         )}
       </DialogContent>

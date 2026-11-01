@@ -189,9 +189,25 @@ export default function UserModal({
   }, [open, reset, mode, initialData])
 
   const onFormSubmit = async (data: UserFormData) => {
-    // Prevent editing the locked admin user
-    if (isLockedAdmin) {
-      setSubmitError('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
+    if (isLockedAdmin && initialData) {
+      setSubmitError(null)
+      if (!data.password || data.password.length < 6) {
+        setSubmitError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')
+        return
+      }
+      setIsSubmitting(true)
+      try {
+        await userService.updateUser(initialData.id, { password: data.password })
+        onClose()
+        if (onSuccess) onSuccess()
+      } catch (error) {
+        setSubmitError(error instanceof Error ? error.message : 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน')
+        if (!isExpectedError(error)) {
+          console.error('Unexpected error changing admin password:', error)
+        }
+      } finally {
+        setIsSubmitting(false)
+      }
       return
     }
 
@@ -283,7 +299,7 @@ export default function UserModal({
       <SlideInPanel
         open={open}
         onClose={handleClose}
-        title={mode === 'edit' ? 'แก้ไขผู้ใช้' : 'สร้างผู้ใช้ใหม่'}
+        title={isLockedAdmin ? 'เปลี่ยนรหัสผ่าน' : (mode === 'edit' ? 'แก้ไขผู้ใช้' : 'สร้างผู้ใช้ใหม่')}
         footer={(
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button onClick={handleClose} disabled={isSubmitting} color="inherit" variant="outlined">
@@ -291,12 +307,12 @@ export default function UserModal({
             </Button>
             <Button
               onClick={handleSubmit(onFormSubmit)}
-              disabled={isSubmitting || isLockedAdmin}
+              disabled={isSubmitting}
               variant="contained"
               color="primary"
               startIcon={isSubmitting ? <CircularProgress size={16} /> : null}
             >
-              {isSubmitting ? (mode === 'edit' ? 'กำลังบันทึก...' : 'กำลังสร้าง...') : (mode === 'edit' ? 'บันทึกการแก้ไข' : 'สร้างผู้ใช้')}
+              {isSubmitting ? (mode === 'edit' ? 'กำลังบันทึก...' : 'กำลังสร้าง...') : (isLockedAdmin ? 'บันทึกรหัสผ่าน' : (mode === 'edit' ? 'บันทึกการแก้ไข' : 'สร้างผู้ใช้'))}
             </Button>
           </Box>
         )}
@@ -304,7 +320,7 @@ export default function UserModal({
         {isLockedAdmin && (
           <Box sx={{ mb: 2, p: 2, bgcolor: 'warning.light' }}>
             <Typography color="warning.dark" variant="body2" fontWeight="medium">
-              ไม่สามารถแก้ไขหรือลบผู้ใช้ admin ได้ (บัญชีนี้ถูกล็อคเพื่อความปลอดภัย)
+              ไม่สามารถแก้ไขชื่อ บทบาท หรือสถานะของบัญชี admin ได้ เปลี่ยนได้เฉพาะรหัสผ่าน
             </Typography>
           </Box>
         )}

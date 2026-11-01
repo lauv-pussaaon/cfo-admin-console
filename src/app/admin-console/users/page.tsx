@@ -177,10 +177,6 @@ function AdminConsoleUsersPage() {
   const handleEdit = (id: string) => {
     const row = users.find(u => u.id === id)
     if (row) {
-      if (row.role === 'Admin' && row.username === 'admin') {
-        notify('ไม่สามารถแก้ไขผู้ใช้ admin ได้')
-        return
-      }
       setEditingUser(row)
       setModalOpen(true)
     }

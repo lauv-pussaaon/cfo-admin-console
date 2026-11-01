@@ -24,6 +24,23 @@ export interface ScopeCategory {
   deleted_at: string | null
 }
 
+export interface CategoryMapDestination {
+  id: string
+  name_en: string
+  code: string
+}
+
+export interface CategoryMapRow {
+  id: string
+  scope: number
+  name_th: string
+  name_en: string
+  display_order: number
+  iso_scope_category_id: string | null
+  iso_code: string | null
+  fuel_count: number | null
+}
+
 export type FuelResourceMeta = {
   maxLoadTon?: number
 }

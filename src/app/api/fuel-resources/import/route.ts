@@ -10,6 +10,7 @@ import {
   refreshReleaseCounts,
 } from '@/lib/api/ef-catalog-releases'
 import { supabase } from '@/lib/supabase'
+import { replaceCategoryMap, resolveCategoryMapRows } from '@/lib/api/tgo-iso-category-map'
 import {
   parseFuelResourceMeta,
   type CatalogFamily,
@@ -199,6 +200,19 @@ export async function POST (request: NextRequest) {
       )
     }
 
+    const categoryMap = body.category_map as Array<Record<string, unknown>> | undefined
+    let mapRows: ReturnType<typeof resolveCategoryMapRows>['resolved'] | null = null
+    if (family === 'iso' && Array.isArray(categoryMap)) {
+      const map = resolveCategoryMapRows(categoryMap, categories)
+      if (map.errors.length > 0) {
+        return NextResponse.json(
+          { error: `${map.errors.length} invalid category map row(s)`, errors: map.errors },
+          { status: 400 }
+        )
+      }
+      mapRows = map.resolved
+    }
+
     await ensureEfCatalogRelease(version, family)
 
     const chunkSize = 200
@@ -209,9 +223,17 @@ export async function POST (request: NextRequest) {
       imported += result.length
     }
 
+    if (mapRows) await replaceCategoryMap(mapRows)
+
     const release = await refreshReleaseCounts(version)
 
-    return NextResponse.json({ imported, version, mode: 'create', release })
+    return NextResponse.json({
+      imported,
+      version,
+      mode: 'create',
+      release,
+      ...(mapRows ? { category_map_count: mapRows.length } : {}),
+    })
   } catch (error) {
     console.error('POST /api/fuel-resources/import error:', error)
     return NextResponse.json({ error: 'Failed to import fuel resources' }, { status: 500 })
