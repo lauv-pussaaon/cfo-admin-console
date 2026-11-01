@@ -53,7 +53,8 @@ export default function EmissionResourcesTable({
     {
       field: 'scope',
       headerName: 'Scope',
-      width: 60,
+      width: 120,
+      minWidth: 120,
       display: 'flex',
       renderCell: (params) => {
         const scope = params.row.scope_category?.scope
@@ -137,7 +138,8 @@ export default function EmissionResourcesTable({
     {
       field: 'ef_value',
       headerName: 'EF Value',
-      width: 110,
+      width: 160,
+      minWidth: 160,
       type: 'number',
       display: 'flex',
       renderCell: (params) =>
