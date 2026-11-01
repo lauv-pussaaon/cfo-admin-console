@@ -585,7 +585,7 @@ function EmissionResourcesPage () {
             onClick={() => setCategoryMapOpen(true)}
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
-            Category map
+            TGO - ISO Mapping
           </Button>
           <IconButton
             aria-label="เพิ่มเติม"

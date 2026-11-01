@@ -101,7 +101,7 @@ export default function CategoryMapPanel ({ open, onClose }: Props) {
       if (!res.ok) throw new Error(json.error || 'Update failed')
       setEditingId(null)
       await fetchMap()
-      showSnackbar('Category map updated')
+      showSnackbar('TGO - ISO Mapping updated')
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : 'Failed to update category map', 'error')
     } finally {
@@ -115,11 +115,11 @@ export default function CategoryMapPanel ({ open, onClose }: Props) {
         anchor="right"
         open={open}
         onClose={onClose}
-        PaperProps={{ sx: { width: 640, display: 'flex', flexDirection: 'column' } }}
+        PaperProps={{ sx: { width: { xs: '80%', md: '50%' }, maxWidth: '100%', display: 'flex', flexDirection: 'column' } }}
       >
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
           <Typography variant="h6" fontWeight={600}>
-            Category map
+            TGO - ISO Mapping
           </Typography>
           <IconButton onClick={onClose} size="small">
             <CloseIcon />
