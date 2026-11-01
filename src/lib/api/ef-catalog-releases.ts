@@ -2,16 +2,24 @@ import { createHash } from 'node:crypto'
 import { supabase } from '@/lib/supabase'
 import {
   serializeFuelResourceMeta,
+  type CatalogFamily,
   type EfCatalogRelease,
   type FuelResourceMeta,
 } from '@/types/emission-resources'
+import { hardDeleteFuelResourcesByVersion } from '@/lib/api/fuel-resources'
 
-export async function listEfCatalogReleases (): Promise<EfCatalogRelease[]> {
-  const { data, error } = await supabase
+export async function listEfCatalogReleases (options?: {
+  includeArchived?: boolean
+}): Promise<EfCatalogRelease[]> {
+  let query = supabase
     .from('ef_catalog_releases')
     .select('*')
     .order('order_index', { ascending: true })
     .order('version', { ascending: true })
+  if (!options?.includeArchived) {
+    query = query.neq('status', 'archived')
+  }
+  const { data, error } = await query
   if (error) throw error
   return (data ?? []) as EfCatalogRelease[]
 }
@@ -38,14 +46,23 @@ async function nextReleaseOrderIndex (): Promise<number> {
   return max + 10
 }
 
-export async function ensureEfCatalogRelease (version: string): Promise<EfCatalogRelease> {
+export async function ensureEfCatalogRelease (
+  version: string,
+  family: CatalogFamily = 'tgo'
+): Promise<EfCatalogRelease> {
   const existing = await getEfCatalogRelease(version)
-  if (existing) return existing
+  if (existing) {
+    if (existing.family !== family) {
+      throw new Error(`Version "${version}" already belongs to ${existing.family}`)
+    }
+    return existing
+  }
   const order_index = await nextReleaseOrderIndex()
   const { data, error } = await supabase
     .from('ef_catalog_releases')
     .insert({
       version,
+      family,
       status: 'draft',
       is_default: false,
       fuel_count: 0,
@@ -158,7 +175,15 @@ export async function publishEfCatalogRelease (
   version: string,
   publishedBy?: string | null
 ): Promise<EfCatalogRelease> {
-  await ensureEfCatalogRelease(version)
+  const existing = await getEfCatalogRelease(version)
+  if (!existing) throw new Error(`Unknown release version: ${version}`)
+  if (existing.family === 'iso') {
+    throw new Error('ISO versions stay draft until the client catalog can tell the families apart')
+  }
+  if (existing.status === 'archived') {
+    throw new Error('Archived versions cannot be published')
+  }
+  await ensureEfCatalogRelease(version, existing.family)
   const [fuel_count, content_hash] = await Promise.all([
     countFuels(version),
     computeReleaseContentHash(version),
@@ -188,11 +213,11 @@ export async function setDefaultEfCatalogRelease (version: string): Promise<EfCa
     throw new Error('Only published releases can be set as default')
   }
 
-  // Clear other defaults first (unique partial index).
   const { error: clearErr } = await supabase
     .from('ef_catalog_releases')
     .update({ is_default: false, updated_at: new Date().toISOString() })
     .eq('is_default', true)
+    .eq('family', release.family)
   if (clearErr) throw clearErr
 
   const { data, error } = await supabase
@@ -203,4 +228,42 @@ export async function setDefaultEfCatalogRelease (version: string): Promise<EfCa
     .single()
   if (error) throw error
   return data as EfCatalogRelease
+}
+
+export async function archiveEfCatalogRelease (version: string): Promise<EfCatalogRelease> {
+  const release = await getEfCatalogRelease(version)
+  if (!release) throw new Error(`Unknown release version: ${version}`)
+  if (release.status !== 'published') {
+    throw new Error('Only a published version can be archived')
+  }
+  if (release.is_default) {
+    throw new Error('Set another published version as the default before archiving this one')
+  }
+
+  const { data, error } = await supabase
+    .from('ef_catalog_releases')
+    .update({
+      status: 'archived',
+      is_default: false,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('version', version)
+    .select()
+    .single()
+  if (error) throw error
+  return data as EfCatalogRelease
+}
+
+export async function deleteDraftEfCatalogRelease (version: string): Promise<void> {
+  const release = await getEfCatalogRelease(version)
+  if (!release) throw new Error(`Unknown release version: ${version}`)
+  if (release.status !== 'draft') {
+    throw new Error('Only a draft version can be deleted')
+  }
+  await hardDeleteFuelResourcesByVersion(version)
+  const { error } = await supabase
+    .from('ef_catalog_releases')
+    .delete()
+    .eq('version', version)
+  if (error) throw error
 }

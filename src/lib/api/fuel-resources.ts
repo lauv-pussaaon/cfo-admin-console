@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import type {
+  CatalogFamily,
   FuelResource,
   FuelResourceWithCategory,
   ScopeCategory,
@@ -13,7 +14,11 @@ import type {
 
 // ─── Scope Categories ──────────────────────────────────────────────────────────
 
-export async function getScopeCategories(scope?: number, includeDeleted = false) {
+export async function getScopeCategories(
+  scope?: number,
+  includeDeleted = false,
+  family?: CatalogFamily
+) {
   let query = supabase
     .from('scope_categories')
     .select('*')
@@ -22,6 +27,9 @@ export async function getScopeCategories(scope?: number, includeDeleted = false)
 
   if (!includeDeleted) {
     query = query.is('deleted_at', null)
+  }
+  if (family) {
+    query = query.eq('family', family)
   }
   if (scope) {
     query = query.eq('scope', scope)
@@ -43,9 +51,21 @@ export async function getScopeCategory(id: string) {
 }
 
 export async function createScopeCategory(input: CreateScopeCategoryInput) {
+  const family: CatalogFamily = input.family === 'iso' ? 'iso' : 'tgo'
+  const scope = Number(input.scope)
+  const max = family === 'iso' ? 6 : 4
+  if (!Number.isInteger(scope) || scope < 1 || scope > max) {
+    throw new Error(family === 'iso' ? 'ISO category must be 1–6' : 'TGO scope must be 1–4')
+  }
   const { data, error } = await supabase
     .from('scope_categories')
-    .insert({ ...input, created_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .insert({
+      ...input,
+      family,
+      scope,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
     .select()
     .single()
   if (error) throw error
@@ -172,6 +192,7 @@ async function fetchAllMatchingFuelResources (
 
 export async function getFuelResources(query: FuelResourcesQuery): Promise<PaginatedResult<FuelResourceWithCategory>> {
   const {
+    family,
     scope,
     category_id,
     sub_category,
@@ -182,10 +203,10 @@ export async function getFuelResources(query: FuelResourcesQuery): Promise<Pagin
     include_deleted = false,
   } = query
 
-  // When filtering by scope, resolve scope_category_ids first (fuel_resources has no scope column)
+  // fuel_resources has no scope column. Family keeps ISO category 4 off the TGO list.
   let scopeCategoryIds: string[] | undefined
-  if (scope) {
-    const categories = await getScopeCategories(scope, include_deleted)
+  if (family || scope) {
+    const categories = await getScopeCategories(scope, include_deleted, family)
     scopeCategoryIds = categories.map((c) => c.id)
     if (scopeCategoryIds.length === 0) {
       return { data: [], total: 0, page, per_page }
@@ -309,6 +330,14 @@ export async function getDistinctSubCategories(scopeCategoryId: string): Promise
 }
 
 /** Distinct non-null version labels that still have active fuels. */
+export async function hardDeleteFuelResourcesByVersion (version: string): Promise<void> {
+  const { error } = await supabase
+    .from('fuel_resources')
+    .delete()
+    .eq('version', version)
+  if (error) throw error
+}
+
 export async function listDistinctFuelVersions (): Promise<string[]> {
   const { data, error } = await supabase
     .from('fuel_resources')

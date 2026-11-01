@@ -15,21 +15,23 @@ export async function GET (request: NextRequest) {
     }
 
     const release = await getEfCatalogRelease(version)
-    if (!release || release.status !== 'published') {
+    if (!release || release.status !== 'published' || release.family === 'iso') {
       return NextResponse.json(
         { error: `Published release not found for version "${version}"` },
         { status: 404 }
       )
     }
 
+    const family = release.family ?? 'tgo'
     const [categories, fuels] = await Promise.all([
-      getScopeCategories(undefined, false),
+      getScopeCategories(undefined, false, family),
       listFuelResourcesForExport(version),
     ])
 
     return NextResponse.json({
       release: {
         version: release.version,
+        family,
         status: release.status,
         content_hash: release.content_hash,
         published_at: release.published_at,
@@ -40,6 +42,7 @@ export async function GET (request: NextRequest) {
       },
       categories: categories.map((c) => ({
         id: c.id,
+        family: c.family,
         scope: c.scope,
         name_th: c.name_th,
         name_en: c.name_en,

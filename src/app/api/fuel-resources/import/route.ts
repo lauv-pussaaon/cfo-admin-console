@@ -10,7 +10,13 @@ import {
   refreshReleaseCounts,
 } from '@/lib/api/ef-catalog-releases'
 import { supabase } from '@/lib/supabase'
-import { parseFuelResourceMeta, type FuelResource, type RefSource } from '@/types/emission-resources'
+import {
+  parseFuelResourceMeta,
+  type CatalogFamily,
+  type FuelResource,
+  type RefSource,
+  type ScopeCategory,
+} from '@/types/emission-resources'
 
 const REF_SOURCES = new Set([
   'SELF_COLLECT',
@@ -52,7 +58,8 @@ async function countActiveFuels (version: string): Promise<number> {
 function resolveRows (
   rows: Array<Record<string, unknown>>,
   version: string,
-  categoryById: Map<string, unknown>,
+  family: CatalogFamily,
+  categoryById: Map<string, ScopeCategory>,
   categoryByNameTh: Map<string, string>
 ): { resolved: Partial<FuelResource>[]; errors: Array<{ row: number; error: string }> } {
   const resolved: Partial<FuelResource>[] = []
@@ -71,8 +78,13 @@ function resolveRows (
     if (!scopeCategoryId && categoryNameTh) {
       scopeCategoryId = categoryByNameTh.get(categoryNameTh) ?? null
     }
-    if (!scopeCategoryId || !categoryById.has(scopeCategoryId)) {
+    const category = scopeCategoryId ? categoryById.get(scopeCategoryId) : undefined
+    if (!scopeCategoryId || !category) {
       errors.push({ row: i + 1, error: 'scope_category_id missing or not found' })
+      continue
+    }
+    if (category.family !== family) {
+      errors.push({ row: i + 1, error: 'scope_category_id belongs to the other catalog family' })
       continue
     }
 
@@ -172,10 +184,13 @@ export async function POST (request: NextRequest) {
       )
     }
 
+    const family: CatalogFamily = body.family === 'iso' ? 'iso' : 'tgo'
     const categories = await getScopeCategories()
     const categoryById = new Map(categories.map((c) => [c.id, c]))
-    const categoryByNameTh = new Map(categories.map((c) => [c.name_th, c.id]))
-    const { resolved, errors } = resolveRows(rows, version, categoryById, categoryByNameTh)
+    const categoryByNameTh = new Map(
+      categories.filter((c) => c.family === family).map((c) => [c.name_th, c.id])
+    )
+    const { resolved, errors } = resolveRows(rows, version, family, categoryById, categoryByNameTh)
 
     if (errors.length > 0) {
       return NextResponse.json(
@@ -184,7 +199,7 @@ export async function POST (request: NextRequest) {
       )
     }
 
-    await ensureEfCatalogRelease(version)
+    await ensureEfCatalogRelease(version, family)
 
     const chunkSize = 200
     let imported = 0

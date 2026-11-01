@@ -101,7 +101,7 @@ export default function TemplateDetailPage() {
     try {
       const [templateRes, categoriesRes, releasesRes] = await Promise.all([
         fetch(`/api/emission-templates/${templateId}`),
-        fetch('/api/emission-categories'),
+        fetch('/api/emission-categories?family=tgo'),
         fetch('/api/ef-catalog/releases'),
       ])
 
@@ -112,7 +112,9 @@ export default function TemplateDetailPage() {
       const templateJson = await templateRes.json()
       const categoriesJson = await categoriesRes.json()
       const releasesJson = await releasesRes.json()
-      const releaseRows: EfCatalogRelease[] = releasesJson.data ?? []
+      const releaseRows: EfCatalogRelease[] = (releasesJson.data ?? []).filter(
+        (r: EfCatalogRelease) => r.family !== 'iso'
+      )
 
       setTemplate(templateJson)
       setCategories(categoriesJson.data ?? [])

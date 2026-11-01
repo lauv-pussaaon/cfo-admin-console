@@ -26,7 +26,7 @@ import {
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material'
 import * as XLSX from 'xlsx'
-import type { ScopeCategory } from '@/types/emission-resources'
+import type { CatalogFamily, ScopeCategory } from '@/types/emission-resources'
 
 interface ParsedRow {
   rowNum: number
@@ -38,6 +38,7 @@ interface Props {
   open: boolean
   onClose: () => void
   onComplete: (version: string) => void
+  family: CatalogFamily
   existingVersions: string[]
   categories: ScopeCategory[]
 }
@@ -51,6 +52,7 @@ export default function FuelResourceExcelImportModal ({
   open,
   onClose,
   onComplete,
+  family,
   existingVersions,
   categories,
 }: Props) {
@@ -166,7 +168,12 @@ export default function FuelResourceExcelImportModal ({
       const res = await fetch('/api/fuel-resources/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ version: version.trim(), mode: 'create', rows: validRows }),
+        body: JSON.stringify({
+          version: version.trim(),
+          family,
+          mode: 'create',
+          rows: validRows,
+        }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -204,6 +211,14 @@ export default function FuelResourceExcelImportModal ({
               Excel import bootstraps a <strong>new</strong> version label only. To correct EF or duo
               values on an existing version, use the edit action on the table.
             </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              label="Catalog"
+              value={family === 'iso' ? 'ISO' : 'TGO'}
+              disabled
+              sx={{ mb: 2 }}
+            />
             <TextField
               fullWidth
               size="small"

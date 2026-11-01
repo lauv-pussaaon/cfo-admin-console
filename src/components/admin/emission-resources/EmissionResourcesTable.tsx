@@ -20,6 +20,8 @@ const SCOPE_COLORS: Record<number, string> = {
   2: '#f59e0b',
   3: '#3b82f6',
   4: '#8b5cf6',
+  5: '#14b8a6',
+  6: '#64748b',
 }
 
 interface Props {
@@ -56,9 +58,10 @@ export default function EmissionResourcesTable({
       renderCell: (params) => {
         const scope = params.row.scope_category?.scope
         if (!scope) return null
+        const label = params.row.scope_category?.family === 'iso' ? String(scope) : `S${scope}`
         return (
           <Chip
-            label={`S${scope}`}
+            label={label}
             size="small"
             sx={{
               bgcolor: SCOPE_COLORS[scope] ?? '#64748b',

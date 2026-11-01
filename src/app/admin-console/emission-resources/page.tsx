@@ -21,6 +21,8 @@ import {
   CircularProgress,
   IconButton,
   Menu,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
 } from '@mui/material'
 import { useAuth } from '@/contexts/AuthContext'
@@ -36,13 +38,14 @@ import {
   MoreVert as MoreVertIcon,
   WarningAmber as WarningAmberIcon,
 } from '@mui/icons-material'
-import type { EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
+import type { CatalogFamily, EfCatalogRelease, FuelResourceWithCategory, ScopeCategory } from '@/types/emission-resources'
 import EmissionResourcesTable from '@/components/admin/emission-resources/EmissionResourcesTable'
 import FuelResourceDetailPanel from '@/components/admin/emission-resources/FuelResourceDetailPanel'
 import CategoriesPanel from '@/components/admin/emission-resources/CategoriesPanel'
 import FuelResourceExcelImportModal from '@/components/admin/emission-resources/FuelResourceExcelImportModal'
 import FuelResourceEditModal from '@/components/admin/emission-resources/FuelResourceEditModal'
 import FuelResourceDeleteDialog from '@/components/admin/emission-resources/FuelResourceDeleteDialog'
+import CatalogVersionActionDialog from '@/components/admin/emission-resources/CatalogVersionActionDialog'
 import { formatDateTime } from '@/lib/utils/datetime'
 import {
   adminBackButtonSx,
@@ -65,7 +68,7 @@ function orderReleases (releases: EfCatalogRelease[]): EfCatalogRelease[] {
   })
 }
 
-const SCOPE_TABS = [
+const TGO_SCOPE_TABS = [
   { value: 0, label: 'All' },
   { value: 1, label: 'Scope 1' },
   { value: 2, label: 'Scope 2' },
@@ -73,17 +76,42 @@ const SCOPE_TABS = [
   { value: 4, label: 'แยกรายงาน' },
 ]
 
+const ISO_SCOPE_TABS = [
+  { value: 0, label: 'All' },
+  { value: 1, label: '1' },
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
+]
+
 const SCOPE_COLORS: Record<number, string> = {
   1: '#ef4444',
   2: '#f59e0b',
   3: '#3b82f6',
   4: '#8b5cf6',
+  5: '#14b8a6',
+  6: '#64748b',
 }
 
-function parseScope (raw: string | null): number {
+function parseFamily (raw: string | null): CatalogFamily {
+  return raw === 'iso' ? 'iso' : 'tgo'
+}
+
+function scopeTabsFor (family: CatalogFamily) {
+  return family === 'iso' ? ISO_SCOPE_TABS : TGO_SCOPE_TABS
+}
+
+function parseScope (raw: string | null, family: CatalogFamily): number {
   const n = Number(raw)
-  if (!Number.isInteger(n) || n < 0 || n > 4) return 0
+  const max = family === 'iso' ? 6 : 4
+  if (!Number.isInteger(n) || n < 0 || n > max) return 0
   return n
+}
+
+function categoryChipLabel (family: CatalogFamily, scope: number) {
+  return family === 'iso' ? String(scope) : `S${scope}`
 }
 
 function parsePageIndex (raw: string | null): number {
@@ -99,6 +127,7 @@ function parsePerPage (raw: string | null): number {
 }
 
 type QueryPatch = {
+  family?: CatalogFamily | null
   version?: string | null
   scope?: number | null
   category_id?: string | null
@@ -119,8 +148,10 @@ function EmissionResourcesPage () {
     }
   }, [user, authLoading, router])
 
+  const family = parseFamily(searchParams.get('family'))
+  const scopeTabs = scopeTabsFor(family)
   const urlVersion = searchParams.get('version')?.trim() || null
-  const scopeTab = parseScope(searchParams.get('scope'))
+  const scopeTab = parseScope(searchParams.get('scope'), family)
   const categoryId = searchParams.get('category_id')?.trim() || ''
   const searchFromUrl = searchParams.get('search') ?? ''
   const page = parsePageIndex(searchParams.get('page'))
@@ -135,6 +166,7 @@ function EmissionResourcesPage () {
   const [categoriesPanelOpen, setCategoriesPanelOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [releases, setReleases] = useState<EfCatalogRelease[]>([])
+  const [takenVersions, setTakenVersions] = useState<string[]>([])
   const [releaseLoading, setReleaseLoading] = useState(false)
   const [actionBusy, setActionBusy] = useState(false)
   const [selectedResource, setSelectedResource] = useState<FuelResourceWithCategory | null>(null)
@@ -142,23 +174,29 @@ function EmissionResourcesPage () {
   const [deleteTarget, setDeleteTarget] = useState<FuelResourceWithCategory | null>(null)
   const [needsRepublish, setNeedsRepublish] = useState(false)
   const [moreMenuAnchor, setMoreMenuAnchor] = useState<null | HTMLElement>(null)
+  const [versionAction, setVersionAction] = useState<'delete' | 'archive' | null>(null)
 
   const orderedReleases = useMemo(() => orderReleases(releases), [releases])
-  const versionTabs = useMemo(
-    () => orderedReleases.map((r) => r.version),
-    [orderedReleases]
+  const familyReleases = useMemo(
+    () => orderedReleases.filter((r) => (r.family ?? 'tgo') === family),
+    [orderedReleases, family]
   )
+  const versionTabs = useMemo(
+    () => familyReleases.map((r) => r.version),
+    [familyReleases]
+  )
+  const existingVersions = takenVersions.length > 0
+    ? takenVersions
+    : orderedReleases.map((r) => r.version)
   const defaultVersion = useMemo(() => {
-    const flagged = orderedReleases.find((r) => r.is_default)?.version
+    const flagged = familyReleases.find((r) => r.is_default)?.version
     return flagged ?? versionTabs[0] ?? ''
-  }, [orderedReleases, versionTabs])
+  }, [familyReleases, versionTabs])
   const catalogVersion = urlVersion || defaultVersion
   const release = useMemo(
     () => releases.find((r) => r.version === catalogVersion) ?? null,
     [releases, catalogVersion]
   )
-  const existingVersions = versionTabs
-
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
     open: false,
     message: '',
@@ -180,6 +218,9 @@ function EmissionResourcesPage () {
       }
     }
 
+    if ('family' in patch && patch.family) {
+      apply('family', patch.family, 'tgo')
+    }
     if ('version' in patch) {
       apply('version', patch.version, defaultVersion || undefined)
     }
@@ -235,13 +276,13 @@ function EmissionResourcesPage () {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const res = await fetch('/api/emission-categories')
+      const res = await fetch(`/api/emission-categories?family=${family}`)
       const json = await res.json()
       setCategories(json.data ?? [])
     } catch {
       console.error('Failed to load categories')
     }
-  }, [])
+  }, [family])
 
   const fetchResources = useCallback(async (overrides?: {
     version?: string
@@ -264,6 +305,7 @@ function EmissionResourcesPage () {
       const scope = overrides?.scope ?? scopeTab
       const cat = overrides?.categoryId ?? categoryId
       const q = overrides?.search ?? searchFromUrl
+      params.set('family', family)
       if (scope > 0) params.set('scope', String(scope))
       if (cat) params.set('category_id', cat)
       if (q) params.set('search', q)
@@ -282,7 +324,7 @@ function EmissionResourcesPage () {
     } finally {
       setLoading(false)
     }
-  }, [scopeTab, categoryId, searchFromUrl, page, perPage, catalogVersion])
+  }, [family, scopeTab, categoryId, searchFromUrl, page, perPage, catalogVersion])
 
   const fetchReleases = useCallback(async () => {
     setReleaseLoading(true)
@@ -291,11 +333,16 @@ function EmissionResourcesPage () {
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Failed to load releases')
       const next = (json.data ?? []) as EfCatalogRelease[]
+      const taken = Array.isArray(json.taken_versions)
+        ? json.taken_versions.filter((v: unknown) => typeof v === 'string')
+        : next.map((r) => r.version)
       setReleases(next)
+      setTakenVersions(taken)
       return next
     } catch (err) {
       console.error(err)
       setReleases([])
+      setTakenVersions([])
       return [] as EfCatalogRelease[]
     } finally {
       setReleaseLoading(false)
@@ -324,7 +371,12 @@ function EmissionResourcesPage () {
   useEffect(() => { void fetchCategories() }, [fetchCategories])
   useEffect(() => { void fetchReleases() }, [fetchReleases])
   useEffect(() => {
-    if (!catalogVersion) return
+    if (!catalogVersion) {
+      setResources([])
+      setTotal(0)
+      setError(null)
+      return
+    }
     void fetchResources()
   }, [catalogVersion, fetchResources])
 
@@ -342,6 +394,17 @@ function EmissionResourcesPage () {
     if (versionTabs.includes(catalogVersion)) return
     replaceQuery({ version: defaultVersion || versionTabs[0], page: 0 })
   }, [versionTabs, catalogVersion, defaultVersion, replaceQuery])
+
+  const handleFamilyChange = (_: React.SyntheticEvent, next: CatalogFamily | null) => {
+    if (!next || next === family) return
+    replaceQuery({
+      family: next,
+      version: null,
+      scope: 0,
+      category_id: null,
+      page: 0,
+    })
+  }
 
   const handleScopeChange = (_: React.SyntheticEvent, newValue: number) => {
     replaceQuery({ scope: newValue, category_id: null, page: 0 })
@@ -451,6 +514,9 @@ function EmissionResourcesPage () {
   const filteredCategories = categories.filter((c) =>
     scopeTab === 0 ? true : c.scope === scopeTab
   )
+  const isoPublishLocked = family === 'iso'
+  const canDeleteDraft = release?.status === 'draft'
+  const canArchive = release?.status === 'published' && !release.is_default
 
   if (authLoading) {
     return (
@@ -482,6 +548,16 @@ function EmissionResourcesPage () {
           <Typography variant="body2" color="text.secondary">
             Versioned emission factors — edit inline or import a new version
           </Typography>
+          <ToggleButtonGroup
+            exclusive
+            size="small"
+            value={family}
+            onChange={handleFamilyChange}
+            sx={{ mt: 1.5 }}
+          >
+            <ToggleButton value="tgo" sx={{ px: 2, textTransform: 'none' }}>TGO</ToggleButton>
+            <ToggleButton value="iso" sx={{ px: 2, textTransform: 'none' }}>ISO</ToggleButton>
+          </ToggleButtonGroup>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <Button
@@ -596,7 +672,7 @@ function EmissionResourcesPage () {
             >
               {release?.is_default ? 'Default' : 'Make Default'}
             </Button>
-            {needsRepublish ? (
+            {needsRepublish && !isoPublishLocked ? (
               <Tooltip title="Require re-publish to apply latest changes">
                 <span>
                   <Button
@@ -619,14 +695,20 @@ function EmissionResourcesPage () {
                 </span>
               </Tooltip>
             ) : (
-              <Button
-                size="small"
-                variant="outlined"
-                disabled={actionBusy || releaseLoading}
-                onClick={handlePublish}
+              <Tooltip
+                title={isoPublishLocked ? 'ISO versions stay draft until the client catalog can tell the families apart' : ''}
               >
-                {release?.status === 'published' ? 'Re-publish' : 'Publish'}
-              </Button>
+                <span>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    disabled={actionBusy || releaseLoading || isoPublishLocked}
+                    onClick={handlePublish}
+                  >
+                    {release?.status === 'published' ? 'Re-publish' : 'Publish'}
+                  </Button>
+                </span>
+              </Tooltip>
             )}
             <Button
               size="small"
@@ -647,6 +729,27 @@ function EmissionResourcesPage () {
             >
               Backup This Version
             </Button>
+            {canDeleteDraft && (
+              <Button
+                size="small"
+                variant="outlined"
+                color="error"
+                disabled={actionBusy || releaseLoading}
+                onClick={() => setVersionAction('delete')}
+              >
+                ลบฉบับร่าง
+              </Button>
+            )}
+            {canArchive && (
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={actionBusy || releaseLoading}
+                onClick={() => setVersionAction('archive')}
+              >
+                Archive
+              </Button>
+            )}
           </Box>
         </Box>
         )}
@@ -656,7 +759,7 @@ function EmissionResourcesPage () {
           onChange={handleScopeChange}
           sx={{ borderBottom: 1, borderColor: 'divider', px: 2 }}
         >
-          {SCOPE_TABS.map((t) => (
+          {scopeTabs.map((t) => (
             <Tab
               key={t.value}
               value={t.value}
@@ -696,7 +799,7 @@ function EmissionResourcesPage () {
                 <MenuItem key={c.id} value={c.id}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Chip
-                      label={`S${c.scope}`}
+                      label={categoryChipLabel(family, c.scope)}
                       size="small"
                       sx={{
                         height: 18,
@@ -757,6 +860,7 @@ function EmissionResourcesPage () {
       <CategoriesPanel
         open={categoriesPanelOpen}
         onClose={() => setCategoriesPanelOpen(false)}
+        family={family}
         initialScope={scopeTab}
         onCategoriesChanged={fetchCategories}
       />
@@ -790,8 +894,21 @@ function EmissionResourcesPage () {
         open={importOpen}
         onClose={() => setImportOpen(false)}
         onComplete={handleImportComplete}
+        family={family}
         existingVersions={existingVersions}
         categories={categories}
+      />
+
+      <CatalogVersionActionDialog
+        open={versionAction !== null}
+        mode={versionAction ?? 'delete'}
+        version={catalogVersion}
+        onClose={() => setVersionAction(null)}
+        onDone={() => {
+          showSnackbar(versionAction === 'archive' ? `Archived ${catalogVersion}` : `Deleted draft ${catalogVersion}`)
+          replaceQuery({ version: null, page: 0 })
+          void fetchReleases()
+        }}
       />
 
       <Snackbar

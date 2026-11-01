@@ -110,7 +110,7 @@ export default function FuelResourceEditModal ({
                 {resource.scope_category && (
                   <Chip
                     size="small"
-                    label={`S${resource.scope_category.scope} · ${resource.scope_category.name_en}`}
+                    label={`${resource.scope_category.family === 'iso' ? resource.scope_category.scope : `S${resource.scope_category.scope}`} · ${resource.scope_category.name_en}`}
                   />
                 )}
                 {resource.sub_category && (

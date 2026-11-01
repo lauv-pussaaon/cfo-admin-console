@@ -10,9 +10,10 @@ export async function GET (request: NextRequest) {
 
     const releases = await listEfCatalogReleases()
     const data = releases
-      .filter((r) => r.status === 'published')
+      .filter((r) => r.status === 'published' && r.family !== 'iso')
       .map((r) => ({
         version: r.version,
+        family: r.family ?? 'tgo',
         content_hash: r.content_hash,
         published_at: r.published_at,
         fuel_count: r.fuel_count,

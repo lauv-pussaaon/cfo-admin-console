@@ -33,10 +33,10 @@ import {
   Add as AddIcon,
   Check as CheckIcon,
 } from '@mui/icons-material'
-import type { ScopeCategory } from '@/types/emission-resources'
+import type { CatalogFamily, ScopeCategory } from '@/types/emission-resources'
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog'
 
-const SCOPE_TABS = [
+const TGO_SCOPE_TABS = [
   { value: 0, label: 'All' },
   { value: 1, label: 'Scope 1' },
   { value: 2, label: 'Scope 2' },
@@ -44,16 +44,29 @@ const SCOPE_TABS = [
   { value: 4, label: 'Scope 4' },
 ]
 
+const ISO_SCOPE_TABS = [
+  { value: 0, label: 'All' },
+  { value: 1, label: '1' },
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
+]
+
 const SCOPE_COLORS: Record<number, string> = {
   1: '#ef4444',
   2: '#f59e0b',
   3: '#3b82f6',
   4: '#8b5cf6',
+  5: '#14b8a6',
+  6: '#64748b',
 }
 
 interface Props {
   open: boolean
   onClose: () => void
+  family: CatalogFamily
   initialScope: number
   onCategoriesChanged: () => void
 }
@@ -72,7 +85,10 @@ interface AddingState {
   display_order: string
 }
 
-export default function CategoriesPanel({ open, onClose, initialScope, onCategoriesChanged }: Props) {
+export default function CategoriesPanel({ open, onClose, family, initialScope, onCategoriesChanged }: Props) {
+  const scopeTabs = family === 'iso' ? ISO_SCOPE_TABS : TGO_SCOPE_TABS
+  const scopeChoices = family === 'iso' ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4]
+  const scopeFieldLabel = family === 'iso' ? 'Category' : 'Scope'
   const [scopeTab, setScopeTab] = useState(initialScope)
   const [categories, setCategories] = useState<ScopeCategory[]>([])
   const [loading, setLoading] = useState(false)
@@ -95,7 +111,7 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/emission-categories')
+      const res = await fetch(`/api/emission-categories?family=${family}`)
       const json = await res.json()
       setCategories(json.data ?? [])
     } catch {
@@ -103,7 +119,7 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [family])
 
   useEffect(() => {
     if (open) {
@@ -173,6 +189,7 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          family,
           scope: adding.scope,
           name_th: adding.name_th,
           name_en: adding.name_en,
@@ -234,7 +251,7 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
           variant="scrollable"
           sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}
         >
-          {SCOPE_TABS.map((t) => (
+          {scopeTabs.map((t) => (
             <Tab key={t.value} value={t.value} label={t.label} sx={{ minWidth: 64 }} />
           ))}
         </Tabs>
@@ -267,14 +284,16 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
               <Typography variant="subtitle2" gutterBottom>New Category</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                 <FormControl size="small" fullWidth>
-                  <InputLabel>Scope</InputLabel>
+                  <InputLabel>{scopeFieldLabel}</InputLabel>
                   <Select
                     value={adding.scope}
                     onChange={(e) => setAdding((a) => a ? { ...a, scope: e.target.value as number } : null)}
-                    label="Scope"
+                    label={scopeFieldLabel}
                   >
-                    {[1, 2, 3, 4].map((s) => (
-                      <MenuItem key={s} value={s}>Scope {s}</MenuItem>
+                    {scopeChoices.map((s) => (
+                      <MenuItem key={s} value={s}>
+                        {family === 'iso' ? String(s) : `Scope ${s}`}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -378,7 +397,7 @@ export default function CategoriesPanel({ open, onClose, initialScope, onCategor
                       /* Display row */
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                         <Chip
-                          label={`S${cat.scope}`}
+                          label={family === 'iso' ? String(cat.scope) : `S${cat.scope}`}
                           size="small"
                           sx={{
                             bgcolor: SCOPE_COLORS[cat.scope],

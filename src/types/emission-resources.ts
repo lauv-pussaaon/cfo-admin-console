@@ -8,11 +8,14 @@ export type RefSource =
   | 'OTHER'
   | 'SUBSITUTE'
 
-export type EfCatalogReleaseStatus = 'draft' | 'published'
+export type CatalogFamily = 'tgo' | 'iso'
+
+export type EfCatalogReleaseStatus = 'draft' | 'published' | 'archived'
 
 export interface ScopeCategory {
   id: string
-  scope: 1 | 2 | 3 | 4
+  family: CatalogFamily
+  scope: 1 | 2 | 3 | 4 | 5 | 6
   name_th: string
   name_en: string
   display_order: number
@@ -100,6 +103,7 @@ export interface FuelResourceWithCategory extends FuelResource {
 
 export interface EfCatalogRelease {
   version: string
+  family: CatalogFamily
   status: EfCatalogReleaseStatus
   is_default: boolean
   content_hash: string | null
@@ -187,6 +191,7 @@ export interface ImportPreviewStats {
 }
 
 export interface FuelResourcesQuery {
+  family?: CatalogFamily
   scope?: number
   category_id?: string
   sub_category?: string

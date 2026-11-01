@@ -15,6 +15,8 @@ const SCOPE_COLORS: Record<number, string> = {
   2: '#f59e0b',
   3: '#3b82f6',
   4: '#8b5cf6',
+  5: '#14b8a6',
+  6: '#64748b',
 }
 
 function InfoRow ({ label, value }: { label: string; value: ReactNode }) {
@@ -63,7 +65,7 @@ export default function FuelResourceDetailPanel ({
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap' }}>
             {cat && (
               <Chip
-                label={`S${cat.scope}`}
+                label={cat.family === 'iso' ? String(cat.scope) : `S${cat.scope}`}
                 size="small"
                 sx={{
                   bgcolor: SCOPE_COLORS[cat.scope] ?? '#64748b',

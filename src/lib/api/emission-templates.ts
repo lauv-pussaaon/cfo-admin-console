@@ -217,7 +217,7 @@ export interface GetEmissionTemplatesWithFullHierarchyQuery {
 
 /** Resolve the version to scope activity groups to when the caller doesn't pass one explicitly. */
 async function resolveDefaultTemplateVersion (): Promise<string | null> {
-  const releases = await listEfCatalogReleases()
+  const releases = (await listEfCatalogReleases()).filter((r) => (r.family ?? 'tgo') === 'tgo')
   const defaultRelease = releases.find((r) => r.is_default) ?? releases[0]
   return defaultRelease?.version ?? null
 }

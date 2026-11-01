@@ -4,6 +4,7 @@
 --   -> 03_seed_ef_catalog_releases.sql -> dataprep/ef-catalog/generated/*
 --   -> 04_seed_emission_templates_and_activity_groups.sql
 --   -> 06_seed_notification_recipients.sql
+--   -> 07_seed_platform_updates.sql -> 08_seed_iso_scope_categories.sql
 
 -- ===========================================
 -- PART 1: CREATE EXTENSIONS
@@ -228,13 +229,18 @@ CREATE TABLE support_message_attachments (
 -- Scope categories (EF catalog)
 CREATE TABLE scope_categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  scope INTEGER NOT NULL CHECK (scope IN (1, 2, 3, 4)),
+  family TEXT NOT NULL DEFAULT 'tgo' CHECK (family IN ('tgo', 'iso')),
+  scope INTEGER NOT NULL,
   name_th TEXT NOT NULL,
   name_en TEXT NOT NULL,
   display_order INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  deleted_at TIMESTAMPTZ
+  deleted_at TIMESTAMPTZ,
+  CONSTRAINT scope_categories_scope_family_check CHECK (
+    (family = 'tgo' AND scope IN (1, 2, 3, 4))
+    OR (family = 'iso' AND scope IN (1, 2, 3, 4, 5, 6))
+  )
 );
 
 -- Fuel resources (versioned EF catalog rows)
@@ -277,8 +283,9 @@ CREATE TABLE fuel_resources (
 -- EF catalog release metadata (publish / sync SoT)
 CREATE TABLE ef_catalog_releases (
   version TEXT PRIMARY KEY,
+  family TEXT NOT NULL DEFAULT 'tgo' CHECK (family IN ('tgo', 'iso')),
   status TEXT NOT NULL DEFAULT 'draft'
-    CHECK (status IN ('draft', 'published')),
+    CHECK (status IN ('draft', 'published', 'archived')),
   is_default BOOLEAN NOT NULL DEFAULT false,
   content_hash TEXT,
   fuel_count INT NOT NULL DEFAULT 0,
@@ -488,7 +495,7 @@ CREATE UNIQUE INDEX uq_fuel_resources_ref_source_version_ref_code
 
 -- EF catalog releases indexes
 CREATE UNIQUE INDEX uq_ef_catalog_releases_one_default
-  ON ef_catalog_releases (is_default)
+  ON ef_catalog_releases (family)
   WHERE is_default = true AND status = 'published';
 
 CREATE INDEX idx_ef_catalog_version_backups_source_version

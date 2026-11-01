@@ -3,11 +3,15 @@ import {
   getFuelResources,
   softDeleteFuelResourcesByVersion,
 } from '@/lib/api/fuel-resources'
+import type { CatalogFamily } from '@/types/emission-resources'
 import { refreshReleaseCounts } from '@/lib/api/ef-catalog-releases'
 
 export async function GET (request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
+    const familyRaw = searchParams.get('family')
+    const family: CatalogFamily | undefined =
+      familyRaw === 'tgo' || familyRaw === 'iso' ? familyRaw : undefined
     const scope = searchParams.get('scope')
     const category_id = searchParams.get('category_id') ?? undefined
     const sub_category = searchParams.get('sub_category') ?? undefined
@@ -18,6 +22,7 @@ export async function GET (request: NextRequest) {
     const include_deleted = searchParams.get('include_deleted') === 'true'
 
     const result = await getFuelResources({
+      family,
       scope: scope ? parseInt(scope, 10) : undefined,
       category_id,
       sub_category,
