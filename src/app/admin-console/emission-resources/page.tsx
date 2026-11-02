@@ -517,7 +517,6 @@ function EmissionResourcesPage () {
   const filteredCategories = categories.filter((c) =>
     scopeTab === 0 ? true : c.scope === scopeTab
   )
-  const isoPublishLocked = family === 'iso'
   const canDeleteDraft = release?.status === 'draft'
   const canArchive = release?.status === 'published' && !release.is_default
 
@@ -683,7 +682,7 @@ function EmissionResourcesPage () {
             >
               {release?.is_default ? 'Default' : 'Make Default'}
             </Button>
-            {needsRepublish && !isoPublishLocked ? (
+            {needsRepublish ? (
               <Tooltip title="Require re-publish to apply latest changes">
                 <span>
                   <Button
@@ -706,20 +705,14 @@ function EmissionResourcesPage () {
                 </span>
               </Tooltip>
             ) : (
-              <Tooltip
-                title={isoPublishLocked ? 'ISO versions stay draft until the client catalog can tell the families apart' : ''}
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={actionBusy || releaseLoading}
+                onClick={handlePublish}
               >
-                <span>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    disabled={actionBusy || releaseLoading || isoPublishLocked}
-                    onClick={handlePublish}
-                  >
-                    {release?.status === 'published' ? 'Re-publish' : 'Publish'}
-                  </Button>
-                </span>
-              </Tooltip>
+                {release?.status === 'published' ? 'Re-publish' : 'Publish'}
+              </Button>
             )}
             <Button
               size="small"

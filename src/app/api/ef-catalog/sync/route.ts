@@ -14,8 +14,9 @@ export async function GET (request: NextRequest) {
       return NextResponse.json({ error: 'version is required' }, { status: 400 })
     }
 
+    const includeIso = request.nextUrl.searchParams.get('includeIso') === '1'
     const release = await getEfCatalogRelease(version)
-    if (!release || release.status !== 'published' || release.family === 'iso') {
+    if (!release || release.status !== 'published' || (release.family === 'iso' && !includeIso)) {
       return NextResponse.json(
         { error: `Published release not found for version "${version}"` },
         { status: 404 }

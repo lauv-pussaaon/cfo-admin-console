@@ -177,9 +177,6 @@ export async function publishEfCatalogRelease (
 ): Promise<EfCatalogRelease> {
   const existing = await getEfCatalogRelease(version)
   if (!existing) throw new Error(`Unknown release version: ${version}`)
-  if (existing.family === 'iso') {
-    throw new Error('ISO versions stay draft until the client catalog can tell the families apart')
-  }
   if (existing.status === 'archived') {
     throw new Error('Archived versions cannot be published')
   }

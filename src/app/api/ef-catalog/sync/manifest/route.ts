@@ -8,9 +8,10 @@ export async function GET (request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const includeIso = request.nextUrl.searchParams.get('includeIso') === '1'
     const releases = await listEfCatalogReleases()
     const data = releases
-      .filter((r) => r.status === 'published' && r.family !== 'iso')
+      .filter((r) => r.status === 'published' && (includeIso || r.family !== 'iso'))
       .map((r) => ({
         version: r.version,
         family: r.family ?? 'tgo',
