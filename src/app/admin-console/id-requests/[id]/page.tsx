@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -93,6 +93,7 @@ export default function TrialRequestDetailPage () {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  const seenStatus = useRef<string | null>(null)
 
   useEffect(() => {
     if (!authLoading && user && !canAccessTrialRequests(user)) {
@@ -106,11 +107,12 @@ export default function TrialRequestDetailPage () {
     setShowSuccessMessage(true)
   }
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (options?: { quiet?: boolean }) => {
     if (!requestId) return
+    const quiet = options?.quiet === true
 
     try {
-      setLoading(true)
+      if (!quiet) setLoading(true)
       const [requestData, consentData] = await Promise.all([
         trialRequestService.getTrialRequestById(requestId),
         trialRequestService.getTrialRequestConsent(requestId),
@@ -128,11 +130,13 @@ export default function TrialRequestDetailPage () {
       if (!isExpectedError(error)) {
         console.error('Failed to load trial request:', error)
       }
-      setRequest(null)
-      setConsent(null)
-      setReviewer(null)
+      if (!quiet) {
+        setRequest(null)
+        setConsent(null)
+        setReviewer(null)
+      }
     } finally {
-      setLoading(false)
+      if (!quiet) setLoading(false)
     }
   }, [requestId])
 
@@ -141,6 +145,26 @@ export default function TrialRequestDetailPage () {
       load()
     }
   }, [user, load])
+
+  useEffect(() => {
+    if (!request) return
+    const previous = seenStatus.current
+    if (previous === 'deploying' && request.status === 'deployed') {
+      notify('ติดตั้งเสร็จแล้ว')
+    }
+    if (previous === 'deploying' && request.status === 'deployment_failed') {
+      notify(request.deploy_error || 'ติดตั้งไม่สำเร็จ', 'error')
+    }
+    seenStatus.current = request.status
+  }, [request])
+
+  useEffect(() => {
+    if (!user || !canAccessTrialRequests(user) || request?.status !== 'deploying') return
+    const timer = window.setInterval(() => {
+      void load({ quiet: true })
+    }, 8000)
+    return () => window.clearInterval(timer)
+  }, [user, request?.status, load])
 
   const handleStartProcessing = async () => {
     if (!request || !user) return
@@ -347,6 +371,29 @@ export default function TrialRequestDetailPage () {
       {actionError && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {actionError}
+        </Alert>
+      )}
+
+      {request.status === 'deploying' && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          กำลังติดตั้งบนโฮสต์ หน้านี้จะอัปเดตเองเมื่อเสร็จ
+        </Alert>
+      )}
+
+      {request.status === 'deployed' && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          ติดตั้งเสร็จแล้ว
+          {request.organization_id ? (
+            <>
+              {' '}
+              <MuiLink
+                component={Link}
+                href={`/admin-console/organizations/${request.organization_id}`}
+              >
+                เปิดองค์กร
+              </MuiLink>
+            </>
+          ) : null}
         </Alert>
       )}
 

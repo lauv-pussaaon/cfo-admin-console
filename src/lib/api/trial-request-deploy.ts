@@ -160,7 +160,16 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     log?: string
     logPath?: string
   }
-): Promise<{ updated: boolean; requestId?: string; currentStatus?: string }> {
+): Promise<{
+  updated: boolean
+  requestId?: string
+  currentStatus?: string
+  notifyFailure?: boolean
+  organizationName?: string
+  contactEmail?: string
+  contactFirstName?: string
+  contactLastName?: string
+}> {
   const matchStatuses = params.status === 'deployed' ? DEPLOYED_MATCH : DEPLOYING_MATCH
   const { data, error } = await supabase
     .from('organization_trial_requests')
@@ -194,7 +203,12 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
             : clearDeployFailureUpdate()),
         })
         .eq('id', existing.id)
-      return { updated: true, requestId: existing.id, currentStatus: existing.status }
+      return {
+        updated: true,
+        requestId: existing.id,
+        currentStatus: existing.status,
+        notifyFailure: false,
+      }
     }
     return { updated: false }
   }
@@ -204,7 +218,7 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     params.status === 'deployment_failed'
       ? deployFailureUpdate(params)
       : clearDeployFailureUpdate()
-  const { error: updateError } = await supabase
+  const { data: updatedRows, error: updateError } = await supabase
     .from('organization_trial_requests')
     .update({
       status: params.status,
@@ -214,9 +228,13 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     })
     .eq('id', data.id)
     .in('status', [...matchStatuses])
+    .select('id')
 
   if (updateError) {
     console.error('[trial-request-deploy] apply deploy-status:', updateError)
+    return { updated: false, requestId: data.id, currentStatus: data.status }
+  }
+  if (!updatedRows || updatedRows.length === 0) {
     return { updated: false, requestId: data.id, currentStatus: data.status }
   }
 
@@ -226,7 +244,16 @@ export async function applyTrialRequestDeployStatusByCompanyCode (
     )
   }
 
-  return { updated: true, requestId: data.id, currentStatus: params.status }
+  return {
+    updated: true,
+    requestId: data.id,
+    currentStatus: params.status,
+    notifyFailure: params.status === 'deployment_failed',
+    organizationName: data.organization_name,
+    contactEmail: data.contact_email,
+    contactFirstName: data.contact_first_name,
+    contactLastName: data.contact_last_name,
+  }
 }
 
 export async function markTrialRequestDeploying (
@@ -272,7 +299,7 @@ export async function markTrialRequestDeploymentFailed (
   params: { id: string; error?: string; log?: string; logPath?: string }
 ): Promise<boolean> {
   const now = new Date().toISOString()
-  const { error } = await supabase
+  const { data: updatedRows, error } = await supabase
     .from('organization_trial_requests')
     .update({
       status: 'deployment_failed',
@@ -281,9 +308,13 @@ export async function markTrialRequestDeploymentFailed (
     })
     .eq('id', params.id)
     .in('status', ['deploying', 'started'])
+    .select('id')
 
   if (error) {
     console.error('[trial-request-deploy] mark deployment_failed:', error)
+    return false
+  }
+  if (!updatedRows || updatedRows.length === 0) {
     return false
   }
   if (params.error) {

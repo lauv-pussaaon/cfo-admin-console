@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminCallerFromRequest } from '@/lib/api/admin-user-auth'
 import { applyTrialRequestDeployStatusByCompanyCode } from '@/lib/api/trial-request-deploy'
+import { sendInstanceDeployFailedNotices } from '@/lib/email/send-instance-deploy-failed'
 import { normalizeOrganizationCode } from '@/lib/organization-code'
 import { getServiceSupabase } from '@/lib/supabase-service'
 import { isBridgeRequestAuthorized } from '@/lib/support-chat/auth'
@@ -68,6 +69,18 @@ export async function POST (request: NextRequest) {
         { error: 'ไม่พบคำขอที่กำลังติดตั้งสำหรับรหัสนี้' },
         { status: 404 }
       )
+    }
+
+    if (result.notifyFailure) {
+      await sendInstanceDeployFailedNotices({
+        organizationName: result.organizationName || companyCode,
+        companyCode,
+        contactEmail: result.contactEmail,
+        contactFirstName: result.contactFirstName,
+        contactLastName: result.contactLastName,
+        error: errorText,
+        logPath,
+      })
     }
 
     return NextResponse.json({

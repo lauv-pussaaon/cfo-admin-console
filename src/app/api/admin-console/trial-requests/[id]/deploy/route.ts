@@ -4,6 +4,7 @@ import {
   markTrialRequestDeploying,
   markTrialRequestDeploymentFailed,
 } from '@/lib/api/trial-request-deploy'
+import { sendInstanceDeployFailedNotices } from '@/lib/email/send-instance-deploy-failed'
 import { isOrgRequestKind } from '@/types/org-request-kind'
 import { getServiceSupabase } from '@/lib/supabase-service'
 
@@ -110,10 +111,20 @@ export async function POST (
     }
 
     if (!accepted) {
-      await markTrialRequestDeploymentFailed(supabase, {
+      const markedFailed = await markTrialRequestDeploymentFailed(supabase, {
         id: requestId,
         error: failReason,
       })
+      if (markedFailed) {
+        await sendInstanceDeployFailedNotices({
+          organizationName: row.organization_name,
+          companyCode,
+          contactEmail: row.contact_email,
+          contactFirstName: row.contact_first_name,
+          contactLastName: row.contact_last_name,
+          error: failReason || 'เริ่มติดตั้งไม่สำเร็จ',
+        })
+      }
       return NextResponse.json(
         { error: failReason || 'เริ่มติดตั้งไม่สำเร็จ' },
         { status: 502 }

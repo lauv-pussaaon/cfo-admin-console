@@ -20,6 +20,7 @@ export function getResendFrom (): string {
 
 export async function sendResendEmail (params: {
   to: string | string[]
+  bcc?: string[]
   subject: string
   text: string
   html: string
@@ -33,6 +34,7 @@ export async function sendResendEmail (params: {
   const result = await resend.emails.send({
     from: getResendFrom(),
     to: params.to,
+    ...(params.bcc && params.bcc.length > 0 ? { bcc: params.bcc } : {}),
     subject: params.subject,
     text: params.text,
     html: params.html,
