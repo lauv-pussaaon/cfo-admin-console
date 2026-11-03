@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isEfCatalogSyncAuthorized } from '@/lib/ef-catalog-sync-auth'
 import { getEfCatalogRelease } from '@/lib/api/ef-catalog-releases'
 import { getScopeCategories, listFuelResourcesForExport } from '@/lib/api/fuel-resources'
+import { listCategoryMapPairs } from '@/lib/api/tgo-iso-category-map'
 
 export async function GET (request: NextRequest) {
   try {
@@ -24,9 +25,10 @@ export async function GET (request: NextRequest) {
     }
 
     const family = release.family ?? 'tgo'
-    const [categories, fuels] = await Promise.all([
+    const [categories, fuels, categoryMap] = await Promise.all([
       getScopeCategories(undefined, false, family),
       listFuelResourcesForExport(version),
+      family === 'iso' ? listCategoryMapPairs() : Promise.resolve(null),
     ])
 
     return NextResponse.json({
@@ -51,6 +53,7 @@ export async function GET (request: NextRequest) {
       })),
       fuels,
       links: [],
+      ...(categoryMap ? { category_map: categoryMap } : {}),
       content_hash: release.content_hash,
     })
   } catch (error) {

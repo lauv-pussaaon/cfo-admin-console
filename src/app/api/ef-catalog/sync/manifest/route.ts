@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isEfCatalogSyncAuthorized } from '@/lib/ef-catalog-sync-auth'
 import { listEfCatalogReleases } from '@/lib/api/ef-catalog-releases'
+import { listCategoryMapPairs } from '@/lib/api/tgo-iso-category-map'
 
 export async function GET (request: NextRequest) {
   try {
@@ -23,7 +24,19 @@ export async function GET (request: NextRequest) {
         order_index: r.order_index ?? 0,
       }))
 
-    return NextResponse.json({ data })
+    let categoryMap: Awaited<ReturnType<typeof listCategoryMapPairs>> | null = null
+    if (includeIso) {
+      try {
+        categoryMap = await listCategoryMapPairs()
+      } catch (mapError) {
+        console.error('GET /api/ef-catalog/sync/manifest category map error:', mapError)
+      }
+    }
+
+    return NextResponse.json({
+      data,
+      ...(categoryMap ? { category_map: categoryMap } : {}),
+    })
   } catch (error) {
     console.error('GET /api/ef-catalog/sync/manifest error:', error)
     return NextResponse.json({ error: 'Failed to list sync manifest' }, { status: 500 })

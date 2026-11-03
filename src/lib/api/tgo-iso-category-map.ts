@@ -150,6 +150,17 @@ export async function getCategoryMap (): Promise<{
   return { data, destinations }
 }
 
+export async function listCategoryMapPairs (): Promise<CategoryMapPair[]> {
+  const { data, error } = await supabase
+    .from('tgo_iso_category_map')
+    .select('tgo_scope_category_id, iso_scope_category_id')
+  if (error) throw error
+  return (data ?? []).map((row) => ({
+    tgo_scope_category_id: row.tgo_scope_category_id,
+    iso_scope_category_id: row.iso_scope_category_id,
+  }))
+}
+
 export async function replaceCategoryMap (rows: CategoryMapPair[]): Promise<void> {
   const { error: deleteError } = await supabase
     .from('tgo_iso_category_map')
