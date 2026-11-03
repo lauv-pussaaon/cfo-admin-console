@@ -25,11 +25,18 @@ export async function GET (request: NextRequest) {
     }
 
     const family = release.family ?? 'tgo'
-    const [categories, fuels, categoryMap] = await Promise.all([
+    const [categories, fuels] = await Promise.all([
       getScopeCategories(undefined, false, family),
       listFuelResourcesForExport(version),
-      family === 'iso' ? listCategoryMapPairs() : Promise.resolve(null),
     ])
+    let categoryMap: Awaited<ReturnType<typeof listCategoryMapPairs>> | null = null
+    if (family === 'iso') {
+      try {
+        categoryMap = await listCategoryMapPairs()
+      } catch (mapError) {
+        console.error('GET /api/ef-catalog/sync category map error:', mapError)
+      }
+    }
 
     return NextResponse.json({
       release: {
