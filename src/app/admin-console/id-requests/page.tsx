@@ -17,7 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ArrowBack, Search as SearchIcon } from '@mui/icons-material'
+import { ArrowBack, OpenInNew as OpenInNewIcon, Search as SearchIcon } from '@mui/icons-material'
 import TrialRequestsTable from '@/components/admin/TrialRequestsTable'
 import { trialRequestService } from '@/lib/services'
 import { useAuth } from '@/contexts/AuthContext'
@@ -37,6 +37,7 @@ import {
   adminFilterControlSx,
   adminPageShellSx,
   adminPageTitleSx,
+  adminPrimaryButtonSx,
   adminSearchFieldSx,
 } from '@/lib/admin-ui-styles'
 
@@ -124,6 +125,14 @@ export default function AdminTrialRequestsPage () {
     router.push(`/admin-console/id-requests/${id}`)
   }
 
+  const handleOpenTrialRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/trial`, '_blank', 'noopener,noreferrer')
+  }
+
+  const handleOpenMembershipRegistrationUrl = () => {
+    window.open(`${window.location.origin}/register/membership`, '_blank', 'noopener,noreferrer')
+  }
+
   if (authLoading || !user || !canAccessTrialRequests(user)) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 320 }}>
@@ -143,9 +152,38 @@ export default function AdminTrialRequestsPage () {
         กลับ
       </Button>
 
-      <Typography variant="h4" component="h1" sx={[adminPageTitleSx, { mb: 3 }]}>
-        ID Request
-      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 3,
+          gap: 2,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography variant="h4" component="h1" sx={adminPageTitleSx}>
+          ID Request
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            onClick={handleOpenTrialRegistrationUrl}
+            sx={adminPrimaryButtonSx}
+          >
+            ลิงก์สมัครทดลองใช้งาน
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            onClick={handleOpenMembershipRegistrationUrl}
+            sx={adminPrimaryButtonSx}
+          >
+            ลิงก์สมัครสมาชิกรายปี
+          </Button>
+        </Box>
+      </Box>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
         <Chip
