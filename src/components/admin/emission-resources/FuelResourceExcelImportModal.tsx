@@ -5,6 +5,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -15,6 +16,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   TextField,
@@ -43,6 +45,8 @@ interface Props {
   categories: ScopeCategory[]
 }
 
+type PreviewStatus = 'all' | 'save' | 'skip'
+
 function str (value: unknown): string {
   if (value === null || value === undefined) return ''
   return String(value).trim()
@@ -70,6 +74,7 @@ export default function FuelResourceExcelImportModal ({
     categoryMapCount?: number
   } | null>(null)
   const [importError, setImportError] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<PreviewStatus>('all')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const categoryById = useMemo(
@@ -91,6 +96,7 @@ export default function FuelResourceExcelImportModal ({
     setImporting(false)
     setImportResult(null)
     setImportError(null)
+    setStatusFilter('all')
   }
 
   const handleClose = () => {
@@ -102,6 +108,7 @@ export default function FuelResourceExcelImportModal ({
     setFile(f)
     setParseError(null)
     setCategoryMap(null)
+    setStatusFilter('all')
     try {
       const buffer = await f.arrayBuffer()
       const workbook = XLSX.read(buffer, { type: 'array' })
@@ -209,10 +216,19 @@ export default function FuelResourceExcelImportModal ({
     }
   }
 
-  const previewRows = parsedRows.slice(0, 40)
+  const visibleRows = useMemo(() => {
+    if (statusFilter === 'save') return parsedRows.filter((r) => r.errors.length === 0)
+    if (statusFilter === 'skip') return parsedRows.filter((r) => r.errors.length > 0)
+    return parsedRows
+  }, [parsedRows, statusFilter])
 
   return (
-    <Dialog open={open} onClose={!importing ? handleClose : undefined} maxWidth="md" fullWidth>
+    <Dialog
+      open={open}
+      onClose={!importing ? handleClose : undefined}
+      maxWidth={false}
+      PaperProps={{ sx: { width: '70vw', maxWidth: '70vw' } }}
+    >
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           Import new catalog version
@@ -299,10 +315,51 @@ export default function FuelResourceExcelImportModal ({
 
         {step === 2 && (
           <Box>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              Target: <strong>{version}</strong> (new version) — {file?.name}: {stats.total} rows ·{' '}
-              {stats.valid} valid · {stats.errors} errors
-            </Typography>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                columnGap: 2,
+                rowGap: 0.5,
+                mb: 1.5,
+                alignItems: 'baseline',
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">Catalog</Typography>
+              <Typography variant="body2">{family === 'iso' ? 'ISO' : 'TGO'}</Typography>
+              <Typography variant="body2" color="text.secondary">Version</Typography>
+              <Typography variant="body2">
+                {version}
+                <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                  {' '}new version
+                </Typography>
+              </Typography>
+              <Typography variant="body2" color="text.secondary">File</Typography>
+              <Typography variant="body2">{file?.name}</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+              <Chip
+                label={`All ${stats.total}`}
+                size="small"
+                color={statusFilter === 'all' ? 'primary' : 'default'}
+                variant={statusFilter === 'all' ? 'filled' : 'outlined'}
+                onClick={() => setStatusFilter('all')}
+              />
+              <Chip
+                label={`OK ${stats.valid}`}
+                size="small"
+                color={statusFilter === 'save' ? 'success' : 'default'}
+                variant={statusFilter === 'save' ? 'filled' : 'outlined'}
+                onClick={() => setStatusFilter('save')}
+              />
+              <Chip
+                label={`Will be skipped ${stats.errors}`}
+                size="small"
+                color={statusFilter === 'skip' ? 'warning' : 'default'}
+                variant={statusFilter === 'skip' ? 'filled' : 'outlined'}
+                onClick={() => setStatusFilter('skip')}
+              />
+            </Box>
             {stats.errors > 0 && (
               <Alert severity="warning" sx={{ mb: 2 }}>
                 Rows with errors will be skipped.
@@ -310,36 +367,42 @@ export default function FuelResourceExcelImportModal ({
             )}
             {importing && <LinearProgress sx={{ mb: 2 }} />}
             {importError && <Alert severity="error" sx={{ mb: 2 }}>{importError}</Alert>}
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Row</TableCell>
-                  <TableCell>Resource</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Errors</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {previewRows.map((r) => (
-                  <TableRow key={r.rowNum}>
-                    <TableCell>{r.rowNum}</TableCell>
-                    <TableCell>{str(r.data.resource) || '—'}</TableCell>
-                    <TableCell>
-                      {r.errors.length > 0 ? 'Skip' : 'Import'}
-                    </TableCell>
-                    <TableCell>
-                      {r.errors.length > 0 ? (
-                        <Typography variant="caption" color="error">
-                          {r.errors.join('; ')}
-                        </Typography>
-                      ) : (
-                        '—'
-                      )}
-                    </TableCell>
+            <TableContainer sx={{ maxHeight: 360 }}>
+              <Table size="small" stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Row</TableCell>
+                    <TableCell>Resource</TableCell>
+                    <TableCell>On confirm</TableCell>
+                    <TableCell>Errors</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {visibleRows.map((r) => (
+                    <TableRow key={r.rowNum}>
+                      <TableCell>{r.rowNum}</TableCell>
+                      <TableCell>{str(r.data.resource) || '—'}</TableCell>
+                      <TableCell>
+                        {r.errors.length > 0 ? (
+                          <Chip label="Will be skipped" size="small" color="warning" variant="outlined" />
+                        ) : (
+                          <Chip label="OK" size="small" color="success" variant="outlined" />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {r.errors.length > 0 ? (
+                          <Typography variant="caption" color="error">
+                            {r.errors.join('; ')}
+                          </Typography>
+                        ) : (
+                          '—'
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
         )}
 
@@ -378,6 +441,7 @@ export default function FuelResourceExcelImportModal ({
                 setImportError(null)
                 setParsedRows([])
                 setFile(null)
+                setStatusFilter('all')
                 setStep(1)
               }}
               disabled={importing}

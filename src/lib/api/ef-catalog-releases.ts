@@ -155,7 +155,8 @@ export async function computeReleaseContentHash (version: string): Promise<strin
 }
 
 export async function refreshReleaseCounts (version: string): Promise<EfCatalogRelease> {
-  await ensureEfCatalogRelease(version)
+  const existing = await getEfCatalogRelease(version)
+  if (!existing) await ensureEfCatalogRelease(version)
   const fuel_count = await countFuels(version)
   const { data, error } = await supabase
     .from('ef_catalog_releases')
