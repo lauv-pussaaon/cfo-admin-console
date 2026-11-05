@@ -139,7 +139,7 @@ export default function CategoryMapPanel ({ open, onClose }: Props) {
 
         {noneMapped && !loading && (
           <Typography variant="body2" color="text.secondary" sx={{ px: 2, py: 1.5, borderBottom: 1, borderColor: 'divider' }}>
-            An ISO import fills these pairs. You can still choose a destination.
+            An ISO import fills these pairs. You can still choose a subcategory.
           </Typography>
         )}
 
@@ -177,6 +177,7 @@ export default function CategoryMapPanel ({ open, onClose }: Props) {
                       </Typography>
                       {editingId === row.id ? (
                         <Box sx={{ width: 220, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Typography variant="caption" color="text.secondary">Subcategory</Typography>
                           <Select
                             size="small"
                             value={draftIsoId}
@@ -211,6 +212,7 @@ export default function CategoryMapPanel ({ open, onClose }: Props) {
                         </Box>
                       ) : (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0 }}>
+                          <Typography variant="caption" color="text.secondary">Subcategory</Typography>
                           <Chip
                             label={row.iso_code ?? 'ไม่มีที่อยู่'}
                             size="small"

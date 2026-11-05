@@ -226,7 +226,9 @@ CREATE TABLE support_message_attachments (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Scope categories (EF catalog)
+-- EF catalog rows. TGO: scope is Scope 1–4 and each row is a category.
+-- ISO: scope is category 1–6 and each row is a subcategory (for example 1.1).
+-- The column stays scope because both families share it. No data migration.
 CREATE TABLE scope_categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   family TEXT NOT NULL DEFAULT 'tgo' CHECK (family IN ('tgo', 'iso')),

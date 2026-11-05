@@ -80,12 +80,12 @@ const TGO_SCOPE_TABS = [
 
 const ISO_SCOPE_TABS = [
   { value: 0, label: 'All' },
-  { value: 1, label: '1' },
-  { value: 2, label: '2' },
-  { value: 3, label: '3' },
-  { value: 4, label: '4' },
-  { value: 5, label: '5' },
-  { value: 6, label: '6' },
+  { value: 1, label: 'Category 1' },
+  { value: 2, label: 'Category 2' },
+  { value: 3, label: 'Category 3' },
+  { value: 4, label: 'Category 4' },
+  { value: 5, label: 'Category 5' },
+  { value: 6, label: 'Category 6' },
 ]
 
 const SCOPE_COLORS: Record<number, string> = {
@@ -113,7 +113,7 @@ function parseScope (raw: string | null, family: CatalogFamily): number {
 }
 
 function categoryChipLabel (family: CatalogFamily, scope: number) {
-  return family === 'iso' ? String(scope) : `S${scope}`
+  return family === 'iso' ? `C${scope}` : `S${scope}`
 }
 
 function parsePageIndex (raw: string | null): number {
@@ -576,7 +576,7 @@ function EmissionResourcesPage () {
             onClick={() => setCategoriesPanelOpen(true)}
             sx={{ textTransform: 'none', borderRadius: 2 }}
           >
-            Manage Categories
+            {family === 'iso' ? 'Manage Subcategories' : 'Manage Categories'}
           </Button>
           <Button
             variant="outlined"
@@ -790,15 +790,15 @@ function EmissionResourcesPage () {
 
         <Box sx={{ display: 'flex', gap: 2, p: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FormControl size="small" sx={[{ minWidth: 260 }, adminFilterControlSx]}>
-            <InputLabel>Category</InputLabel>
+            <InputLabel>{family === 'iso' ? 'Subcategory' : 'Category'}</InputLabel>
             <Select
               value={categoryId}
               onChange={(e) => {
                 replaceQuery({ category_id: e.target.value || null, page: 0 })
               }}
-              label="Category"
+              label={family === 'iso' ? 'Subcategory' : 'Category'}
             >
-              <MenuItem value="">All Categories</MenuItem>
+              <MenuItem value="">{family === 'iso' ? 'All Subcategories' : 'All Categories'}</MenuItem>
               {filteredCategories.map((c) => (
                 <MenuItem key={c.id} value={c.id}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -841,6 +841,7 @@ function EmissionResourcesPage () {
       </Paper>
 
       <EmissionResourcesTable
+        family={family}
         rows={resources}
         total={total}
         page={page}

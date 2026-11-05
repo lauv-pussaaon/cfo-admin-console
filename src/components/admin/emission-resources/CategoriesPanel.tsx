@@ -46,12 +46,12 @@ const TGO_SCOPE_TABS = [
 
 const ISO_SCOPE_TABS = [
   { value: 0, label: 'All' },
-  { value: 1, label: '1' },
-  { value: 2, label: '2' },
-  { value: 3, label: '3' },
-  { value: 4, label: '4' },
-  { value: 5, label: '5' },
-  { value: 6, label: '6' },
+  { value: 1, label: 'Category 1' },
+  { value: 2, label: 'Category 2' },
+  { value: 3, label: 'Category 3' },
+  { value: 4, label: 'Category 4' },
+  { value: 5, label: 'Category 5' },
+  { value: 6, label: 'Category 6' },
 ]
 
 const SCOPE_COLORS: Record<number, string> = {
@@ -86,9 +86,12 @@ interface AddingState {
 }
 
 export default function CategoriesPanel({ open, onClose, family, initialScope, onCategoriesChanged }: Props) {
-  const scopeTabs = family === 'iso' ? ISO_SCOPE_TABS : TGO_SCOPE_TABS
-  const scopeChoices = family === 'iso' ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4]
-  const scopeFieldLabel = family === 'iso' ? 'Category' : 'Scope'
+  const isIso = family === 'iso'
+  const scopeTabs = isIso ? ISO_SCOPE_TABS : TGO_SCOPE_TABS
+  const scopeChoices = isIso ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4]
+  const scopeFieldLabel = isIso ? 'Category' : 'Scope'
+  const rowNoun = isIso ? 'Subcategory' : 'Category'
+  const rowNounLower = isIso ? 'subcategory' : 'category'
   const [scopeTab, setScopeTab] = useState(initialScope)
   const [categories, setCategories] = useState<ScopeCategory[]>([])
   const [loading, setLoading] = useState(false)
@@ -115,11 +118,11 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
       const json = await res.json()
       setCategories(json.data ?? [])
     } catch {
-      setError('Failed to load categories')
+      setError(`Failed to load ${rowNounLower}s`)
     } finally {
       setLoading(false)
     }
-  }, [family])
+  }, [family, rowNounLower])
 
   useEffect(() => {
     if (open) {
@@ -159,9 +162,9 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
       setEditing(null)
       await fetchCategories()
       onCategoriesChanged()
-      showSnackbar('Category updated')
+      showSnackbar(`${rowNoun} updated`)
     } catch {
-      showSnackbar('Failed to update category', 'error')
+      showSnackbar(`Failed to update ${rowNounLower}`, 'error')
     } finally {
       setSaving(false)
     }
@@ -200,9 +203,9 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
       setAdding(null)
       await fetchCategories()
       onCategoriesChanged()
-      showSnackbar('Category added')
+      showSnackbar(`${rowNoun} added`)
     } catch {
-      showSnackbar('Failed to add category', 'error')
+      showSnackbar(`Failed to add ${rowNounLower}`, 'error')
     } finally {
       setSaving(false)
     }
@@ -218,9 +221,9 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
       setDeleteTarget(null)
       await fetchCategories()
       onCategoriesChanged()
-      showSnackbar('Category deleted')
+      showSnackbar(`${rowNoun} deleted`)
     } catch {
-      setDeleteError('Failed to delete category. It may have associated fuel resources.')
+      setDeleteError(`Failed to delete ${rowNounLower}. It may have associated fuel resources.`)
     } finally {
       setIsDeleting(false)
     }
@@ -237,7 +240,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
         {/* Header */}
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: 1, borderColor: 'divider' }}>
           <Typography variant="h6" fontWeight={600}>
-            Manage Categories
+            {isIso ? 'Manage Subcategories' : 'Manage Categories'}
           </Typography>
           <IconButton onClick={onClose} size="small">
             <CloseIcon />
@@ -264,7 +267,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
             variant="contained"
             onClick={handleStartAdd}
           >
-            Add Category
+            {isIso ? 'Add Subcategory' : 'Add Category'}
           </Button>
         </Box>
 
@@ -281,7 +284,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
           {/* Add form */}
           {adding && (
             <Box sx={{ mb: 2, p: 2, border: '1px solid', borderColor: 'primary.main', borderRadius: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>New Category</Typography>
+              <Typography variant="subtitle2" gutterBottom>{isIso ? 'New Subcategory' : 'New Category'}</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                 <FormControl size="small" fullWidth>
                   <InputLabel>{scopeFieldLabel}</InputLabel>
@@ -292,7 +295,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
                   >
                     {scopeChoices.map((s) => (
                       <MenuItem key={s} value={s}>
-                        {family === 'iso' ? String(s) : `Scope ${s}`}
+                        {isIso ? `Category ${s}` : `Scope ${s}`}
                       </MenuItem>
                     ))}
                   </Select>
@@ -342,7 +345,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
             <List disablePadding>
               {filteredCategories.length === 0 && (
                 <Typography variant="body2" color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                  No categories found
+                  {isIso ? 'No subcategories found' : 'No categories found'}
                 </Typography>
               )}
 
@@ -397,7 +400,7 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
                       /* Display row */
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                         <Chip
-                          label={family === 'iso' ? String(cat.scope) : `S${cat.scope}`}
+                          label={isIso ? `C${cat.scope}` : `S${cat.scope}`}
                           size="small"
                           sx={{
                             bgcolor: SCOPE_COLORS[cat.scope],
@@ -444,9 +447,9 @@ export default function CategoriesPanel({ open, onClose, family, initialScope, o
         open={!!deleteTarget}
         onClose={() => { setDeleteTarget(null); setDeleteError(null) }}
         onConfirm={handleDeleteConfirm}
-        title="Delete Category"
+        title={isIso ? 'Delete Subcategory' : 'Delete Category'}
         message={`Are you sure you want to delete "${deleteTarget?.name_en}"?`}
-        description="This will soft-delete the category. Fuel resources linked to it will remain but may need reassignment."
+        description={`This will soft-delete the ${rowNounLower}. Fuel resources linked to it will remain but may need reassignment.`}
         isDeleting={isDeleting}
         error={deleteError}
       />

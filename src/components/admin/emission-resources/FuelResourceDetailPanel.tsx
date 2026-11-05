@@ -65,7 +65,7 @@ export default function FuelResourceDetailPanel ({
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap' }}>
             {cat && (
               <Chip
-                label={cat.family === 'iso' ? String(cat.scope) : `S${cat.scope}`}
+                label={cat.family === 'iso' ? `C${cat.scope}` : `S${cat.scope}`}
                 size="small"
                 sx={{
                   bgcolor: SCOPE_COLORS[cat.scope] ?? '#64748b',
@@ -108,9 +108,9 @@ export default function FuelResourceDetailPanel ({
     >
       {resource && (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-          <InfoRow label="Category (EN)" value={textOrDash(cat?.name_en)} />
-          <InfoRow label="Category (TH)" value={textOrDash(cat?.name_th)} />
-          <InfoRow label="Sub-category" value={textOrDash(resource.sub_category)} />
+          <InfoRow label={cat?.family === 'iso' ? 'Subcategory (EN)' : 'Category (EN)'} value={textOrDash(cat?.name_en)} />
+          <InfoRow label={cat?.family === 'iso' ? 'Subcategory (TH)' : 'Category (TH)'} value={textOrDash(cat?.name_th)} />
+          <InfoRow label={cat?.family === 'iso' ? 'Resource group' : 'Sub-category'} value={textOrDash(resource.sub_category)} />
           <InfoRow
             label="Unit"
             value={

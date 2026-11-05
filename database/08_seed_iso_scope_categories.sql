@@ -1,4 +1,5 @@
--- ISO 14064-1 subcategories. scope is the ISO category 1–6, not TGO scope.
+-- ISO 14064-1 subcategories. scope is category 1–6. Each row is one subcategory.
+-- The column stays scope because TGO uses the same table. Not TGO Scope.
 -- Ids match dataprep/iso-14064-1/build-iso-catalog.mjs (uuid v5 of category:{code}).
 -- Does not insert fuel rows. Those enter through Import new version.
 

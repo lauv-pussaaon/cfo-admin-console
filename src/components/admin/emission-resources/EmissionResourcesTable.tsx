@@ -7,7 +7,7 @@ import {
   EditOutlined as EditOutlinedIcon,
 } from '@mui/icons-material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import type { FuelResourceWithCategory } from '@/types/emission-resources'
+import type { CatalogFamily, FuelResourceWithCategory } from '@/types/emission-resources'
 import {
   adminDataGridPaperSx,
   adminDataGridProps,
@@ -25,6 +25,7 @@ const SCOPE_COLORS: Record<number, string> = {
 }
 
 interface Props {
+  family: CatalogFamily
   rows: FuelResourceWithCategory[]
   total: number
   page: number
@@ -38,6 +39,7 @@ interface Props {
 }
 
 export default function EmissionResourcesTable({
+  family,
   rows,
   total,
   page,
@@ -52,14 +54,14 @@ export default function EmissionResourcesTable({
   const columns: GridColDef[] = [
     {
       field: 'scope',
-      headerName: 'Scope',
+      headerName: family === 'iso' ? 'Category' : 'Scope',
       width: 120,
       minWidth: 120,
       display: 'flex',
       renderCell: (params) => {
         const scope = params.row.scope_category?.scope
         if (!scope) return null
-        const label = params.row.scope_category?.family === 'iso' ? String(scope) : `S${scope}`
+        const label = params.row.scope_category?.family === 'iso' ? `C${scope}` : `S${scope}`
         return (
           <Chip
             label={label}
@@ -77,7 +79,7 @@ export default function EmissionResourcesTable({
     },
     {
       field: 'category',
-      headerName: 'Category',
+      headerName: family === 'iso' ? 'Subcategory' : 'Category',
       flex: 1,
       width: 100,
       display: 'flex',
@@ -95,7 +97,7 @@ export default function EmissionResourcesTable({
     },
     {
       field: 'sub_category',
-      headerName: 'Sub-category',
+      headerName: family === 'iso' ? 'Resource group' : 'Sub-category',
       flex: 1,
       width: 120,
       display: 'flex',
